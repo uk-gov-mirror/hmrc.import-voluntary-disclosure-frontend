@@ -54,7 +54,7 @@ trait IntegrationSpec
     super.afterAll()
   }
 
-  def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port/import-voluntary-disclosure-frontend$path").withFollowRedirects(false)
+  def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port/import-voluntary-disclosure$path").withFollowRedirects(false)
 
   def document(response: WSResponse): JsValue = Json.parse(response.body)
 }
