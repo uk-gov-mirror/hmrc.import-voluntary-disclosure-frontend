@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package views
+package views.helpers
 
 import config.AppConfig
 import play.api.i18n.Messages
