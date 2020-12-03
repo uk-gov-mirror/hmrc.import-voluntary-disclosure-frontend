@@ -1,5 +1,5 @@
 service.name = import-voluntary-disclosure-frontend
-service.homePageUrl = /import-voluntary-disclosure-frontend
+service.homePageUrl = /import-voluntary-disclosure/hello-world
 service.text = This is your new service
 
 footer.cookies.text = Cookies
