@@ -1,5 +1,5 @@
 
-# import-voluntary-disclosure-frontend
+# Import Voluntary Disclosure Frontend
 
 This is a placeholder README.md for a new repository
 
