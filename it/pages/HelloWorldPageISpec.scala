@@ -7,7 +7,7 @@ package pages
 
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.AuditStub
+import stubs.{AuditStub, AuthStub}
 import support.IntegrationSpec
 
 class HelloWorldPageISpec extends IntegrationSpec {
@@ -17,6 +17,7 @@ class HelloWorldPageISpec extends IntegrationSpec {
     "return an OK response" in {
 
       AuditStub.audit()
+      AuthStub.authorised()
 
       val request: WSRequest = buildRequest("/hello-world")
 

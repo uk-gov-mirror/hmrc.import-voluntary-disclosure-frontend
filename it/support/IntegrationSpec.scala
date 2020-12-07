@@ -5,15 +5,18 @@
 
 package support
 
+import config.SessionKeys
 import org.scalatest._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
+import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.{WSClient, WSRequest, WSResponse}
 import play.api.test.{DefaultAwaitTimeout, FutureAwaits}
 import play.api.{Application, Environment, Mode}
+import uk.gov.hmrc.auth.core.AffinityGroup
 
 trait IntegrationSpec
   extends AnyWordSpec
@@ -54,7 +57,17 @@ trait IntegrationSpec
     super.afterAll()
   }
 
-  def buildRequest(path: String): WSRequest = client.url(s"http://localhost:$port/import-voluntary-disclosure$path").withFollowRedirects(false)
-
   def document(response: WSResponse): JsValue = Json.parse(response.body)
+
+  private def bakeCookie(sessionKvs: (String, String)*): (String, String) =
+    HeaderNames.COOKIE ->
+      SessionCookieBaker.bakeSessionCookie(
+        (sessionKvs :+ SessionKeys.userType -> Json.toJson(AffinityGroup.Organisation).toString).toMap
+      )
+
+  def buildRequest(path: String): WSRequest =
+    client.url(s"http://localhost:$port/import-voluntary-disclosure$path")
+      .withHttpHeaders(bakeCookie())
+      .withFollowRedirects(false)
+
 }

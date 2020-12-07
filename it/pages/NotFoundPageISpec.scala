@@ -7,7 +7,7 @@ package pages
 
 import play.api.http.Status
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.AuditStub
+import stubs.{AuditStub, AuthStub}
 import support.IntegrationSpec
 
 class NotFoundPageISpec extends IntegrationSpec {
@@ -17,6 +17,8 @@ class NotFoundPageISpec extends IntegrationSpec {
     "return an Not Found response" in {
 
       AuditStub.audit()
+      AuthStub.authorised()
+
 
       val request: WSRequest = buildRequest("/some-path-that-does-not-exist")
 
