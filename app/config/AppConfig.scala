@@ -18,10 +18,18 @@ package config
 
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
+import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 @Singleton
-class AppConfig @Inject()(config: Configuration) {
+class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
 
   val footerLinkItems: Seq[String] = config.get[Seq[String]]("footerLinkItems")
+
+  lazy val appName: String = servicesConfig.getString("appName")
+  lazy val loginUrl: String = servicesConfig.getString("urls.login")
+  lazy val signOutUrl: String = servicesConfig.getString("urls.signOut")
+  lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
+  lazy val agentServicesNoClientUrl: String = servicesConfig.getString("urls.agentServicesNoClientUrl")
+  lazy val enrolmentStoreUrl: String = servicesConfig.baseUrl("enrolment-store-proxy")
 
 }

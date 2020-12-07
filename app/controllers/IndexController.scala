@@ -17,28 +17,20 @@
 package controllers
 
 import config.AppConfig
-import controllers.actions.IdentifierAction
-import play.api.i18n.I18nSupport
-
-import javax.inject.{Inject, Singleton}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.HelloWorldPage
 
+import javax.inject.Inject
 import scala.concurrent.Future
 
-@Singleton
-class HelloWorldController @Inject()(
-  identity: IdentifierAction,
-  appConfig: AppConfig,
-  mcc: MessagesControllerComponents,
-  helloWorldPage: HelloWorldPage)
-    extends FrontendController(mcc) with I18nSupport {
+class IndexController  @Inject()(appConfig: AppConfig,
+                                 mcc: MessagesControllerComponents)
+  extends FrontendController(mcc) {
 
   implicit val config: AppConfig = appConfig
 
-  val helloWorld: Action[AnyContent] = identity.async { implicit request =>
-    Future.successful(Ok(helloWorldPage()))
+  val onPageLoad: Action[AnyContent] = Action.async { _ =>
+    Future.successful(Redirect(controllers.routes.HelloWorldController.helloWorld()))
   }
 
 }

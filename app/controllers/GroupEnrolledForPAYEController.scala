@@ -17,28 +17,18 @@
 package controllers
 
 import config.AppConfig
-import controllers.actions.IdentifierAction
 import play.api.i18n.I18nSupport
-
-import javax.inject.{Inject, Singleton}
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.HelloWorldPage
 
-import scala.concurrent.Future
+import javax.inject.Inject
 
-@Singleton
-class HelloWorldController @Inject()(
-  identity: IdentifierAction,
-  appConfig: AppConfig,
-  mcc: MessagesControllerComponents,
-  helloWorldPage: HelloWorldPage)
-    extends FrontendController(mcc) with I18nSupport {
+class GroupEnrolledForPAYEController @Inject()(val cc: MessagesControllerComponents,
+                                               view: views.html.GroupEnrolledForPAYEView
+                                              )(implicit appConfig: AppConfig) extends FrontendController(cc) with I18nSupport {
 
-  implicit val config: AppConfig = appConfig
-
-  val helloWorld: Action[AnyContent] = identity.async { implicit request =>
-    Future.successful(Ok(helloWorldPage()))
+  def onPageLoad: Action[AnyContent] = Action { implicit request =>
+    Ok(view())
   }
 
 }
