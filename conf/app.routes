@@ -12,4 +12,4 @@ GET        /user-id                              controllers.errors.Unauthorised
 GET        /agent-cannot-claim                   controllers.errors.UnauthorisedController.agent
 GET        /no-paye-online                       controllers.errors.UnauthorisedController.missingEnrolment
 GET        /file-only-agent                      controllers.errors.IneligibleController.fileOnlyAgent
-GET        /admin-user-need-authorisation        controllers.GroupEnrolledForPAYEController.onPageLoad
+GET        /admin-user-need-authorisation        controllers.GroupEnrolledForPayeController.onPageLoad

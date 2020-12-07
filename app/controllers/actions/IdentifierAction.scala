@@ -18,7 +18,7 @@ package controllers.actions
 
 import com.google.inject.Inject
 import config.{AppConfig, EnrolmentKeys, SessionKeys}
-import controllers.connectors.IsGroupEnrolledForPAYEConnector
+import controllers.connectors.EnrolmentStoreProxyConnector
 import models.audit.{AgentIneligibleAuditEvent, AgentNotAuthorisedAuditEvent, IndividualIneligibleAuditEvent, MissingEnrolmentAuditEvent}
 import models.requests.IdentifierRequest
 import play.api.Logger
@@ -42,7 +42,7 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
                                               config: AppConfig,
                                               auditService: AuditService,
                                               val parser: BodyParsers.Default,
-                                              isGroupEnrolledForPAYEConnector: IsGroupEnrolledForPAYEConnector
+                                              isGroupEnrolledForPAYEConnector: EnrolmentStoreProxyConnector
                                              )(implicit val executionContext: ExecutionContext)
   extends IdentifierAction with AuthorisedFunctions {
 
@@ -232,10 +232,10 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       val fetchUrl = controllers.routes.IndexController.onPageLoad().url
       val fetchFreshData = request.uri == fetchUrl
 
-      isGroupEnrolledForPAYEConnector.isGroupEnrolledForPAYE(groupId, fetchFreshData).map {
+      isGroupEnrolledForPAYEConnector.isGroupEnrolledForPaye(groupId, fetchFreshData).map {
         case true =>
           logger.debug(s"[enrolmentCheck] Group is enrolled for PAYE")
-          Redirect(controllers.routes.GroupEnrolledForPAYEController.onPageLoad())
+          Redirect(controllers.routes.GroupEnrolledForPayeController.onPageLoad())
             .addingToSession(SessionKeys.groupEnrolledForPAYE -> "true")
 
         case false =>

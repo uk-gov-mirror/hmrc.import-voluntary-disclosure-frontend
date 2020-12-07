@@ -18,7 +18,7 @@ package controllers.connectors
 
 import com.google.inject.Inject
 import config.{AppConfig, SessionKeys}
-import models.isGroupEnrolledForPAYE.GroupServicesResponse
+import models.responses.EnrolmentStoreProxy.GroupServicesResponse
 import play.api.Logger
 import play.api.http.Status.{NO_CONTENT, OK}
 import play.api.mvc.Request
@@ -28,16 +28,16 @@ import javax.inject.Singleton
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IsGroupEnrolledForPAYEConnector @Inject()(httpClient: HttpClient)
-                                               (implicit val executionContext: ExecutionContext, config: AppConfig) {
+class EnrolmentStoreProxyConnector @Inject()(httpClient: HttpClient)
+                                            (implicit val executionContext: ExecutionContext, config: AppConfig) {
 
   private val logger = Logger("application." + getClass.getCanonicalName)
 
-  def isGroupEnrolledForPAYE(groupId: String, fetchFreshData: Boolean)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] = {
+  def isGroupEnrolledForPaye(groupId: String, fetchFreshData: Boolean)(implicit hc: HeaderCarrier, request: Request[_]): Future[Boolean] = {
 
     val enrolment: Option[Boolean] = request.session.get(SessionKeys.groupEnrolledForPAYE).map(_.toBoolean)
 
-    def fetchData: Future[Boolean] = isGroupEnrolledForPAYECall(groupId)
+    def fetchData: Future[Boolean] = isGroupEnrolledForPayeCall(groupId)
 
     if (enrolment.isEmpty) {
       fetchData
@@ -48,7 +48,7 @@ class IsGroupEnrolledForPAYEConnector @Inject()(httpClient: HttpClient)
     }
   }
 
-  def isGroupEnrolledForPAYECall(groupId: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
+  def isGroupEnrolledForPayeCall(groupId: String)(implicit hc: HeaderCarrier): Future[Boolean] = {
 
     val endPoint = config.enrolmentStoreUrl + s"/enrolment-store-proxy/enrolment-store/groups/$groupId/services"
 

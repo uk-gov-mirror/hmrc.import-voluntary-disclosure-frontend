@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,19 +12,21 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import config.AppConfig
-@import templates.Layout
+package models.responses.EnrolmentStoreProxy
 
-@this(layout: Layout)
+import play.api.libs.json.{Json, OFormat, Reads}
 
-@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+case class GroupServicesResponse(services: Seq[String])
 
-@layout(pageTitle = Some("coronavirus-jrb-claim-frontend")) {
-    <h1 class="govuk-heading-xl">Group enrolled for PAYE</h1>
-}
+object GroupServicesResponse {
 
-@{
-    //$COVERAGE-OFF$
+  implicit lazy val reads: Reads[GroupServicesResponse] = {
+    import play.api.libs.json._
+
+    (__ \ "services").read[Seq[String]].map(GroupServicesResponse.apply)
+  }
+
+  val format: OFormat[GroupServicesResponse] = Json.format[GroupServicesResponse]
 }

@@ -23,8 +23,8 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.Inject
 
-class GroupEnrolledForPAYEController @Inject()(val cc: MessagesControllerComponents,
-                                               view: views.html.GroupEnrolledForPAYEView
+class GroupEnrolledForPayeController @Inject()(val cc: MessagesControllerComponents,
+                                               view: views.html.GroupEnrolledForPayeView
                                               )(implicit appConfig: AppConfig) extends FrontendController(cc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
