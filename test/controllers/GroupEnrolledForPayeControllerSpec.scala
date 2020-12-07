@@ -19,22 +19,22 @@ package controllers
 import base.SpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
-import views.html.HelloWorldPage
+import views.html.GroupEnrolledForPayeView
 
-class HelloWorldControllerSpec extends SpecBase {
+class GroupEnrolledForPayeControllerSpec extends SpecBase {
 
-  lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
+  lazy val view: GroupEnrolledForPayeView = app.injector.instanceOf[GroupEnrolledForPayeView]
 
-  private lazy val controller = new HelloWorldController(authenticatedAction, appConfig, messagesControllerComponents, helloWorldPage)
+  private lazy val controller = new GroupEnrolledForPayeController(messagesControllerComponents, view)
 
   "GET /" should {
     "return 200" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.onPageLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
     "return HTML" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.onPageLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }

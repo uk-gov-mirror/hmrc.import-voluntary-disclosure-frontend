@@ -26,9 +26,6 @@ object SessionUtils {
   implicit class SessionUtils(session: Session) {
     def getModel[T](key: String)(implicit sessionFormatter: SessionFormatter[T]): Option[T] =
       session.get(key) flatMap sessionFormatter.fromString
-
-    def removeModel[T](key: String)(implicit sessionFormatter: SessionFormatter[T]): Option[T] =
-      session.get(key) flatMap sessionFormatter.fromString
   }
 
   implicit class ResultUtils(result: Result) {

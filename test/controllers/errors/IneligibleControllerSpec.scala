@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.errors
 
 import base.SpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
-import views.html.HelloWorldPage
+import views.html.ineligable.FileOnlyAgentView
 
-class HelloWorldControllerSpec extends SpecBase {
+class IneligibleControllerSpec extends SpecBase {
 
-  lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
+  lazy val view: FileOnlyAgentView = app.injector.instanceOf[FileOnlyAgentView]
 
-  private lazy val controller = new HelloWorldController(authenticatedAction, appConfig, messagesControllerComponents, helloWorldPage)
+  private lazy val controller = new IneligibleController(messagesControllerComponents, view)
 
   "GET /" should {
     "return 200" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.fileOnlyAgent(fakeRequest)
       status(result) mustBe Status.OK
     }
 
     "return HTML" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.fileOnlyAgent(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }

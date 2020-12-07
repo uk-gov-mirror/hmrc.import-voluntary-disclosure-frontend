@@ -217,12 +217,11 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
         logger.debug("[checkOrganisationEpayeEnrolment] IR-PAYE enrolment found but not activated")
         auditService.audit(MissingEnrolmentAuditEvent(credId))
         Future.successful(Redirect(controllers.errors.routes.UnauthorisedController.missingEnrolment()))
-      case _ => enrolmentCheck(groupId, internalId, role, credId)
+      case _ => enrolmentCheck(groupId, role, credId)
     }
   }
 
   def enrolmentCheck[A](groupId: String,
-                        internalId: String,
                         role: Option[CredentialRole],
                         credId: String)
                        (implicit hc: HeaderCarrier, request: Request[A]): Future[Result] = {

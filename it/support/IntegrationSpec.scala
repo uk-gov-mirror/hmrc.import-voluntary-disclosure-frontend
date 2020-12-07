@@ -7,8 +7,6 @@ package support
 
 import config.SessionKeys
 import org.scalatest._
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.wordspec._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.HeaderNames
 import play.api.inject.guice.GuiceApplicationBuilder
@@ -19,7 +17,7 @@ import play.api.{Application, Environment, Mode}
 import uk.gov.hmrc.auth.core.AffinityGroup
 
 trait IntegrationSpec
-  extends AnyWordSpec
+  extends WordSpec
     with EitherValues
     with Matchers
     with FutureAwaits
