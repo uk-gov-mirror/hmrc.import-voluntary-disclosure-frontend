@@ -19,24 +19,17 @@ package controllers
 import base.ControllerSpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
-import views.html.HelloWorldPage
 
-class HelloWorldControllerSpec extends ControllerSpecBase {
+class IndexControllerSpec extends ControllerSpecBase {
 
-  lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
-
-  private lazy val controller = new HelloWorldController(authenticatedAction, appConfig, messagesControllerComponents, helloWorldPage)
+  private lazy val controller = new IndexController(appConfig, messagesControllerComponents)
 
   "GET /" should {
-    "return 200" in {
-      val result = controller.helloWorld(fakeRequest)
-      status(result) mustBe Status.OK
+    "return 303" in {
+      val result = controller.onPageLoad(fakeRequest)
+      status(result) mustBe Status.SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.routes.HelloWorldController.helloWorld.url)
     }
 
-    "return HTML" in {
-      val result = controller.helloWorld(fakeRequest)
-      contentType(result) mustBe Some("text/html")
-      charset(result) mustBe Some("utf-8")
-    }
   }
 }

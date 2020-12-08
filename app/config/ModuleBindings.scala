@@ -16,18 +16,14 @@
 
 package config
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import controllers.actions.{AuthenticatedIdentifierAction, IdentifierAction}
+import play.api.{Configuration, Environment}
+import play.api.inject.{Binding, Module}
 
-@Singleton
-class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
+class ModuleBindings extends Module {
 
-  val footerLinkItems: Seq[String] = config.get[Seq[String]]("footerLinkItems")
-
-  lazy val appName: String = servicesConfig.getString("appName")
-  lazy val loginUrl: String = servicesConfig.getString("urls.login")
-  lazy val signOutUrl: String = servicesConfig.getString("urls.signOut")
-  lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
+  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
+    bind[IdentifierAction].to(classOf[AuthenticatedIdentifierAction])
+  )
 
 }

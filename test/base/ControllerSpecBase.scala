@@ -14,19 +14,11 @@
  * limitations under the License.
  */
 
-package stubs
+package base
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status._
-import support.WireMockMethods
+import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 
-object AuditStub extends WireMockMethods {
-
-  private val auditUri: String = s"/write/audit.*"
-
-  def audit(): StubMapping = {
-    when(method = POST, uri = auditUri)
-      .thenReturn(status = NO_CONTENT)
-  }
-
+trait ControllerSpecBase extends SpecBase {
+  lazy val authenticatedAction: IdentifierAction =
+    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
 }

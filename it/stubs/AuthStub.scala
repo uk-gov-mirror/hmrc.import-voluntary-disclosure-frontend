@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package config
+package stubs
 
-import javax.inject.{Inject, Singleton}
-import play.api.Configuration
-import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
+import com.github.tomakehurst.wiremock.stubbing.StubMapping
+import play.api.http.Status.{OK, UNAUTHORIZED}
+import play.api.libs.json.Json
+import support.WireMockMethods
 
-@Singleton
-class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig) {
+object AuthStub extends WireMockMethods {
 
-  val footerLinkItems: Seq[String] = config.get[Seq[String]]("footerLinkItems")
+  private val authoriseUri = "/auth/authorise"
 
-  lazy val appName: String = servicesConfig.getString("appName")
-  lazy val loginUrl: String = servicesConfig.getString("urls.login")
-  lazy val signOutUrl: String = servicesConfig.getString("urls.signOut")
-  lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
+  def authorised(): StubMapping =
+    when(method = POST, uri = authoriseUri)
+      .thenReturn(status = OK, body = Json.obj("externalId" -> "some_external_id"))
 
+  def unauthorised(): StubMapping =
+    when(method = POST, uri = authoriseUri).thenReturn(status = UNAUTHORIZED)
 }
+

@@ -14,29 +14,30 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.errors
 
 import base.ControllerSpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
-import views.html.HelloWorldPage
+import views.html.errors._
 
-class HelloWorldControllerSpec extends ControllerSpecBase {
+class UnauthorisedControllerSpec extends ControllerSpecBase {
 
-  lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
+  lazy val view: UnauthorisedView = app.injector.instanceOf[UnauthorisedView]
 
-  private lazy val controller = new HelloWorldController(authenticatedAction, appConfig, messagesControllerComponents, helloWorldPage)
+  private lazy val controller = new UnauthorisedController(messagesControllerComponents, view)
 
-  "GET /" should {
+  "onPageLoad" should {
     "return 200" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.onPageLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
     "return HTML" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.onPageLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
   }
 }
+

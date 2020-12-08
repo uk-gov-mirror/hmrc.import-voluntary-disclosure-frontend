@@ -14,19 +14,8 @@
  * limitations under the License.
  */
 
-package stubs
+package models.requests
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status._
-import support.WireMockMethods
+import play.api.mvc.{Request, WrappedRequest}
 
-object AuditStub extends WireMockMethods {
-
-  private val auditUri: String = s"/write/audit.*"
-
-  def audit(): StubMapping = {
-    when(method = POST, uri = auditUri)
-      .thenReturn(status = NO_CONTENT)
-  }
-
-}
+case class IdentifierRequest[A](request: Request[A], credId: String) extends WrappedRequest[A](request)

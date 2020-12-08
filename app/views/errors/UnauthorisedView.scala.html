@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,21 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package stubs
+@import templates.Layout
 
-import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status._
-import support.WireMockMethods
+@this(layout: Layout)
 
-object AuditStub extends WireMockMethods {
+@()(implicit request: Request[_], messages: Messages)
 
-  private val auditUri: String = s"/write/audit.*"
+@layout(pageTitle = Some("coronavirus-jrb-claim-frontend")) {
+    <h1 class="govuk-heading-xl">Unauthorised</h1>
+}
 
-  def audit(): StubMapping = {
-    when(method = POST, uri = auditUri)
-      .thenReturn(status = NO_CONTENT)
-  }
-
+@{
+    //$COVERAGE-OFF$
 }

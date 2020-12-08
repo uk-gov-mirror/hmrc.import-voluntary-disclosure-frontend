@@ -14,25 +14,25 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
 @import views.helpers.FooterLinks
 
-@this(
-        govukLayout: GovukLayout,
+@this(govukLayout: GovukLayout,
+        appConfig: AppConfig,
+        footerLinks: FooterLinks,
         head: partials.Head
 )
 
 @(pageTitle: Option[String] = None,
         headBlock: Option[Html] = None,
         scriptsBlock: Option[Html] = None
-)(contentBlock: Html)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+)(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @govukLayout(
     pageTitle = pageTitle,
     headBlock = Some(head(headBlock)),
     scriptsBlock = scriptsBlock,
     beforeContentBlock = None,
-    footerItems = FooterLinks()
+    footerItems = footerLinks.links()
 )(contentBlock)
 
 @{
