@@ -16,19 +16,16 @@
 
 package controllers.errors
 
-import base.SpecBase
+import base.ControllerSpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
 import views.html.errors._
 
-class UnauthorisedControllerSpec extends SpecBase {
+class UnauthorisedControllerSpec extends ControllerSpecBase {
 
   lazy val view: UnauthorisedView = app.injector.instanceOf[UnauthorisedView]
-  lazy val individualAccountView: IndividualUnauthorisedView = app.injector.instanceOf[IndividualUnauthorisedView]
-  lazy val agentAccountView: AgentUnauthorisedView = app.injector.instanceOf[AgentUnauthorisedView]
-  lazy val missingEnrolmentView: MissingEnrolmentUnauthorisedView = app.injector.instanceOf[MissingEnrolmentUnauthorisedView]
 
-  private lazy val controller = new UnauthorisedController(messagesControllerComponents, view, individualAccountView, agentAccountView, missingEnrolmentView)
+  private lazy val controller = new UnauthorisedController(messagesControllerComponents, view)
 
   "onPageLoad" should {
     "return 200" in {
@@ -38,45 +35,6 @@ class UnauthorisedControllerSpec extends SpecBase {
 
     "return HTML" in {
       val result = controller.onPageLoad(fakeRequest)
-      contentType(result) mustBe Some("text/html")
-      charset(result) mustBe Some("utf-8")
-    }
-  }
-
-  "individual" should {
-    "return 200" in {
-      val result = controller.individual(fakeRequest)
-      status(result) mustBe Status.OK
-    }
-
-    "return HTML" in {
-      val result = controller.individual(fakeRequest)
-      contentType(result) mustBe Some("text/html")
-      charset(result) mustBe Some("utf-8")
-    }
-  }
-
-  "agent" should {
-    "return 200" in {
-      val result = controller.agent(fakeRequest)
-      status(result) mustBe Status.OK
-    }
-
-    "return HTML" in {
-      val result = controller.agent(fakeRequest)
-      contentType(result) mustBe Some("text/html")
-      charset(result) mustBe Some("utf-8")
-    }
-  }
-
-  "missingEnrolment" should {
-    "return 200" in {
-      val result = controller.missingEnrolment(fakeRequest)
-      status(result) mustBe Status.OK
-    }
-
-    "return HTML" in {
-      val result = controller.missingEnrolment(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }

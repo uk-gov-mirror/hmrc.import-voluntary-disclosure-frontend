@@ -17,9 +17,7 @@
 package base
 
 import config.{AppConfig, ErrorHandler}
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import models.requests.IdentifierRequest
-import org.jsoup.Jsoup
+import org.scalamock.scalatest.MockFactory
 import org.scalatest.TryValues
 import org.scalatest.concurrent.{IntegrationPatience, ScalaFutures}
 import org.scalatestplus.play._
@@ -41,29 +39,18 @@ trait SpecBase extends PlaySpec
   with TryValues
   with ScalaFutures
   with IntegrationPatience
-  with MaterializerSupport {
+  with MaterializerSupport
+  with MockFactory {
 
   override lazy val app: Application = GuiceApplicationBuilder()
     .build()
 
-  val internalId = "id"
-  val empref = "840-GZ00064"
-  val credId = "1234567891"
-
   lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
     FakeRequest("GET", "/foo").withSession(SessionKeys.sessionId -> "foo").withCSRFToken.asInstanceOf[FakeRequest[AnyContentAsEmpty.type]]
-
-  lazy val fakeIdentifierRequest: IdentifierRequest[_] =
-    IdentifierRequest(fakeRequest, internalId, empref, credId, None)
 
   implicit val defaultTimeout: FiniteDuration = 5.seconds
 
   def await[A](future: Future[A])(implicit timeout: Duration): A = Await.result(future, timeout)
-
-  def title(heading: String, section: Option[String] = None)(implicit messages: Messages): String =
-    s"$heading - ${section.fold("")(_ + " - ")}${messages("service.name")} - ${messages("site.govuk")}"
-
-  def titleOf(result: String): String = Jsoup.parse(result).title
 
   lazy val injector: Injector = app.injector
 
@@ -79,8 +66,5 @@ trait SpecBase extends PlaySpec
   implicit lazy val errorHandler: ErrorHandler = injector.instanceOf[ErrorHandler]
 
   implicit val hc: HeaderCarrier = HeaderCarrier()
-
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent,internalId, empref, credId)
 
 }

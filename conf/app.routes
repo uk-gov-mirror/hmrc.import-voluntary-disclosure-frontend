@@ -1,15 +1,10 @@
 # microservice specific routes
 
-->         /govuk-frontend                       govuk.Routes
-->         /hmrc-frontend                        hmrcfrontend.Routes
-GET        /assets/*file                         controllers.Assets.versioned(path = "/public", file: Asset)
+->         /govuk-frontend        govuk.Routes
+->         /hmrc-frontend         hmrcfrontend.Routes
+GET        /assets/*file          controllers.Assets.versioned(path = "/public", file: Asset)
 
-GET        /hello-world                          controllers.HelloWorldController.helloWorld
-GET        /                                     controllers.IndexController.onPageLoad
+GET        /hello-world           controllers.HelloWorldController.helloWorld
+GET        /                      controllers.IndexController.onPageLoad
 
-GET        /unauthorised                         controllers.errors.UnauthorisedController.onPageLoad
-GET        /user-id                              controllers.errors.UnauthorisedController.individual
-GET        /agent-cannot-claim                   controllers.errors.UnauthorisedController.agent
-GET        /no-paye-online                       controllers.errors.UnauthorisedController.missingEnrolment
-GET        /file-only-agent                      controllers.errors.IneligibleController.fileOnlyAgent
-GET        /admin-user-need-authorisation        controllers.GroupEnrolledForPayeController.onPageLoad
+GET        /unauthorised          controllers.errors.UnauthorisedController.onPageLoad

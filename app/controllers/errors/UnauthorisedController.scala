@@ -16,34 +16,17 @@
 
 package controllers.errors
 
-import config.AppConfig
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.errors.{AgentUnauthorisedView, IndividualUnauthorisedView, MissingEnrolmentUnauthorisedView, UnauthorisedView}
+import views.html.errors.UnauthorisedView
 
 import javax.inject.Inject
 
-class UnauthorisedController @Inject()(mcc: MessagesControllerComponents,
-                                       view: UnauthorisedView,
-                                       individualAccountView: IndividualUnauthorisedView,
-                                       agentAccountView: AgentUnauthorisedView,
-                                       missingEnrolmentView: MissingEnrolmentUnauthorisedView
-                                      )(implicit appConfig: AppConfig) extends FrontendController(mcc) with I18nSupport {
+class UnauthorisedController @Inject()(mcc: MessagesControllerComponents, view: UnauthorisedView)
+  extends FrontendController(mcc) with I18nSupport {
 
   def onPageLoad: Action[AnyContent] = Action { implicit request =>
     Ok(view())
-  }
-
-  def individual: Action[AnyContent] = Action { implicit request =>
-    Ok(individualAccountView())
-  }
-
-  def agent: Action[AnyContent] = Action { implicit request =>
-    Ok(agentAccountView())
-  }
-
-  def missingEnrolment: Action[AnyContent] = Action { implicit request =>
-    Ok(missingEnrolmentView())
   }
 }

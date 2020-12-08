@@ -14,11 +14,9 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-
 @this(layout: templates.Layout)
 
-@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("import-voluntary-disclosure-frontend")) {
     <h1 class="govuk-heading-xl">import-voluntary-disclosure-frontend</h1>

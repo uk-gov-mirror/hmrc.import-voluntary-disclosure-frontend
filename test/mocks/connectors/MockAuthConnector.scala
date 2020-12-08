@@ -16,21 +16,25 @@
 
 package mocks.connectors
 
-import controllers.connectors.EnrolmentStoreProxyConnector
+import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
-import play.api.mvc.Request
+import uk.gov.hmrc.auth.core.AuthConnector
+import uk.gov.hmrc.auth.core.authorise.Predicate
+import uk.gov.hmrc.auth.core.retrieve.Retrieval
 import uk.gov.hmrc.http.HeaderCarrier
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-trait MockEnrolmentStoreProxyConnector extends MockFactory {
+trait MockAuthConnector extends MockFactory {
 
-  lazy val mockConnector: EnrolmentStoreProxyConnector = mock[EnrolmentStoreProxyConnector]
+  val mockAuthConnector: AuthConnector = mock[AuthConnector]
 
-  def mockCheckGroup(groupId: String)(response: Boolean): Unit = {
-
-    (mockConnector.isGroupEnrolledForPaye(_: String, _: Boolean)(_: HeaderCarrier, _: Request[_]))
-      .expects(groupId, *, *, *)
-      .returns(Future.successful(response))
+  object MockedAuthConnector {
+    def authorise(response: Future[_]): CallHandler[Future[Any]] = {
+      (mockAuthConnector.authorise(_: Predicate, _: Retrieval[_])(_: HeaderCarrier, _: ExecutionContext))
+        .expects(*, *, *, *)
+        .returns(response)
+    }
   }
+
 }

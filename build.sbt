@@ -33,3 +33,17 @@ lazy val microservice = Project(appName, file("."))
   .settings(integrationTestSettings(): _*)
   .settings(resolvers += Resolver.jcenterRepo)
   .settings(CodeCoverageSettings.settings: _*)
+
+val codeStyleIntegrationTest = taskKey[Unit]("enforce code style then integration test")
+
+// and then in settings...
+Project.inConfig(IntegrationTest)(ScalastylePlugin.rawScalastyleSettings()) ++
+  Seq(
+    scalastyleConfig in IntegrationTest := (scalastyleConfig in scalastyle).value,
+    scalastyleTarget in IntegrationTest := target.value / "scalastyle-it-results.xml",
+    scalastyleFailOnError in IntegrationTest := (scalastyleFailOnError in scalastyle).value,
+    (scalastyleFailOnWarning in IntegrationTest) := (scalastyleFailOnWarning in scalastyle).value,
+    scalastyleSources in IntegrationTest := (unmanagedSourceDirectories in IntegrationTest).value,
+    codeStyleIntegrationTest := scalastyle.in(IntegrationTest).toTask("").value,
+    (test in IntegrationTest) := ((test in IntegrationTest) dependsOn codeStyleIntegrationTest).value
+  )

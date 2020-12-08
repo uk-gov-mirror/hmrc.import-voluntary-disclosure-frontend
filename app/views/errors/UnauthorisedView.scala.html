@@ -14,12 +14,11 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
 @import templates.Layout
 
 @this(layout: Layout)
 
-@()(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@()(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = Some("coronavirus-jrb-claim-frontend")) {
     <h1 class="govuk-heading-xl">Unauthorised</h1>

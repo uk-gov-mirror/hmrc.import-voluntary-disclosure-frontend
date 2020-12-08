@@ -16,11 +16,11 @@
 
 package controllers
 
-import base.SpecBase
+import base.ControllerSpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
 
-class IndexControllerSpec extends SpecBase {
+class IndexControllerSpec extends ControllerSpecBase {
 
   private lazy val controller = new IndexController(appConfig, messagesControllerComponents)
 

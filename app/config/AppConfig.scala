@@ -29,7 +29,5 @@ class AppConfig @Inject()(config: Configuration, servicesConfig: ServicesConfig)
   lazy val loginUrl: String = servicesConfig.getString("urls.login")
   lazy val signOutUrl: String = servicesConfig.getString("urls.signOut")
   lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
-  lazy val agentServicesNoClientUrl: String = servicesConfig.getString("urls.agentServicesNoClientUrl")
-  lazy val enrolmentStoreUrl: String = servicesConfig.baseUrl("enrolment-store-proxy")
 
 }

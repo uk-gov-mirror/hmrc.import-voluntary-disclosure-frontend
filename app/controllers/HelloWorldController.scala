@@ -19,21 +19,19 @@ package controllers
 import config.AppConfig
 import controllers.actions.IdentifierAction
 import play.api.i18n.I18nSupport
-
-import javax.inject.{Inject, Singleton}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.HelloWorldPage
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class HelloWorldController @Inject()(
-  identity: IdentifierAction,
-  appConfig: AppConfig,
-  mcc: MessagesControllerComponents,
-  helloWorldPage: HelloWorldPage)
-    extends FrontendController(mcc) with I18nSupport {
+class HelloWorldController @Inject()(identity: IdentifierAction,
+                                     appConfig: AppConfig,
+                                     mcc: MessagesControllerComponents,
+                                     helloWorldPage: HelloWorldPage)
+  extends FrontendController(mcc) with I18nSupport {
 
   implicit val config: AppConfig = appConfig
 

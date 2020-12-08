@@ -24,7 +24,6 @@ import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.AuditExtensions
 import uk.gov.hmrc.play.audit.http.connector.AuditConnector
 import uk.gov.hmrc.play.audit.model.ExtendedDataEvent
-import utils.JsonUtils
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
@@ -50,7 +49,7 @@ class AuditService @Inject()(appConfig: AppConfig,
 
 }
 
-trait JsonAuditModel extends JsonUtils {
+trait JsonAuditModel {
   val auditType: String
   val transactionName: String
   val detail: JsValue

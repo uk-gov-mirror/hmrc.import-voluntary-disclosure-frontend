@@ -16,12 +16,12 @@
 
 package controllers
 
-import base.SpecBase
+import base.ControllerSpecBase
 import play.api.http.Status
 import play.api.test.Helpers._
 import views.html.HelloWorldPage
 
-class HelloWorldControllerSpec extends SpecBase {
+class HelloWorldControllerSpec extends ControllerSpecBase {
 
   lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
 

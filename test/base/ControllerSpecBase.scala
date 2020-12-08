@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@import templates.Layout
+package base
 
-@this(layout: Layout)
+import controllers.actions.{FakeIdentifierAction, IdentifierAction}
 
-@()(implicit request: Request[_], messages: Messages)
-
-@layout(pageTitle = Some("coronavirus-jrb-claim-frontend")) {
-    <h1 class="govuk-heading-xl">Group enrolled for PAYE</h1>
-}
-
-@{
-    //$COVERAGE-OFF$
+trait ControllerSpecBase extends SpecBase {
+  lazy val authenticatedAction: IdentifierAction =
+    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
 }
