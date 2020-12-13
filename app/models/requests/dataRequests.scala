@@ -14,18 +14,13 @@
  * limitations under the License.
  */
 
-package config
+package models.requests
 
-import controllers.actions.{AuthenticatedIdentifierAction, IdentifierAction}
-import play.api.inject.{Binding, Module}
-import play.api.{Configuration, Environment}
-import repositories.{SessionRepository, UserAnswersRepository}
+import models.UserAnswers
+import play.api.mvc.WrappedRequest
 
-class ModuleBindings extends Module {
+case class OptionalDataRequest[A](request: IdentifierRequest[A], credId: String, userAnswers: Option[UserAnswers])
+  extends WrappedRequest[A](request)
 
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
-    bind[IdentifierAction].to(classOf[AuthenticatedIdentifierAction]),
-    bind[SessionRepository].to(classOf[UserAnswersRepository])
-  )
-
-}
+case class DataRequest[A](request: OptionalDataRequest[A], credId: String, userAnswers: UserAnswers)
+  extends WrappedRequest[A](request)

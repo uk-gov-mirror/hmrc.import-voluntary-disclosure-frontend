@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package config
+package controllers.actions
 
-import controllers.actions.{AuthenticatedIdentifierAction, IdentifierAction}
-import play.api.inject.{Binding, Module}
-import play.api.{Configuration, Environment}
-import repositories.{SessionRepository, UserAnswersRepository}
+import models.UserAnswers
+import models.requests.{IdentifierRequest, OptionalDataRequest}
 
-class ModuleBindings extends Module {
+import scala.concurrent.{ExecutionContext, Future}
 
-  override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
-    bind[IdentifierAction].to(classOf[AuthenticatedIdentifierAction]),
-    bind[SessionRepository].to(classOf[UserAnswersRepository])
-  )
+class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers]) extends DataRetrievalAction {
 
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
+    Future(OptionalDataRequest(request, request.credId, dataToReturn))
+
+  override protected implicit val executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 }
