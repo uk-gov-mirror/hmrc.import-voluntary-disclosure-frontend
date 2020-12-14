@@ -17,17 +17,23 @@
 package controllers
 
 import config.AppConfig
-import controllers.actions.IdentifierAction
+import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import models.UserAnswers
+import pages.HelloWorldPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
+import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.HelloWorldPage
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class HelloWorldController @Inject()(identity: IdentifierAction,
+                                     getData: DataRetrievalAction,
+                                     sessionRepository: SessionRepository,
                                      appConfig: AppConfig,
                                      mcc: MessagesControllerComponents,
                                      helloWorldPage: HelloWorldPage)
@@ -35,8 +41,17 @@ class HelloWorldController @Inject()(identity: IdentifierAction,
 
   implicit val config: AppConfig = appConfig
 
-  val helloWorld: Action[AnyContent] = identity.async { implicit request =>
-    Future.successful(Ok(helloWorldPage()))
+  val onLoad: Action[AnyContent] = (identity andThen getData).async { implicit request =>
+    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
+    Future.successful(Ok(helloWorldPage(userAnswers)))
+  }
+
+  def onSubmit(): Action[AnyContent] = (identity andThen getData).async { implicit request =>
+    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
+    for {
+      updatedAnswers <- Future.fromTry(userAnswers.set(HelloWorldPage, "Some test value written"))
+      _ <- sessionRepository.set(updatedAnswers)
+    } yield Redirect(controllers.routes.HelloWorldController.onLoad())
   }
 
 }

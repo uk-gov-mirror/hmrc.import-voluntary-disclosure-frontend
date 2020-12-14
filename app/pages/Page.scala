@@ -14,17 +14,28 @@
  * limitations under the License.
  */
 
-package base
+package pages
 
-import controllers.actions.{DataRetrievalAction, FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import play.api.libs.json.{JsPath, JsString, Reads, Writes}
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+import scala.language.implicitConversions
 
-  lazy val dataRetrievalAction: DataRetrievalAction = injector.instanceOf[DataRetrievalAction]
+trait Page
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
+object Page {
 
+  implicit def toString(page: Page): String = page.toString
+
+  val pages = Seq(
+    HelloWorldPage
+  )
+
+  val pagesMap: Map[String, Page] = pages.map(page => page.toString -> page).toMap
+
+  def apply(page: String): Page = pagesMap(page)
+
+  def unapply(arg: Page): String = pagesMap.map(_.swap).apply(arg)
+
+  implicit val reads: Reads[Page] = JsPath.read[String].map(apply)
+  implicit val writes: Writes[Page] = Writes { page => JsString(unapply(page)) }
 }

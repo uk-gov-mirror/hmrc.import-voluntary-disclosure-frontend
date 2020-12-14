@@ -2,6 +2,8 @@ service.name = import-voluntary-disclosure-frontend
 service.homePageUrl = /import-voluntary-disclosure/hello-world
 service.text = This is your new service
 
+common.button.confirmAndContinue = Confirm and continue
+
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
 footer.privacy.text = Privacy policy

@@ -14,17 +14,14 @@
  * limitations under the License.
  */
 
-package base
+package pages
 
-import controllers.actions.{DataRetrievalAction, FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import play.api.libs.json.JsPath
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+case object HelloWorldPage extends QuestionPage[String] {
 
-  lazy val dataRetrievalAction: DataRetrievalAction = injector.instanceOf[DataRetrievalAction]
+  def path: JsPath = JsPath \ toString
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
+  override def toString: String = "helloWorld"
 
 }

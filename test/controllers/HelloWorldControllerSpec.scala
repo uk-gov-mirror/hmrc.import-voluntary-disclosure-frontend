@@ -25,16 +25,17 @@ class HelloWorldControllerSpec extends ControllerSpecBase {
 
   lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
 
-  private lazy val controller = new HelloWorldController(authenticatedAction, appConfig, messagesControllerComponents, helloWorldPage)
+  private lazy val controller = new HelloWorldController(authenticatedAction, dataRetrievalAction,
+    sessionRepository, appConfig, messagesControllerComponents, helloWorldPage)
 
   "GET /" should {
     "return 200" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
     "return HTML" in {
-      val result = controller.helloWorld(fakeRequest)
+      val result = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
