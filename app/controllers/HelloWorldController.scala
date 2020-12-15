@@ -46,7 +46,7 @@ class HelloWorldController @Inject()(identity: IdentifierAction,
     Future.successful(Ok(helloWorldPage(userAnswers)))
   }
 
-  def onSubmit(): Action[AnyContent] = (identity andThen getData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identity andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
     for {
       updatedAnswers <- Future.fromTry(userAnswers.set(HelloWorldPage, "Some test value written"))

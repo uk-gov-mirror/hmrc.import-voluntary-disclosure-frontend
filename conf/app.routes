@@ -7,6 +7,6 @@ GET         /assets/*file          controllers.Assets.versioned(path = "/public"
 GET         /                      controllers.IndexController.onPageLoad
 
 GET         /hello-world           controllers.HelloWorldController.onLoad
-POST        /hello-world           controllers.HelloWorldController.onSubmit()
+POST        /hello-world           controllers.HelloWorldController.onSubmit
 
 GET         /unauthorised          controllers.errors.UnauthorisedController.onPageLoad
