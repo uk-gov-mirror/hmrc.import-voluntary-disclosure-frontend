@@ -1,5 +1,5 @@
 service.name = import-voluntary-disclosure-frontend
-service.homePageUrl = /import-voluntary-disclosure/hello-world
+service.homePageUrl = /disclose-import-taxes-underpayment
 service.text = This is your new service
 
 common.button.confirmAndContinue = Confirm and continue
