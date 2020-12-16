@@ -16,7 +16,7 @@
 
 package config
 
-import controllers.actions.{AuthenticatedIdentifierAction, IdentifierAction}
+import controllers.actions._
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
 import repositories.{SessionRepository, UserAnswersRepository}
@@ -25,6 +25,8 @@ class ModuleBindings extends Module {
 
   override def bindings(environment: Environment, configuration: Configuration): Seq[Binding[_]] = Seq(
     bind[IdentifierAction].to(classOf[AuthenticatedIdentifierAction]),
+    bind[DataRequiredAction].to(classOf[DataRequiredActionImpl]),
+    bind[DataRetrievalAction].to(classOf[DataRetrievalActionImpl]),
     bind[SessionRepository].to(classOf[UserAnswersRepository])
   )
 

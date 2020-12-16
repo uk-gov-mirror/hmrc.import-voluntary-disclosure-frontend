@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,17 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package base
+@this(govukButton: GovukButton)
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+@(msg: String, idForButton: String = "button-1", changeContinueToSaveAndContinue: Boolean = true)(implicit messages: Messages)
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+@govukButton(Button(
+    attributes = Map("id" -> idForButton),
+    content = {
+        Text(messages(msg))
+    },
+    preventDoubleClick = true
+))
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
-
+@{
+    //$COVERAGE-OFF$
 }

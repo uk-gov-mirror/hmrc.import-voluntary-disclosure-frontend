@@ -28,7 +28,7 @@ class IndexControllerSpec extends ControllerSpecBase {
     "return 303" in {
       val result = controller.onPageLoad(fakeRequest)
       status(result) mustBe Status.SEE_OTHER
-      redirectLocation(result) mustBe Some(controllers.routes.HelloWorldController.helloWorld.url)
+      redirectLocation(result) mustBe Some(controllers.routes.HelloWorldController.onLoad().url)
     }
 
   }

@@ -14,15 +14,26 @@
  * limitations under the License.
  *@
 
-@this(layout: templates.Layout)
+@this(layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        button: components.button)
 
-@()(implicit request: Request[_], messages: Messages)
+@(userAnswers: UserAnswers)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = Some("import-voluntary-disclosure-frontend")) {
-    <h1 class="govuk-heading-xl">import-voluntary-disclosure-frontend</h1>
-    <p class="govuk-body">@{messages("service.text")}</p>
-}
+    @layout(pageTitle = Some("import-voluntary-disclosure-frontend")) {
+        <h1 class="govuk-heading-xl">import-voluntary-disclosure-frontend</h1>
+        <p class="govuk-body">@{
+            messages("service.text")
+        }</p>
 
-@{
- //$COVERAGE-OFF$
-}
+        <h3>Current values within user answers: @userAnswers.data</h3>
+
+        @formHelper(action = controllers.routes.HelloWorldController.onSubmit()) {
+            @button("common.button.confirmAndContinue")
+        }
+
+    }
+
+    @{
+        //$COVERAGE-OFF$
+    }
