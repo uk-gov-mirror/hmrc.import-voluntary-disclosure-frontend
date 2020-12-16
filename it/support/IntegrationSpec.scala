@@ -70,7 +70,7 @@ trait IntegrationSpec
     HeaderNames.COOKIE -> SessionCookieBaker.bakeSessionCookie(sessionData.toMap)
 
   def buildRequest(path: String): WSRequest =
-    client.url(s"http://localhost:$port/import-voluntary-disclosure$path")
+    client.url(s"http://localhost:$port/disclose-import-taxes-underpayment$path")
       .withHttpHeaders(bakeCookie())
       .withFollowRedirects(false)
 
