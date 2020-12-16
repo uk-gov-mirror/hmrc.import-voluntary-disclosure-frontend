@@ -16,6 +16,7 @@
 
 package repositories
 
+import config.AppConfig
 import models.{MongoDateTimeFormats, UserAnswers}
 import org.scalatestplus.play.PlaySpec
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
@@ -29,10 +30,11 @@ import scala.concurrent.ExecutionContext.Implicits.global
 class SessionRepositoryISpec extends PlaySpec with GuiceOneServerPerSuite with FutureAwaits with DefaultAwaitTimeout {
 
   val mongo: ReactiveMongoComponent = app.injector.instanceOf[ReactiveMongoComponent]
+  val appConfig: AppConfig = app.injector.instanceOf[AppConfig]
 
   val fakeNow: LocalDateTime = LocalDateTime.now()
 
-  val repo: UserAnswersRepository = new UserAnswersRepository(mongo: ReactiveMongoComponent)
+  val repo: UserAnswersRepository = new UserAnswersRepository(mongo: ReactiveMongoComponent, appConfig)
 
   private def count = await(repo.count)
 

@@ -16,6 +16,7 @@
 
 package repositories
 
+import config.AppConfig
 import models.UserAnswers
 import play.api.libs.json._
 import play.modules.reactivemongo.ReactiveMongoComponent
@@ -29,7 +30,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UserAnswersRepository @Inject()(mongoComponent: ReactiveMongoComponent)
+class UserAnswersRepository @Inject()(mongoComponent: ReactiveMongoComponent, appConfig: AppConfig)
   extends ReactiveRepository[UserAnswers, String](
     collectionName = "user-answers",
     mongo = mongoComponent.mongoConnector.db,
@@ -40,7 +41,7 @@ class UserAnswersRepository @Inject()(mongoComponent: ReactiveMongoComponent)
   override def indexes: Seq[Index] = Seq(Index(
     key = Seq("lastUpdated" -> IndexType.Ascending),
     name = Some("user-answers-last-updated-index"),
-    options = BSONDocument("expireAfterSeconds" -> 600) //TODO: Get Mongo TTL from config
+    options = BSONDocument("expireAfterSeconds" -> appConfig.cacheTtl)
   ))
 
   override def get(id: String)(implicit ec: ExecutionContext): Future[Option[UserAnswers]] =
