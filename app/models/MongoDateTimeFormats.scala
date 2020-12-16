@@ -14,15 +14,25 @@
  * limitations under the License.
  */
 
-package base
+package models
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import play.api.libs.json._
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
+trait MongoDateTimeFormats {
 
+  implicit val localDateTimeRead: Reads[LocalDateTime] =
+    (__ \ "$date").read[Long].map {
+      millis =>
+        LocalDateTime.ofInstant(Instant.ofEpochMilli(millis), ZoneOffset.UTC)
+    }
+
+  implicit val localDateTimeWrite: Writes[LocalDateTime] = new Writes[LocalDateTime] {
+    def writes(dateTime: LocalDateTime): JsValue = Json.obj(
+      "$date" -> dateTime.atZone(ZoneOffset.UTC).toInstant.toEpochMilli
+    )
+  }
 }
+
+object MongoDateTimeFormats extends MongoDateTimeFormats

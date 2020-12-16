@@ -14,15 +14,8 @@
  * limitations under the License.
  */
 
-package base
+package models
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
-
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
-
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
-
+class WithName(string: String) {
+  override val toString: String = string
 }

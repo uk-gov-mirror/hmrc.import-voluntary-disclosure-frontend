@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package base
+package controllers.actions
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import models.UserAnswers
+import models.requests.{IdentifierRequest, OptionalDataRequest}
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+import scala.concurrent.{ExecutionContext, Future}
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
+class FakeDataRetrievalAction(dataToReturn: Option[UserAnswers]) extends DataRetrievalAction {
 
+  override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
+    Future(OptionalDataRequest(request, request.credId, dataToReturn))
+
+  override protected implicit val executionContext: ExecutionContext =
+    scala.concurrent.ExecutionContext.Implicits.global
 }

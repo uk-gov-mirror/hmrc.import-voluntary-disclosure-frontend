@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package base
+package models
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import org.scalatest.{MustMatchers, WordSpec}
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+class WithNameSpec extends WordSpec with MustMatchers {
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
+  object Foo extends WithName("bar")
 
+  ".toString" must {
+    "return the correct string" in {
+      Foo.toString mustEqual "bar"
+    }
+  }
 }

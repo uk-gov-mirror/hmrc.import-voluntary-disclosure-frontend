@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package base
+package models.requests
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import models.UserAnswers
+import play.api.mvc.WrappedRequest
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+case class OptionalDataRequest[A](request: IdentifierRequest[A], credId: String, userAnswers: Option[UserAnswers])
+  extends WrappedRequest[A](request)
 
-  val sessionRepository: UserAnswersRepository = injector.instanceOf[UserAnswersRepository]
-
-}
+case class DataRequest[A](request: OptionalDataRequest[A], credId: String, userAnswers: UserAnswers)
+  extends WrappedRequest[A](request)
