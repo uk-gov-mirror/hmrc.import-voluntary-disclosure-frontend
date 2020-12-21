@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package messages
 
-import play.api.libs.json._
+object NumberOfEntriesMessages {
 
-trait Enumerable[A] {
+  val title: String = "How many entries are you disclosing an underpayment for?"
+  val h1: String = "How many entries are you disclosing an underpayment for?"
+  val radioButtonOne: String = "One entry"
+  val radioButtonTwo: String = "More than one entry"
+  val hint: String = "Multiple entries must be for the same importer, and have the same reason for underpayment."
 
-  def withName(str: String): Option[A]
-}
-
-object Enumerable {
-
-  def apply[A](entries: (String, A)*): Enumerable[A] =
-    new Enumerable[A] {
-      override def withName(str: String): Option[A] =
-        entries.toMap.get(str)
-    }
-
-  trait Implicits {
-
-    implicit def writes[A : Enumerable]: Writes[A] = {
-      Writes(value => JsString(value.toString))
-    }
-  }
 }

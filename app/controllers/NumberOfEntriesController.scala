@@ -20,12 +20,12 @@ import config.AppConfig
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import forms.NumberOfEntriesFormProvider
 import models.UserAnswers
-import pages.{HelloWorldPage, NumberOfEntriesPage}
+import pages.NumberOfEntriesPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.NumberOfEntriesPage
+import views.html.NumberOfEntriesView
 import javax.inject.{Inject, Singleton}
 import play.api.libs.json.Format.GenericFormat
 
@@ -39,7 +39,7 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
                                           appConfig: AppConfig,
                                           mcc: MessagesControllerComponents,
                                           formProvider: NumberOfEntriesFormProvider,
-                                          view: NumberOfEntriesPage)
+                                          view: NumberOfEntriesView)
   extends FrontendController(mcc) with I18nSupport {
 
   implicit val config: AppConfig = appConfig
