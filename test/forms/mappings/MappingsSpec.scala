@@ -133,6 +133,16 @@ class MappingsSpec extends WordSpec with MustMatchers with OptionValues with Map
       result.errors must contain(FormError("value", "error.required"))
     }
 
+    "not bind a non int value" in {
+      val result = testForm.bind(Map("value" -> "abcd"))
+      result.errors must contain(FormError("value", "error.nonNumeric"))
+    }
+
+    "not bind a non whole number value" in {
+      val result = testForm.bind(Map("value" -> "1.1"))
+      result.errors must contain(FormError("value", "error.wholeNumber"))
+    }
+
     "not bind an empty map" in {
       val result = testForm.bind(Map.empty[String, String])
       result.errors must contain(FormError("value", "error.required"))
