@@ -78,51 +78,6 @@ trait Formatters {
         baseFormatter.unbind(key, value.toString)
     }
 
-  private[mappings] def numericFormatter(isCurrency: Boolean = false,
-                                         requiredKey: String,
-                                         invalidNumericKey: String,
-                                         nonNumericKey: String,
-                                         args: Seq[String] = Seq.empty): Formatter[BigDecimal] =
-    new Formatter[BigDecimal] {
-
-      val is2dp = """(^-?\d*$)|(^-?\d*\.\d{1,2}$)"""
-      val validNumeric = """(^-?\d*$)|(^-?\d*\.\d*$)"""
-
-      private val baseFormatter = stringFormatter(requiredKey)
-
-      override def bind(key: String, data: Map[String, String]) = {
-
-        val numericFormatter = stringFormatter(requiredKey).bind(key, data)
-          .right.map(_.replace(",", ""))
-          .right.map(_.replaceAll("\\s", ""))
-
-        val currencyFormatter = numericFormatter
-          .right.map(_.replace("£", ""))
-
-        val validation: PartialFunction[String, Either[Seq[FormError], BigDecimal]] = {
-          case s if !s.matches(validNumeric) =>
-            Left(Seq(FormError(key, nonNumericKey, args)))
-          case s if !s.matches(is2dp) =>
-            Left(Seq(FormError(key, invalidNumericKey, args)))
-          case s =>
-            nonFatalCatch
-              .either(BigDecimal(s))
-              .left.map(_ => Seq(FormError(key, nonNumericKey, args)))
-        }
-
-        if (isCurrency) {
-          currencyFormatter
-            .right.flatMap(validation)
-        } else {
-          numericFormatter
-            .right.flatMap(validation)
-        }
-      }
-
-      override def unbind(key: String, value: BigDecimal) =
-        baseFormatter.unbind(key, value.toString)
-    }
-
   private[mappings] def enumerableFormatter[A](requiredKey: String, invalidKey: String)(implicit ev: Enumerable[A]): Formatter[A] =
     new Formatter[A] {
 

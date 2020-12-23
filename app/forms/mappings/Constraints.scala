@@ -97,22 +97,6 @@ trait Constraints {
         Invalid(errorKey, maximum)
     }
 
-  protected def maxDate(maximum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
-    Constraint {
-      case date if date.isAfter(maximum) =>
-        Invalid(errorKey, args: _*)
-      case _ =>
-        Valid
-    }
-
-  protected def minDate(minimum: LocalDate, errorKey: String, args: Any*): Constraint[LocalDate] =
-    Constraint {
-      case date if date.isBefore(minimum) =>
-        Invalid(errorKey, args: _*)
-      case _ =>
-        Valid
-    }
-
   protected def uniqueEntry(values: Seq[String], idx: Int,  errorKey: String): Constraint[String] = {
 
     val filteredValues = values.zipWithIndex.filterNot(_._2 == idx -1).map(_._1)
@@ -132,70 +116,4 @@ trait Constraints {
       case _ =>
         Invalid(errorKey)
     }
-
-  protected def regexpNoMatchesOpt(regex: String, errorKey: String)(implicit messages: Messages): Constraint[Option[String]] = {
-    def getInvalidChars(str: String): List[String] = str.toList.collect {
-      case c if c.toString.matches(regex) => c.toString
-    }
-
-    Constraint {
-      case Some(str) if getInvalidChars(str).nonEmpty =>
-      val errorList: List[String] = getInvalidChars(str).reverse.distinct.map(c => s"'$c'")
-
-        val invalidStr = if (errorList.tail.isEmpty) {
-          errorList.head.mkString
-        }
-        else {
-          errorList.tail.reverse.mkString(", ") + messages("contactDetails.error.fullName.and") + errorList.head.mkString
-        }
-
-        Invalid(errorKey, invalidStr)
-      case _ =>
-        Valid
-    }
-  }
-
-  protected def regexpNoMatches(regex: String, errorKey: String)(implicit messages: Messages): Constraint[String] = {
-    def getInvalidChars(str: String): List[String] = str.toList.collect {
-      case c if c.toString.matches(regex) => c.toString
-    }
-
-    Constraint {
-      case str if getInvalidChars(str).nonEmpty =>
-        val errorList: List[String] = getInvalidChars(str).reverse.distinct.map(c => s"'$c'")
-
-        val invalidStr = if (errorList.tail.isEmpty) {
-          errorList.head.mkString
-        }
-        else {
-          errorList.tail.reverse.mkString(", ") + messages("contactDetails.error.fullName.and") + errorList.head.mkString
-        }
-
-        Invalid(errorKey, invalidStr)
-      case _ =>
-        Valid
-    }
-  }
-
-  protected def regexpNoNonMatchingChars(regex: String, errorKey: String)(implicit messages: Messages): Constraint[String] = {
-    def getInvalidChars(str: String): List[String] = str.toList.collect {
-      case c if !c.toString.matches(regex) => c.toString
-    }
-
-    Constraint {
-      case str if getInvalidChars(str).nonEmpty =>
-        val errorList: List[String] = getInvalidChars(str).reverse.distinct.map(c => s"'$c'")
-
-        val invalidStr = if (errorList.tail.isEmpty) {
-          errorList.head.mkString
-        }
-        else {
-          errorList.tail.reverse.mkString(", ") + messages("contactDetails.error.fullName.and") + errorList.head.mkString
-        }
-
-        Invalid(errorKey, invalidStr)
-      case _ =>
-        Valid
-    }
-  }
 }
