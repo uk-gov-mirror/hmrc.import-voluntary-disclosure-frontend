@@ -52,11 +52,31 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
     }
   }
 
-  "POST /" should {
+  "POST oneEntry" should {
     "return a OK, write UserAnswers and redirect to next page" in {
 
       val request = fakeRequest.withFormUrlEncodedBody(
         "value" -> NumberOfEntries.OneEntry.toString
+      )
+
+      val result: Future[Result] = controller.onSubmit(request)
+      status(result) mustBe Status.SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.routes.NumberOfEntriesController.onLoad().url)
+    }
+
+    "return a BAD REQUEST and errors when invalid data is submitted" in {
+
+      val result: Future[Result] = controller.onSubmit(fakeRequest)
+      status(result) mustBe Status.BAD_REQUEST
+
+    }
+  }
+
+  "POST moreThanOneEntry" should {
+    "return a OK, write UserAnswers and redirect to next page" in {
+
+      val request = fakeRequest.withFormUrlEncodedBody(
+        "value" -> NumberOfEntries.MoreThanOneEntry.toString
       )
 
       val result: Future[Result] = controller.onSubmit(request)

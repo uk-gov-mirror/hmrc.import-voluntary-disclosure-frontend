@@ -19,7 +19,7 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import forms.NumberOfEntriesFormProvider
-import models.UserAnswers
+import models.{NumberOfEntries, UserAnswers}
 import pages.NumberOfEntriesPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -27,7 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.NumberOfEntriesView
 import javax.inject.{Inject, Singleton}
-import play.api.libs.json.Format.GenericFormat
+import models.NumberOfEntries.{MoreThanOneEntry, OneEntry}
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -60,10 +60,14 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
           updatedAnswers <- Future.fromTry(userAnswers.set(NumberOfEntriesPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.NumberOfEntriesController.onLoad())
+          redirect(value)
         }
       }
     )
   }
 
+  private def redirect (entries: NumberOfEntries) : Result = entries match {
+    case OneEntry => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
+    case MoreThanOneEntry => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
+  }
 }
