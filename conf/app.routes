@@ -5,6 +5,8 @@
 GET         /assets/*file          controllers.Assets.versioned(path = "/public", file: Asset)
 
 GET         /                      controllers.IndexController.onPageLoad
+GET        /initialise            controllers.AddressLookupController.initialiseJourney
+GET        /callback              controllers.AddressLookupController.callback(id: String)
 
 GET         /hello-world           controllers.HelloWorldController.onLoad
 POST        /hello-world           controllers.HelloWorldController.onSubmit

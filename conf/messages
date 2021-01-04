@@ -1,3 +1,5 @@
+common.continue = Continue
+
 service.name = import-voluntary-disclosure-frontend
 service.homePageUrl = /disclose-import-taxes-underpayment
 service.text = This is your new service
@@ -12,3 +14,21 @@ footer.termsConditions.text = Terms and conditions
 footer.termsConditions.url = /help/terms-and-conditions
 footer.govukHelp.text = Help using GOV.UK
 footer.govukHelp.url = https://www.gov.uk/help
+
+#Feedback
+feedback.title = Give feedback
+feedback.before = This is a new service – your
+feedback.link = feedback
+feedback.after = will help us to improve it.
+banner.phaseName = BETA
+
+#Address Lookup
+address_lookupPage.title = Find your address
+address_lookupPage.heading = Find your address
+address_lookupPage.filter = Property name or number (optional)
+address_lookupPage.postcode = UK postcode
+address_lookupPage.postcode.link = The address does not have a post code
+address_lookupPage.selectPage.heading = Select the new address
+address_lookupPage.selectPage.editLink = Edit the address manually
+address_lookupPage.confirmPage.heading = Confirm address
+address_lookupPage.lookupPage.submit = Find Address
