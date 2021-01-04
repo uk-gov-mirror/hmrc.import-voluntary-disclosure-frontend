@@ -18,26 +18,7 @@ package messages
 
 trait BaseMessages {
 
-  val clientServiceName = "Business tax account"
-  val otherServiceName = "VAT"
-  val agentServiceName = "Your client’s VAT details"
-
+  val clientServiceName = "import-voluntary-disclosure-frontend"
   val continue = "Continue"
-  val confirm = "Confirm"
-  val confirmAndContinue = "Confirm and continue"
-  val saveAndContinue = "Save and continue"
-  val signOut = "Sign out"
-  val finish = "Finish"
-  val finishAgent = "Back to client’s details"
-  val back = "Back"
-  val errorHeading = "There is a problem"
 
-  val breadcrumbBta = "Business tax account"
-  val breadcrumbVat = "Your VAT account"
-  val breadcrumbBizDeets = "Your business details"
-  val titleSuffixUser = " - Business tax account - GOV.UK"
-  val titleSuffixOther = " - VAT - GOV.UK"
-  val titleSuffixAgent  = " - Your client’s VAT details - GOV.UK"
-
-  val errorTitlePrefix = "Error:"
 }
