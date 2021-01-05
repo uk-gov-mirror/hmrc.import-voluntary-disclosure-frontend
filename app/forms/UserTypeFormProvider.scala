@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package controllers
+package forms
 
-import config.AppConfig
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import forms.mappings.Mappings
+import models.UserType
+import play.api.data.Form
 
 import javax.inject.Inject
-import scala.concurrent.Future
 
-class IndexController  @Inject()(appConfig: AppConfig,
-                                 mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
 
-  implicit val config: AppConfig = appConfig
+class UserTypeFormProvider @Inject() extends Mappings {
 
-  val onPageLoad: Action[AnyContent] = Action.async { _ =>
-    Future.successful(Redirect(controllers.routes.UserTypeController.onLoad()))
-  }
-
+  def apply(): Form[UserType] =
+    Form(
+      "value" -> enumerable[UserType]("userType.error.required")
+    )
 }

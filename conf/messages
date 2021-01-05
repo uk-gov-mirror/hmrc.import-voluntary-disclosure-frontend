@@ -1,10 +1,11 @@
 common.continue = Continue
 
-service.name = import-voluntary-disclosure-frontend
+service.name = Disclose an underpayment of import duties
 service.homePageUrl = /disclose-import-taxes-underpayment
 service.text = This is your new service
 
 common.button.confirmAndContinue = Confirm and continue
+common.button.continue = Continue
 
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
@@ -32,3 +33,14 @@ address_lookupPage.selectPage.heading = Select the new address
 address_lookupPage.selectPage.editLink = Edit the address manually
 address_lookupPage.confirmPage.heading = Confirm address
 address_lookupPage.lookupPage.submit = Find Address
+
+# User Type Page
+userType.pageTitle = Importer or representative?
+userType.heading = Are you the importer or their representative?
+userType.importer = Importer
+userType.representative = Representative
+userType.error.required = Select if you are the importer or their representative
+
+# Error Summary
+# ----------------------------------------------
+error.summary.title = There is a problem

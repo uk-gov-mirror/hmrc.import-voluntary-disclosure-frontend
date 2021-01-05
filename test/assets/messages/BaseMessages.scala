@@ -18,7 +18,7 @@ package messages
 
 trait BaseMessages {
 
-  val clientServiceName = "import-voluntary-disclosure-frontend"
   val continue = "Continue"
 
+  val errorPrefix = "Error: "
 }

@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package controllers
+@import uk.gov.hmrc.govukfrontend.views.html.components._
 
-import base.ControllerSpecBase
-import play.api.http.Status
-import play.api.test.Helpers._
+@this(govukBackLink : GovukBackLink)
 
-class IndexControllerSpec extends ControllerSpecBase {
+@()
 
-  private lazy val controller = new IndexController(appConfig, messagesControllerComponents)
-
-  "GET /" should {
-    "return 303" in {
-      val result = controller.onPageLoad(fakeRequest)
-      status(result) mustBe Status.SEE_OTHER
-      redirectLocation(result) mustBe Some(controllers.routes.UserTypeController.onLoad().url)
-    }
-
-  }
-}
+@govukBackLink(BackLink(
+ href = "#",
+ content = Text("Back")
+))

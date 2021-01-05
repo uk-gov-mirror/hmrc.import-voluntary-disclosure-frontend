@@ -14,23 +14,15 @@
  * limitations under the License.
  */
 
-package controllers
+package pages
 
-import config.AppConfig
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import models.UserType
+import play.api.libs.json.JsPath
 
-import javax.inject.Inject
-import scala.concurrent.Future
+case object UserTypePage extends QuestionPage[UserType] {
 
-class IndexController  @Inject()(appConfig: AppConfig,
-                                 mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
+  def path: JsPath = JsPath \ toString
 
-  implicit val config: AppConfig = appConfig
-
-  val onPageLoad: Action[AnyContent] = Action.async { _ =>
-    Future.successful(Redirect(controllers.routes.UserTypeController.onLoad()))
-  }
+  override def toString: String = "user-type"
 
 }

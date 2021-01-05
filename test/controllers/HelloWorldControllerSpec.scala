@@ -18,6 +18,7 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
+import mocks.repositories.MockSessionRepository
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -27,20 +28,24 @@ import scala.concurrent.Future
 
 class HelloWorldControllerSpec extends ControllerSpecBase {
 
-  private lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
+  trait Test extends MockSessionRepository {
+    private lazy val helloWorldPage: HelloWorldPage = app.injector.instanceOf[HelloWorldPage]
 
-  private lazy val dataRetrievalAction = new FakeDataRetrievalAction(None)
+    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(None)
 
-  private lazy val controller = new HelloWorldController(authenticatedAction, dataRetrievalAction,
-    sessionRepository, appConfig, messagesControllerComponents, helloWorldPage)
+    MockedSessionRepository.set(Future.successful(true))
+
+    lazy val controller = new HelloWorldController(authenticatedAction, dataRetrievalAction,
+      mockSessionRepository, appConfig, messagesControllerComponents, helloWorldPage)
+  }
 
   "GET /" should {
-    "return 200" in {
+    "return 200" in new Test {
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
-    "return HTML" in {
+    "return HTML" in new Test {
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -48,7 +53,7 @@ class HelloWorldControllerSpec extends ControllerSpecBase {
   }
 
   "POST /" should {
-    "write UserAnswers and redirect to next page" in {
+    "write UserAnswers and redirect to next page" in new Test {
       val result: Future[Result] = controller.onSubmit(fakeRequest)
       status(result) mustBe Status.SEE_OTHER
       redirectLocation(result) mustBe Some(controllers.routes.HelloWorldController.onLoad().url)

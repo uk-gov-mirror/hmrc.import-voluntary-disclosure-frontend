@@ -109,7 +109,7 @@ object AddressLookupTestConstants extends BaseMessages {
     "labels" -> Json.obj(
       "en" -> Json.obj(
         "appLevelLabels" -> Json.obj(
-          "navTitle" -> clientServiceName,
+          "navTitle" -> "import-voluntary-disclosure-frontend",
           "phaseBannerHtml" -> phaseBannerHtml
         ),
         "selectPageLabels" -> Json.obj(
@@ -136,7 +136,7 @@ object AddressLookupTestConstants extends BaseMessages {
       ),
       "cy" -> Json.obj(
         "appLevelLabels" -> Json.obj(
-          "navTitle" -> clientServiceName,
+          "navTitle" -> "import-voluntary-disclosure-frontend",
           "phaseBannerHtml" -> phaseBannerHtml
         ),
         "selectPageLabels" -> Json.obj(
