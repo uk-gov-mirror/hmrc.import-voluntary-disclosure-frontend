@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package support
 
+import com.github.tomakehurst.wiremock.client.WireMock.{equalToJson, postRequestedFor, urlMatching, verify}
 import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.HeaderNames
@@ -46,6 +47,8 @@ trait IntegrationSpec
   def overriddenConfig: Map[String, Any] = Map(
     s"$servicesPath.auth.host" -> mockHost,
     s"$servicesPath.auth.port" -> mockPort,
+    s"$servicesPath.address-lookup-frontend.host" -> mockHost,
+    s"$servicesPath.address-lookup-frontend.port" -> mockPort,
     "auditing.consumer.baseUri.port" -> mockPort
   )
 

@@ -30,7 +30,7 @@ class IndexController  @Inject()(appConfig: AppConfig,
   implicit val config: AppConfig = appConfig
 
   val onPageLoad: Action[AnyContent] = Action.async { _ =>
-    Future.successful(Redirect(controllers.routes.HelloWorldController.onLoad()))
+    Future.successful(Redirect(controllers.routes.UserTypeController.onLoad()))
   }
 
 }

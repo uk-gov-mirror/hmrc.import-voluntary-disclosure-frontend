@@ -1,4 +1,6 @@
-service.name = import-voluntary-disclosure-frontend
+common.continue = Continue
+
+service.name = Disclose an underpayment of import duties
 service.homePageUrl = /disclose-import-taxes-underpayment
 service.text = This is your new service
 
@@ -14,8 +16,32 @@ footer.termsConditions.url = /help/terms-and-conditions
 footer.govukHelp.text = Help using GOV.UK
 footer.govukHelp.url = https://www.gov.uk/help
 
-#### Number of entries page
+#Feedback
+feedback.title = Give feedback
+feedback.before = This is a new service – your
+feedback.link = feedback
+feedback.after = will help us to improve it.
+banner.phaseName = BETA
 
+#Address Lookup
+address_lookupPage.title = Find your address
+address_lookupPage.heading = Find your address
+address_lookupPage.filter = Property name or number (optional)
+address_lookupPage.postcode = UK postcode
+address_lookupPage.postcode.link = The address does not have a post code
+address_lookupPage.selectPage.heading = Select the new address
+address_lookupPage.selectPage.editLink = Edit the address manually
+address_lookupPage.confirmPage.heading = Confirm address
+address_lookupPage.lookupPage.submit = Find Address
+
+# User Type Page
+userType.pageTitle = Importer or representative?
+userType.heading = Are you the importer or their representative?
+userType.importer = Importer
+userType.representative = Representative
+userType.error.required = Select if you are the importer or their representative
+
+# Number of entries page
 numberOfEntries.pageTitle = How many entries are you disclosing an underpayment for?
 numberOfEntries.title = How many entries are you disclosing an underpayment for?
 numberOfEntries.oneEntry = One entry
@@ -23,6 +49,5 @@ numberOfEntries.moreThanOneEntry = More than one entry
 numberOfEntries.moreThanOneEntry.hint = Multiple entries must be for the same importer, and have the same reason for underpayment.
 numberOfEntries.error.required = Select if you are disclosing an underpayment for one declaration or more than one declaration
 
-#### Error Summary
-
+# Error Summary
 error.summary.title = There is a problem

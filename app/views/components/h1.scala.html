@@ -16,13 +16,8 @@
 
 @this()
 
-@(headingMsg: String, subheadingMsg: Option[String] = None, classes: String = "govuk-heading-l govuk-!-margin-bottom-2")(implicit messages: Messages)
+@(headingMsg: String)(implicit messages: Messages)
 
-@if(subheadingMsg.isDefined){
-<header class="hmrc-page-heading govuk-!-margin-bottom-3 govuk-!-margin-top-0">
- <h1 id="heading" class="@classes">@messages(headingMsg)</h1>
-    <span id="subheading" class="govuk-caption-l hmrc-caption-xl">@subheadingMsg</span>
+<header class="hmrc-page-heading">
+ <h1 class="govuk-heading-xl">@messages(headingMsg)</h1>
 </header>
-} else {
-<h1 id="heading" class="@classes">@messages(headingMsg)</h1>
-}

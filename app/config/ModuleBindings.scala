@@ -27,6 +27,7 @@ class ModuleBindings extends Module {
     bind[IdentifierAction].to(classOf[AuthenticatedIdentifierAction]),
     bind[DataRequiredAction].to(classOf[DataRequiredActionImpl]),
     bind[DataRetrievalAction].to(classOf[DataRetrievalActionImpl]),
+    bind[AppConfig].to(classOf[AppConfigImpl]),
     bind[SessionRepository].to(classOf[UserAnswersRepository])
   )
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 HM Revenue & Customs
+ * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@ import play.api.libs.json.Writes
 
 trait WireMockMethods {
 
-  def when(method: HTTPMethod, uri: String, queryParams: Map[String, String] = Map.empty, headers: Map[String, String] = Map.empty): Mapping = {
+  def when(method: HTTPMethod, uri: String, queryParams: Map[String, String] = Map.empty,
+           headers: Map[String, String] = Map.empty, body: Option[String] = None): Mapping = {
     new Mapping(method, uri, queryParams, headers, None)
   }
 
