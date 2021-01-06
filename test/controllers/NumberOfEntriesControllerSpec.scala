@@ -20,9 +20,11 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.NumberOfEntriesFormProvider
 import mocks.repositories.MockSessionRepository
-import models.NumberOfEntries
+import models.{NumberOfEntries, UserAnswers}
+import pages.NumberOfEntriesPage
 import play.api.http.Status
-import play.api.mvc.Result
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
+import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import views.html.NumberOfEntriesView
 
@@ -33,14 +35,16 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
   trait Test extends MockSessionRepository {
     private lazy val numberOfEntriesPage: NumberOfEntriesView = app.injector.instanceOf[NumberOfEntriesView]
 
-    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(None)
+    val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
 
-    val formProvider = injector.instanceOf[NumberOfEntriesFormProvider]
-    val form = formProvider
+    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
+
+    val formProvider: NumberOfEntriesFormProvider = injector.instanceOf[NumberOfEntriesFormProvider]
+    val form: NumberOfEntriesFormProvider = formProvider
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new NumberOfEntriesController(authenticatedAction, dataRetrievalAction,
+    lazy val controller = new NumberOfEntriesController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
       mockSessionRepository, appConfig, messagesControllerComponents, form, numberOfEntriesPage)
   }
 
@@ -51,6 +55,7 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(NumberOfEntriesPage, NumberOfEntries.OneEntry).success.value)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -61,13 +66,13 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
     "payload contains valid data" should {
 
       "return a SEE OTHER response" in new Test {
-        val request = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.OneEntry.toString)
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.OneEntry.toString)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
       }
 
       "return the correct location header" in new Test {
-        val request = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.OneEntry.toString)
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.OneEntry.toString)
         lazy val result: Future[Result] = controller.onSubmit(request)
         redirectLocation(result) mustBe Some(controllers.routes.NumberOfEntriesController.onLoad().url)
       }
@@ -91,13 +96,13 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
     "payload contains valid data" should {
 
       "return a SEE OTHER response" in new Test {
-        val request = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.MoreThanOneEntry.toString)
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.MoreThanOneEntry.toString)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
       }
 
       "return the correct location header" in new Test {
-        val request = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.MoreThanOneEntry.toString)
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.MoreThanOneEntry.toString)
         lazy val result: Future[Result] = controller.onSubmit(request)
         redirectLocation(result) mustBe Some(controllers.routes.NumberOfEntriesController.onLoad().url)
       }

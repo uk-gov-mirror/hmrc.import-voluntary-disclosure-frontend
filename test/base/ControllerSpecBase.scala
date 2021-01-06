@@ -16,10 +16,11 @@
 
 package base
 
-import controllers.actions.{FakeIdentifierAction, IdentifierAction}
-import repositories.UserAnswersRepository
+import controllers.actions._
 
 trait ControllerSpecBase extends SpecBase {
   lazy val authenticatedAction: IdentifierAction =
     FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+
+  lazy val dataRequiredAction: DataRequiredAction = injector.instanceOf[DataRequiredActionImpl]
 }

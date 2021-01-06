@@ -17,8 +17,9 @@
 package controllers
 
 import config.AppConfig
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.NumberOfEntriesFormProvider
+import models.NumberOfEntries.{MoreThanOneEntry, OneEntry}
 import models.{NumberOfEntries, UserAnswers}
 import pages.NumberOfEntriesPage
 import play.api.i18n.I18nSupport
@@ -26,15 +27,15 @@ import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.NumberOfEntriesView
-import javax.inject.{Inject, Singleton}
-import models.NumberOfEntries.{MoreThanOneEntry, OneEntry}
 
-import scala.concurrent.Future
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 @Singleton
 class NumberOfEntriesController @Inject()(identity: IdentifierAction,
                                           getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
                                           sessionRepository: SessionRepository,
                                           appConfig: AppConfig,
                                           mcc: MessagesControllerComponents,
@@ -44,20 +45,22 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
 
   implicit val config: AppConfig = appConfig
 
-  val onLoad: Action[AnyContent] = (identity andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
+  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
 
-    Future.successful(Ok(view(formProvider(), userAnswers)))
+    val form = request.userAnswers.get(NumberOfEntriesPage).fold(formProvider()) {
+      formProvider().fill
+    }
+
+    Future.successful(Ok(view(form)))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
+  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
 
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, userAnswers))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(userAnswers.set(NumberOfEntriesPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(NumberOfEntriesPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           redirect(value)
@@ -66,7 +69,7 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
     )
   }
 
-  private def redirect (entries: NumberOfEntries) : Result = entries match {
+  private def redirect(entries: NumberOfEntries): Result = entries match {
     case OneEntry => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
     case MoreThanOneEntry => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
   }

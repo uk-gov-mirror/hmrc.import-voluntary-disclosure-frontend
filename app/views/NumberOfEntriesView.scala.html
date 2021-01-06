@@ -24,7 +24,7 @@
         inputRadio: components.inputRadio,
         button: components.button)
 
-@(form: Form[_], userAnswers: UserAnswers)(implicit request: Request[_], messages: Messages)
+@(form: Form[_])(implicit request: Request[_], messages: Messages)
 
     @layout(pageTitle = Some(messages("numberOfEntries.pageTitle"))) {
         @back_link()

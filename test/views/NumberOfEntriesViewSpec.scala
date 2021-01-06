@@ -16,14 +16,12 @@
 
 package views
 
-import java.time.LocalDateTime
-
 import forms.NumberOfEntriesFormProvider
 import messages.{BaseMessages, NumberOfEntriesMessages}
-import models.UserAnswers
+import models.NumberOfEntries
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.libs.json.Json
+import play.api.data.Form
 import play.twirl.api.Html
 import views.html.NumberOfEntriesView
 
@@ -31,17 +29,12 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
 
   private lazy val injectedView: NumberOfEntriesView = app.injector.instanceOf[NumberOfEntriesView]
 
-  val userAnswers: UserAnswers = UserAnswers(
-    "123456",
-    Json.obj("value" -> "oneEntry"),
-    LocalDateTime.now()
-  )
-  val formProvider = injector.instanceOf[NumberOfEntriesFormProvider]
-  val form = formProvider.apply()
+  val formProvider: NumberOfEntriesFormProvider = injector.instanceOf[NumberOfEntriesFormProvider]
+  val form: Form[NumberOfEntries] = formProvider.apply()
 
   "Rendering the NumberOfEntries page" when {
 
-    lazy val view: Html = injectedView(form, userAnswers)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form)(fakeRequest, messages)
 
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
