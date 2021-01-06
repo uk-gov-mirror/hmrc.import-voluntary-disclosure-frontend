@@ -29,16 +29,13 @@
 
         @errorSummary(form.errors)
 
-        @h1(messages("userType.heading"))
-
         @formHelper(action = controllers.routes.UserTypeController.onSubmit()) {
             @inputRadio(
                 form = form,
                 legend = messages("userType.heading"),
                 items = UserType.options(form),
                 inline = true,
-                legendAsHeading = false,
-                classes = "govuk-visually-hidden"
+                legendAsHeading = true
             )
 
             @button("common.button.continue")
