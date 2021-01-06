@@ -31,16 +31,13 @@
 
         @errorSummary(form.errors)
 
-        @h1(messages("numberOfEntries.title"))
-
         @formHelper(action = controllers.routes.NumberOfEntriesController.onSubmit()) {
             @inputRadio(
                 form = form,
-                legend = messages("numberOfEntries.heading"),
+                legend = messages("numberOfEntries.title"),
                 items = NumberOfEntries.options(form),
                 inline = true,
-                legendAsHeading = false,
-                classes = "govuk-visually-hidden"
+                legendAsHeading = true
             )
 
             @button("common.button.continue")
