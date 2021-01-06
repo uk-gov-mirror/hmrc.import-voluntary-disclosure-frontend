@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package base
+package views
 
-import controllers.actions._
+import play.api.i18n.Messages
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
+import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+object ViewUtils  {
 
-  lazy val dataRequiredAction: DataRequiredAction = injector.instanceOf[DataRequiredActionImpl]
+  def hint(messageKey: String, hintMessageArgs: String*)(implicit messages: Messages): Hint = Hint(content = HtmlContent(messages(messageKey, hintMessageArgs: _*)))
+
 }

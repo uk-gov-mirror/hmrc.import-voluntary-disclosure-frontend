@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
-package base
+package forms
 
-import controllers.actions._
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.NumberOfEntries
+import play.api.data.Form
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
 
-  lazy val dataRequiredAction: DataRequiredAction = injector.instanceOf[DataRequiredActionImpl]
+class NumberOfEntriesFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[NumberOfEntries] =
+    Form(
+      "value" -> enumerable[NumberOfEntries]("numberOfEntries.error.required")
+    )
 }

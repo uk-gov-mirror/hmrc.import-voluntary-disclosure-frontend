@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package base
+package messages
 
-import controllers.actions._
+object NumberOfEntriesMessages extends BaseMessages {
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+  val title: String = "How many entries are you disclosing an underpayment for?"
+  val h1: String = "How many entries are you disclosing an underpayment for?"
+  val radioButtonOne: String = "One entry"
+  val radioButtonTwo: String = "More than one entry"
+  val hint: String = "Multiple entries must be for the same importer, and have the same reason for underpayment."
+  val requiredError: String = "Select if you are disclosing an underpayment for one declaration or more than one declaration"
 
-  lazy val dataRequiredAction: DataRequiredAction = injector.instanceOf[DataRequiredActionImpl]
 }
