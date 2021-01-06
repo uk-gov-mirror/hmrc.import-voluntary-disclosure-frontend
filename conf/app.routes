@@ -14,4 +14,7 @@ POST        /hello-world           controllers.HelloWorldController.onSubmit
 GET         /who-is-disclosing     controllers.UserTypeController.onLoad
 POST        /who-is-disclosing     controllers.UserTypeController.onSubmit
 
+GET         /one-or-more-entries   controllers.NumberOfEntriesController.onLoad
+POST        /one-or-more-entries   controllers.NumberOfEntriesController.onSubmit
+
 GET         /unauthorised          controllers.errors.UnauthorisedController.onPageLoad

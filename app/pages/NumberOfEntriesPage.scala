@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package base
+package pages
 
-import controllers.actions._
+import models.NumberOfEntries
+import play.api.libs.json.JsPath
 
-trait ControllerSpecBase extends SpecBase {
-  lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+case object NumberOfEntriesPage extends QuestionPage[NumberOfEntries] {
 
-  lazy val dataRequiredAction: DataRequiredAction = injector.instanceOf[DataRequiredActionImpl]
+  def path: JsPath = JsPath \ toString
+
+  override def toString: String = "number-of-entries"
+
 }

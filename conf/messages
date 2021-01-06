@@ -41,6 +41,13 @@ userType.importer = Importer
 userType.representative = Representative
 userType.error.required = Select if you are the importer or their representative
 
+# Number of entries page
+numberOfEntries.pageTitle = How many entries are you disclosing an underpayment for?
+numberOfEntries.title = How many entries are you disclosing an underpayment for?
+numberOfEntries.oneEntry = One entry
+numberOfEntries.moreThanOneEntry = More than one entry
+numberOfEntries.moreThanOneEntry.hint = Multiple entries must be for the same importer, and have the same reason for underpayment.
+numberOfEntries.error.required = Select if you are disclosing an underpayment for one declaration or more than one declaration
+
 # Error Summary
-# ----------------------------------------------
 error.summary.title = There is a problem

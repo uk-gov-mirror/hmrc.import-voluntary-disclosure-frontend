@@ -58,7 +58,7 @@ class UserTypeController @Inject()(identity: IdentifierAction,
           updatedAnswers <- Future.fromTry(userAnswers.set(UserTypePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.UserTypeController.onLoad())
+          Redirect(controllers.routes.NumberOfEntriesController.onLoad())
         }
       }
     )

@@ -27,10 +27,16 @@
         scriptsBlock: Option[Html] = None
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
+@scripts = {
+    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script>window.GOVUKFrontend.initAll();</script>
+    @scriptsBlock
+}
+
 @govukLayout(
     pageTitle = pageTitle,
     headBlock = Some(head(headBlock)),
-    scriptsBlock = scriptsBlock,
+    scriptsBlock = Some(scripts),
     beforeContentBlock = None,
     footerItems = footerLinks.links()
 )(contentBlock)
