@@ -14,4 +14,7 @@ POST        /hello-world           controllers.HelloWorldController.onSubmit
 GET         /who-is-disclosing     controllers.UserTypeController.onLoad
 POST        /who-is-disclosing     controllers.UserTypeController.onSubmit
 
+GET         /disclosure/when-entry-acceptance-date     controllers.AcceptanceDateController.onLoad
+POST        /disclosure/when-entry-acceptance-date     controllers.AcceptanceDateController.onSubmit
+
 GET         /unauthorised          controllers.errors.UnauthorisedController.onPageLoad

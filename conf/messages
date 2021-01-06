@@ -41,6 +41,13 @@ userType.importer = Importer
 userType.representative = Representative
 userType.error.required = Select if you are the importer or their representative
 
+#Acceptance Date Page
+acceptanceDate.pageTitle = Was the entry acceptance date before 1 January 2021?
+acceptanceDate.heading = Was the entry acceptance date before 1 January 2021?
+acceptanceDate.yes = Yes
+acceptanceDate.no = No
+acceptanceDate.error.required = Select yes if the entry acceptance date was before 1 January 2021
+
 # Error Summary
 # ----------------------------------------------
 error.summary.title = There is a problem
