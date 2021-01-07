@@ -16,10 +16,9 @@
 
 package controllers
 
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.AcceptanceDateFormProvider
 import javax.inject.{Inject, Singleton}
-import models.UserAnswers
 import pages.AcceptanceDatePage
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
@@ -38,24 +37,26 @@ class AcceptanceDateController @Inject()(identity: IdentifierAction,
                                          sessionRepository: SessionRepository,
                                          mcc: MessagesControllerComponents,
                                          formProvider: AcceptanceDateFormProvider,
-                                         view: AcceptanceDateView)
+                                         view: AcceptanceDateView,
+                                         requireData: DataRequiredAction)
   extends FrontendController(mcc) with I18nSupport {
 
-  val onLoad: Action[AnyContent] = (identity andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
+  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
 
-    Future.successful(Ok(view(formProvider(), userAnswers)))
+    val form = request.userAnswers.get(AcceptanceDatePage).fold(formProvider()) {
+      formProvider().fill
+    }
 
+    Future.successful(Ok(view(form)))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
+  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
 
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, userAnswers))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(userAnswers.set(AcceptanceDatePage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(AcceptanceDatePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           Redirect(controllers.routes.AcceptanceDateController.onSubmit())
