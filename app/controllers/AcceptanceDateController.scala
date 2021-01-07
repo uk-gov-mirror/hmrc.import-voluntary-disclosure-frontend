@@ -34,11 +34,11 @@ import scala.concurrent.Future
 @Singleton
 class AcceptanceDateController @Inject()(identity: IdentifierAction,
                                          getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
                                          sessionRepository: SessionRepository,
                                          mcc: MessagesControllerComponents,
                                          formProvider: AcceptanceDateFormProvider,
-                                         view: AcceptanceDateView,
-                                         requireData: DataRequiredAction)
+                                         view: AcceptanceDateView)
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
