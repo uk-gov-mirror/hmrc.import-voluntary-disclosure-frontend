@@ -1,5 +1,6 @@
 common.continue = Continue
 common.back = Back
+common.errorPrefix = 'Error: '
 
 service.name = Disclose an underpayment of import duties
 service.homePageUrl = /disclose-import-taxes-underpayment

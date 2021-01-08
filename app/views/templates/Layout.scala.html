@@ -23,7 +23,8 @@
         backLink: components.back_link
 )
 
-@(pageTitle: Option[String] = None,
+@(pageTitle: String,
+        form: Option[Form[_]] = None,
         headBlock: Option[Html] = None,
         scriptsBlock: Option[Html] = None,
         showBackLink: Boolean = true,
@@ -31,7 +32,7 @@
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @scripts = {
-    <script src='@controllers.routes.Assets.versioned("javascripts/application.js")'></script>
+    <script src='@controllers.routes.Assets.versioned("javascripts/application.min.js")'></script>
     <script>window.GOVUKFrontend.initAll();</script>
     @scriptsBlock
 }
@@ -42,14 +43,19 @@
     }
 }
 
-@govukLayout(
-    pageTitle = pageTitle,
-    headBlock = Some(head(headBlock)),
-    scriptsBlock = Some(scripts),
-    beforeContentBlock = Some(beforeContentBlock),
-    footerItems = footerLinks.links()
-)(contentBlock)
-
+@defining({
+    form.collect[String] {
+        case f if f.errors.nonEmpty => messages("common.errorPrefix") + pageTitle
+    }.orElse(Some(pageTitle))
+}) { title =>
+    @govukLayout(
+        pageTitle = title,
+        headBlock = Some(head(headBlock)),
+        scriptsBlock = Some(scripts),
+        beforeContentBlock = Some(beforeContentBlock),
+        footerItems = footerLinks.links()
+    )(contentBlock)
+}
 @{
     //$COVERAGE-OFF$
 }
