@@ -16,6 +16,7 @@
 
 package views
 
+import base.ViewBaseSpec
 import forms.NumberOfEntriesFormProvider
 import messages.{BaseMessages, NumberOfEntriesMessages}
 import models.NumberOfEntries

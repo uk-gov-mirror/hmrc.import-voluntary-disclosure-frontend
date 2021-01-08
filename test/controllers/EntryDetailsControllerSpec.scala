@@ -83,7 +83,7 @@ class EntryDetailsControllerSpec extends ControllerSpecBase {
         private val request = fakeRequest.withFormUrlEncodedBody(buildForm(day=Some("31"),month=Some("12"),year=Some("2020")):_*)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.EntryDetailsController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.AcceptanceDateController.onLoad().url)
       }
 
       "return a SEE OTHER response and redirect to correct location for date AFTER EU exit" in new Test {

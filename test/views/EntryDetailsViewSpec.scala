@@ -18,6 +18,7 @@ package views
 
 import java.time.LocalDate
 
+import base.ViewBaseSpec
 import forms.EntryDetailsFormProvider
 import messages.{BaseMessages, EntryDetailsMessages}
 import models.EntryDetails

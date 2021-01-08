@@ -67,7 +67,7 @@ class EntryDetailsController @Inject()(identity: IdentifierAction,
 
   private def redirect(entryDetails: EntryDetails): Result =
     if (entryDetails.entryDate.isBefore(appConfig.euExitDate)) {
-      Redirect(controllers.routes.EntryDetailsController.onLoad()) // Acceptance Entry Page
+      Redirect(controllers.routes.AcceptanceDateController.onLoad())
     } else {
       Redirect(controllers.routes.EntryDetailsController.onLoad())
     }

@@ -16,6 +16,7 @@
 
 package views
 
+import base.ViewBaseSpec
 import forms.AcceptanceDateFormProvider
 import messages.{AcceptanceDateMessages, BaseMessages}
 import org.jsoup.Jsoup
