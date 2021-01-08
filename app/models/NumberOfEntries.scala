@@ -53,5 +53,4 @@ object NumberOfEntries extends Enumerable.Implicits {
   implicit val enumerable: Enumerable[NumberOfEntries] =
     Enumerable(values.map(v => v.toString -> v): _*)
 
-
 }

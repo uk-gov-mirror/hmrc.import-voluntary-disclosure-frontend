@@ -16,10 +16,10 @@
 
 package forms.mappings
 
+import filters.InputFilter
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
-trait Constraints {
-
+trait Constraints extends InputFilter {
   protected def firstError[A](constraints: Constraint[A]*): Constraint[A] =
     Constraint {
       input =>
