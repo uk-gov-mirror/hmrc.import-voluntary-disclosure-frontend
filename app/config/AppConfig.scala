@@ -16,6 +16,8 @@
 
 package config
 
+import java.time.LocalDate
+
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.mvc.RequestHeader
@@ -51,7 +53,7 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val cacheTtl = servicesConfig.getInt("mongodb.timeToLiveInSeconds")
 }
 
-trait AppConfig {
+trait AppConfig extends FixedConfig {
   val footerLinkItems: Seq[String]
   val contactFormServiceIdentifier: String
   val contactUrl: String
@@ -68,4 +70,8 @@ trait AppConfig {
   val addressLookupCallbackUrl: String
   val timeoutPeriod: Int
   val cacheTtl: Int
+}
+
+trait FixedConfig {
+  val euExitDate: LocalDate = LocalDate.of(2021, 1, 1)
 }

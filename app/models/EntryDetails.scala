@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package views
+package models
 
-import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
-import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
+import java.time.LocalDate
 
-object ViewUtils  {
+import play.api.libs.json.Json
 
-  def hint(messageKey: String, hintMessageArgs: String*)(implicit messages: Messages): Hint =
-    Hint(content = HtmlContent(messages(messageKey, hintMessageArgs: _*)))
+case class EntryDetails(epu: String, entryNumber: String, entryDate: LocalDate)
 
+object EntryDetails {
+  implicit val format = Json.format[EntryDetails]
 }
+

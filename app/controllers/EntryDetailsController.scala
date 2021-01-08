@@ -18,36 +18,33 @@ package controllers
 
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.NumberOfEntriesFormProvider
-import models.NumberOfEntries.{MoreThanOneEntry, OneEntry}
-import models.{NumberOfEntries, UserAnswers}
-import pages.NumberOfEntriesPage
+import forms.EntryDetailsFormProvider
+import javax.inject.{Inject, Singleton}
+import models.EntryDetails
+import pages.EntryDetailsPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.NumberOfEntriesView
+import views.html.EntryDetailsView
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class NumberOfEntriesController @Inject()(identity: IdentifierAction,
-                                          getData: DataRetrievalAction,
-                                          requireData: DataRequiredAction,
-                                          sessionRepository: SessionRepository,
-                                          appConfig: AppConfig,
-                                          mcc: MessagesControllerComponents,
-                                          formProvider: NumberOfEntriesFormProvider,
-                                          view: NumberOfEntriesView)
+class EntryDetailsController @Inject()(identity: IdentifierAction,
+                                       getData: DataRetrievalAction,
+                                       requireData: DataRequiredAction,
+                                       sessionRepository: SessionRepository,
+                                       appConfig: AppConfig,
+                                       mcc: MessagesControllerComponents,
+                                       formProvider: EntryDetailsFormProvider,
+                                       view: EntryDetailsView)
   extends FrontendController(mcc) with I18nSupport {
 
-  implicit val config: AppConfig = appConfig
+  def onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
 
-  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-
-    val form = request.userAnswers.get(NumberOfEntriesPage).fold(formProvider()) {
+    val form = request.userAnswers.get(EntryDetailsPage).fold(formProvider()) {
       formProvider().fill
     }
 
@@ -55,12 +52,11 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
   }
 
   def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(NumberOfEntriesPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(EntryDetailsPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           redirect(value)
@@ -69,8 +65,12 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
     )
   }
 
-  private def redirect(entries: NumberOfEntries): Result = entries match {
-    case OneEntry => Redirect(controllers.routes.EntryDetailsController.onLoad())
-    case MoreThanOneEntry => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
-  }
+  private def redirect(entryDetails: EntryDetails): Result =
+    if (entryDetails.entryDate.isBefore(appConfig.euExitDate)) {
+      Redirect(controllers.routes.EntryDetailsController.onLoad()) // Acceptance Entry Page
+    } else {
+      Redirect(controllers.routes.EntryDetailsController.onLoad())
+    }
+
+
 }

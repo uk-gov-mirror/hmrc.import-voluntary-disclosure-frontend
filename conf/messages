@@ -4,6 +4,11 @@ service.name = Disclose an underpayment of import duties
 service.homePageUrl = /disclose-import-taxes-underpayment
 service.text = This is your new service
 
+date.day = Day
+date.month = Month
+date.year = Year
+
+site.and = ' and '
 common.button.confirmAndContinue = Confirm and continue
 common.button.continue = Continue
 
@@ -33,6 +38,28 @@ address_lookupPage.selectPage.heading = Select the new address
 address_lookupPage.selectPage.editLink = Edit the address manually
 address_lookupPage.confirmPage.heading = Confirm address
 address_lookupPage.lookupPage.submit = Find Address
+
+error.date.length = You have entered too many numbers for {0}
+error.year.length = Year must be 4 numbers
+
+entryDetails.pageTitle = Entry details
+entryDetails.title = Entry details
+entryDetails.epu.label = EPU number
+entryDetails.epu.hint = This is 3 numbers, for example ‘121’
+entryDetails.epu.error.missing = Enter an EPU number
+entryDetails.epu.error.format = Enter an EPU number in the correct format
+entryDetails.entryNumber.label = Entry number
+entryDetails.entryNumber.hint = This is 6 numbers and a letter, for example ‘123456Q’
+entryDetails.entryNumber.error.missing = Enter an entry number
+entryDetails.entryNumber.error.format = Enter an entry number in the correct format
+entryDetails.entryDate.label = Entry date
+entryDetails.entryDate.hint = For example, 27 3 2020
+entryDetails.entryDate.error.invalid = Entry date must be a real date
+entryDetails.entryDate.error.required.all = Enter an entry date and include a day, month and year
+entryDetails.entryDate.error.required.two = Entry date must include a {0} and {1}
+entryDetails.entryDate.error.required = Entry date must include a {0}
+entryDetails.entryDate.error.year.length = Entry date year must be 4 numbers
+entryDetails.entryDate.error.past = Entry date must be today or in the past
 
 # User Type Page
 userType.pageTitle = Importer or representative?

@@ -33,9 +33,30 @@ trait Mappings extends Formatters with Constraints {
                     nonNumericKey: String = "error.nonNumeric"): FieldMapping[Int] =
     of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey))
 
+  protected def numeric(isCurrency: Boolean = false,
+                        requiredKey: String = "error.required",
+                        invalidNumeric: String = "error.invalidNumeric",
+                        nonNumericKey: String = "error.nonNumeric"
+                       ): FieldMapping[BigDecimal] =
+    if (isCurrency) {
+      of(numericFormatter(isCurrency = true, requiredKey, invalidNumeric, nonNumericKey))
+    } else {
+      of(numericFormatter(isCurrency = false, requiredKey, invalidNumeric, nonNumericKey))
+    }
+
   protected def boolean(requiredKey: String = "error.required",
                         invalidKey: String = "error.boolean"): FieldMapping[Boolean] =
     of(booleanFormatter(requiredKey, invalidKey))
+
+  protected def localDate(invalidKey: String,
+                           allRequiredKey: String,
+                           twoRequiredKey: String,
+                           requiredKey: String,
+                           dayMonthLengthKey: String = "error.date.length",
+                           yearLengthKey: String = "error.year.length",
+                           validatePastKey: Option[String] = None,
+                           args: Seq[String] = Seq.empty)(implicit messages: Messages): FieldMapping[LocalDate] =
+    of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, dayMonthLengthKey, yearLengthKey, validatePastKey, args))
 
   protected def enumerable[A](requiredKey: String = "error.required",
                               invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
