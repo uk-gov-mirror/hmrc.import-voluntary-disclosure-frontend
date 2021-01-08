@@ -62,6 +62,10 @@ class UserTypeViewSpec extends ViewBaseSpec with BaseMessages {
       s"have the correct value for the second radio button of '${UserTypeMessages.radioButtonTwo}'" in {
         elementText("#main-content div.govuk-radios__item:nth-child(2)") mustBe UserTypeMessages.radioButtonTwo
       }
+
+      "not render a back link" in {
+        document.select("#back-link").size mustBe 0
+      }
     }
 
     "an error exists (no option has been selected)" should {

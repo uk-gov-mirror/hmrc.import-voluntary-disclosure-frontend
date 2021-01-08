@@ -19,25 +19,34 @@
 @this(govukLayout: GovukLayout,
         appConfig: AppConfig,
         footerLinks: FooterLinks,
-        head: partials.Head
+        head: partials.Head,
+        backLink: components.back_link
 )
 
 @(pageTitle: Option[String] = None,
         headBlock: Option[Html] = None,
-        scriptsBlock: Option[Html] = None
+        scriptsBlock: Option[Html] = None,
+        showBackLink: Boolean = true,
+        customBackLinkUrl: Option[Call] = None
 )(contentBlock: Html)(implicit request: Request[_], messages: Messages)
 
 @scripts = {
-    <script src='@controllers.routes.Assets.versioned("lib/govuk-frontend/govuk/all.js")'></script>
+    <script src='@controllers.routes.Assets.versioned("javascripts/application.js")'></script>
     <script>window.GOVUKFrontend.initAll();</script>
     @scriptsBlock
+}
+
+@beforeContentBlock = {
+    @if(showBackLink) {
+        @backLink(customBackLinkUrl)
+    }
 }
 
 @govukLayout(
     pageTitle = pageTitle,
     headBlock = Some(head(headBlock)),
     scriptsBlock = Some(scripts),
-    beforeContentBlock = None,
+    beforeContentBlock = Some(beforeContentBlock),
     footerItems = footerLinks.links()
 )(contentBlock)
 
