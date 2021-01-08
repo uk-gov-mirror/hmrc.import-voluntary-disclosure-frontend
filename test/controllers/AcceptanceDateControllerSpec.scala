@@ -64,7 +64,7 @@ class AcceptanceDateControllerSpec extends ControllerSpecBase {
     }
   }
 
-  "POST oneEntry" when {
+  "POST /" when {
     "payload contains valid data" should {
 
       "return a SEE OTHER response" in new Test {
