@@ -23,8 +23,9 @@ import mocks.repositories.MockSessionRepository
 import models.UserAnswers
 import pages.AcceptanceDatePage
 import play.api.http.Status
-import play.api.mvc.Result
-import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
+import play.api.test.FakeRequest
+import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import views.html.AcceptanceDateView
 
 import scala.concurrent.Future
@@ -47,6 +48,8 @@ class AcceptanceDateControllerSpec extends ControllerSpecBase {
       mockSessionRepository, messagesControllerComponents, form, acceptanceDateView)
   }
 
+  val acceptanceDateYes: Boolean = true
+
   "GET /" should {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad(fakeRequest)
@@ -54,16 +57,44 @@ class AcceptanceDateControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(AcceptanceDatePage, Boolean().success.value))
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(AcceptanceDatePage, acceptanceDateYes).success.value)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
   }
 
+  "POST oneEntry" when {
+    "payload contains valid data" should {
 
+      "return a SEE OTHER response" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        status(result) mustBe Status.SEE_OTHER
+      }
+
+      "return the correct location header" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        redirectLocation(result) mustBe Some(controllers.routes.AcceptanceDateController.onLoad().url)
+      }
+
+      "update the UserAnswers in session" in new Test {
+        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        await(controller.onSubmit(request))
+        MockedSessionRepository.verifyCalls()
+      }
+    }
+
+    "payload contains invalid data" should {
+      "return a BAD REQUEST" in new Test {
+        val result: Future[Result] = controller.onSubmit(fakeRequest)
+        status(result) mustBe Status.BAD_REQUEST
+      }
+    }
   }
 
+}
 
 
 
