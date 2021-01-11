@@ -24,7 +24,11 @@
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("numberOfEntries.pageTitle"), form = Some(form)) {
+@layout(
+    pageTitle = messages("numberOfEntries.pageTitle"),
+    form = Some(form),
+    customBackLinkUrl = Some(controllers.routes.UserTypeController.onLoad)
+) {
 
     @errorSummary(form.errors)
 
