@@ -22,7 +22,7 @@
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-    @layout(pageTitle = Some(messages("acceptanceDate.pageTitle"))) {
+    @layout(pageTitle = messages("acceptanceDate.pageTitle"), form = Some(form), customBackLinkUrl = Some(controllers.routes.EntryDetailsController.onLoad)) {
 
         @errorSummary(form.errors)
 

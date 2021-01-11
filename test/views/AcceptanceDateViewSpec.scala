@@ -38,20 +38,16 @@ class AcceptanceDateViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct page heading of '${AcceptanceDateMessages.title}'" in {
+      s"have the correct page title" in {
         document.title mustBe AcceptanceDateMessages.title
       }
 
-      s"have the correct h1 of '${AcceptanceDateMessages.h1}'" in {
-        elementText("h1") mustBe AcceptanceDateMessages.h1
+      "not render an error summary" in {
+        document.select("div.govuk-error-summary").size mustBe 0
       }
 
-      s"have the correct value for the first radio button of '${AcceptanceDateMessages.radioButtonOne}'" in {
-        elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(1)") mustBe AcceptanceDateMessages.radioButtonOne
-      }
-
-      s"have the correct value for the second radio button of '${AcceptanceDateMessages.radioButtonTwo}'" in {
-        elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(2)") mustBe AcceptanceDateMessages.radioButtonTwo
+      "not render an error message against the field" in {
+        document.select("#value-error").size mustBe 0
       }
     }
 
@@ -59,6 +55,10 @@ class AcceptanceDateViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
       lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "update the page title to include the error prefix" in {
+        document.title mustBe AcceptanceDateMessages.errorPrefix + AcceptanceDateMessages.title
+      }
 
       "render an error summary with the correct message" in {
         elementText("div.govuk-error-summary > div") mustBe AcceptanceDateMessages.requiredError
@@ -69,5 +69,33 @@ class AcceptanceDateViewSpec extends ViewBaseSpec with BaseMessages {
       }
 
     }
+  }
+
+  it should {
+
+    val form: Form[Boolean] = formProvider.apply()
+    lazy val view: Html = injectedView(form)(fakeRequest, messages)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct h1 of '${AcceptanceDateMessages.h1}'" in {
+      elementText("h1") mustBe AcceptanceDateMessages.h1
+    }
+
+    s"have the correct value for the first radio button of '${AcceptanceDateMessages.radioButtonOne}'" in {
+      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(1)") mustBe AcceptanceDateMessages.radioButtonOne
+    }
+
+    s"have the correct value for the second radio button of '${AcceptanceDateMessages.radioButtonTwo}'" in {
+      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(2)") mustBe AcceptanceDateMessages.radioButtonTwo
+    }
+
+    "render a back link with the correct URL" in {
+      elementAttributes("#back-link") must contain("href" -> controllers.routes.EntryDetailsController.onLoad().url)
+    }
+
+    s"have the correct Continue button" in {
+      elementText(".govuk-button") mustBe continue
+    }
+
   }
 }
