@@ -18,33 +18,30 @@
 
 @this(layout: templates.Layout,
         formHelper: FormWithCSRF,
-        h1: components.h1,
-        back_link: components.back_link,
         errorSummary: components.errorSummary,
         inputRadio: components.inputRadio,
         button: components.button)
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-    @layout(pageTitle = Some(messages("numberOfEntries.pageTitle"))) {
-        @back_link()
+@layout(pageTitle = messages("numberOfEntries.pageTitle"), form = Some(form)) {
 
-        @errorSummary(form.errors)
+    @errorSummary(form.errors)
 
-        @formHelper(action = controllers.routes.NumberOfEntriesController.onSubmit()) {
-            @inputRadio(
-                form = form,
-                legend = messages("numberOfEntries.title"),
-                items = NumberOfEntries.options(form),
-                inline = true,
-                legendAsHeading = true
-            )
+    @formHelper(action = controllers.routes.NumberOfEntriesController.onSubmit()) {
+        @inputRadio(
+            form = form,
+            legend = messages("numberOfEntries.title"),
+            items = NumberOfEntries.options(form),
+            inline = true,
+            legendAsHeading = true
+        )
 
-            @button("common.button.continue")
-        }
-
+        @button("common.button.continue")
     }
 
-    @{
-        //$COVERAGE-OFF$
-    }
+}
+
+@{
+    //$COVERAGE-OFF$
+}
