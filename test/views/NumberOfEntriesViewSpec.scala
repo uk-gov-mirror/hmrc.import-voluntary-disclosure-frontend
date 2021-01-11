@@ -91,8 +91,8 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
         s"${NumberOfEntriesMessages.radioButtonTwo} ${NumberOfEntriesMessages.hint}"
     }
 
-    "render a back link" in {
-      document.select("#back-link").size mustBe 1
+    "render a back link with the correct URL" in {
+      elementAttributes("#back-link") must contain("href" -> controllers.routes.UserTypeController.onLoad().url)
     }
 
   }

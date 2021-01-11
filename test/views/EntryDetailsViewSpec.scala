@@ -176,8 +176,12 @@ class EntryDetailsViewSpec extends ViewBaseSpec with BaseMessages {
       elementText("#entryDate-hint") mustBe EntryDetailsMessages.entryDateHint
     }
 
-    s"have the correct Continue button" in {
+    "have the correct Continue button" in {
       elementText(".govuk-button") mustBe continue
+    }
+
+    "render a back link with the correct URL" in {
+      elementAttributes("#back-link") must contain("href" -> controllers.routes.NumberOfEntriesController.onLoad().url)
     }
   }
 }
