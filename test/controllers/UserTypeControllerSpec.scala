@@ -20,7 +20,8 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.UserTypeFormProvider
 import mocks.repositories.MockSessionRepository
-import models.UserType
+import models.{UserAnswers, UserType}
+import pages.UserTypePage
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -32,8 +33,8 @@ class UserTypeControllerSpec extends ControllerSpecBase {
 
   trait Test extends MockSessionRepository {
     private lazy val userTypePage: UserTypeView = app.injector.instanceOf[UserTypeView]
-
-    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(None)
+    val userAnswers: Option[UserAnswers] = None
+    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
     val formProvider: UserTypeFormProvider = injector.instanceOf[UserTypeFormProvider]
     val form: UserTypeFormProvider = formProvider
@@ -46,6 +47,8 @@ class UserTypeControllerSpec extends ControllerSpecBase {
 
   "GET /" should {
     "return OK" in new Test {
+      private val previousAnswers = UserAnswers("some cred ID").set(UserTypePage, UserType.Importer).success.value
+      override val userAnswers: Option[UserAnswers] = Some(previousAnswers)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }

@@ -22,7 +22,7 @@
         inputRadio: components.inputRadio,
         button: components.button)
 
-@(form: Form[_], userAnswers: UserAnswers)(implicit request: Request[_], messages: Messages)
+@(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = messages("userType.pageTitle"), form = Some(form), showBackLink = false) {
 
