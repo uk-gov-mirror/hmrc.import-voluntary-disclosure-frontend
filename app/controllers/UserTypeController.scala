@@ -42,17 +42,22 @@ class UserTypeController @Inject()(identity: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identity andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
 
-    Future.successful(Ok(view(formProvider(), userAnswers)))
+    val form = for {
+      userAnswers <- request.userAnswers
+      data <- userAnswers.get(UserTypePage)
+    } yield {
+      formProvider().fill(data)
+    }
 
+    Future.successful(Ok(view(form.getOrElse(formProvider()))))
   }
 
   def onSubmit: Action[AnyContent] = (identity andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
 
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, userAnswers))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
           updatedAnswers <- Future.fromTry(userAnswers.set(UserTypePage, value))

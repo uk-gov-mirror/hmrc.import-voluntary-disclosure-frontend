@@ -19,32 +19,23 @@ package views
 import base.ViewBaseSpec
 import forms.UserTypeFormProvider
 import messages.{BaseMessages, UserTypeMessages}
-import models.{UserAnswers, UserType}
+import models.UserType
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
-import play.api.libs.json.Json
 import play.twirl.api.Html
 import views.html.UserTypeView
-
-import java.time.LocalDateTime
 
 class UserTypeViewSpec extends ViewBaseSpec with BaseMessages {
 
   private lazy val injectedView: UserTypeView = app.injector.instanceOf[UserTypeView]
-
-  val userAnswers: UserAnswers = UserAnswers(
-    "123456",
-    Json.obj("value" -> "importer"),
-    LocalDateTime.now()
-  )
   val formProvider: UserTypeFormProvider = injector.instanceOf[UserTypeFormProvider]
 
   "Rendering the UserType page" when {
 
     "no errors exist" should {
       lazy val form: Form[UserType] = formProvider()
-      lazy val view: Html = injectedView(form, userAnswers)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -62,7 +53,7 @@ class UserTypeViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[UserType] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form, userAnswers)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -82,7 +73,7 @@ class UserTypeViewSpec extends ViewBaseSpec with BaseMessages {
 
   it should {
     lazy val form: Form[UserType] = formProvider()
-    lazy val view: Html = injectedView(form, userAnswers)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${UserTypeMessages.h1}'" in {
