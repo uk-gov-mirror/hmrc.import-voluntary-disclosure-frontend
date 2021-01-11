@@ -18,9 +18,6 @@
 
 @this(govukBackLink : GovukBackLink)
 
-@()
+@(url: Option[Call] = None)(implicit messages: Messages)
 
-@govukBackLink(BackLink(
- href = "#",
- content = Text("Back")
-))
+@govukBackLink(BackLink(href = url.fold("#")(customUrl => customUrl), content = Text(messages("common.back")), attributes = Map("id" -> "back-link")))

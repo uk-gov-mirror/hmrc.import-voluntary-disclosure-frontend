@@ -25,45 +25,45 @@
 
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
-    @layout(pageTitle = Some(messages("entryDetails.pageTitle"))) {
-        @errorSummary(form.errors)
+@layout(pageTitle = messages("entryDetails.pageTitle"), form = Some(form)) {
+    @errorSummary(form.errors)
 
-        @h1(messages("entryDetails.title"))
+    @h1(messages("entryDetails.title"))
 
-        @formHelper(action = controllers.routes.EntryDetailsController.onSubmit()) {
-            @inputNumber(
-                form = form,
-                id = "epu",
-                name = "epu",
-                label = messages("entryDetails.epu.label"),
-                isDecimal = false,
-                hint = Some(messages("entryDetails.epu.hint")),
-                classes = Some("govuk-input--width-3")
-            )
+    @formHelper(action = controllers.routes.EntryDetailsController.onSubmit()) {
+        @inputNumber(
+            form = form,
+            id = "epu",
+            name = "epu",
+            label = messages("entryDetails.epu.label"),
+            isDecimal = false,
+            hint = Some(messages("entryDetails.epu.hint")),
+            classes = Some("govuk-input--width-3")
+        )
 
-            @inputText(
-                form = form,
-                id = "entryNumber",
-                name = "entryNumber",
-                label = messages("entryDetails.entryNumber.label"),
-                isPageHeading = false,
-                hint = Some(Html(messages("entryDetails.entryNumber.hint"))),
-                classes = Some("govuk-input--width-10")
-            )
+        @inputText(
+            form = form,
+            id = "entryNumber",
+            name = "entryNumber",
+            label = messages("entryDetails.entryNumber.label"),
+            isPageHeading = false,
+            hint = Some(Html(messages("entryDetails.entryNumber.hint"))),
+            classes = Some("govuk-input--width-10")
+        )
 
-            @inputDate(
-                form = form,
-                id = "entryDate",
-                legendContent = messages("entryDetails.entryDate.label"),
-                hintText = Some(messages("entryDetails.entryDate.hint"))
-            )
+        @inputDate(
+            form = form,
+            id = "entryDate",
+            legendContent = messages("entryDetails.entryDate.label"),
+            hintText = Some(messages("entryDetails.entryDate.hint"))
+        )
 
 
-            @button("common.button.continue")
-        }
-
+        @button("common.button.continue")
     }
 
-    @{
-        //$COVERAGE-OFF$
-    }
+}
+
+@{
+    //$COVERAGE-OFF$
+}

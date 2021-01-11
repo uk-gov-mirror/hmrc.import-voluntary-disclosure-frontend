@@ -39,21 +39,16 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
-      s"have the correct page heading of '${NumberOfEntriesMessages.title}'" in {
+      s"have the correct page title" in {
         document.title mustBe NumberOfEntriesMessages.title
       }
 
-      s"have the correct h1 of '${NumberOfEntriesMessages.h1}'" in {
-        elementText("h1") mustBe NumberOfEntriesMessages.h1
+      "not render an error summary" in {
+        document.select("div.govuk-error-summary").size mustBe 0
       }
 
-      s"have the correct value for the first radio button of '${NumberOfEntriesMessages.radioButtonOne}'" in {
-        elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(1)") mustBe NumberOfEntriesMessages.radioButtonOne
-      }
-
-      s"have the correct value for the second radio button of '${NumberOfEntriesMessages.radioButtonTwo}'" in {
-        elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(2)") mustBe
-          s"${NumberOfEntriesMessages.radioButtonTwo} ${NumberOfEntriesMessages.hint}"
+      "not render an error message against the field" in {
+        document.select("#value-error").size mustBe 0
       }
     }
 
@@ -61,6 +56,10 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val form: Form[NumberOfEntries] = formProvider().bind(Map("value" -> ""))
       lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      "update the page title to include the error prefix" in {
+        document.title mustBe NumberOfEntriesMessages.errorPrefix + NumberOfEntriesMessages.title
+      }
 
       "render an error summary with the correct message" in {
         elementText("div.govuk-error-summary > div") mustBe NumberOfEntriesMessages.requiredError
@@ -71,5 +70,30 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
       }
 
     }
+  }
+
+  it should {
+
+    val form: Form[NumberOfEntries] = formProvider.apply()
+    lazy val view: Html = injectedView(form)(fakeRequest, messages)
+    lazy implicit val document: Document = Jsoup.parse(view.body)
+
+    s"have the correct h1 of '${NumberOfEntriesMessages.h1}'" in {
+      elementText("h1") mustBe NumberOfEntriesMessages.h1
+    }
+
+    s"have the correct value for the first radio button of '${NumberOfEntriesMessages.radioButtonOne}'" in {
+      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(1)") mustBe NumberOfEntriesMessages.radioButtonOne
+    }
+
+    s"have the correct value for the second radio button of '${NumberOfEntriesMessages.radioButtonTwo}'" in {
+      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(2)") mustBe
+        s"${NumberOfEntriesMessages.radioButtonTwo} ${NumberOfEntriesMessages.hint}"
+    }
+
+    "render a back link" in {
+      document.select("#back-link").size mustBe 1
+    }
+
   }
 }
