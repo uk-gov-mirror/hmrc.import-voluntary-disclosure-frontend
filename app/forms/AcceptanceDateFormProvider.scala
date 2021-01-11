@@ -14,18 +14,17 @@
  * limitations under the License.
  */
 
-package messages
+package forms
 
-trait BaseMessages {
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-  val continue = "Continue"
 
-  val back_link = "Back"
+class AcceptanceDateFormProvider @Inject() extends Mappings {
 
-  val errorPrefix = "Error: "
-
-  val siteYes = "Yes"
-
-  val siteNo = "No"
-
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("acceptanceDate.error.required")
+    )
 }

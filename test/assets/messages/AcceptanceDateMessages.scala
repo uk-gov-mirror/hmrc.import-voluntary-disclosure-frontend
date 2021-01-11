@@ -16,16 +16,10 @@
 
 package messages
 
-trait BaseMessages {
+object AcceptanceDateMessages extends BaseMessages {
 
-  val continue = "Continue"
-
-  val back_link = "Back"
-
-  val errorPrefix = "Error: "
-
-  val siteYes = "Yes"
-
-  val siteNo = "No"
+  val title: String = "Was the entry acceptance date before 1 January 2021?"
+  val h1: String = "Was the entry acceptance date before 1 January 2021?"
+  val requiredError: String = "Select yes if the entry acceptance date was before 1 January 2021"
 
 }

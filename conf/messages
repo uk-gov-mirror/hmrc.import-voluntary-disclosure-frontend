@@ -11,6 +11,8 @@ date.month = Month
 date.year = Year
 
 site.and = ' and '
+site.yes = Yes
+site.no = No
 common.button.confirmAndContinue = Confirm and continue
 common.button.continue = Continue
 
@@ -77,6 +79,11 @@ numberOfEntries.oneEntry = One entry
 numberOfEntries.moreThanOneEntry = More than one entry
 numberOfEntries.moreThanOneEntry.hint = Multiple entries must be for the same importer, and have the same reason for underpayment.
 numberOfEntries.error.required = Select if you are disclosing an underpayment for one declaration or more than one declaration
+
+#Acceptance Date Page
+acceptanceDate.pageTitle = Was the entry acceptance date before 1 January 2021?
+acceptanceDate.heading = Was the entry acceptance date before 1 January 2021?
+acceptanceDate.error.required = Select yes if the entry acceptance date was before 1 January 2021
 
 # Error Summary
 error.summary.title = There is a problem

@@ -16,35 +16,34 @@
 
 package controllers
 
-import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.EntryDetailsFormProvider
+import forms.AcceptanceDateFormProvider
 import javax.inject.{Inject, Singleton}
-import models.EntryDetails
-import pages.EntryDetailsPage
+import pages.AcceptanceDatePage
 import play.api.i18n.I18nSupport
+import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.EntryDetailsView
+import views.html.AcceptanceDateView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+
 @Singleton
-class EntryDetailsController @Inject()(identity: IdentifierAction,
-                                       getData: DataRetrievalAction,
-                                       requireData: DataRequiredAction,
-                                       sessionRepository: SessionRepository,
-                                       appConfig: AppConfig,
-                                       mcc: MessagesControllerComponents,
-                                       formProvider: EntryDetailsFormProvider,
-                                       view: EntryDetailsView)
+class AcceptanceDateController @Inject()(identity: IdentifierAction,
+                                         getData: DataRetrievalAction,
+                                         requireData: DataRequiredAction,
+                                         sessionRepository: SessionRepository,
+                                         mcc: MessagesControllerComponents,
+                                         formProvider: AcceptanceDateFormProvider,
+                                         view: AcceptanceDateView)
   extends FrontendController(mcc) with I18nSupport {
 
-  def onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
 
-    val form = request.userAnswers.get(EntryDetailsPage).fold(formProvider()) {
+    val form = request.userAnswers.get(AcceptanceDatePage).fold(formProvider()) {
       formProvider().fill
     }
 
@@ -52,25 +51,18 @@ class EntryDetailsController @Inject()(identity: IdentifierAction,
   }
 
   def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(EntryDetailsPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(AcceptanceDatePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          redirect(value)
+          Redirect(controllers.routes.AcceptanceDateController.onSubmit())
         }
       }
     )
   }
-
-  private def redirect(entryDetails: EntryDetails): Result =
-    if (entryDetails.entryDate.isBefore(appConfig.euExitDate)) {
-      Redirect(controllers.routes.AcceptanceDateController.onLoad())
-    } else {
-      Redirect(controllers.routes.EntryDetailsController.onLoad())
-    }
-
 
 }

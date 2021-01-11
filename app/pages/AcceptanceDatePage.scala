@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package messages
+package pages
 
-trait BaseMessages {
+import play.api.libs.json.JsPath
 
-  val continue = "Continue"
+case object AcceptanceDatePage extends QuestionPage[Boolean] {
 
-  val back_link = "Back"
+  def path: JsPath = JsPath \ toString
 
-  val errorPrefix = "Error: "
-
-  val siteYes = "Yes"
-
-  val siteNo = "No"
+  override def toString: String = "acceptance-date"
 
 }
