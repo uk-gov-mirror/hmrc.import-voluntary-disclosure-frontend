@@ -23,4 +23,9 @@ trait BaseMessages {
   val back_link = "Back"
 
   val errorPrefix = "Error: "
+
+  val siteYes = "Yes"
+
+  val siteNo = "No"
+
 }

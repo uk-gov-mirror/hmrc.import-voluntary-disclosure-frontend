@@ -81,12 +81,12 @@ class AcceptanceDateViewSpec extends ViewBaseSpec with BaseMessages {
       elementText("h1") mustBe AcceptanceDateMessages.h1
     }
 
-    s"have the correct value for the first radio button of '${AcceptanceDateMessages.radioButtonOne}'" in {
-      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(1)") mustBe AcceptanceDateMessages.radioButtonOne
+    s"have the correct value for the first radio button of '${AcceptanceDateMessages.siteYes}'" in {
+      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(1)") mustBe AcceptanceDateMessages.siteYes
     }
 
-    s"have the correct value for the second radio button of '${AcceptanceDateMessages.radioButtonTwo}'" in {
-      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(2)") mustBe AcceptanceDateMessages.radioButtonTwo
+    s"have the correct value for the second radio button of '${AcceptanceDateMessages.siteNo}'" in {
+      elementText("#main-content > div > div > form > div > fieldset > div > div:nth-child(2)") mustBe AcceptanceDateMessages.siteNo
     }
 
     "render a back link with the correct URL" in {
