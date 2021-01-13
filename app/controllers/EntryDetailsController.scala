@@ -69,7 +69,7 @@ class EntryDetailsController @Inject()(identity: IdentifierAction,
     if (entryDetails.entryDate.isBefore(appConfig.euExitDate)) {
       Redirect(controllers.routes.AcceptanceDateController.onLoad())
     } else {
-      Redirect(controllers.routes.EntryDetailsController.onLoad())
+      Redirect(controllers.routes.UnderpaymentTypeController.onLoad())
     }
 
 

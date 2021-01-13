@@ -132,7 +132,7 @@ class EntryDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     lazy val view: Html = injectedView(form)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
-    s"have the correct page heading of '${EntryDetailsMessages.title}'" in {
+    s"have the correct page title of '${EntryDetailsMessages.title}'" in {
       document.title mustBe EntryDetailsMessages.title
     }
 

@@ -87,3 +87,12 @@ acceptanceDate.error.required = Select yes if the entry acceptance date was befo
 
 # Error Summary
 error.summary.title = There is a problem
+
+# Underpayment Type
+underpaymentType.pageTitle = What have you underpaid?
+underpaymentType.pageHeader = What have you underpaid?
+underpaymentType.pageWarning = Select all that apply.
+underpaymentType.error.required = Select if you have underpaid Customs Duty, Import VAT or Excise Duty
+underpaymentType.customsDuty = Customs Duty
+underpaymentType.importVAT = Import VAT
+underpaymentType.exciseDuty = Excise Duty

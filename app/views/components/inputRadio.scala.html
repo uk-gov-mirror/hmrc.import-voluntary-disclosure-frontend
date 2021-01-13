@@ -41,3 +41,7 @@
     items = items,
     errorMessage = form("value").error.map(err => ErrorMessage(content = Text(messages(err.message, err.args:_*))))
 ))
+
+@{
+    //$COVERAGE-OFF$
+}
