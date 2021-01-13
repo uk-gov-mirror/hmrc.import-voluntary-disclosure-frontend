@@ -38,4 +38,6 @@ object MockAppConfig extends AppConfig {
   override val addressLookupCallbackUrl: String = "TBC"
   override val timeoutPeriod: Int = 900
   override val cacheTtl: Int = 500
+  override val allowedUploadFileTypes: Seq[String] = Seq("DOC", "JPG", "PDF", "PNG", "XLS")
+  override val fileSize: Int = 30
 }

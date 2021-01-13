@@ -16,9 +16,13 @@
 
 @this()
 
-@(headingMsg: String)(implicit messages: Messages)
+@(content: Html, classes: String = "govuk-body", id: Option[String] = None)(implicit messages: Messages)
 
-<h1 class="govuk-heading-l">@messages(headingMsg)</h1>
+@if(id.isDefined){
+    <p class="@classes", id ="@id">@content</p>
+    } else {
+    <p class="@classes">@content</p>
+    }
 
 @{
 //$COVERAGE-OFF$

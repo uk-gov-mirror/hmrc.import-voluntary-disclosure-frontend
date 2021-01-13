@@ -16,10 +16,12 @@
 
 @this()
 
-@(headingMsg: String)(implicit messages: Messages)
+@(url: String, value: String, classes: String = "govuk-button", id: Option[String] = None)
 
-<h1 class="govuk-heading-l">@messages(headingMsg)</h1>
+   <a href=@url  role="button" draggable="false" class=@classes data-module="govuk-button">
+    @value
+   </a>
 
 @{
-//$COVERAGE-OFF$
+ //$COVERAGE-OFF$
 }
