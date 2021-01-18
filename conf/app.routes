@@ -38,3 +38,5 @@ POST        /disclosure/customs-duty-details                   controllers.Custo
 GET         /disclosure/import-vat-details                     controllers.ImportVATController.onLoad
 POST        /disclosure/import-vat-details                     controllers.ImportVATController.onSubmit
 
+GET         /disclosure/excise-duty-details                    controllers.ExciseDutyController.onLoad
+POST        /disclosure/excise-duty-details                    controllers.ExciseDutyController.onSubmit

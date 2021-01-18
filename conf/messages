@@ -125,3 +125,16 @@ importVAT.error.originalUpperLimit = Original amount cannot be more than £9,999
 importVAT.error.amendedNonEmpty = Enter the amended amount, in pounds
 importVAT.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
 
+
+# Excise Duty page
+exciseDuty.pageTitle = Excise Duty underpayment details
+exciseDuty.pageHeader = Excise Duty underpayment details
+exciseDuty.originalAmount = Original amount, in pounds
+exciseDuty.amendedAmount = Amended amount, in pounds
+exciseDuty.error.originalNonEmpty = Enter the original amount, in pounds
+exciseDuty.error.originalNonNumber = Original amount must be a number like 7235 or 67.39
+exciseDuty.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
+exciseDuty.error.amendedNonEmpty = Enter the amended amount, in pounds
+exciseDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
+
+

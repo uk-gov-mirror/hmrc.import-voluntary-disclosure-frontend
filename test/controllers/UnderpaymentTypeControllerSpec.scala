@@ -116,7 +116,7 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
 
       "return a SEE OTHER response to to Excise Duty page when Excise Duty is selected" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator(exciseDuty = "true"))
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeController.onLoad().url) // Excise Duty
+        redirectLocation(result) mustBe Some(controllers.routes.ExciseDutyController.onLoad().url) // Excise Duty
       }
 
       "update the UserAnswers in session" in new Test {
