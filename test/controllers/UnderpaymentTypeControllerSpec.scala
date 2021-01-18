@@ -21,7 +21,7 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.UnderpaymentTypeFormProvider
 import mocks.repositories.MockSessionRepository
 import models.{EntryDetails, UnderpaymentType, UserAnswers}
-import pages.{EntryDetailsPage, UnderpaymentTypePage}
+import pages.UnderpaymentTypePage
 import play.api.http.Status
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
 import play.api.mvc.{Call, Result}
@@ -111,7 +111,7 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
 
       "return a SEE OTHER response to to Import VAT page when Import VAT is selected" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator(importVAT = "true"))
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeController.onLoad().url) // Import VAT
+        redirectLocation(result) mustBe Some(controllers.routes.ImportVATController.onLoad().url)
       }
 
       "return a SEE OTHER response to to Excise Duty page when Excise Duty is selected" in new Test {

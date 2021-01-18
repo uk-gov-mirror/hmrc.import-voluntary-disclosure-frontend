@@ -89,7 +89,7 @@ class CustomsDutyControllerSpec extends ControllerSpecBase {
 
     "Underpayment type has Import VAT selected" should {
       "redirect to Import VAT page" in new Test {
-        controller.redirect(Some(UnderpaymentType(true, true, false))) mustBe Redirect(controllers.routes.CustomsDutyController.onLoad()) // Import VAT
+        controller.redirect(Some(UnderpaymentType(true, true, false))) mustBe Redirect(controllers.routes.ImportVATController.onLoad())
       }
     }
 

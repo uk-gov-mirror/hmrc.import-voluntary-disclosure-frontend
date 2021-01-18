@@ -75,8 +75,8 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           value match {
-            case UnderpaymentType(true, _, _) => Redirect(controllers.routes.CustomsDutyController.onLoad()) // Customs Duty
-            case UnderpaymentType(false, true, _) => Redirect(controllers.routes.UnderpaymentTypeController.onLoad()) // Import VAT
+            case UnderpaymentType(true, _, _) => Redirect(controllers.routes.CustomsDutyController.onLoad())
+            case UnderpaymentType(false, true, _) => Redirect(controllers.routes.ImportVATController.onLoad())
             case UnderpaymentType(false, false, true) => Redirect(controllers.routes.UnderpaymentTypeController.onLoad()) // Excise Duty
           }
         }

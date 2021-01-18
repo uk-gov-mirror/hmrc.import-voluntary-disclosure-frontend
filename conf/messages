@@ -113,3 +113,15 @@ customsDuty.error.originalNonNumber = Original amount must be a number like 7235
 customsDuty.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
 customsDuty.error.amendedNonEmpty = Enter the amended amount, in pounds
 customsDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
+
+# Import VAT page
+importVAT.pageTitle = Import VAT underpayment details
+importVAT.pageHeader = Import VAT underpayment details
+importVAT.originalAmount = Original amount, in pounds
+importVAT.amendedAmount = Amended amount, in pounds
+importVAT.error.originalNonEmpty = Enter the original amount, in pounds
+importVAT.error.originalNonNumber = Original amount must be a number like 7235 or 67.39
+importVAT.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
+importVAT.error.amendedNonEmpty = Enter the amended amount, in pounds
+importVAT.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
+
