@@ -31,7 +31,7 @@ import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
-class HelloWorldController @Inject()(identity: IdentifierAction,
+class HelloWorldController @Inject()(identify: IdentifierAction,
                                      getData: DataRetrievalAction,
                                      sessionRepository: SessionRepository,
                                      appConfig: AppConfig,
@@ -41,12 +41,12 @@ class HelloWorldController @Inject()(identity: IdentifierAction,
 
   implicit val config: AppConfig = appConfig
 
-  val onLoad: Action[AnyContent] = (identity andThen getData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
     Future.successful(Ok(helloWorldPage(userAnswers)))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
     for {
       updatedAnswers <- Future.fromTry(userAnswers.set(HelloWorldPage, "Some test value written"))

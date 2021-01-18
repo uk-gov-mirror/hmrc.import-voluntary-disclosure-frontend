@@ -102,3 +102,14 @@ underpaymentType.error.required = Select if you have underpaid Customs Duty, Imp
 underpaymentType.customsDuty = Customs Duty
 underpaymentType.importVAT = Import VAT
 underpaymentType.exciseDuty = Excise Duty
+
+# Customs Duty page
+customsDuty.pageTitle = Customs Duty underpayment details
+customsDuty.pageHeader = Customs Duty underpayment details
+customsDuty.originalAmount = Original amount, in pounds
+customsDuty.amendedAmount = Amended amount, in pounds
+customsDuty.error.originalNonEmpty = Enter the original amount, in pounds
+customsDuty.error.originalNonNumber = Original amount must be a number like 7235 or 67.39
+customsDuty.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
+customsDuty.error.amendedNonEmpty = Enter the amended amount, in pounds
+customsDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39

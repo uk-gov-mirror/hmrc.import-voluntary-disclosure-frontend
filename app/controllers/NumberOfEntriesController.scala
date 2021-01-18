@@ -33,7 +33,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class NumberOfEntriesController @Inject()(identity: IdentifierAction,
+class NumberOfEntriesController @Inject()(identify: IdentifierAction,
                                           getData: DataRetrievalAction,
                                           requireData: DataRequiredAction,
                                           sessionRepository: SessionRepository,
@@ -45,7 +45,7 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
 
   implicit val config: AppConfig = appConfig
 
-  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     val form = request.userAnswers.get(NumberOfEntriesPage).fold(formProvider()) {
       formProvider().fill
@@ -54,7 +54,7 @@ class NumberOfEntriesController @Inject()(identity: IdentifierAction,
     Future.successful(Ok(view(form)))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),

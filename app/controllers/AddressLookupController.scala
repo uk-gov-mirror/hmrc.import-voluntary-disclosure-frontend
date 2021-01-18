@@ -27,14 +27,14 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class AddressLookupController @Inject()(identity: IdentifierAction,
-                                         addressLookupService: AddressLookupService,
-                                          val errorHandler: ErrorHandler,
-                                          val mcc: MessagesControllerComponents,
-                                          implicit val appConfig: AppConfig,
-                                          implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
+class AddressLookupController @Inject()(identify: IdentifierAction,
+                                        addressLookupService: AddressLookupService,
+                                        val errorHandler: ErrorHandler,
+                                        val mcc: MessagesControllerComponents,
+                                        implicit val appConfig: AppConfig,
+                                        implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
-  val initialiseJourney: Action[AnyContent] = identity.async { implicit request =>
+  val initialiseJourney: Action[AnyContent] = identify.async { implicit request =>
     addressLookupService.initialiseJourney map {
       case Right(response) =>
         Redirect(response.redirectUrl)
@@ -43,7 +43,7 @@ class AddressLookupController @Inject()(identity: IdentifierAction,
     }
   }
 
-  val callback: String => Action[AnyContent] = id => identity.async { implicit user =>
+  val callback: String => Action[AnyContent] = id => identify.async { implicit user =>
     addressLookupService.retrieveAddress(id) map {
       case Right(address) =>
        Ok(address.toString)

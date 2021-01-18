@@ -99,14 +99,14 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
         lazy val result: Future[Result] = controller.onSubmit(
           fakeRequestGenerator(customsDuty = "true", importVAT = "true", exciseDuty = "true")
         )
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeController.onLoad().url) // Customs Duty
+        redirectLocation(result) mustBe Some(controllers.routes.CustomsDutyController.onLoad().url) // Customs Duty
       }
 
       "return a SEE OTHER response to to Customs Duty page when Customs Duty is selected" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(
           fakeRequestGenerator(customsDuty = "true")
         )
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeController.onLoad().url) // Customs Duty
+        redirectLocation(result) mustBe Some(controllers.routes.CustomsDutyController.onLoad().url) // Customs Duty
       }
 
       "return a SEE OTHER response to to Import VAT page when Import VAT is selected" in new Test {

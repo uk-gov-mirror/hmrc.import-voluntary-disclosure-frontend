@@ -25,6 +25,9 @@ import scala.collection.JavaConverters._
 
 trait ViewBaseSpec extends SpecBase with GuiceOneAppPerSuite {
 
+  final val emptyString = ""
+  final val govErrorSummaryListClass = ".govuk-error-summary__list"
+
   def elementText(selector: String)(implicit document: Document): String = {
     element(selector).text()
   }

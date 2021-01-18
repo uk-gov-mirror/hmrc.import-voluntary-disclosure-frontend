@@ -31,7 +31,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnderpaymentTypeController @Inject()(identity: IdentifierAction,
+class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            sessionRepository: SessionRepository,
@@ -42,7 +42,7 @@ class UnderpaymentTypeController @Inject()(identity: IdentifierAction,
                                           )
   extends FrontendController(mcc) with I18nSupport {
 
-  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     Future.successful(
       Ok(
         underpaymentTypeView(
@@ -56,7 +56,7 @@ class UnderpaymentTypeController @Inject()(identity: IdentifierAction,
     )
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
       formWithErrors => {
         Future.successful(
@@ -75,7 +75,7 @@ class UnderpaymentTypeController @Inject()(identity: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           value match {
-            case UnderpaymentType(true, _, _) => Redirect(controllers.routes.UnderpaymentTypeController.onLoad()) // Customs Duty
+            case UnderpaymentType(true, _, _) => Redirect(controllers.routes.CustomsDutyController.onLoad()) // Customs Duty
             case UnderpaymentType(false, true, _) => Redirect(controllers.routes.UnderpaymentTypeController.onLoad()) // Import VAT
             case UnderpaymentType(false, false, true) => Redirect(controllers.routes.UnderpaymentTypeController.onLoad()) // Excise Duty
           }

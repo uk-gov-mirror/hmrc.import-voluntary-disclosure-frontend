@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 
 @Singleton
-class UserTypeController @Inject()(identity: IdentifierAction,
+class UserTypeController @Inject()(identify: IdentifierAction,
                                    getData: DataRetrievalAction,
                                    sessionRepository: SessionRepository,
                                    mcc: MessagesControllerComponents,
@@ -41,7 +41,7 @@ class UserTypeController @Inject()(identity: IdentifierAction,
                                    view: UserTypeView)
   extends FrontendController(mcc) with I18nSupport {
 
-  val onLoad: Action[AnyContent] = (identity andThen getData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     val form = for {
       userAnswers <- request.userAnswers
@@ -53,7 +53,7 @@ class UserTypeController @Inject()(identity: IdentifierAction,
     Future.successful(Ok(view(form.getOrElse(formProvider()))))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
 
     formProvider().bindFromRequest().fold(

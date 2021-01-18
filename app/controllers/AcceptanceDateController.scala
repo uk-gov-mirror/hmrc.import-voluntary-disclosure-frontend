@@ -32,7 +32,7 @@ import scala.concurrent.Future
 
 
 @Singleton
-class AcceptanceDateController @Inject()(identity: IdentifierAction,
+class AcceptanceDateController @Inject()(identify: IdentifierAction,
                                          getData: DataRetrievalAction,
                                          requireData: DataRequiredAction,
                                          sessionRepository: SessionRepository,
@@ -41,7 +41,7 @@ class AcceptanceDateController @Inject()(identity: IdentifierAction,
                                          view: AcceptanceDateView)
   extends FrontendController(mcc) with I18nSupport {
 
-  val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     val form = request.userAnswers.get(AcceptanceDatePage).fold(formProvider()) {
       formProvider().fill
@@ -50,7 +50,7 @@ class AcceptanceDateController @Inject()(identity: IdentifierAction,
     Future.successful(Ok(view(form)))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
