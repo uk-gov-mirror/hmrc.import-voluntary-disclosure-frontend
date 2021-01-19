@@ -66,7 +66,7 @@ class ImportVATController @Inject()(identify: IdentifierAction,
   private[controllers] def redirect(underpaymentType: Option[UnderpaymentType]): Result =
     underpaymentType match {
       case Some(UnderpaymentType(_, _, true)) => Redirect(controllers.routes.ExciseDutyController.onLoad())
-      case _ => Redirect(controllers.routes.ImportVATController.onLoad())
+      case _ => Redirect(controllers.routes.UnderpaymentSummaryController.onLoad())
     }
 
   private[controllers] def backLink(underpaymentType: Option[UnderpaymentType]): Call =

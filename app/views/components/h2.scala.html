@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,14 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package models
+@this()
 
-import play.api.libs.json.Json
+@(headingMsg: String)(implicit messages: Messages)
 
-case class UnderpaymentAmount(original: BigDecimal, amended: BigDecimal)
+<h2 class="govuk-heading-m">@messages(headingMsg)</h2>
 
-object UnderpaymentAmount {
-  implicit val format = Json.format[UnderpaymentAmount]
+@{
+ //$COVERAGE-OFF$
 }

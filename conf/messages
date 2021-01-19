@@ -85,6 +85,17 @@ acceptanceDate.pageTitle = Was the entry acceptance date before 1 January 2021?
 acceptanceDate.heading = Was the entry acceptance date before 1 January 2021?
 acceptanceDate.error.required = Select yes if the entry acceptance date was before 1 January 2021
 
+#Underpayment Summary
+underpaymentSummary.pageTitle = Underpayment amount summary
+underpaymentSummary.heading = Underpayment amount summary
+underpaymentSummary.customsDuty.title = Customs Duty
+underpaymentSummary.importVat.title = Import VAT
+underpaymentSummary.exciseDuty.title = Excise Duty
+underpaymentSummary.change = Change
+underpaymentSummary.originalAmount = Original amount
+underpaymentSummary.amendedAmount = Amended amount
+underpaymentSummary.dueToHmrc = {0} due to HMRC
+
 # Supporting Documentation
 SupportDoc.pageTitle = Supporting documentation
 SupportDoc.heading = Supporting documentation

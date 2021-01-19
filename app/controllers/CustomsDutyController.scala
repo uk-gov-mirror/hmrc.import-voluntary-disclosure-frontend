@@ -64,7 +64,7 @@ class CustomsDutyController @Inject()(identify: IdentifierAction,
     underpaymentType match {
       case Some(UnderpaymentType(_, true, _)) => Redirect(controllers.routes.ImportVATController.onLoad())
       case Some(UnderpaymentType(_, _, true)) => Redirect(controllers.routes.ExciseDutyController.onLoad())
-      case _ => Redirect(controllers.routes.CustomsDutyController.onLoad())
+      case _ => Redirect(controllers.routes.UnderpaymentSummaryController.onLoad())
     }
 
 }

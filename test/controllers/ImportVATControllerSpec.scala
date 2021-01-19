@@ -99,13 +99,13 @@ class ImportVATControllerSpec extends ControllerSpecBase {
 
       "Underpayment type has Excise Duty selected" should {
         "redirect to Exercise Duty page" in new Test {
-          controller.redirect(Some(UnderpaymentType(true, true, true))) mustBe Redirect(controllers.routes.ExciseDutyController.onLoad()) // Excise Duty
+          controller.redirect(Some(UnderpaymentType(true, true, true))) mustBe Redirect(controllers.routes.ExciseDutyController.onLoad())
         }
       }
 
       "Underpayment type doesn't have Excise Duty selected" should {
         "redirect to Summary page" in new Test {
-          controller.redirect(Some(UnderpaymentType(true, true, false))) mustBe Redirect(controllers.routes.ImportVATController.onLoad()) // Summary
+          controller.redirect(Some(UnderpaymentType(true, true, false))) mustBe Redirect(controllers.routes.UnderpaymentSummaryController.onLoad())
         }
       }
 

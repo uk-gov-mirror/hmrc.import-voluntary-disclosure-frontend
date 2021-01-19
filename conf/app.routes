@@ -19,8 +19,6 @@ POST        /one-or-more-entries                               controllers.Numbe
 
 GET         /unauthorised                                      controllers.errors.UnauthorisedController.onPageLoad
 
-GET         /unauthorised                                      controllers.errors.UnauthorisedController.onPageLoad
-
 GET         /disclosure/entry-details                          controllers.EntryDetailsController.onLoad
 POST        /disclosure/entry-details                          controllers.EntryDetailsController.onSubmit
 
@@ -40,3 +38,5 @@ POST        /disclosure/import-vat-details                     controllers.Impor
 
 GET         /disclosure/excise-duty-details                    controllers.ExciseDutyController.onLoad
 POST        /disclosure/excise-duty-details                    controllers.ExciseDutyController.onSubmit
+
+GET         /disclosure/underpayment-amount-summary            controllers.UnderpaymentSummaryController.onLoad

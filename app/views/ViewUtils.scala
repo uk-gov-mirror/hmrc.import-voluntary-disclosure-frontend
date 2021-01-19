@@ -16,6 +16,8 @@
 
 package views
 
+import java.text.NumberFormat
+
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.hint.Hint
@@ -25,4 +27,8 @@ object ViewUtils  {
   def hint(messageKey: String, hintMessageArgs: String*)(implicit messages: Messages): Hint =
     Hint(content = HtmlContent(messages(messageKey, hintMessageArgs: _*)))
 
+  val monetaryFormatter: NumberFormat = NumberFormat.getNumberInstance
+  monetaryFormatter.setMinimumFractionDigits(2)
+
+  def displayMoney(amountInPence: BigDecimal) = s"£${monetaryFormatter.format(amountInPence.setScale(2))}"
 }
