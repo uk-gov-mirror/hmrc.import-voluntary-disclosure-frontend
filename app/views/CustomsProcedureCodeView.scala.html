@@ -20,20 +20,19 @@
         yesNoRadio: components.yesNoRadio,
         button: components.button)
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
     @layout(
-        pageTitle = messages("acceptanceDate.pageTitle"),
+        pageTitle = messages("customsProcedureCode.pageTitle"),
         form = Some(form),
-        customBackLinkUrl = Some(controllers.routes.EntryDetailsController.onLoad)) {
+        customBackLinkUrl = Some(backLink)) {
 
         @errorSummary(form.errors)
 
-        @formHelper(action = controllers.routes.AcceptanceDateController.onSubmit()) {
+        @formHelper(action = controllers.routes.CustomsProcedureCodeController.onSubmit()) {
             @yesNoRadio(
                 form,
-                headingKey = "acceptanceDate.heading",
-                inline = false
+                headingKey = "customsProcedureCode.heading"
             )
 
             @button("common.button.continue")

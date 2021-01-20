@@ -154,3 +154,8 @@ enterCustomsProcedureCode.pageHeader = What is the amended customs procedure cod
 enterCustomsProcedureCode.cpc.error.missing = Enter the customs procedure code
 enterCustomsProcedureCode.cpc.error.format = Enter a valid customs procedure code
 
+# Customs Procedure Code page
+customsProcedureCode.pageTitle = Has CPC changed
+customsProcedureCode.heading = Has the customs procedure code changed?
+customsProcedureCode.error.required = Select yes if the customs procedure code has changed
+

@@ -94,19 +94,19 @@ class EnterCustomsProcedureCodeControllerSpec extends ControllerSpecBase {
 
     "payload contains valid data" should {
 
-      "return a SEE OTHER response when correct data with spaces is sent" in new Test {
+      "return a SEE OTHER response when correct data with numeric only values" in new Test {
         override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
-        lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1234 5678 9a"))
+        lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1234567"))
         status(result) mustBe Status.SEE_OTHER
       }
-      "return a SEE OTHER response when correct data with no spaces sent" in new Test {
+      "return a SEE OTHER response when correct data with an alphanumeric value" in new Test {
         override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
-        lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("123456789a"))
+        lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1234A12"))
         status(result) mustBe Status.SEE_OTHER
       }
       "update the UserAnswers in session" in new Test {
         override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
-        await(controller.onSubmit(fakeRequestGenerator("123456789a")))
+        await(controller.onSubmit(fakeRequestGenerator("1234567")))
         MockedSessionRepository.verifyCalls()
       }
 
@@ -116,7 +116,25 @@ class EnterCustomsProcedureCodeControllerSpec extends ControllerSpecBase {
 
       "return BAD REQUEST when invalid data is sent" in new Test {
         override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
-        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("123456789!"))
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("123456!"))
+        status(result) mustBe Status.BAD_REQUEST
+      }
+
+      "return BAD REQUEST when data is more than 7 in length" in new Test {
+        override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("12345678"))
+        status(result) mustBe Status.BAD_REQUEST
+      }
+
+      "return BAD REQUEST when data there is an alpha character at the beginning" in new Test {
+        override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("A2345678"))
+        status(result) mustBe Status.BAD_REQUEST
+      }
+
+      "return BAD REQUEST when data there is an alpha character at the end" in new Test {
+        override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1234567A"))
         status(result) mustBe Status.BAD_REQUEST
       }
 

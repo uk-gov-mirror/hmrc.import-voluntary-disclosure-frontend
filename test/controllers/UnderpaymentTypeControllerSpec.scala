@@ -79,16 +79,10 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
       charset(result) mustBe Some("utf-8")
     }
 
-    "should redirect the back button to Acceptance page" in new Test {
+    "should redirect the back button to Customs Procedure Code page" in new Test {
       val dateBeforeExit: LocalDate = LocalDate of (2020, 1, 1)
       val entryDetails: EntryDetails = EntryDetails("123", "123456A", dateBeforeExit)
-      controller.backLink(Some(entryDetails)) mustBe Call("GET", controllers.routes.AcceptanceDateController.onLoad().toString)
-    }
-
-    "should redirect the back button to EntryDetails page" in new Test {
-      val dateAfterExit: LocalDate = LocalDate of (2021, 1, 2)
-      val entryDetails: EntryDetails = EntryDetails("123", "123456A", dateAfterExit)
-      controller.backLink(Some(entryDetails)) mustBe Call("GET", controllers.routes.EntryDetailsController.onLoad().toString)
+      controller.backLink mustBe Call("GET", controllers.routes.CustomsProcedureCodeController.onLoad().toString)
     }
   }
 
