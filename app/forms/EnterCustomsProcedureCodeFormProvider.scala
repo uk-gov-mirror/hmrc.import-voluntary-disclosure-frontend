@@ -30,9 +30,8 @@ class EnterCustomsProcedureCodeFormProvider @Inject()(implicit appConfig: AppCon
   def apply()(implicit messages: Messages): Form[CustomsProcedureCode] =
     Form(
       mapping(
-        "cpc" -> text(
-          errorKey = ""
-        ).verifying(regexp("^([A-z][0-9])$", "enterCRN.error.regex"))
+        "cpc" -> text("enterCustomsProcedureCode.cpc.error.missing")
+          .verifying(regexp("^[A-z 0-9]{1,10}$","enterCustomsProcedureCode.cpc.error.missing"))
       )(CustomsProcedureCode.apply)(CustomsProcedureCode.unapply)
     )
 

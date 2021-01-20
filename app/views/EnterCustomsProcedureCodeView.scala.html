@@ -25,16 +25,14 @@
 @(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
     @layout(
-        pageTitle = messages("importVAT.pageTitle"),
+        pageTitle = messages("enterCustomsProcedureCode.pageTitle"),
         form = Some(form),
         customBackLinkUrl = Some(backLink)) {
 
         @errorSummary(form.errors)
 
-        @h1(messages("importVAT.pageHeader"))
-
         @formHelper(action = controllers.routes.EnterCustomsProcedureCodeController.onSubmit()) {
-            @inputText(form, "cpc", "cpc", messages("importVAT.originalAmount"), false)
+            @inputText(form, "cpc", "cpc", messages("enterCustomsProcedureCode.pageHeader"), true, classes = Some("govuk-fieldset__legend govuk-input--width-10"))
             @button("common.button.continue")
 
         }
