@@ -20,8 +20,8 @@ import com.google.inject.Inject
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.EnterCustomsProcedureCodeFormProvider
-import models.{EntryDetails, UnderpaymentType}
-import pages.{EnterCustomsProcedureCodePage, EntryDetailsPage, UnderpaymentTypePage}
+import models.EntryDetails
+import pages.{EnterCustomsProcedureCodePage, EntryDetailsPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository

@@ -19,7 +19,7 @@ package forms
 import config.AppConfig
 import forms.mappings.Mappings
 import javax.inject.Inject
-import models.{CustomsProcedureCode, UnderpaymentAmount}
+import models.CustomsProcedureCode
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.i18n.Messages
