@@ -17,33 +17,31 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.AcceptanceDateFormProvider
-import javax.inject.{Inject, Singleton}
-import pages.AcceptanceDatePage
+import forms.CustomsProcedureCodeFormProvider
+import javax.inject.Inject
+import pages.CustomsProcedureCodePage
 import play.api.i18n.I18nSupport
-import play.api.libs.json.Format.GenericFormat
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.AcceptanceDateView
+import views.html.CustomsProcedureCodeView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+class CustomsProcedureCodeController @Inject()(identify: IdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               sessionRepository: SessionRepository,
+                                               mcc: MessagesControllerComponents,
+                                               formProvider: CustomsProcedureCodeFormProvider,
+                                               view: CustomsProcedureCodeView)
 
-@Singleton
-class AcceptanceDateController @Inject()(identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         sessionRepository: SessionRepository,
-                                         mcc: MessagesControllerComponents,
-                                         formProvider: AcceptanceDateFormProvider,
-                                         view: AcceptanceDateView)
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    val form = request.userAnswers.get(AcceptanceDatePage).fold(formProvider()) {
+    val form = request.userAnswers.get(CustomsProcedureCodePage).fold(formProvider()) {
       formProvider().fill
     }
 
@@ -56,13 +54,18 @@ class AcceptanceDateController @Inject()(identify: IdentifierAction,
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(AcceptanceDatePage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(CustomsProcedureCodePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.CustomsProcedureCodeController.onLoad())
+          if (value) {
+            Redirect(controllers.routes.CustomsProcedureCodeController.onLoad())
+          } else {
+            Redirect(controllers.routes.UnderpaymentTypeController.onLoad())
+          }
         }
       }
     )
+
   }
 
 }

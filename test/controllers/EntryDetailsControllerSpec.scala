@@ -90,7 +90,7 @@ class EntryDetailsControllerSpec extends ControllerSpecBase {
         private val request = fakeRequest.withFormUrlEncodedBody(buildForm(day=Some("02"),month=Some("01"),year=Some("2021")):_*)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.CustomsProcedureCodeController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {

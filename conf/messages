@@ -148,4 +148,9 @@ exciseDuty.error.originalUpperLimit = Original amount cannot be more than £9,99
 exciseDuty.error.amendedNonEmpty = Enter the amended amount, in pounds
 exciseDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
 
+# Customs Procedure Code page
+customsProcedureCode.pageTitle = Has CPC changed
+customsProcedureCode.heading = Has the customs procedure code changed?
+customsProcedureCode.error.required = Select yes if the customs procedure code has changed
+
 

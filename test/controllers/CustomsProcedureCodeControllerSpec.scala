@@ -18,37 +18,34 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.AcceptanceDateFormProvider
+import forms.CustomsProcedureCodeFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.AcceptanceDatePage
+import pages.CustomsProcedureCodePage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.AcceptanceDateView
+import views.html.CustomsProcedureCodeView
 
 import scala.concurrent.Future
 
 
-class AcceptanceDateControllerSpec extends ControllerSpecBase {
+class CustomsProcedureCodeControllerSpec extends ControllerSpecBase {
+
+  val customsProcedureCodeNo: Boolean = false
 
   trait Test extends MockSessionRepository {
-    private lazy val acceptanceDateView: AcceptanceDateView = app.injector.instanceOf[AcceptanceDateView]
-
-    val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
+    lazy val controller = new CustomsProcedureCodeController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+      mockSessionRepository, messagesControllerComponents, form, customsProcedureCodeView)
+    private lazy val customsProcedureCodeView: CustomsProcedureCodeView = app.injector.instanceOf[CustomsProcedureCodeView]
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
-
-    val formProvider: AcceptanceDateFormProvider = injector.instanceOf[AcceptanceDateFormProvider]
-    val form: AcceptanceDateFormProvider = formProvider
+    val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
+    val formProvider: CustomsProcedureCodeFormProvider = injector.instanceOf[CustomsProcedureCodeFormProvider]
 
     MockedSessionRepository.set(Future.successful(true))
-
-    lazy val controller = new AcceptanceDateController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, messagesControllerComponents, form, acceptanceDateView)
+    val form: CustomsProcedureCodeFormProvider = formProvider
   }
-
-  val acceptanceDateYes: Boolean = true
 
   "GET /" should {
     "return OK" in new Test {
@@ -57,7 +54,7 @@ class AcceptanceDateControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(AcceptanceDatePage, acceptanceDateYes).success.value)
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(CustomsProcedureCodePage, customsProcedureCodeNo).success.value)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -67,20 +64,26 @@ class AcceptanceDateControllerSpec extends ControllerSpecBase {
   "POST /" when {
     "payload contains valid data" should {
 
-      "return a SEE OTHER response" in new Test {
+      "return a SEE OTHER response when false" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        status(result) mustBe Status.SEE_OTHER
+      }
+
+      "return a SEE OTHER response when true" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
       }
 
       "return the correct location header" in new Test {
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.CustomsProcedureCodeController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
-        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         await(controller.onSubmit(request))
         MockedSessionRepository.verifyCalls()
       }
