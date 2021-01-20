@@ -39,4 +39,7 @@ POST        /disclosure/import-vat-details                     controllers.Impor
 GET         /disclosure/excise-duty-details                    controllers.ExciseDutyController.onLoad
 POST        /disclosure/excise-duty-details                    controllers.ExciseDutyController.onSubmit
 
+GET         /disclosure/enter-cpc                              controllers.EnterCustomsProcedureCodeController.onLoad
+POST        /disclosure/enter-cpc                              controllers.EnterCustomsProcedureCodeController.onSubmit
+
 GET         /disclosure/underpayment-amount-summary            controllers.UnderpaymentSummaryController.onLoad

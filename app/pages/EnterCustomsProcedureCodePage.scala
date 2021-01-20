@@ -16,13 +16,13 @@
 
 package pages
 
-import models.EntryDetails
+import models.CustomsProcedureCode
 import play.api.libs.json.JsPath
 
-case object EntryDetailsPage extends QuestionPage[EntryDetails] {
+case object EnterCustomsProcedureCodePage extends QuestionPage[CustomsProcedureCode] {
 
-  override def path: JsPath = JsPath \ toString
+  def path: JsPath = JsPath \ toString
 
-  override def toString: String = "entry-details"
+  override def toString: String = "cpc"
 
 }

@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.EntryDetails
-import play.api.libs.json.JsPath
+import play.api.libs.json.Json
 
-case object EntryDetailsPage extends QuestionPage[EntryDetails] {
+case class CustomsProcedureCode(cpc: String)
 
-  override def path: JsPath = JsPath \ toString
-
-  override def toString: String = "entry-details"
-
+object CustomsProcedureCode {
+  implicit val format = Json.format[CustomsProcedureCode]
 }
