@@ -152,7 +152,7 @@ exciseDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or
 enterCustomsProcedureCode.pageTitle = What is the amended customs procedure code?
 enterCustomsProcedureCode.pageHeader = What is the amended customs procedure code?
 enterCustomsProcedureCode.cpc.error.missing = Enter the customs procedure code
-enterCustomsProcedureCode.cpc.error.format = Enter a valid customs procedure code
+enterCustomsProcedureCode.cpc.error.format = Enter the customs procedure code in the correct format like 4800003 or 4000C09
 
 # Customs Procedure Code page
 customsProcedureCode.pageTitle = Has CPC changed
