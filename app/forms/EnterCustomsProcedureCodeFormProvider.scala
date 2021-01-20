@@ -31,7 +31,8 @@ class EnterCustomsProcedureCodeFormProvider @Inject()(implicit appConfig: AppCon
     Form(
       mapping(
         "cpc" -> text("enterCustomsProcedureCode.cpc.error.missing")
-          .verifying(regexp("^[A-z 0-9]{1,10}$","enterCustomsProcedureCode.cpc.error.missing"))
+          .transform[String](text => text.replace(" ", ""), text => text)
+          .verifying(regexp("^[A-z 0-9]{1,10}$","enterCustomsProcedureCode.cpc.error.format"))
       )(CustomsProcedureCode.apply)(CustomsProcedureCode.unapply)
     )
 
