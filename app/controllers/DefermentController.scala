@@ -63,7 +63,11 @@ class DefermentController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(userAnswers.set(DefermentPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.DefermentController.onLoad())
+          if (value) {
+            Redirect(controllers.routes.DefermentController.onLoad())
+          } else {
+            Redirect(controllers.routes.DefermentController.onLoad())
+          }
         }
       }
     )
