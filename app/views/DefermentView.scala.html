@@ -23,7 +23,7 @@ yesNoRadio: components.yesNoRadio)
 
 @(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("deferment.pageTitle"), form = Some(form), customBackLinkUrl = Some(controllers.routes.DefermentController.onLoad)) {
+@layout(pageTitle = messages("deferment.pageTitle"), form = Some(form), customBackLinkUrl = Some(controllers.routes.UnderpaymentSummaryController.onLoad)) {
 
    @errorSummary(form.errors)
 
