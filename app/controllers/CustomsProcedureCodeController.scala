@@ -21,7 +21,7 @@ import forms.CustomsProcedureCodeFormProvider
 import javax.inject.Inject
 import pages.CustomsProcedureCodePage
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.CustomsProcedureCodeView
@@ -45,13 +45,13 @@ class CustomsProcedureCodeController @Inject()(identify: IdentifierAction,
       formProvider().fill
     }
 
-    Future.successful(Ok(view(form)))
+    Future.successful(Ok(view(form, backLink)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {
         for {
           updatedAnswers <- Future.fromTry(request.userAnswers.set(CustomsProcedureCodePage, value))
@@ -67,5 +67,7 @@ class CustomsProcedureCodeController @Inject()(identify: IdentifierAction,
     )
 
   }
+
+  private[controllers] def backLink: Call = Call("GET",controllers.routes.EnterCustomsProcedureCodeController.onLoad().url)
 
 }

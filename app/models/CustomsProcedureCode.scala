@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package messages
+package models
 
-object CustomsProcedureCodeMessages extends BaseMessages {
+import play.api.libs.json.Json
 
-  val title: String = "Has the customs procedure code changed?"
-  val h1: String = "Has the customs procedure code changed?"
-  val requiredError: String = "Select yes if the customs procedure code has changed"
+case class CustomsProcedureCode(cpc: String)
 
+object CustomsProcedureCode {
+  implicit val format = Json.format[CustomsProcedureCode]
 }

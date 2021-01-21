@@ -16,28 +16,26 @@
 
 @this(layout: templates.Layout,
         formHelper: FormWithCSRF,
+        h1: components.h1,
         errorSummary: components.errorSummary,
-        yesNoRadio: components.yesNoRadio,
-        button: components.button)
+        button: components.button,
+        inputText: components.inputText
+)
 
 @(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
     @layout(
-        pageTitle = messages("customsProcedureCode.pageTitle"),
+        pageTitle = messages("enterCustomsProcedureCode.pageTitle"),
         form = Some(form),
         customBackLinkUrl = Some(backLink)) {
 
         @errorSummary(form.errors)
 
-        @formHelper(action = controllers.routes.CustomsProcedureCodeController.onSubmit()) {
-            @yesNoRadio(
-                form,
-                headingKey = "customsProcedureCode.heading"
-            )
-
+        @formHelper(action = controllers.routes.EnterCustomsProcedureCodeController.onSubmit()) {
+            @inputText(form, "cpc", "cpc", messages("enterCustomsProcedureCode.pageHeader"), true, classes = Some("govuk-fieldset__legend govuk-input--width-10"))
             @button("common.button.continue")
-        }
 
+        }
     }
 
     @{

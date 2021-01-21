@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-package messages
+package pages
 
-object CustomsProcedureCodeMessages extends BaseMessages {
+import models.CustomsProcedureCode
+import play.api.libs.json.JsPath
 
-  val title: String = "Has the customs procedure code changed?"
-  val h1: String = "Has the customs procedure code changed?"
-  val requiredError: String = "Select yes if the customs procedure code has changed"
+case object EnterCustomsProcedureCodePage extends QuestionPage[CustomsProcedureCode] {
+
+  def path: JsPath = JsPath \ toString
+
+  override def toString: String = "cpc"
 
 }

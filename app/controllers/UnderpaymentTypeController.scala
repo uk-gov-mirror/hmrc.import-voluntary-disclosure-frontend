@@ -50,7 +50,7 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
           request.userAnswers.get(UnderpaymentTypePage).getOrElse(
             UnderpaymentType(customsDuty = false, importVAT = false, exciseDuty = false)
           ),
-          backLink(request.userAnswers.get(EntryDetailsPage))
+          backLink
         )
       )
     )
@@ -64,7 +64,7 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
             underpaymentTypeView(
               formWithErrors,
               UnderpaymentType(customsDuty = false, importVAT = false, exciseDuty = false),
-              backLink(request.userAnswers.get(EntryDetailsPage))
+              backLink
             )
           )
         )
@@ -84,15 +84,6 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
     )
   }
 
-  private[controllers] def backLink(entryDetails: Option[EntryDetails]): Call = {
-    val entryDetailsCall = controllers.routes.EntryDetailsController.onLoad()
-    entryDetails.fold(entryDetailsCall){ value =>
-      if (value.entryDate.isBefore(appConfig.euExitDate)) {
-        controllers.routes.AcceptanceDateController.onLoad()
-      } else {
-        entryDetailsCall
-      }
-    }
-  }
+  private[controllers] def backLink: Call = Call("GET",controllers.routes.CustomsProcedureCodeController.onLoad().url)
 
 }

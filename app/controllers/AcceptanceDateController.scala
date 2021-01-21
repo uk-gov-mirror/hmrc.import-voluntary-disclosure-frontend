@@ -59,7 +59,7 @@ class AcceptanceDateController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(AcceptanceDatePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.CustomsProcedureCodeController.onLoad())
+          Redirect(controllers.routes.EnterCustomsProcedureCodeController.onLoad())
         }
       }
     )

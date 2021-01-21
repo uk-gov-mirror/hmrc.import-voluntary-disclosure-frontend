@@ -22,6 +22,7 @@ import messages.{BaseMessages, CustomsProcedureCodeMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
+import play.api.mvc.Call
 import play.twirl.api.Html
 import views.html.CustomsProcedureCodeView
 
@@ -35,7 +36,7 @@ class CustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EnterCustomsProcedureCodeController.onLoad().url))(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -53,7 +54,7 @@ class CustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EnterCustomsProcedureCodeController.onLoad().url))(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -74,7 +75,7 @@ class CustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
   it should {
 
     val form: Form[Boolean] = formProvider.apply()
-    lazy val view: Html = injectedView(form)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EnterCustomsProcedureCodeController.onLoad().url))(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${CustomsProcedureCodeMessages.h1}'" in {
@@ -90,7 +91,7 @@ class CustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.CustomsProcedureCodeController.onLoad().url)
+      elementAttributes("#back-link") must contain("href" -> controllers.routes.EnterCustomsProcedureCodeController.onLoad().url)
     }
 
     s"have the correct Continue button" in {

@@ -69,7 +69,7 @@ class EntryDetailsController @Inject()(identify: IdentifierAction,
     if (entryDetails.entryDate.isBefore(appConfig.euExitDate)) {
       Redirect(controllers.routes.AcceptanceDateController.onLoad())
     } else {
-      Redirect(controllers.routes.CustomsProcedureCodeController.onLoad())
+      Redirect(controllers.routes.EnterCustomsProcedureCodeController.onLoad())
     }
 
 
