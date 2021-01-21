@@ -159,3 +159,9 @@ customsProcedureCode.pageTitle = Has the customs procedure code changed?
 customsProcedureCode.heading = Has the customs procedure code changed?
 customsProcedureCode.error.required = Select yes if the customs procedure code has changed
 
+deferment.pageTitle = Are you paying by deferment?
+deferment.heading = Are you paying by deferment?
+deferment.yes = Yes
+deferment.no = No
+deferment.error.required = Select if you are the importer or their representative
+
