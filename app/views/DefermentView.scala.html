@@ -14,8 +14,6 @@
  * limitations under the License.
  *@
 
-@import models.UserType
-
 @this(layout: templates.Layout,
 formHelper: FormWithCSRF,
 errorSummary: components.errorSummary,
@@ -23,9 +21,9 @@ inputRadio: components.inputRadio,
 button: components.button,
 yesNoRadio: components.yesNoRadio)
 
-@(form: Form[_])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("deferment.pageTitle"), form = Some(form), showBackLink = true) {
+@layout(pageTitle = messages("deferment.pageTitle"), form = Some(form), customBackLinkUrl = Some(controllers.routes.DefermentController.onLoad)) {
 
    @errorSummary(form.errors)
 

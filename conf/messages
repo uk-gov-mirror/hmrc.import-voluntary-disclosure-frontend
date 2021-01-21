@@ -161,7 +161,5 @@ customsProcedureCode.error.required = Select yes if the customs procedure code h
 
 deferment.pageTitle = Are you paying by deferment?
 deferment.heading = Are you paying by deferment?
-deferment.yes = Yes
-deferment.no = No
-deferment.error.required = Select if you are the importer or their representative
+deferment.error.required = Select yes if you are paying by deferment
 
