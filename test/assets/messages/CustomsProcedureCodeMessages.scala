@@ -18,7 +18,7 @@ package messages
 
 object CustomsProcedureCodeMessages extends BaseMessages {
 
-  val title: String = "Has CPC changed"
+  val title: String = "Has the customs procedure code changed?"
   val h1: String = "Has the customs procedure code changed?"
   val requiredError: String = "Select yes if the customs procedure code has changed"
 
