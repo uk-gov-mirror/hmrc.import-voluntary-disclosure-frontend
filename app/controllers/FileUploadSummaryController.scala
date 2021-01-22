@@ -39,6 +39,7 @@ class FileUploadSummaryController @Inject()(identify: IdentifierAction,
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
       implicit request =>
+        //TODO - Redirect at line 43 to be defined, will redirect back to the upload a file page
         request.userAnswers.get(FileUploadJsonQuery).fold(Future(Redirect(""))) { possibleFiles =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FileUploadJsonQuery, possibleFiles))
