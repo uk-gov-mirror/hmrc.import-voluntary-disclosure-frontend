@@ -16,7 +16,7 @@
 
 package controllers
 
-import controllers.actions.{DataRetrievalAction, IdentifierAction}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.{DefermentFormProvider, UserTypeFormProvider}
 import models.UserAnswers
 import pages.{DefermentPage, UserTypePage}
@@ -35,34 +35,31 @@ import scala.concurrent.Future
 @Singleton
 class DefermentController @Inject()(identify: IdentifierAction,
                                     getData: DataRetrievalAction,
+                                    requireData: DataRequiredAction,
                                     sessionRepository: SessionRepository,
                                     mcc: MessagesControllerComponents,
                                     formProvider: DefermentFormProvider,
                                     view: DefermentView)
   extends FrontendController(mcc) with I18nSupport {
 
-  val onLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
+  val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    val form = for {
-      userAnswers <- request.userAnswers
-      data <- userAnswers.get(DefermentPage)
-    } yield {
-      formProvider().fill(data)
+    val form = request.userAnswers.get(DefermentPage).fold(formProvider()) {
+      formProvider().fill
     }
-
-    Future.successful(Ok(view(form.getOrElse(formProvider()),backLink)))
+    Future.successful(Ok(view(form, backLink)))
   }
 
-  def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
-    val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
-
+  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors,backLink))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors,
+        backLink
+      ))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(userAnswers.set(DefermentPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(DefermentPage, value))
           _ <- sessionRepository.set(updatedAnswers)
-        } yield {
+        }  yield {
           if (value) {
             Redirect(controllers.routes.DefermentController.onLoad())
           } else {
