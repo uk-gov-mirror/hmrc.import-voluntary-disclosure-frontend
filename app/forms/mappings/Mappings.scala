@@ -16,12 +16,12 @@
 
 package forms.mappings
 
-import java.time.LocalDate
-
 import models.Enumerable
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
 import play.api.i18n.Messages
+
+import java.time.LocalDate
 
 trait Mappings extends Formatters with Constraints {
 
@@ -49,13 +49,13 @@ trait Mappings extends Formatters with Constraints {
     of(booleanFormatter(requiredKey, invalidKey))
 
   protected def localDate(invalidKey: String,
-                           allRequiredKey: String,
-                           twoRequiredKey: String,
-                           requiredKey: String,
-                           dayMonthLengthKey: String = "error.date.length",
-                           yearLengthKey: String = "error.year.length",
-                           validatePastKey: Option[String] = None,
-                           args: Seq[String] = Seq.empty)(implicit messages: Messages): FieldMapping[LocalDate] =
+                          allRequiredKey: String,
+                          twoRequiredKey: String,
+                          requiredKey: String,
+                          dayMonthLengthKey: String = "error.date.length",
+                          yearLengthKey: String = "error.year.length",
+                          validatePastKey: Option[String] = None,
+                          args: Seq[String] = Seq.empty)(implicit messages: Messages): FieldMapping[LocalDate] =
     of(new LocalDateFormatter(invalidKey, allRequiredKey, twoRequiredKey, requiredKey, dayMonthLengthKey, yearLengthKey, validatePastKey, args))
 
   protected def enumerable[A](requiredKey: String = "error.required",

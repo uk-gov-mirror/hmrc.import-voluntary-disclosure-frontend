@@ -36,7 +36,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.DefermentController.onLoad().url))(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.TraderContactDetailsController.onLoad().url))(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -54,7 +54,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.DefermentController.onLoad().url))(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.TraderContactDetailsController.onLoad().url))(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -75,7 +75,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
   it should {
 
     val form: Form[Boolean] = formProvider.apply()
-    lazy val view: Html = injectedView(form, Call("GET", controllers.routes.DefermentController.onLoad().url))(fakeRequest, messages)
+    lazy val view: Html = injectedView(form, Call("GET", controllers.routes.TraderContactDetailsController.onLoad().url))(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${DefermentMessages.h1}'" in {
@@ -91,7 +91,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.UnderpaymentSummaryController.onLoad().url)
+      elementAttributes("#back-link") must contain("href" -> controllers.routes.TraderContactDetailsController.onLoad().url)
     }
 
     s"have the correct Continue button" in {

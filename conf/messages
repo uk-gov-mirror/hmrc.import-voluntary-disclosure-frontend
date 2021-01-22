@@ -163,3 +163,17 @@ deferment.pageTitle = Are you paying by deferment?
 deferment.heading = Are you paying by deferment?
 deferment.error.required = Select yes if you are paying by deferment
 
+# Trader Contact Details
+traderContactDetails.pageTitle = Enter contact details
+traderContactDetails.h1 = What are your contact details?
+traderContactDetails.p = We will only use these details if we have questions about this underpayment disclosure.
+traderContactDetails.error.nameNonEmpty = Enter a name
+traderContactDetails.error.emailNonEmpty = Enter an email address
+traderContactDetails.error.phoneNumberNonEmpty = Enter a UK telephone number
+traderContactDetails.error.nameMinLength = Name must be 2 characters or more
+traderContactDetails.error.nameMaxLength = Name must be 50 characters or fewer
+traderContactDetails.error.nameAllowableCharacters = Name must only include letters a to z, hyphens, spaces and apostrophes
+traderContactDetails.error.emailInvalidFormat = Enter an email address in the correct format, like name@example.com
+traderContactDetails.error.phoneNumberInvalidFormat = Enter a UK telephone number, like 01632 960 001 or 07700 900 982
+
+

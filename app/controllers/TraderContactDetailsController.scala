@@ -17,57 +17,46 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.{DefermentFormProvider, UserTypeFormProvider}
-import models.UserAnswers
-import pages.{DefermentPage, UserTypePage}
+import forms.TraderContactDetailsFormProvider
+import pages.TraderContactDetailsPage
 import play.api.i18n.I18nSupport
-import play.api.libs.json.Format.GenericFormat
-import play.api.mvc._
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.{DefermentView, UserTypeView}
-import javax.inject.{Inject, Singleton}
+import views.html.TraderContactDetailsView
 
+import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-
-@Singleton
-class DefermentController @Inject()(identify: IdentifierAction,
-                                    getData: DataRetrievalAction,
-                                    requireData: DataRequiredAction,
-                                    sessionRepository: SessionRepository,
-                                    mcc: MessagesControllerComponents,
-                                    formProvider: DefermentFormProvider,
-                                    view: DefermentView)
+class TraderContactDetailsController @Inject()(identify: IdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               sessionRepository: SessionRepository,
+                                               mcc: MessagesControllerComponents,
+                                               formProvider: TraderContactDetailsFormProvider,
+                                               view: TraderContactDetailsView)
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    val form = request.userAnswers.get(DefermentPage).fold(formProvider()) {
+    val form = request.userAnswers.get(TraderContactDetailsPage).fold(formProvider()) {
       formProvider().fill
     }
-    Future.successful(Ok(view(form, backLink)))
+    Future.successful(Ok(view(form)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(DefermentPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderContactDetailsPage, value))
           _ <- sessionRepository.set(updatedAnswers)
-        }  yield {
-          if (value) {
-            Redirect(controllers.routes.DefermentController.onLoad())
-          } else {
-            Redirect(controllers.routes.DefermentController.onLoad())
-          }
+        } yield {
+          Redirect(controllers.routes.DefermentController.onLoad())
         }
       }
     )
   }
-
-  private[controllers] def backLink: Call = Call("GET", controllers.routes.TraderContactDetailsController.onLoad().url)
 
 }
