@@ -35,12 +35,13 @@ class AddFileNameRowHelper(val userAnswers: UserAnswers)
           case (file, index) =>
             addToListRow(
               value = HtmlFormat.escape(file.fileName).toString,
-              removeAction = ActionItem(
+              removeAction = Some(ActionItem(
                 href = "",
                 content = Text("Remove"),
                 visuallyHiddenText = Some("")
               )
             )
+          )
         }
     }.getOrElse(List.empty)
   }

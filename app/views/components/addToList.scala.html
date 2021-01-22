@@ -18,7 +18,7 @@
 
 @this()
 
-@(items: Seq[AddToListRow], changeLinkRequired: Boolean)(implicit messages: Messages)
+@(items: Seq[AddToListRow])(implicit messages: Messages)
 
 <ul class="hmrc-add-to-a-list hmrc-add-to-a-list--short">
     @for(item <- items) {
@@ -26,23 +26,26 @@
             <span class="hmrc-add-to-a-list__identifier hmrc-add-to-a-list__identifier--light">
                 @item.value.content.asHtml
             </span>
-            @if(changeLinkRequired){
-            <span class="hmrc-add-to-a-list__change">
-                <a class="govuk-link" href="@item.changeAction.get.href">
-                    <span aria-hidden="true">@messages("site.change")</span>
-                    @item.changeAction.get.visuallyHiddenText.map { text =>
-                        <span class="govuk-visually-hidden">@text</span>
-                    }
-                </a>
-            </span>}
+            @item.changeAction.map { action =>
+                <span class="hmrc-add-to-a-list__change">
+                    <a class="govuk-link" href="@action.href">
+                        <span aria-hidden="true">@messages("site.change")</span>
+                        @action.visuallyHiddenText.map { text =>
+                            <span class="govuk-visually-hidden">@text</span>
+                        }
+                    </a>
+                </span>
+            }
+            @item.removeAction.map { action =>
             <span class="hmrc-add-to-a-list__remove">
-                <a class="govuk-link" href="@item.removeAction.href">
-                    <span aria-hidden="true">@item.removeAction.content.asHtml</span>
-                    @item.removeAction.visuallyHiddenText.map { text =>
+                <a class="govuk-link" href="@action.href">
+                    <span aria-hidden="true">@action.content.asHtml</span>
+                    @action.visuallyHiddenText.map { text =>
                         <span class="govuk-visually-hidden">@text</span>
                     }
                 </a>
             </span>
+            }
         </li>
     }
 </ul>

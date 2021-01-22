@@ -21,7 +21,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Value
 
 trait AddToListRowHelper {
 
-  def addToListRow(value: String, changeAction: Option[ActionItem] = None, removeAction: ActionItem): AddToListRow = {
+  def addToListRow(value: String, changeAction: Option[ActionItem] = None, removeAction: Option[ActionItem] = None): AddToListRow = {
     AddToListRow(
       value = Value(
         content = HtmlContent(value)

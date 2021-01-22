@@ -21,5 +21,5 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Value
 final case class AddToListRow(
                                value: Value,
                                changeAction: Option[ActionItem] = None,
-                               removeAction: ActionItem
+                               removeAction: Option[ActionItem] = None
                              )

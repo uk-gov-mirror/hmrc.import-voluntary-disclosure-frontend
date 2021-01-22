@@ -39,16 +39,17 @@ class FileUploadSummaryController @Inject()(identify: IdentifierAction,
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
       implicit request =>
-        for {
-          possibleFiles <- Future { request.userAnswers.get(FileUploadJsonQuery).get }
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(FileUploadJsonQuery, possibleFiles))
-          _ <- sessionRepository.set(updatedAnswers)
-        } yield {
-          val helper = new AddFileNameRowHelper(updatedAnswers)
-          val rows   = helper.rows
+        request.userAnswers.get(FileUploadJsonQuery).fold(Future(Redirect(""))) { possibleFiles =>
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(FileUploadJsonQuery, possibleFiles))
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield {
+            val helper = new AddFileNameRowHelper(updatedAnswers)
+            val rows = helper.rows
 
-          Ok(view(rows))
-        }
+            Ok(view(rows))
+          }
+      }
   }
 
   private[controllers] def backLink: Call = Call("GET",controllers.routes.EnterCustomsProcedureCodeController.onLoad().url)
