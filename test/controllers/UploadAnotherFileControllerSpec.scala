@@ -66,43 +66,53 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
+
+    "redirect to supporting Doc page" in new Test {
+      override val data = Json.obj("" -> "")
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id", data).set(UploadAnotherFilePage, true).success.value)
+        val result: Future[Result] = controller.onLoad(fakeRequest)
+        status(result) mustBe Status.SEE_OTHER
+      }
+
   }
 
-//  "POST /" when {
-//    "payload contains valid data" should {
-//
-//      "return a SEE OTHER response when false" in new Test {
-//        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
-//        lazy val result: Future[Result] = controller.onSubmit(request)
-//        status(result) mustBe Status.SEE_OTHER
-//      }
-//
-//      "return a SEE OTHER response when true" in new Test {
-//        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
-//        lazy val result: Future[Result] = controller.onSubmit(request)
-//        status(result) mustBe Status.SEE_OTHER
-//      }
-//
-//      "return the correct location header" in new Test {
-//        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
-//        lazy val result: Future[Result] = controller.onSubmit(request)
-//        redirectLocation(result) mustBe Some(controllers.routes.DefermentController.onLoad().url)
-//      }
-//
-//      "update the UserAnswers in session" in new Test {
-//        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
-//        await(controller.onSubmit(request))
-//        MockedSessionRepository.verifyCalls()
-//      }
-//    }
-//
-//    "payload contains invalid data" should {
-//      "return a BAD REQUEST" in new Test {
-//        val result: Future[Result] = controller.onSubmit(fakeRequest)
-//        status(result) mustBe Status.BAD_REQUEST
-//      }
-//    }
-//  }
+  "POST /" when {
+    "payload contains valid data" should {
+
+      "return a SEE OTHER response when false" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        status(result) mustBe Status.SEE_OTHER
+      }
+
+      "return a SEE OTHER response when true" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        status(result) mustBe Status.SEE_OTHER
+      }
+
+      "return the correct location header" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        redirectLocation(result) mustBe Some(controllers.routes.UploadAnotherFileController.onLoad().url)
+      }
+
+      "update the UserAnswers in session" in new Test {
+        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        await(controller.onSubmit(request))
+        MockedSessionRepository.verifyCalls()
+      }
+    }
+
+    "payload contains invalid data" should {
+      "return a BAD REQUEST" in new Test {
+        val result: Future[Result] = controller.onSubmit(fakeRequest)
+        status(result) mustBe Status.BAD_REQUEST
+      }
+    }
+
+
+  }
 
 }
 
