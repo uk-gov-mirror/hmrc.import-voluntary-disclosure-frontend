@@ -16,7 +16,6 @@
 
 package viewmodels
 
-import controllers.routes
 import models.UserAnswers
 import play.api.i18n.Messages
 import play.twirl.api.HtmlFormat
@@ -37,7 +36,7 @@ class AddFileNameRowHelper(val userAnswers: UserAnswers)
               value = HtmlFormat.escape(file.fileName).toString,
               removeAction = Some(ActionItem(
                 href = "",
-                content = Text("Remove"),
+                content = Text(messages("common.remove")),
                 visuallyHiddenText = Some("")
               )
             )

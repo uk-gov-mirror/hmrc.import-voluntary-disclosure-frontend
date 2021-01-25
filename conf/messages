@@ -1,6 +1,7 @@
 common.continue = Continue
 common.back = Back
 common.errorPrefix = 'Error: '
+common.remove = Remove
 
 service.name = Disclose an underpayment of import duties
 service.homePageUrl = /disclose-import-taxes-underpayment
@@ -176,4 +177,8 @@ traderContactDetails.error.nameAllowableCharacters = Name must only include lett
 traderContactDetails.error.emailInvalidFormat = Enter an email address in the correct format, like name@example.com
 traderContactDetails.error.phoneNumberInvalidFormat = Enter a UK telephone number, like 01632 960 001 or 07700 900 982
 
-
+# File Upload Summary page
+fileUploadSummary.pageTitle = You have uploaded {0} {1}
+fileUploadSummary.heading = You have uploaded {0} {1}
+fileUploadSummary.addAnotherFile = Do you need to upload another file?
+fileUploadSummary.error.required = Select yes to upload another file

@@ -54,3 +54,4 @@ GET         /disclosure/paying-by-deferment                    controllers.Defer
 POST        /disclosure/paying-by-deferment                    controllers.DefermentController.onSubmit
 
 GET         /disclosure/upload-another-file                    controllers.FileUploadSummaryController.onLoad
+POST        /disclosure/upload-another-file                    controllers.FileUploadSummaryController.onSubmit

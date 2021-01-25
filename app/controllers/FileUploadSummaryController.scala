@@ -17,10 +17,14 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import forms.FileUploadSummaryFormProvider
 import javax.inject.Inject
+import models.requests.DataRequest
+import pages.FileUploadSummaryPage
+import play.api.data.Form
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
-import queries.{FileUploadJsonQuery}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Result}
+import queries.FileUploadJsonQuery
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.AddFileNameRowHelper
@@ -33,12 +37,17 @@ class FileUploadSummaryController @Inject()(identify: IdentifierAction,
                                             requireData: DataRequiredAction,
                                             sessionRepository: SessionRepository,
                                             mcc: MessagesControllerComponents,
+                                            formProvider: FileUploadSummaryFormProvider,
                                             view: FileUploadSummaryView)(implicit ec: ExecutionContext)
 
   extends FrontendController(mcc) with I18nSupport {
 
+
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
       implicit request =>
+        val form = request.userAnswers.get(FileUploadSummaryPage).fold(formProvider()) {
+          formProvider().fill
+        }
         //TODO - Redirect at line 43 to be defined, will redirect back to the upload a file page
         request.userAnswers.get(FileUploadJsonQuery).fold(Future(Redirect(""))) { possibleFiles =>
           for {
@@ -48,11 +57,35 @@ class FileUploadSummaryController @Inject()(identify: IdentifierAction,
             val helper = new AddFileNameRowHelper(updatedAnswers)
             val rows = helper.rows
 
-            Ok(view(rows))
+            Ok(view(form, backLink, rows))
           }
       }
   }
 
-  private[controllers] def backLink: Call = Call("GET",controllers.routes.EnterCustomsProcedureCodeController.onLoad().url)
+  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    formProvider().bindFromRequest().fold(
+      formWithErrors => resultWithErrors(formWithErrors),
+      value => {
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(FileUploadSummaryPage, value))
+          _ <- sessionRepository.set(updatedAnswers)
+        }  yield {
+          if (value) {
+            Redirect(controllers.routes.FileUploadSummaryController.onLoad())
+          } else {
+            Redirect(controllers.routes.FileUploadSummaryController.onLoad())
+          }
+        }
+      }
+    )
+  }
 
+  private[controllers] def backLink: Call = Call("GET",controllers.routes.SupportingDocController.onLoad().url)
+
+  private def resultWithErrors(formWithErrors: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Result] = {
+    val helper = new AddFileNameRowHelper(request.userAnswers)
+    val rows   = helper.rows
+
+    Future.successful(BadRequest(view(formWithErrors, backLink, rows)))
+  }
 }

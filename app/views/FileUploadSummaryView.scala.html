@@ -21,20 +21,40 @@
         govukSummaryList: GovukSummaryList,
         h1: components.h1,
         addToList: components.addToList,
-        linkButton: components.linkButton
+        button: components.button,
+        yesNoRadio: components.yesNoRadio,
+        errorSummary: components.errorSummary,
+        formHelper: FormWithCSRF
 )
 
-@(answers: Seq[AddToListRow])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, answers: Seq[AddToListRow])(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("underpaymentSummary.pageTitle")) {
+@singularFile = @{
+    if(answers.size == 1) "file" else "files"
+}
 
-        @h1(messages("addRestaurant.heading"))
+@layout(pageTitle = messages("fileUploadSummary.pageTitle", answers.size, singularFile), form = Some(form),customBackLinkUrl = Some(backLink)) {
+
+        @errorSummary(form.errors)
+
+        @h1(messages("fileUploadSummary.heading", answers.size, singularFile))
+
+        @formHelper(action = controllers.routes.FileUploadSummaryController.onSubmit()) {
 
         @addToList(answers)
 
-        @linkButton(
-            url = controllers.routes.TraderContactDetailsController.onLoad().url,
-            value = messages("common.continue")
+        <br>
+
+        @yesNoRadio(
+            form,
+            headingKey = "fileUploadSummary.addAnotherFile",
+            inline = true,
+            isPageHeading = false,
+            classes = "govuk-fieldset__legend govuk-fieldset__legend--m"
         )
+
+        @button("common.button.continue")
+
+    }
 
 }
