@@ -21,10 +21,10 @@ import javax.inject.Inject
 import play.api.data.Form
 
 
-class FileUploadSummaryFormProvider @Inject() extends Mappings {
+class UploadAnotherFileFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("fileUploadSummary.error.required")
+      "value" -> boolean("uploadAnotherFile.error.required")
     )
 }

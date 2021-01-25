@@ -33,13 +33,13 @@
     if(answers.size == 1) "file" else "files"
 }
 
-@layout(pageTitle = messages("fileUploadSummary.pageTitle", answers.size, singularFile), form = Some(form),customBackLinkUrl = Some(backLink)) {
+@layout(pageTitle = messages("uploadAnotherFile.pageTitle", answers.size, singularFile), form = Some(form),customBackLinkUrl = Some(backLink)) {
 
         @errorSummary(form.errors)
 
-        @h1(messages("fileUploadSummary.heading", answers.size, singularFile))
+        @h1(messages("uploadAnotherFile.heading", answers.size, singularFile))
 
-        @formHelper(action = controllers.routes.FileUploadSummaryController.onSubmit()) {
+        @formHelper(action = controllers.routes.UploadAnotherFileController.onSubmit()) {
 
         @addToList(answers)
 
@@ -47,7 +47,7 @@
 
         @yesNoRadio(
             form,
-            headingKey = "fileUploadSummary.addAnotherFile",
+            headingKey = "uploadAnotherFile.addFile",
             inline = true,
             isPageHeading = false,
             classes = "govuk-fieldset__legend govuk-fieldset__legend--m"

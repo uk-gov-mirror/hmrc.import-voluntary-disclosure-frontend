@@ -17,10 +17,10 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.FileUploadSummaryFormProvider
+import forms.UploadAnotherFileFormProvider
 import javax.inject.Inject
 import models.requests.DataRequest
-import pages.FileUploadSummaryPage
+import pages.UploadAnotherFilePage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Result}
@@ -28,24 +28,24 @@ import queries.FileUploadJsonQuery
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.AddFileNameRowHelper
-import views.html.FileUploadSummaryView
+import views.html.UploadAnotherFileView
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class FileUploadSummaryController @Inject()(identify: IdentifierAction,
+class UploadAnotherFileController @Inject()(identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             requireData: DataRequiredAction,
                                             sessionRepository: SessionRepository,
                                             mcc: MessagesControllerComponents,
-                                            formProvider: FileUploadSummaryFormProvider,
-                                            view: FileUploadSummaryView)(implicit ec: ExecutionContext)
+                                            formProvider: UploadAnotherFileFormProvider,
+                                            view: UploadAnotherFileView)(implicit ec: ExecutionContext)
 
   extends FrontendController(mcc) with I18nSupport {
 
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
       implicit request =>
-        val form = request.userAnswers.get(FileUploadSummaryPage).fold(formProvider()) {
+        val form = request.userAnswers.get(UploadAnotherFilePage).fold(formProvider()) {
           formProvider().fill
         }
         //TODO - Redirect at line 43 to be defined, will redirect back to the upload a file page
@@ -67,13 +67,13 @@ class FileUploadSummaryController @Inject()(identify: IdentifierAction,
       formWithErrors => resultWithErrors(formWithErrors),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(FileUploadSummaryPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(UploadAnotherFilePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         }  yield {
           if (value) {
-            Redirect(controllers.routes.FileUploadSummaryController.onLoad())
+            Redirect(controllers.routes.UploadAnotherFileController.onLoad())
           } else {
-            Redirect(controllers.routes.FileUploadSummaryController.onLoad())
+            Redirect(controllers.routes.UploadAnotherFileController.onLoad())
           }
         }
       }

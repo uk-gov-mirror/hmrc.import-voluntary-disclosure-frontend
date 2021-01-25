@@ -18,10 +18,10 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object FileUploadSummaryPage extends QuestionPage[Boolean] {
+case object UploadAnotherFilePage extends QuestionPage[Boolean] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "file-upload-summary"
+  override def toString: String = "upload-another-file"
 
 }
