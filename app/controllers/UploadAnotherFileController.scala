@@ -48,8 +48,7 @@ class UploadAnotherFileController @Inject()(identify: IdentifierAction,
         val form = request.userAnswers.get(UploadAnotherFilePage).fold(formProvider()) {
           formProvider().fill
         }
-        //TODO - Redirect at line 43 to be defined, will redirect back to the upload a file page
-        request.userAnswers.get(FileUploadJsonQuery).fold(Future(Redirect(""))) { possibleFiles =>
+        request.userAnswers.get(FileUploadJsonQuery).fold(Future(Redirect(controllers.routes.SupportingDocController.onLoad().url))) { possibleFiles =>
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(FileUploadJsonQuery, possibleFiles))
             _ <- sessionRepository.set(updatedAnswers)
