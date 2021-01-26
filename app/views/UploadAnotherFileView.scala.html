@@ -1,0 +1,64 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import viewmodels.AddToListRow
+
+@this(
+        layout: templates.Layout,
+        govukSummaryList: GovukSummaryList,
+        h1: components.h1,
+        addToList: components.addToList,
+        button: components.button,
+        yesNoRadio: components.yesNoRadio,
+        errorSummary: components.errorSummary,
+        formHelper: FormWithCSRF
+)
+
+@(form: Form[_], backLink: Call, answers: Seq[AddToListRow])(implicit request: Request[_], messages: Messages)
+
+@singularFile = @{
+    if(answers.size == 1) "file" else "files"
+}
+
+@layout(pageTitle = messages("uploadAnotherFile.pageTitle", answers.size, singularFile), form = Some(form),customBackLinkUrl = Some(backLink)) {
+
+        @errorSummary(form.errors)
+
+        @h1(messages("uploadAnotherFile.heading", answers.size, singularFile))
+
+        @formHelper(action = controllers.routes.UploadAnotherFileController.onSubmit()) {
+
+        @addToList(answers)
+
+        <br>
+
+        @yesNoRadio(
+            form,
+            headingKey = "uploadAnotherFile.addFile",
+            inline = true,
+            isPageHeading = false,
+            classes = "govuk-fieldset__legend govuk-fieldset__legend--m"
+        )
+
+        @button("common.button.continue")
+
+    }
+
+}
+
+@{
+//$COVERAGE-OFF$
+}
