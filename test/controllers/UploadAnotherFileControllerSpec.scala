@@ -18,16 +18,16 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.{DefermentFormProvider, UploadAnotherFileFormProvider}
+import forms.UploadAnotherFileFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.{DefermentPage, UploadAnotherFilePage}
+import pages.UploadAnotherFilePage
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.{DefermentView, UploadAnotherFileView}
+import views.html.UploadAnotherFileView
 
 import scala.concurrent.Future
 
@@ -35,7 +35,7 @@ import scala.concurrent.Future
 class UploadAnotherFileControllerSpec extends ControllerSpecBase {
 
   trait Test extends MockSessionRepository {
-    private lazy val defermentView: UploadAnotherFileView = app.injector.instanceOf[UploadAnotherFileView]
+    private lazy val uploadAnotherFileView: UploadAnotherFileView = app.injector.instanceOf[UploadAnotherFileView]
 
     val data: JsObject = Json.obj("uploaded-files" -> Json.arr(Json.obj("fileName" -> "text.txt")))
 
@@ -49,7 +49,7 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
     MockedSessionRepository.set(Future.successful(true))
 
     lazy val controller = new UploadAnotherFileController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, messagesControllerComponents, form, defermentView)
+      mockSessionRepository, messagesControllerComponents, form, uploadAnotherFileView)
   }
 
   val acceptanceDateYes: Boolean = true
@@ -67,7 +67,7 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
       charset(result) mustBe Some("utf-8")
     }
 
-    "redirect to supporting Doc page" in new Test {
+    "redirect to supporting Doc page when no data present" in new Test {
       override val data = Json.obj("" -> "")
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id", data).set(UploadAnotherFilePage, true).success.value)
         val result: Future[Result] = controller.onLoad(fakeRequest)
@@ -91,8 +91,14 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
         status(result) mustBe Status.SEE_OTHER
       }
 
-      "return the correct location header" in new Test {
+      "return the correct location header when true" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        redirectLocation(result) mustBe Some(controllers.routes.UploadAnotherFileController.onLoad().url)
+      }
+
+      "return the correct location header when false" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         lazy val result: Future[Result] = controller.onSubmit(request)
         redirectLocation(result) mustBe Some(controllers.routes.UploadAnotherFileController.onLoad().url)
       }

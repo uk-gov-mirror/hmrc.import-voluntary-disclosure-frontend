@@ -17,15 +17,15 @@
 package views
 
 import base.ViewBaseSpec
-import forms.{DefermentFormProvider, UploadAnotherFileFormProvider}
-import messages.{BaseMessages, DefermentMessages, UploadAnotherFileMessages}
+import forms.UploadAnotherFileFormProvider
+import messages.{BaseMessages, UploadAnotherFileMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.mvc.Call
 import play.twirl.api.Html
 import viewmodels.AddToListRow
-import views.html.{DefermentView, UploadAnotherFileView}
+import views.html.UploadAnotherFileView
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Value}
 
