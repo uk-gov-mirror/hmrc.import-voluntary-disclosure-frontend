@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package queries
+package forms
 
-import models.{FileUploadInfo, Gettable}
-import play.api.libs.json.JsPath
+import javax.inject.Inject
 
-object FileUploadQuery extends Gettable[List[FileUploadInfo]] {
+import forms.mappings.Mappings
+import play.api.data.Form
 
-  override def path: JsPath = JsPath \ "uploaded-files"
+class RemoveUploadedFileFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("removeUploadedFile.error.required")
+    )
 }

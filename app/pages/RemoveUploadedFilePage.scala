@@ -16,12 +16,10 @@
 
 package pages
 
+import models.Index
 import play.api.libs.json.JsPath
 
-case object UploadAnotherFilePage extends QuestionPage[Boolean] {
+final case class RemoveUploadedFilePage(index: Index) extends  QuestionPage[Boolean] {
 
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "upload-another-file"
-
+  override def path: JsPath = JsPath \ "uploaded-file" \ index.position \ "remove"
 }

@@ -18,7 +18,6 @@
 
 @this(
         layout: templates.Layout,
-        govukSummaryList: GovukSummaryList,
         h1: components.h1,
         addToList: components.addToList,
         button: components.button,
@@ -27,13 +26,16 @@
         formHelper: FormWithCSRF
 )
 
-@(form: Form[_], backLink: Call, answers: Seq[AddToListRow])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], answers: Seq[AddToListRow])(implicit request: Request[_], messages: Messages)
 
 @singularFile = @{
     if(answers.size == 1) "file" else "files"
 }
 
-@layout(pageTitle = messages("uploadAnotherFile.pageTitle", answers.size, singularFile), form = Some(form),customBackLinkUrl = Some(backLink)) {
+@layout(
+    pageTitle = messages("uploadAnotherFile.pageTitle", answers.size, singularFile),
+    form = Some(form),
+    customBackLinkUrl = Some(controllers.routes.SupportingDocController.onLoad)) {
 
         @errorSummary(form.errors)
 

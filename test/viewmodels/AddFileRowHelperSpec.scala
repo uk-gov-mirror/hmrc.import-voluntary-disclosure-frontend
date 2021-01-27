@@ -17,7 +17,7 @@
 package viewmodels
 
 import base.SpecBase
-import models.UserAnswers
+import models.{FileUploadInfo, UserAnswers}
 import org.scalatest.{MustMatchers, OptionValues, TryValues}
 import play.api.libs.json.{JsObject, Json}
 import play.twirl.api.Html
@@ -28,7 +28,7 @@ class AddFileRowHelperSpec extends SpecBase with MustMatchers with TryValues wit
 
     "must return an empty list when there are no files" in {
 
-      val helper = new AddFileNameRowHelper(UserAnswers("id"))
+      val helper = new AddFileNameRowHelper(List.empty)
 
       helper.rows mustBe empty
     }
@@ -43,7 +43,7 @@ class AddFileRowHelperSpec extends SpecBase with MustMatchers with TryValues wit
 
       val answers =
         UserAnswers("id", data)
-      val helper = new AddFileNameRowHelper(answers)
+      val helper = new AddFileNameRowHelper(List(FileUploadInfo("text.txt"),FileUploadInfo("text2.txt"),FileUploadInfo("text3.txt")))
 
       val result = helper.rows
 

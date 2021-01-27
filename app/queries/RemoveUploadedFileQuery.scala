@@ -16,10 +16,11 @@
 
 package queries
 
-import models.{FileUploadInfo, Gettable}
-import play.api.libs.json.JsPath
+import models.Index
+import pages.QuestionPage
+import play.api.libs.json.{JsObject, JsPath}
 
-object FileUploadQuery extends Gettable[List[FileUploadInfo]] {
+final case class RemoveUploadedFileQuery(index: Index) extends QuestionPage[JsObject] {
 
-  override def path: JsPath = JsPath \ "uploaded-files"
+  override def path: JsPath = JsPath \ "uploaded-files" \ index.position
 }

@@ -55,3 +55,6 @@ POST        /disclosure/paying-by-deferment                    controllers.Defer
 
 GET         /disclosure/upload-another-file                    controllers.UploadAnotherFileController.onLoad
 POST        /disclosure/upload-another-file                    controllers.UploadAnotherFileController.onSubmit
+
+GET         /disclosure/remove-file/:index                     controllers.RemoveUploadedFileController.onLoad(index: models.Index)
+POST        /disclosure/remove-file/:index                     controllers.RemoveUploadedFileController.onSubmit(index: models.Index)

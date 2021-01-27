@@ -52,7 +52,7 @@ class UploadAnotherFileViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist when one file is present" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.SupportingDocController.onLoad().url),answers)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form,answers)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -80,7 +80,7 @@ class UploadAnotherFileViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist when two files are present" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.SupportingDocController.onLoad().url),answersTwoFiles)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form,answersTwoFiles)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -110,7 +110,7 @@ class UploadAnotherFileViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form, Call("GET", controllers.routes.SupportingDocController.onLoad().url),answers)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form,answers)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -131,7 +131,7 @@ class UploadAnotherFileViewSpec extends ViewBaseSpec with BaseMessages {
   it should {
 
     val form: Form[Boolean] = formProvider.apply()
-    lazy val view: Html = injectedView(form, Call("GET", controllers.routes.SupportingDocController.onLoad().url),answers)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form,answers)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${UploadAnotherFileMessages.h1("1","file")}'" in {
