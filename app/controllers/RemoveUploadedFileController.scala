@@ -40,12 +40,13 @@ class RemoveUploadedFileController @Inject()(
                                               view: RemoveUploadedFileView
                                  )(implicit ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
-  def onLoad(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData) {
+
+  def onLoad(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      if(request.userAnswers.get(FileUploadQuery).get.isEmpty) {
-        Redirect(controllers.routes.SupportingDocController.onLoad())
-      } else {
-        Ok(view(formProvider(), index))
+      request.userAnswers.get(FileUploadQuery) match {
+        case None => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
+        case Some(files) if(files.isEmpty) => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
+        case _ => Future.successful(Ok(view(formProvider(), index)))
       }
   }
 
