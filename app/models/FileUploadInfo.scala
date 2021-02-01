@@ -18,8 +18,16 @@ package models
 
 import play.api.libs.json._
 
-case class FileUploadInfo(fileName: String)
+import java.time.LocalDateTime
+
+case class FileUploadInfo(fileName: String,
+                          downloadUrl: String,
+                          uploadTimestamp: LocalDateTime,
+                          checksum: String,
+                          fileMimeType: String
+                         )
 
 object FileUploadInfo {
   implicit val reads: Reads[FileUploadInfo] = Json.reads[FileUploadInfo]
+  implicit val writes: Writes[FileUploadInfo] = Json.writes[FileUploadInfo]
 }

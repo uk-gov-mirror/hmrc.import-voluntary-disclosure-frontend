@@ -18,16 +18,17 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.{AcceptanceDateFormProvider, DefermentFormProvider, RemoveUploadedFileFormProvider}
+import forms.RemoveUploadedFileFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{Index, UserAnswers}
-import pages.{AcceptanceDatePage, DefermentPage, RemoveUploadedFilePage}
+import models.{FileUploadInfo, Index, UserAnswers}
+import pages.FileUploadPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.{AcceptanceDateView, DefermentView, RemoveUploadedFileView}
+import play.api.test.Helpers._
+import views.html.RemoveUploadedFileView
 
+import java.time.LocalDateTime
 import scala.concurrent.Future
 
 
@@ -52,31 +53,42 @@ class RemoveUploadedFileControllerSpec extends ControllerSpecBase {
 
 
   "GET /" should {
-    "redirect to SupportingDoc page" in new Test {
+    "redirect to SupportingDoc page if no uploaded-files in user answers" in new Test {
       val result: Future[Result] = controller.onLoad(index)(fakeRequest)
       status(result) mustBe Status.SEE_OTHER
     }
-//    "redirect to SupportingDoc page if all files removed" in new Test {
-//      override val userAnswers: Option[UserAnswers] = Some(
-//        UserAnswers("credId")
-//          .set()
-//      )
-//      val result: Future[Result] = controller.onLoad(index)(fakeRequest)
-//      status(result) mustBe Status.OK
-//    }
-//
-//    "redirect to RemoveUploadedFile page if files exist" in new Test {
-//      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
-//      val result: Future[Result] = controller.onLoad(index)(fakeRequest)
-//      status(result) mustBe Status.OK
-//    }
 
+    "redirect to SupportingDoc page if all files removed" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("credId")
+          .set(
+            FileUploadPage,
+            Seq.empty
+          ).success.value
+      )
+      val result: Future[Result] = controller.onLoad(index)(fakeRequest)
+      status(result) mustBe Status.SEE_OTHER
+    }
 
-//    "return HTML" in new Test {
-//      val result: Future[Result] = controller.onLoad(index)(fakeRequest)
-//      contentType(result) mustBe Some("text/html")
-//      charset(result) mustBe Some("utf-8")
-//    }
+    "redirect to RemoveUploadedFile page if files exist" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("credId")
+          .set(
+            FileUploadPage,
+            Seq(FileUploadInfo(
+              fileName = "file.txt",
+              downloadUrl = "url",
+              uploadTimestamp = LocalDateTime.now,
+              checksum = "checksum",
+              fileMimeType = "application/txt"
+            ))
+          ).success.value
+      )
+      val result: Future[Result] = controller.onLoad(index)(fakeRequest)
+      status(result) mustBe Status.OK
+      contentType(result) mustBe Some("text/html")
+      charset(result) mustBe Some("utf-8")
+    }
   }
 
   "POST /" when {
@@ -103,7 +115,7 @@ class RemoveUploadedFileControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         await(controller.onSubmit(index)(request))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
     }
 

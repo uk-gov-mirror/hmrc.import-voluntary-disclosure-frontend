@@ -85,7 +85,7 @@ class CustomsProcedureCodeControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         await(controller.onSubmit(request))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
     }
 

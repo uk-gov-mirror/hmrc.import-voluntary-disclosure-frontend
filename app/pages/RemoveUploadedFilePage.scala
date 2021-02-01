@@ -17,9 +17,9 @@
 package pages
 
 import models.Index
-import play.api.libs.json.JsPath
+import play.api.libs.json.{JsObject, JsPath}
 
-final case class RemoveUploadedFilePage(index: Index) extends  QuestionPage[Boolean] {
+final case class RemoveUploadedFilePage(index: Index) extends QuestionPage[JsObject] {
 
-  override def path: JsPath = JsPath \ "uploaded-file" \ index.position \ "remove"
+  override def path: JsPath = JsPath \ "uploaded-files" \ index.position
 }

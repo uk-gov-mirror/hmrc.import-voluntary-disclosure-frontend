@@ -18,12 +18,13 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UploadAnotherFileFormProvider
+
 import javax.inject.Inject
 import models.requests.DataRequest
+import pages.FileUploadPage
 import play.api.data.Form
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents, Result}
-import queries.FileUploadQuery
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.AddFileNameRowHelper
 import views.html.UploadAnotherFileView
@@ -42,10 +43,10 @@ class UploadAnotherFileController @Inject()(identify: IdentifierAction,
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async {
       implicit request =>
-        request.userAnswers.get(FileUploadQuery).fold(Future(Redirect(controllers.routes.SupportingDocController.onLoad().url))) { files =>
+        request.userAnswers.get(FileUploadPage).fold(Future(Redirect(controllers.routes.SupportingDocController.onLoad().url))) { files =>
             val helper = new AddFileNameRowHelper(files)
             if(files.isEmpty) {
-              Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
+              Future.successful(Redirect(controllers.routes.UploadFileController.onLoad()))
             } else {
               Future.successful(Ok(view(formProvider(), helper.rows)))
             }
@@ -57,7 +58,7 @@ class UploadAnotherFileController @Inject()(identify: IdentifierAction,
       formWithErrors => resultWithErrors(formWithErrors),
       value => {
           if (value) {
-            Future.successful(Redirect(controllers.routes.UploadAnotherFileController.onLoad()))
+            Future.successful(Redirect(controllers.routes.UploadFileController.onLoad()))
           } else {
             Future.successful(Redirect(controllers.routes.UploadAnotherFileController.onLoad()))
           }
@@ -66,7 +67,7 @@ class UploadAnotherFileController @Inject()(identify: IdentifierAction,
   }
 
   private def resultWithErrors(formWithErrors: Form[Boolean])(implicit request: DataRequest[AnyContent]): Future[Result] = {
-    request.userAnswers.get(FileUploadQuery).fold(Future(Redirect(controllers.routes.SupportingDocController.onLoad().url))) { files =>
+    request.userAnswers.get(FileUploadPage).fold(Future(Redirect(controllers.routes.UploadFileController.onLoad().url))) { files =>
       val helper = new AddFileNameRowHelper(files)
 
       Future.successful(BadRequest(view(formWithErrors, helper.rows)))

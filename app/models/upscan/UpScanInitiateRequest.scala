@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package models.upscan
 
-import play.api.libs.json.{Format, Json}
+import play.api.libs.json.{Json, Writes}
 
-case class ErrorModel(status: Int, message: String)
-
-object ErrorModel {
-  implicit val format: Format[ErrorModel] = Json.format[ErrorModel]
+case class UpScanInitiateRequest(callbackUrl: String,
+                                 successRedirect: String,
+                                 errorRedirect: String,
+                                 minimumFileSize: Int,
+                                 maximumFileSize: Int
+                             )
+object UpScanInitiateRequest {
+  implicit val jsonWrites: Writes[UpScanInitiateRequest] = Json.writes[UpScanInitiateRequest]
 }

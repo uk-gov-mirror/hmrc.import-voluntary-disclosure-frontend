@@ -107,7 +107,7 @@ class EnterCustomsProcedureCodeControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         override val userAnswers: Option[UserAnswers] = userAnswersWithEntryDetails
         await(controller.onSubmit(fakeRequestGenerator("1234567")))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
 
     }

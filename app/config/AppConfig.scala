@@ -21,7 +21,6 @@ import java.time.LocalDate
 import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.mvc.RequestHeader
-import play.twirl.api.Html
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
@@ -53,8 +52,20 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val timeoutPeriod: Int = servicesConfig.getInt("timeout.period")
   lazy val cacheTtl = servicesConfig.getInt("mongodb.timeToLiveInSeconds")
   lazy val allowedUploadFileTypes: Seq[String] = config.get[Seq[String]]("uploads.allowedFileTypes")
+  lazy val mustIncludeFiles: Seq[String] = config.get[Seq[String]]("uploads.mustIncludeFiles")
+  lazy val mayIncludeFiles: Seq[String] = config.get[Seq[String]]("uploads.mayIncludeFiles")
   lazy val fileSize = config.get[Int]("uploads.maxFileSize")
 
+  lazy val upScanCallbackUrlForSuccessOrFailureOfFileUpload: String = servicesConfig.getString("upscan.callbackUrlForSuccessOrFailureOfFileUpload")
+  lazy val upScanSuccessRedirectForUser: String = host + servicesConfig.getString("upscan.successRedirectForUser")
+  lazy val upScanErrorRedirectForUser: String = host + servicesConfig.getString("upscan.errorRedirectForUser")
+  lazy val upScanMinFileSize: Int = servicesConfig.getInt("upscan.minFileSize")
+  lazy val upScanMaxFileSize: Int = servicesConfig.getInt("upscan.maxFileSize")
+  lazy val upScanPollingDelayMilliSeconds: Int = servicesConfig.getInt("upscan.upScanPollingDelayMilliSeconds")
+  lazy val upScanInitiateBaseUrl: String = servicesConfig.baseUrl("upscan-initiate")
+  lazy val upScanAcceptedFileTypes: String = allowedUploadFileTypes.map(x=>"."+x).mkString(",").toLowerCase
+
+  lazy val fileRepositoryTtl: Int = servicesConfig.getInt("upscan.fileRepositoryTtl")
 }
 
 trait AppConfig extends FixedConfig {
@@ -75,7 +86,19 @@ trait AppConfig extends FixedConfig {
   val timeoutPeriod: Int
   val cacheTtl: Int
   val allowedUploadFileTypes: Seq[String]
+  val mustIncludeFiles: Seq[String]
+  val mayIncludeFiles: Seq[String]
   val fileSize: Int
+  val upScanCallbackUrlForSuccessOrFailureOfFileUpload: String
+  val upScanSuccessRedirectForUser: String
+  val upScanErrorRedirectForUser: String
+  val upScanMinFileSize: Int
+  val upScanMaxFileSize: Int
+  val upScanPollingDelayMilliSeconds: Int
+  val upScanInitiateBaseUrl: String
+  val upScanAcceptedFileTypes: String
+
+  val fileRepositoryTtl: Int
 }
 
 trait FixedConfig {

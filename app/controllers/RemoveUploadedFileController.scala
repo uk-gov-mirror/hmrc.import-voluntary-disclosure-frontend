@@ -18,11 +18,12 @@ package controllers
 
 import controllers.actions._
 import forms.RemoveUploadedFileFormProvider
+
 import javax.inject.Inject
 import models.Index
+import pages.{FileUploadPage, RemoveUploadedFilePage}
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import queries.{FileUploadQuery, RemoveUploadedFileQuery}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.RemoveUploadedFileView
@@ -43,7 +44,7 @@ class RemoveUploadedFileController @Inject()(
 
   def onLoad(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
-      request.userAnswers.get(FileUploadQuery) match {
+      request.userAnswers.get(FileUploadPage) match {
         case None => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
         case Some(files) if(files.isEmpty) => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
         case _ => Future.successful(Ok(view(formProvider(), index)))
@@ -58,7 +59,7 @@ class RemoveUploadedFileController @Inject()(
           value => {
             if (value) {
               for {
-                updatedAnswers <- Future.fromTry(request.userAnswers.remove(RemoveUploadedFileQuery(index)))
+                updatedAnswers <- Future.fromTry(request.userAnswers.remove(RemoveUploadedFilePage(index)))
                 _ <- sessionRepository.set(updatedAnswers)
               } yield
                   Redirect(controllers.routes.UploadAnotherFileController.onLoad())

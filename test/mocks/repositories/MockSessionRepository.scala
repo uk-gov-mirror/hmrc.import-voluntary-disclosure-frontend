@@ -16,14 +16,14 @@
 
 package mocks.repositories
 
+import base.RepositorySpecBase
 import models.UserAnswers
 import org.scalamock.handlers.CallHandler
-import org.scalamock.scalatest.MockFactory
 import repositories.SessionRepository
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockSessionRepository extends MockFactory {
+trait MockSessionRepository extends RepositorySpecBase {
 
   val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
@@ -33,8 +33,6 @@ trait MockSessionRepository extends MockFactory {
       (mockSessionRepository.set(_: UserAnswers)(_: ExecutionContext))
         .expects(*, *)
         .returning(response)
-
-    def verifyCalls(): Unit = withExpectations(() => ())
 
   }
 

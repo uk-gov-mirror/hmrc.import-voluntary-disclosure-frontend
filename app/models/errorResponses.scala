@@ -14,12 +14,25 @@
  * limitations under the License.
  */
 
-package queries
+package models
 
-import models.{FileUploadInfo, Gettable}
-import play.api.libs.json.JsPath
+import play.api.http.Status.BAD_REQUEST
 
-object FileUploadQuery extends Gettable[List[FileUploadInfo]] {
-
-  override def path: JsPath = JsPath \ "uploaded-files"
+trait ErrorResponse {
+  val status: Int
+  val message: String
 }
+
+case class ErrorModel(status: Int, message: String) extends ErrorResponse
+
+case object InvalidJson extends ErrorResponse {
+  override val status = BAD_REQUEST
+  override val message = "Invalid JSON received"
+}
+
+case object BadRequest extends ErrorResponse {
+  override val status: Int = BAD_REQUEST
+  override val message: String = "Json body sent incorrect"
+}
+
+case class UnexpectedFailure(override val status: Int, override val message: String) extends ErrorResponse

@@ -1,0 +1,72 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import config.AppConfig
+@import models.upscan.UpScanInitiateResponse
+
+@this(layout: templates.Layout,
+        h1: components.h1,
+        p: components.p,
+        bullets: components.bullets,
+        button: components.button
+)
+
+@(upScanResponse: UpScanInitiateResponse, backLink: Call)(implicit request: Request[_], appConfig: AppConfig, messages: Messages)
+
+@layout(
+    pageTitle = messages("uploadFile.pageTitle"),
+    customBackLinkUrl = Some(backLink)
+) {
+
+    @h1(messages("uploadFile.pageHeader"))
+
+    @p {
+        @messages("uploadFile.mustInclude")
+    }
+
+    @bullets(appConfig.mustIncludeFiles.map(Html(_)))
+
+    @p {
+        @messages("uploadFile.mayInclude")
+    }
+
+    @bullets(appConfig.mayIncludeFiles.map(Html(_)))
+
+    <form action="@upScanResponse.uploadFormTemplate.href" method="POST" enctype="multipart/form-data" id="file-upload-form">
+
+        <div id="file-upload-form-group" class="govuk-form-group">
+           @upScanResponse.uploadFormTemplate.fields.map { row =>
+               <input type="hidden" name="@row._1" value="@row._2">
+           }
+
+           <label class="govuk-label" for="file">
+                @messages("uploadFile.uploadAFile")
+           </label>
+
+           <input class="govuk-file-upload" id="file" name="file" type="file"
+                accept="@appConfig.upScanAcceptedFileTypes"
+                data-max-file-size="@appConfig.upScanMaxFileSize"
+                data-min-file-size="@appConfig.upScanMinFileSize">
+       </div>
+
+        @button("common.button.continue")
+    </form>
+}
+
+
+@{
+    //$COVERAGE-OFF$
+}

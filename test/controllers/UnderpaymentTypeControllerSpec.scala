@@ -20,7 +20,7 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.UnderpaymentTypeFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{EntryDetails, UnderpaymentType, UserAnswers}
+import models.{UnderpaymentType, UserAnswers}
 import pages.UnderpaymentTypePage
 import play.api.http.Status
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
@@ -28,7 +28,6 @@ import play.api.mvc.{Call, Result}
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import views.html.UnderpaymentTypeView
 
-import java.time.LocalDate
 import scala.concurrent.Future
 
 class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
@@ -80,8 +79,6 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
     }
 
     "should redirect the back button to Customs Procedure Code page" in new Test {
-      val dateBeforeExit: LocalDate = LocalDate of (2020, 1, 1)
-      val entryDetails: EntryDetails = EntryDetails("123", "123456A", dateBeforeExit)
       controller.backLink mustBe Call("GET", controllers.routes.CustomsProcedureCodeController.onLoad().toString)
     }
   }
@@ -115,7 +112,7 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
 
       "update the UserAnswers in session" in new Test {
         await(controller.onSubmit(fakeRequestGenerator(customsDuty = "true")))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
 
 

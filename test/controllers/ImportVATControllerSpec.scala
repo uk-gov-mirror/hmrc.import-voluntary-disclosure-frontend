@@ -120,7 +120,7 @@ class ImportVATControllerSpec extends ControllerSpecBase {
         "update the UserAnswers in session" in new Test {
           override val userAnswers: Option[UserAnswers] = userAnswersWithUnderpayment
           await(controller.onSubmit(fakeRequestGenerator(original = "40", amended = "50")))
-          MockedSessionRepository.verifyCalls()
+          verifyCalls()
         }
 
       }

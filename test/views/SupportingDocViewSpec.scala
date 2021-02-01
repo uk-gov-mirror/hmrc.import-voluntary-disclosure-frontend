@@ -73,7 +73,7 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
         }
 
         "render a continue button with the correct URL " in {
-          elementAttributes(".govuk-button") must contain("href" -> "/disclose-import-taxes-underpayment/disclosure/supporting-documentation-format")
+          elementAttributes(".govuk-button") must contain("href" -> "/disclose-import-taxes-underpayment/disclosure/upload-file")
         }
       }
     }

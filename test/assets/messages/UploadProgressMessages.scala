@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package queries
+package messages
 
-import models.Index
-import pages.QuestionPage
-import play.api.libs.json.{JsObject, JsPath}
+object UploadProgressMessages extends BaseMessages {
 
-final case class RemoveUploadedFileQuery(index: Index) extends QuestionPage[JsObject] {
-
-  override def path: JsPath = JsPath \ "uploaded-files" \ index.position
+  val title: String = "Upload progress"
+  val h1: String = "Upload progress"
+  val waiting: String = "Waiting for uploaded file to be scanned"
+  val request: String = "Please refresh to view latest progress"
+  val refresh: String = "Refresh"
 }

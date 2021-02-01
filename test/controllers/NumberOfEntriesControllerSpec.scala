@@ -80,7 +80,7 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.OneEntry.toString)
         await(controller.onSubmit(request))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
     }
 
@@ -110,7 +110,7 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> NumberOfEntries.MoreThanOneEntry.toString)
         await(controller.onSubmit(request))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
     }
 

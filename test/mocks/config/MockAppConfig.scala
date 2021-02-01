@@ -40,4 +40,16 @@ object MockAppConfig extends AppConfig {
   override val cacheTtl: Int = 500
   override val allowedUploadFileTypes: Seq[String] = Seq("DOC", "JPG", "PDF", "PNG", "XLS")
   override val fileSize: Int = 30
+  override val mustIncludeFiles: Seq[String] = Seq("Mandatory File 1","Mandatory File 2")
+  override val mayIncludeFiles: Seq[String] = Seq("Optional File 1","Optional File 2")
+  override val upScanCallbackUrlForSuccessOrFailureOfFileUpload: String = "TBC"
+  override val upScanSuccessRedirectForUser: String = "TBC"
+  override val upScanErrorRedirectForUser: String = "TBC"
+  override val upScanMinFileSize: Int = 1
+  override val upScanMaxFileSize: Int = 10485760
+  override val upScanPollingDelayMilliSeconds: Int = 10
+  override val upScanInitiateBaseUrl: String = "TBC"
+  override val upScanAcceptedFileTypes: String = "TBC"
+
+  override val fileRepositoryTtl: Int = 86400
 }

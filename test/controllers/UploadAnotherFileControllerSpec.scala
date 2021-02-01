@@ -36,7 +36,13 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
   trait Test {
     private lazy val uploadAnotherFileView: UploadAnotherFileView = app.injector.instanceOf[UploadAnotherFileView]
 
-    val data: JsObject = Json.obj("uploaded-files" -> Json.arr(Json.obj("fileName" -> "text.txt")))
+    val data: JsObject = Json.obj("uploaded-files" -> Json.arr(
+      Json.obj("fileName" -> "text.txt",
+      "downloadUrl" -> "http://localhost:9570/upscan/download/6f531dec-108d-4dc9-a586-9a97cf78bc34",
+      "uploadTimestamp" -> "2021-01-26T13:22:59.388",
+      "checksum" -> "396f101dd52e8b2ace0dcf5ed09b1d1f030e608938510ce46e7a5c7a4e775100",
+      "fileMimeType" -> "application/txt"))
+    )
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId", data))
 
@@ -95,7 +101,7 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
       "return the correct location header when true" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.UploadAnotherFileController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.UploadFileController.onLoad().url)
       }
 
       "return the correct location header when false" in new Test {
@@ -113,7 +119,7 @@ class UploadAnotherFileControllerSpec extends ControllerSpecBase {
 
         val result: Future[Result] = controller.onSubmit(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.SupportingDocController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.UploadFileController.onLoad().url)
       }
 
       "return a BAD REQUEST" in new Test {

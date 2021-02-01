@@ -99,7 +99,7 @@ class TraderContactDetailsControllerSpec extends ControllerSpecBase {
             phoneNumber = "0123456789"
           ))
         )
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
 
     }

@@ -79,7 +79,7 @@ class UserTypeControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> UserType.Importer.toString)
         await(controller.onSubmit(request))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
     }
 

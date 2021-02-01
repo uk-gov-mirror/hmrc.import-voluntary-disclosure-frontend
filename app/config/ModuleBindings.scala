@@ -19,7 +19,7 @@ package config
 import controllers.actions._
 import play.api.inject.{Binding, Module}
 import play.api.{Configuration, Environment}
-import repositories.{SessionRepository, UserAnswersRepository}
+import repositories._
 
 class ModuleBindings extends Module {
 
@@ -28,7 +28,8 @@ class ModuleBindings extends Module {
     bind[DataRequiredAction].to(classOf[DataRequiredActionImpl]),
     bind[DataRetrievalAction].to(classOf[DataRetrievalActionImpl]),
     bind[AppConfig].to(classOf[AppConfigImpl]),
-    bind[SessionRepository].to(classOf[UserAnswersRepository])
+    bind[SessionRepository].to(classOf[UserAnswersRepository]),
+    bind[FileUploadRepository].to(classOf[FileUploadRepositoryImpl])
   )
 
 }

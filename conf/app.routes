@@ -47,6 +47,10 @@ POST        /disclosure/enter-cpc                              controllers.Enter
 
 GET         /disclosure/underpayment-amount-summary            controllers.UnderpaymentSummaryController.onLoad
 
+GET         /disclosure/upload-file                            controllers.UploadFileController.onLoad
+GET         /disclosure/upload-file/upscan-response            controllers.UploadFileController.upscanResponseHandler(key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
+GET         /disclosure/upload-file/polling                    controllers.UploadFileController.uploadProgress(key: String)
+
 GET         /disclosure/importer-contact-details               controllers.TraderContactDetailsController.onLoad
 POST        /disclosure/importer-contact-details               controllers.TraderContactDetailsController.onSubmit
 

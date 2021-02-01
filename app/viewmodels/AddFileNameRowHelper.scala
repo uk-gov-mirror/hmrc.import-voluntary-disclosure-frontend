@@ -22,22 +22,21 @@ import play.twirl.api.HtmlFormat
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.ActionItem
 
-class AddFileNameRowHelper(val files: List[FileUploadInfo])
+class AddFileNameRowHelper(val files: Seq[FileUploadInfo])
                           (implicit val messages: Messages) extends AddToListRowHelper {
 
-  def rows: List[AddToListRow] = {
-
-        files.zipWithIndex.map {
-          case (file, index) =>
-            addToListRow(
-              value = HtmlFormat.escape(file.fileName).toString,
-              removeAction = Some(ActionItem(
-                href = controllers.routes.RemoveUploadedFileController.onLoad(Index(index)).url,
-                content = Text(messages("common.remove")),
-                visuallyHiddenText = Some(file.fileName)
-              )
-            )
+  def rows: Seq[AddToListRow] = {
+    files.zipWithIndex.map {
+      case (file, index) =>
+        addToListRow(
+          value = HtmlFormat.escape(file.fileName).toString,
+          removeAction = Some(ActionItem(
+            href = controllers.routes.RemoveUploadedFileController.onLoad(Index(index)).url,
+            content = Text(messages("common.remove")),
+            visuallyHiddenText = Some(file.fileName)
           )
-        }
+        )
+      )
     }
+  }
 }

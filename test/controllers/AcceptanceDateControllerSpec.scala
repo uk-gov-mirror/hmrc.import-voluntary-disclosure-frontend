@@ -82,7 +82,7 @@ class AcceptanceDateControllerSpec extends ControllerSpecBase {
       "update the UserAnswers in session" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         await(controller.onSubmit(request))
-        MockedSessionRepository.verifyCalls()
+        verifyCalls()
       }
     }
 
