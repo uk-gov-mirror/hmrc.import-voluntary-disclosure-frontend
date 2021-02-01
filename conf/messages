@@ -197,6 +197,12 @@ traderContactDetails.error.nameAllowableCharacters = Name must only include lett
 traderContactDetails.error.emailInvalidFormat = Enter an email address in the correct format, like name@example.com
 traderContactDetails.error.phoneNumberInvalidFormat = Enter a UK telephone number, like 01632 960 001 or 07700 900 982
 
+# Importer Address
+importerAddress.pageTitle = Is this correct destination address for C18 notice - importer
+importerAddress.h1 = Is this your correct address?
+importerAddress.p = We will send the demand for payment notice to this address.
+importerAddress.error.required = Select yes if this is the correct address to send the demand for payment to
+
 # File Upload Summary page
 uploadAnotherFile.pageTitle = You have uploaded {0} {1}
 uploadAnotherFile.heading = You have uploaded {0} {1}

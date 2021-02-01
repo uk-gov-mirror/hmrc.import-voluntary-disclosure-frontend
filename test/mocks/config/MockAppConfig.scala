@@ -33,7 +33,6 @@ object MockAppConfig extends AppConfig {
   override val loginContinueUrl: String = "TBC"
   override val addressLookupFrontend: String = "TBC"
   override val addressLookupInitialise: String = "TBC"
-  override val addressLookupConfirmed: String = "TBC"
   override val addressLookupFeedbackUrl: String = "TBC"
   override val addressLookupCallbackUrl: String = "TBC"
   override val timeoutPeriod: Int = 900
@@ -50,6 +49,7 @@ object MockAppConfig extends AppConfig {
   override val upScanPollingDelayMilliSeconds: Int = 10
   override val upScanInitiateBaseUrl: String = "TBC"
   override val upScanAcceptedFileTypes: String = "TBC"
-
   override val fileRepositoryTtl: Int = 86400
+
+  override val importVoluntaryDisclosureSubmission: String = "TBC"
 }

@@ -27,7 +27,7 @@ case class AddressModel(line1: Option[String],
 
 object AddressModel {
 
-  val customerAddressReads: Reads[AddressModel] = for {
+  implicit val customerAddressReads: Reads[AddressModel] = for {
     lines <- (__ \\ "lines").readNullable[Seq[String]]
     postcode <- (__ \\ "postcode").readNullable[String]
     countryCode <- (__ \\ "code").readNullable[String]

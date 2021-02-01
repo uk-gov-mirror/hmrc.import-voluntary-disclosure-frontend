@@ -62,3 +62,6 @@ POST        /disclosure/upload-another-file                    controllers.Uploa
 
 GET         /disclosure/remove-file/:index                     controllers.RemoveUploadedFileController.onLoad(index: models.Index)
 POST        /disclosure/remove-file/:index                     controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
+
+GET         /disclosure/importer-address                       controllers.ImporterAddressController.onLoad
+POST        /disclosure/importer-address                       controllers.ImporterAddressController.onSubmit

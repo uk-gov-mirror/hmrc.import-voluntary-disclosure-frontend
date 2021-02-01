@@ -53,7 +53,7 @@ class TraderContactDetailsController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderContactDetailsPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.DefermentController.onLoad())
+          Redirect(controllers.routes.ImporterAddressController.onLoad())
         }
       }
     )
