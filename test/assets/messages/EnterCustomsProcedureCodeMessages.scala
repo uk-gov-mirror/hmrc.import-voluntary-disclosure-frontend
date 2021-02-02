@@ -18,8 +18,8 @@ package messages
 
 object EnterCustomsProcedureCodeMessages extends BaseMessages {
 
-  val title: String = "What is the amended customs procedure code?"
-  val h1: String = "What is the amended customs procedure code?"
+  val title: String = "What is the customs procedure code?"
+  val h1: String = "What is the customs procedure code?"
   val requiredError: String = "Enter the customs procedure code"
   val formatError: String = "Enter the customs procedure code in the correct format like 4800003 or 4000C09"
 
