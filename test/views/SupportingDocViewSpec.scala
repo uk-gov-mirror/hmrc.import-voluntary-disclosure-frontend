@@ -30,7 +30,7 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
 
    "Rendering the Supportdoc page" when {
       "no errors exist" should {
-       lazy val view: Html = injectedView()(fakeRequest, appConfig, messages)
+       lazy val view: Html = injectedView(controllers.routes.UnderpaymentSummaryController.onLoad())(fakeRequest, appConfig, messages)
        lazy implicit val document: Document = Jsoup.parse(view.body)
 
        s"have the correct page title of '${SupportingDocMessages.pageTitle}'" in {
@@ -38,7 +38,7 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
        }
 
       "it" should {
-          lazy val view: Html = injectedView()(fakeRequest, appConfig, messages)
+          lazy val view: Html = injectedView(controllers.routes.UnderpaymentSummaryController.onLoad())(fakeRequest, appConfig, messages)
           lazy implicit val document: Document = Jsoup.parse(view.body)
         s"have the correct page heading of '${SupportingDocMessages.heading}'" in {
           elementText("h1") mustBe SupportingDocMessages.heading
@@ -74,6 +74,10 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
 
         "render a continue button with the correct URL " in {
           elementAttributes(".govuk-button") must contain("href" -> "/disclose-import-taxes-underpayment/disclosure/upload-file")
+        }
+
+        "render a back link with the correct URL" in {
+          elementAttributes("#back-link") must contain("href" -> controllers.routes.UnderpaymentSummaryController.onLoad().url)
         }
       }
     }

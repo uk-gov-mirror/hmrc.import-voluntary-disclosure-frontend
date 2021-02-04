@@ -31,14 +31,11 @@ class SupportingDocControllerSpec extends ControllerSpecBase {
 
   trait Test extends MockSessionRepository {
 
-    val view = injector.instanceOf[SupportingDocView]
-
-    val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
-
-    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
-
     lazy val controller = new SupportingDocController(authenticatedAction, dataRetrievalAction,
-        messagesControllerComponents,dataRequiredAction, view, appConfig)
+      messagesControllerComponents, dataRequiredAction, view, appConfig)
+    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
+    val view = injector.instanceOf[SupportingDocView]
+    val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
   }
 
   "GET /" should {
@@ -48,10 +45,10 @@ class SupportingDocControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML" in new Test {
-          val result: Future[Result] = controller.onLoad(fakeRequest)
-          contentType(result) mustBe Some("text/html")
-          charset(result) mustBe Some("utf-8")
-        }
-      }
+      val result: Future[Result] = controller.onLoad(fakeRequest)
+      contentType(result) mustBe Some("text/html")
+      charset(result) mustBe Some("utf-8")
     }
 
+  }
+}

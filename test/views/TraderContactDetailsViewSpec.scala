@@ -322,7 +322,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.UnderpaymentSummaryController.onLoad().url)
+      elementAttributes("#back-link") must contain("href" -> controllers.routes.UploadAnotherFileController.onLoad().url)
     }
 
   }

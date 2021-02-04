@@ -24,9 +24,10 @@
       linkButton: components.linkButton
       )
 
-@()(implicit request: Request[_],appConfig: AppConfig, messages: Messages)
+@(backLink: Call)(implicit request: Request[_],appConfig: AppConfig, messages: Messages)
 
-@layout(pageTitle = messages("SupportDoc.pageTitle")) {
+@layout(pageTitle = messages("SupportDoc.pageTitle"),
+    customBackLinkUrl = Some(backLink)) {
 
     @h1(messages("SupportDoc.heading"))
 
