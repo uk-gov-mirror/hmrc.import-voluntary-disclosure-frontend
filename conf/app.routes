@@ -65,3 +65,5 @@ POST        /disclosure/remove-file/:index                     controllers.Remov
 
 GET         /disclosure/importer-address                       controllers.ImporterAddressController.onLoad
 POST        /disclosure/importer-address                       controllers.ImporterAddressController.onSubmit
+
+GET         /disclosure/reason-introduction                    controllers.BoxGuidanceController.onLoad

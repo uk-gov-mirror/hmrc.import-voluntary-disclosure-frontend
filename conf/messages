@@ -213,3 +213,13 @@ uploadAnotherFile.error.required = Select yes to upload another file
 removeUploadedFile.pageTitle = Are you sure you want to remove this file?
 removeUploadedFile.heading = Are you sure you want to remove this file?
 removeUploadedFile.error.required = Select yes to remove file
+
+# Box Guidance page
+boxGuidance.pageTitle = You must tell us the reason for the underpayment
+boxGuidance.heading = You must tell us the reason for the underpayment
+boxGuidance.p1 = We will ask you about the information supplied in the declaration that resulted in the underpayment.
+boxGuidance.p2 = You will need to provide:
+boxGuidance.bullet1 = the box number
+boxGuidance.bullet2 = the item number (if applicable)
+boxGuidance.bullet3 = the original value and the amended value
+boxGuidance.p3 = You will be able to provide more than one reason for the underpayment.
