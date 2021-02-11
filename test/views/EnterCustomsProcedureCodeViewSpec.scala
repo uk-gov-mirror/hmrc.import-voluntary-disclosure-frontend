@@ -36,7 +36,7 @@ class EnterCustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
   "Rendering the Customs Procedure Code page" when {
     "no errors exist" should {
 
-      val form: Form[CustomsProcedureCode] = formProvider.apply()
+      val form: Form[String] = formProvider.apply()
       lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EntryDetailsController.onLoad().url))(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -56,7 +56,7 @@ class EnterCustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
     "no data supplied" should {
 
       "an error exists" should {
-        lazy val form: Form[CustomsProcedureCode] = formProvider().bind(Map("cpc" -> ""))
+        lazy val form: Form[String] = formProvider().bind(Map("cpc" -> ""))
         lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EntryDetailsController.onLoad().url))(fakeRequest, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -78,7 +78,7 @@ class EnterCustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
     "invalid data supplied" should {
 
       "an error exists" should {
-        lazy val form: Form[CustomsProcedureCode] = formProvider().bind(Map("cpc" -> "A1234567"))
+        lazy val form: Form[String] = formProvider().bind(Map("cpc" -> "A1234567"))
         lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EntryDetailsController.onLoad().url))(fakeRequest, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -100,7 +100,7 @@ class EnterCustomsProcedureCodeViewSpec extends ViewBaseSpec with BaseMessages {
 
   it should {
 
-    val form: Form[CustomsProcedureCode] = formProvider.apply()
+    val form: Form[String] = formProvider.apply()
     lazy val view: Html = injectedView(form, Call("GET", controllers.routes.EntryDetailsController.onLoad().url))(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

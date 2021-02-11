@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.CustomsProcedureCodeFormProvider
 import javax.inject.Inject
-import pages.CustomsProcedureCodePage
+import pages.CPCChangedPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -41,7 +41,7 @@ class CustomsProcedureCodeController @Inject()(identify: IdentifierAction,
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    val form = request.userAnswers.get(CustomsProcedureCodePage).fold(formProvider()) {
+    val form = request.userAnswers.get(CPCChangedPage).fold(formProvider()) {
       formProvider().fill
     }
 
@@ -54,7 +54,7 @@ class CustomsProcedureCodeController @Inject()(identify: IdentifierAction,
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(CustomsProcedureCodePage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(CPCChangedPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           if (value) {

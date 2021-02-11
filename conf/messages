@@ -16,6 +16,7 @@ site.yes = Yes
 site.no = No
 common.button.confirmAndContinue = Confirm and continue
 common.button.continue = Continue
+common.button.acceptAndSend = Accept and send
 
 footer.cookies.text = Cookies
 footer.cookies.url = /help/cookies
@@ -223,3 +224,39 @@ boxGuidance.bullet1 = the box number
 boxGuidance.bullet2 = the item number (if applicable)
 boxGuidance.bullet3 = the original value and the amended value
 boxGuidance.p3 = You will be able to provide more than one reason for the underpayment.
+
+
+# Check Your Answers
+cya.pageTitle = Check your answers before sending your disclosure
+cya.heading = Check your answers before sending your disclosure
+cya.sendDisclosure = Now send your disclosure
+cya.disclosureConfirmation = By sending this disclosure you are confirming that, to the best of your knowledge, the details you are providing are correct.
+
+cya.underpaymentDetails = Underpayment details
+cya.customsDuty = Customs Duty
+cya.importVat = Import VAT
+cya.exciseDuty = Excise Duty
+cya.change = Change
+cya.amendmentDetails= Amendment details
+cya.customsProcedureCode = Customs procedure code
+cya.cpcChange = Customs procedure code changed?
+cya.disclosureDetails = Disclosure details
+cya.numberOfEntries = Number of entries
+cya.oneEntry = One
+cya.bulkEntry = Bulk Entry
+cya.epu = EPU
+cya.entryNumber = Entry number
+cya.entryDate = Entry date
+cya.acceptanceDate = Entry acceptance date before 1 January 2021?
+cya.supportingDocuments = Supporting documents
+cya.filesUploaded = {0} {1} uploaded
+cya.yourDetails = Your details
+cya.name = Name
+cya.email = Email address
+cya.phone = Telephone number
+cya.address = Address
+cya.paymentInformation = Payment information
+cya.payingByDeferment = By deferment?
+cya.numberOfAmendments = Number of amendments
+cya.supportingInformation = Supporting information
+cya.newCustomsProcedure = Amended customs procedure code

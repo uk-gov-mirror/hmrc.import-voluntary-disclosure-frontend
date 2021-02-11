@@ -21,7 +21,7 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.CustomsProcedureCodeFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.CustomsProcedureCodePage
+import pages.CPCChangedPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -54,7 +54,7 @@ class CustomsProcedureCodeControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(CustomsProcedureCodePage, customsProcedureCodeNo).success.value)
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(CPCChangedPage, customsProcedureCodeNo).success.value)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")

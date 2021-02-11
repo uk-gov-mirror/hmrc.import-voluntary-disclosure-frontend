@@ -19,10 +19,10 @@ package pages
 import models.CustomsProcedureCode
 import play.api.libs.json.JsPath
 
-case object EnterCustomsProcedureCodePage extends QuestionPage[CustomsProcedureCode] {
+case object EnterCustomsProcedureCodePage extends QuestionPage[String] {
 
-  def path: JsPath = JsPath \ toString
+  def path: JsPath = JsPath \ "cpc" \ toString
 
-  override def toString: String = "cpc"
+  override def toString: String = "original-cpc"
 
 }

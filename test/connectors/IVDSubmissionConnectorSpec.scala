@@ -24,9 +24,9 @@ import utils.ReusableValues
 
 import scala.concurrent.Future
 
-class ImporterAddressConnectorSpec extends SpecBase with MockHttp with ReusableValues {
+class IVDSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableValues {
 
-  object Connector extends ImporterAddressConnector(mockHttp, appConfig)
+  object Connector extends IVDSubmissionConnector(mockHttp, appConfig)
 
   "Importer Address Connector" should {
 

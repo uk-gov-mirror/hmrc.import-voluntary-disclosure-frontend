@@ -17,15 +17,15 @@
 package services
 
 import base.SpecBase
-import connectors.MockImporterAddressConnector
+import connectors.MockIVDSubmissionConnector
 import utils.ReusableValues
 
 
-class ImporterAddressServiceSpec extends SpecBase with MockImporterAddressConnector with ReusableValues {
+class ImporterAddressServiceSpec extends SpecBase with MockIVDSubmissionConnector with ReusableValues {
 
   def setup(traderAddressResponse: TraderAddressResponse): ImporterAddressService = {
     setupMockGetAddress(traderAddressResponse)
-    new ImporterAddressService(mockAddressLookupConnector, messagesApi, appConfig)
+    new ImporterAddressService(mockIVDSubmissionConnector, messagesApi, appConfig)
   }
 
   "connector call is successful" should {

@@ -61,7 +61,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           if (value) {
             Redirect(controllers.routes.DefermentController.onLoad())
           } else {
-            Redirect(controllers.routes.DefermentController.onLoad())
+            Redirect(controllers.routes.CheckYourAnswersController.onLoad())
           }
         }
       }

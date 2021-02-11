@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package forms
+package pages
 
-import config.AppConfig
-import forms.mappings.Mappings
-import javax.inject.Inject
-import models.CustomsProcedureCode
-import play.api.data.Form
-import play.api.data.Forms.mapping
-import play.api.i18n.Messages
+import play.api.libs.json.JsPath
 
+case object CPCChangedPage extends QuestionPage[Boolean] {
 
-class EnterCustomsProcedureCodeFormProvider @Inject() extends Mappings {
+  def path: JsPath = JsPath \ "cpc" \ toString
 
-  def apply()(implicit messages: Messages): Form[String] =
-    Form(
-        "cpc" -> text("enterCustomsProcedureCode.cpc.error.required")
-          .verifying(regexp("^[0-9]{4}[A-Za-z0-9][0-9]{2}$","enterCustomsProcedureCode.cpc.error.format"))
-      )
-
+  override def toString: String = "cpc-changed"
 
 }

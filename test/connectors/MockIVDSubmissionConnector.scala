@@ -22,14 +22,14 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockImporterAddressConnector extends MockFactory {
+trait MockIVDSubmissionConnector extends MockFactory {
 
-  val mockAddressLookupConnector: ImporterAddressConnector = mock[ImporterAddressConnector]
+  val mockIVDSubmissionConnector: IVDSubmissionConnector = mock[IVDSubmissionConnector]
 
   type TraderAddressResponse = Either[ErrorModel, TraderAddress]
 
   def setupMockGetAddress(response: Either[ErrorModel, TraderAddress]): Unit = {
-    (mockAddressLookupConnector.getAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
+    (mockIVDSubmissionConnector.getAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*,*,*)
       .returns(Future.successful(response))
   }

@@ -14,14 +14,8 @@
  * limitations under the License.
  */
 
-package pages
+package viewmodels
 
-import play.api.libs.json.JsPath
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
 
-case object CustomsProcedureCodePage extends QuestionPage[Boolean] {
-
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "customs-procedure"
-
-}
+case class CYASummaryList(heading: String, summaryList: SummaryList)

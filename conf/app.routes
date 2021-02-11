@@ -67,3 +67,5 @@ GET         /disclosure/importer-address                       controllers.Impor
 POST        /disclosure/importer-address                       controllers.ImporterAddressController.onSubmit
 
 GET         /disclosure/reason-introduction                    controllers.BoxGuidanceController.onLoad
+
+GET         /disclosure/check-your-answers                     controllers.CheckYourAnswersController.onLoad

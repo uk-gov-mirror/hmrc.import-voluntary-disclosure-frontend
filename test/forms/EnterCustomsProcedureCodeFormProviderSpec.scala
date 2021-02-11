@@ -29,7 +29,7 @@ class EnterCustomsProcedureCodeFormProviderSpec extends SpecBase {
     cpcKey -> cpc
   )
 
-  def formBinder(formValues: Map[String, String] = Map(cpc -> "")): Form[CustomsProcedureCode] =
+  def formBinder(formValues: Map[String, String] = Map(cpc -> "")): Form[String] =
     new EnterCustomsProcedureCodeFormProvider()().bind(formValues)
 
 

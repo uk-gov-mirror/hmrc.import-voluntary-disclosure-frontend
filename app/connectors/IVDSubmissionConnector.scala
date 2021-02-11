@@ -26,8 +26,8 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ImporterAddressConnector @Inject()(val http: HttpClient,
-                                         implicit val config: AppConfig){
+class IVDSubmissionConnector @Inject()(val http: HttpClient,
+                                       implicit val config: AppConfig){
 
   private[connectors] def getAddressUrl(id: String) = s"${config.importVoluntaryDisclosureSubmission}/api/address?id=$id"
 

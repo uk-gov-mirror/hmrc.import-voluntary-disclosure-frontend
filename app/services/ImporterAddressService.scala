@@ -17,7 +17,7 @@
 package services
 
 import config.AppConfig
-import connectors.ImporterAddressConnector
+import connectors.IVDSubmissionConnector
 import javax.inject.{Inject, Singleton}
 import models.{ErrorModel, TraderAddress}
 import play.api.i18n.MessagesApi
@@ -26,12 +26,12 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ImporterAddressService @Inject()(importerAddressConnector: ImporterAddressConnector,
+class ImporterAddressService @Inject()(ivdSubmissionConnector: IVDSubmissionConnector,
                                        implicit val messagesApi: MessagesApi,
                                        implicit val appConfig: AppConfig) {
 
   def retrieveAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, TraderAddress]] = {
-    importerAddressConnector.getAddress(id)
+    ivdSubmissionConnector.getAddress(id)
   }
 
 }
