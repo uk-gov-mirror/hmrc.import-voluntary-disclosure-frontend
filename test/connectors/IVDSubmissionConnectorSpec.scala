@@ -19,9 +19,10 @@ package connectors
 import base.SpecBase
 import connectors.httpParsers.ResponseHttpParser.HttpGetResult
 import mocks.MockHttp
-import models.TraderAddress
+import models._
 import utils.ReusableValues
 
+import java.time.LocalDate
 import scala.concurrent.Future
 
 class IVDSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableValues {
@@ -44,5 +45,32 @@ class IVDSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
 
   }
 
+  "called to post the Submission" should {
+
+    val submission = IVDSubmission(
+      userType = UserType.Importer,
+      numEntries = NumberOfEntries.OneEntry,
+      acceptanceDate = None,
+      additionalInfo = None,
+      entryDetails = EntryDetails("123", "123456Q", LocalDate.of(2020, 1, 12)),
+      originalCpc = "cpc",
+      amendedCpc = None,
+      traderContactDetails = TraderContactDetails("name", "email", "phone"),
+      traderAddress = traderAddress,
+      defermentType = None,
+      defermentAccountNumber = None,
+      additionalDefermentNumber = None,
+      underpaymentReasons = None,
+      underpaymentDetails = None,
+      documentList = None
+    )
+
+    val submissionResponse = SubmissionResponse("1234")
+
+    "return the Right response" in {
+      setupMockHttpPost(Connector.postSubmissionUrl)(Right(submissionResponse))
+      await(Connector.postSubmission(submission)) mustBe Right(submissionResponse)
+    }
+  }
 
 }

@@ -17,7 +17,7 @@
 package services
 
 import base.SpecBase
-import connectors.MockIVDSubmissionConnector
+import mocks.connectors.MockIVDSubmissionConnector
 import utils.ReusableValues
 
 

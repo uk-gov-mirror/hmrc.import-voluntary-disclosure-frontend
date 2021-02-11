@@ -32,12 +32,12 @@
 
 package controllers
 
-import java.time.LocalDateTime
-
+import java.time.{LocalDate, LocalDateTime}
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
+import mocks.connectors.MockIVDSubmissionConnector
 import mocks.repositories.MockSessionRepository
-import models.{FileUploadInfo, NumberOfEntries, TraderContactDetails, UserAnswers}
+import models.{BadRequest, EntryDetails, ErrorModel, FileUploadInfo, NumberOfEntries, SubmissionResponse, TraderAddress, TraderContactDetails, UserAnswers, UserType}
 import pages._
 import play.api.http.Status
 import play.api.mvc.Result
@@ -51,13 +51,18 @@ import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
-  trait Test extends MockSessionRepository {
+  trait Test extends MockSessionRepository with MockIVDSubmissionConnector {
 
-
+    private def setupConnectorMock(response: Either[ErrorModel, SubmissionResponse]) = {
+      setupMockPostSubmission(response)
+    }
     private lazy val checkYourAnswersView: CheckYourAnswersView = app.injector.instanceOf[CheckYourAnswersView]
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+      .set(UserTypePage, UserType.Importer).success.value
       .set(NumberOfEntriesPage,NumberOfEntries.OneEntry).success.value
+      .set(EntryDetailsPage, EntryDetails("123","123456Q",LocalDate.of(2020, 12, 1))).success.value
+      .set(AcceptanceDatePage,true).success.value
       .set(CustomsDutyPage, cdUnderpayment).success.value
       .set(ImportVATPage, ivUnderpayment).success.value
       .set(ExciseDutyPage, edUnderpayment).success.value
@@ -71,19 +76,26 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         "f",
         "fefewfew@gmail.com",
         "07485939292")).success.value
+      .set(ImporterAddressFinalPage,TraderAddress(
+        "street", "city", Some("postcode"), "country code")).success.value
       .set(EnterCustomsProcedureCodePage,"3333333").success.value
       .set(DefermentPage,true).success.value
     )
+
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new CheckYourAnswersController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-       messagesControllerComponents, checkYourAnswersView)
+    lazy val connectorMock: Either[ErrorModel, SubmissionResponse] = Right(SubmissionResponse("123"))
+    lazy val controller = {
+      setupConnectorMock(connectorMock)
+      new CheckYourAnswersController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+        messagesControllerComponents, mockIVDSubmissionConnector, checkYourAnswersView, ec)
+    }
   }
 
 
-  "GET /" should {
+  "GET onLoad" should {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
@@ -94,6 +106,29 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
+  }
+
+  "GET onSubmit" should {
+
+    "return Redirect" in new Test {
+      val result: Future[Result] = controller.onSubmit()(fakeRequest)
+      status(result) mustBe Status.SEE_OTHER
+    }
+
+    "return Internal Server error is submission fails" in new Test {
+      override lazy val connectorMock = Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"Not Working"))
+      val result: Future[Result] = controller.onSubmit()(fakeRequest)
+      status(result) mustBe Status.INTERNAL_SERVER_ERROR
+    }
+
+    "throw a Runtime error if the user answers doesn't parse to a submission model" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+        .set(UserTypePage, UserType.Importer).success.value)
+
+      val result = intercept[RuntimeException](await(controller.onSubmit()(fakeRequest)))
+      assert(result.getMessage.contains("Completed journey answers does not parse to IVDSubmission model"))
+    }
+
   }
 }
 

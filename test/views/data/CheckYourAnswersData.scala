@@ -26,9 +26,9 @@ import views.ViewUtils.displayMoney
 
 object CheckYourAnswersData {
   val changeUrl = "Url"
-  val cdUnderpayment: BigDecimal = BigDecimal(5000.00)
-  val ivUnderpayment: BigDecimal = BigDecimal(900.00)
-  val edUnderpayment: BigDecimal = BigDecimal(140.00)
+  val cdUnderpayment: BigDecimal = BigDecimal(5000)
+  val ivUnderpayment: BigDecimal = BigDecimal(900)
+  val edUnderpayment: BigDecimal = BigDecimal(140)
   val cpc = "4000C09"
   val file = "Example.pdf"
   val fullName = "First Second"
@@ -205,7 +205,7 @@ object CheckYourAnswersData {
               changeUrl,
               Text(CYAMessages.change))),
               classes = "govuk-!-padding-bottom-0")),
-              classes = "govuk-summary-list__row--no-border"
+          classes = "govuk-summary-list__row--no-border"
           ),
         SummaryListRow(
           key = Key(
@@ -237,7 +237,7 @@ object CheckYourAnswersData {
             classes = "govuk-!-width-two-thirds"
           ),
           value = Value(
-            HtmlContent(buildAddress(traderAddress)),
+            HtmlContent(buildAddress(traderAddress))
           ),
           actions = Some(Actions(items = Seq(
             ActionItem(
@@ -261,19 +261,19 @@ object CheckYourAnswersData {
             classes = "govuk-!-width-two-thirds"
           ),
           value = Value(
-            HtmlContent(numberOfEntries),
+            HtmlContent(numberOfEntries)
           ),
           actions = Some(Actions(items = Seq(
             ActionItem(
               changeUrl,
-              Text(CYAMessages.change),
+              Text(CYAMessages.change)
             )
           )))
         ),
         SummaryListRow(
           key = Key(
             Text(CYAMessages.epu),
-            classes = "govuk-!-width-two-thirds govuk-!-padding-bottom-0",
+            classes = "govuk-!-width-two-thirds govuk-!-padding-bottom-0"
           ),
           value = Value(
             HtmlContent(epu),
@@ -283,14 +283,15 @@ object CheckYourAnswersData {
             ActionItem(
               changeUrl,
               Text(CYAMessages.change))
+            ),
+            classes = "govuk-!-padding-bottom-0")
           ),
-            classes = "govuk-!-padding-bottom-0")),
-            classes = "govuk-summary-list__row--no-border"
+          classes = "govuk-summary-list__row--no-border"
         ),
         SummaryListRow(
           key = Key(
             Text(CYAMessages.entryNumber),
-            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0 govuk-!-padding-bottom-0",
+            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0 govuk-!-padding-bottom-0"
           ),
           value = Value(
             HtmlContent(entryNumber),
@@ -302,7 +303,7 @@ object CheckYourAnswersData {
         SummaryListRow(
           key = Key(
             Text(CYAMessages.entryDate),
-            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0",
+            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
           ),
           value = Value(
             HtmlContent(entryDate),

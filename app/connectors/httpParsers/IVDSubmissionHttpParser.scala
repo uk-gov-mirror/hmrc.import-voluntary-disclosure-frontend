@@ -16,13 +16,13 @@
 
 package connectors.httpParsers
 
-import connectors.httpParsers.ResponseHttpParser.HttpGetResult
-import models.{ErrorModel, TraderAddress}
+import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
+import models.{ErrorModel, SubmissionResponse, TraderAddress}
 import play.api.Logger
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object ImporterAddressHttpParser {
+object IVDSubmissionHttpParser {
 
   implicit object TraderAddressReads extends HttpReads[HttpGetResult[TraderAddress]] {
 
@@ -42,6 +42,28 @@ object ImporterAddressHttpParser {
         case status =>
           logger.error("Failed to validate JSON with status: " + status + " body: " + response.body)
           Left(ErrorModel(status, "Downstream error returned when retrieving TraderAddress model from back end"))
+      }
+    }
+  }
+
+  implicit object SubmissionResponseReads extends HttpReads[HttpPostResult[SubmissionResponse]] {
+
+    private val logger = Logger("application." + getClass.getCanonicalName)
+
+    override def read(method: String, url: String, response: HttpResponse): HttpPostResult[SubmissionResponse] = {
+
+      response.status match {
+        case Status.OK =>
+          response.json.validate[SubmissionResponse].fold(
+            invalid => {
+              logger.error("Failed to validate JSON with errors: " + invalid)
+              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from IVD Submission"))
+            },
+            valid => Right(valid)
+          )
+        case status =>
+          logger.error("Failed to validate JSON with status: " + status + " body: " + response.body)
+          Left(ErrorModel(status, "Downstream error returned when retrieving SubmissionResponse from back end"))
       }
     }
   }

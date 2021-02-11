@@ -16,22 +16,27 @@
 
 package controllers
 
+import connectors.IVDSubmissionConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.IVDSubmission
 import play.api.i18n.I18nSupport
+import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{CYASummaryList, CYASummaryListHelper}
 import views.html.CheckYourAnswersView
-import javax.inject.{Inject, Singleton}
 
-import scala.concurrent.Future
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class CheckYourAnswersController @Inject()(identify: IdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            mcc: MessagesControllerComponents,
-                                           view: CheckYourAnswersView)
+                                           ivdSubmissionConnector: IVDSubmissionConnector,
+                                           view: CheckYourAnswersView,
+                                           implicit val ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with CYASummaryListHelper {
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -43,7 +48,20 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
     val yourDetailsDocuments: CYASummaryList = buildYourDetailsSummaryList(request.userAnswers).get
     val paymentInformation: CYASummaryList = buildPaymentInformationSummaryList(request.userAnswers).get
 
-
     Future.successful(Ok(view(Seq(disclosureDetails, underpaymentDetails, amendmentDetails, supportingDocuments, yourDetailsDocuments, paymentInformation), controllers.routes.CheckYourAnswersController.onLoad)))
+  }
+
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+
+    Json.fromJson[IVDSubmission](request.userAnswers.data) match {
+      case JsSuccess(submission, _) => {
+        ivdSubmissionConnector.postSubmission(submission).flatMap {
+          case Right(value) => Future.successful(Redirect(controllers.routes.CheckYourAnswersController.onLoad))
+          case Left(error) => Future.successful(InternalServerError)
+        }
+      }
+      case JsError(_) => throw new RuntimeException("Completed journey answers does not parse to IVDSubmission model")
+    }
+
   }
 }

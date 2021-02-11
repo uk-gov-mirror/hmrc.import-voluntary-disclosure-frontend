@@ -17,17 +17,12 @@
 package controllers.internal
 
 import base.ControllerSpecBase
-import controllers.actions.FakeDataRetrievalAction
 import mocks.config.MockAppConfig
-import mocks.repositories.{MockFileUploadRepository, MockSessionRepository}
-import mocks.services.MockUpScanService
-import models.UserAnswers
+import mocks.repositories.MockFileUploadRepository
 import models.upscan._
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
-import play.api.mvc.Result
 import play.api.test.Helpers._
-import views.html.{UploadFileView, UploadProgressView}
 
 import scala.concurrent.Future
 

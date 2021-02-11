@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package connectors
+package mocks.connectors
 
-import models.{ErrorModel, TraderAddress}
+import connectors.IVDSubmissionConnector
+import models.{ErrorModel, IVDSubmission, SubmissionResponse, TraderAddress}
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -31,6 +32,12 @@ trait MockIVDSubmissionConnector extends MockFactory {
   def setupMockGetAddress(response: Either[ErrorModel, TraderAddress]): Unit = {
     (mockIVDSubmissionConnector.getAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*,*,*)
+      .returns(Future.successful(response))
+  }
+
+  def setupMockPostSubmission(response: Either[ErrorModel, SubmissionResponse]): Unit = {
+    (mockIVDSubmissionConnector.postSubmission(_: IVDSubmission)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 
