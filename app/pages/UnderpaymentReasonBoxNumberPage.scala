@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package models
+package pages
 
-import play.api.libs.json.Json
+import play.api.libs.json.JsPath
 
-case class UnderpaymentReason(
-                               boxNumber: Int,
-                               itemNumber: Int = 0,
-                               original: String,
-                               amended: String
-                             )
+case object UnderpaymentReasonBoxNumberPage extends QuestionPage[Int] {
 
-object UnderpaymentReason {
+  def path: JsPath = JsPath \ "underpayment-reason-temp" \ toString
 
-  implicit val format = Json.format[UnderpaymentReason]
+  override def toString: String = "boxNumber"
+
 }

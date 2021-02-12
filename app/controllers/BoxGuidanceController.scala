@@ -18,12 +18,12 @@ package controllers
 
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.BoxGuidanceView
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
@@ -36,7 +36,7 @@ class BoxGuidanceController @Inject()(identity: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(controllers.routes.BoxGuidanceController.onLoad())))
+    Future.successful(Ok(view(controllers.routes.BoxNumberController.onLoad())))
   }
 
 }

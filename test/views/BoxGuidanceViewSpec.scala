@@ -68,7 +68,7 @@ class BoxGuidanceViewSpec extends ViewBaseSpec with BaseMessages {
         }
 
         "render a continue button with the correct URL " in {
-          elementAttributes(".govuk-button") must contain("href" -> controllers.routes.BoxGuidanceController.onLoad().url)
+          elementAttributes(".govuk-button") must contain("href" -> controllers.routes.BoxNumberController.onLoad().url)
         }
 
         "render a back link with the correct URL" in {

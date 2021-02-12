@@ -14,18 +14,22 @@
  * limitations under the License.
  */
 
-package models
+package forms
 
-import play.api.libs.json.Json
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.i18n.Messages
 
-case class UnderpaymentReason(
-                               boxNumber: Int,
-                               itemNumber: Int = 0,
-                               original: String,
-                               amended: String
-                             )
+import javax.inject.Inject
 
-object UnderpaymentReason {
 
-  implicit val format = Json.format[UnderpaymentReason]
+class BoxNumberFormProvider @Inject() extends Mappings {
+
+  def apply()(implicit messages: Messages): Form[Int] =
+    Form(
+      "value" -> int(
+        requiredKey = "boxNumber.error.required"
+      )
+    )
+
 }

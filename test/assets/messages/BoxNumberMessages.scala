@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package models
+package messages
 
-import play.api.libs.json.Json
+object BoxNumberMessages extends BaseMessages {
 
-case class UnderpaymentReason(
-                               boxNumber: Int,
-                               itemNumber: Int = 0,
-                               original: String,
-                               amended: String
-                             )
+  val pageTitle = "What is the box number?"
+  val heading = "What is the box number?"
+  val errorRequired = "Enter a box number"
 
-object UnderpaymentReason {
-
-  implicit val format = Json.format[UnderpaymentReason]
 }

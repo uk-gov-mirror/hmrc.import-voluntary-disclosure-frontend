@@ -236,6 +236,11 @@ boxGuidance.bullet2 = the item number (if applicable)
 boxGuidance.bullet3 = the original value and the amended value
 boxGuidance.p3 = You will be able to provide more than one reason for the underpayment.
 
+# Box Number
+boxNumber.pageTitle = What is the box number?
+boxNumber.heading = What is the box number?
+boxNumber.error.required = Enter a box number
+
 # Check Your Answers
 cya.pageTitle = Check your answers before sending your disclosure
 cya.heading = Check your answers before sending your disclosure

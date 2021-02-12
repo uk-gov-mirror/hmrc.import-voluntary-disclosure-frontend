@@ -31,18 +31,24 @@
 
     @h1(messages("boxGuidance.heading"))
 
-    @p{ @messages("boxGuidance.p1") }
+    @p {
+        @messages("boxGuidance.p1")
+    }
 
-    @p{ @messages("boxGuidance.p2") }
+    @p {
+        @messages("boxGuidance.p2")
+    }
 
-    @bullets(Seq(messages("boxGuidance.bullet1"),messages("boxGuidance.bullet2"),messages("boxGuidance.bullet3")).map(Html(_)))
+    @bullets(Seq(messages("boxGuidance.bullet1"), messages("boxGuidance.bullet2"), messages("boxGuidance.bullet3")).map(Html(_)))
 
-    @p{ @messages("boxGuidance.p3") }
+    @p {
+        @messages("boxGuidance.p3")
+    }
 
-    @linkButton(url = controllers.routes.BoxGuidanceController.onLoad().url,messages(("common.button.continue")))
+    @linkButton(url = controllers.routes.BoxNumberController.onLoad().url, messages(("common.button.continue")))
 }
 
 
-@{
-    //$COVERAGE-OFF$
-}
+    @{
+        //$COVERAGE-OFF$
+    }
