@@ -24,7 +24,7 @@ import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import viewmodels.{CYASummaryList, CYASummaryListHelper}
-import views.html.CheckYourAnswersView
+import views.html.{CheckYourAnswersView, ConfirmationView}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
@@ -36,6 +36,7 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
                                            mcc: MessagesControllerComponents,
                                            ivdSubmissionConnector: IVDSubmissionConnector,
                                            view: CheckYourAnswersView,
+                                           confirmationView: ConfirmationView,
                                            implicit val ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with CYASummaryListHelper {
 
@@ -56,12 +57,12 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
     Json.fromJson[IVDSubmission](request.userAnswers.data) match {
       case JsSuccess(submission, _) => {
         ivdSubmissionConnector.postSubmission(submission).flatMap {
-          case Right(value) => Future.successful(Redirect(controllers.routes.CheckYourAnswersController.onLoad))
+          case Right(value) => Future.successful(Ok(confirmationView(value.id)))
           case Left(error) => Future.successful(InternalServerError)
         }
       }
       case JsError(_) => throw new RuntimeException("Completed journey answers does not parse to IVDSubmission model")
     }
-
   }
+
 }

@@ -37,14 +37,13 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.connectors.MockIVDSubmissionConnector
 import mocks.repositories.MockSessionRepository
-import models.{BadRequest, EntryDetails, ErrorModel, FileUploadInfo, NumberOfEntries, SubmissionResponse, TraderAddress, TraderContactDetails, UserAnswers, UserType}
+import models.{EntryDetails, ErrorModel, FileUploadInfo, NumberOfEntries, SubmissionResponse, TraderAddress, TraderContactDetails, UserAnswers, UserType}
 import pages._
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
-import viewmodels.CYASummaryListHelper
 import views.data.UnderpaymentSummaryData.{cdUnderpayment, edUnderpayment, ivUnderpayment}
-import views.html.CheckYourAnswersView
+import views.html.{CheckYourAnswersView, ConfirmationView}
 
 import scala.concurrent.Future
 
@@ -57,6 +56,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
       setupMockPostSubmission(response)
     }
     private lazy val checkYourAnswersView: CheckYourAnswersView = app.injector.instanceOf[CheckYourAnswersView]
+    private lazy val confirmationView: ConfirmationView = app.injector.instanceOf[ConfirmationView]
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
       .set(UserTypePage, UserType.Importer).success.value
@@ -90,7 +90,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
     lazy val controller = {
       setupConnectorMock(connectorMock)
       new CheckYourAnswersController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-        messagesControllerComponents, mockIVDSubmissionConnector, checkYourAnswersView, ec)
+        messagesControllerComponents, mockIVDSubmissionConnector, checkYourAnswersView, confirmationView, ec)
     }
   }
 
@@ -112,7 +112,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
     "return Redirect" in new Test {
       val result: Future[Result] = controller.onSubmit()(fakeRequest)
-      status(result) mustBe Status.SEE_OTHER
+      status(result) mustBe Status.OK
     }
 
     "return Internal Server error is submission fails" in new Test {
