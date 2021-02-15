@@ -275,3 +275,16 @@ cya.payingByDeferment = By deferment?
 cya.numberOfAmendments = Number of amendments
 cya.supportingInformation = Supporting information
 cya.newCustomsProcedure = Amended customs procedure code
+
+# Item Number
+itemNo.pageTitle = What is the item number?
+itemNo.pageHeader = What is the item number?
+itemNo.error.required = Enter an item number
+itemNo.error.outOfRange = Item number must be 99 or fewer
+itemNo.error.wholeNumber = Item number must be a whole number
+itemNo.error.nonNumeric = Item number must be a number
+
+
+
+
+
