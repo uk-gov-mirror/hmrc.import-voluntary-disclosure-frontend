@@ -14,14 +14,7 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import play.api.libs.json.JsPath
+case class BoxType(boxNumber: Int, boxLevel: String, boxType: String, inputWidth: Int)
 
-case object UnderpaymentReasonBoxNumberPage extends QuestionPage[Int] {
-
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "underpayment-reason-boxNumber-temp"
-
-}

@@ -241,6 +241,19 @@ boxNumber.pageTitle = What is the box number?
 boxNumber.heading = What is the box number?
 boxNumber.error.required = Enter a box number
 
+# Amend Reason Values
+amendmentValue.originalAmount = Original value
+amendmentValue.amendedAmount = Amended value
+box22.pageTitle = Invoice currency and total amount invoiced amendment
+box22.pageHeader = Invoice currency and total amount invoiced amendment
+box22.pageBody = You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946
+box33.pageTitle = Commodity code amendment details
+box33.pageHeader = Commodity code amendment details
+box33.pageBody = Must be 10 numbers, sometimes followed by a code of 4 characters, for example 1806321000 or 2204109400X411.
+box62.pageTitle = Air Transport Costs
+box62.pageHeader = Air Transport Costs
+box62.pageBody = You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946
+
 # Check Your Answers
 cya.pageTitle = Check your answers before sending your disclosure
 cya.heading = Check your answers before sending your disclosure

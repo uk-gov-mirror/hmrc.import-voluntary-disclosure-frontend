@@ -14,14 +14,23 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import play.api.libs.json.JsPath
+import models.{UnderpaymentReasonValue, UnderpaymentType}
+import play.api.data.Form
+import play.api.data.Forms._
+import play.api.i18n.Messages
 
-case object UnderpaymentReasonBoxNumberPage extends QuestionPage[Int] {
+class UnderpaymentReasonAmendmentFormProvider {
 
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "underpayment-reason-boxNumber-temp"
+  // TODO: Need to look at how to pass boxnumber in
+  def apply()(implicit messages: Messages): Form[UnderpaymentReasonValue] = {
+    Form(
+      mapping(
+        "original" -> text,
+        "amended" -> text
+      )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+    )
+  }
 
 }

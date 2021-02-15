@@ -16,12 +16,13 @@
 
 package pages
 
+import models.UnderpaymentReasonValue
 import play.api.libs.json.JsPath
 
-case object UnderpaymentReasonBoxNumberPage extends QuestionPage[Int] {
+case object UnderpaymentReasonAmendmentPage extends QuestionPage[UnderpaymentReasonValue] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "underpayment-reason-boxNumber-temp"
+  override def toString: String = "underpayment-reason-amendment-temp"
 
 }

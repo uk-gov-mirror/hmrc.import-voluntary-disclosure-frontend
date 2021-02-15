@@ -73,3 +73,6 @@ POST        /disclosure/box-number                             controllers.BoxNu
 
 GET         /disclosure/check-your-answers                     controllers.CheckYourAnswersController.onLoad
 GET         /disclosure/confirmation                           controllers.CheckYourAnswersController.onSubmit
+
+GET         /disclosure/amendments                             controllers.UnderpaymentReasonAmendmentController.onLoad
+POST        /disclosure/amendments                             controllers.UnderpaymentReasonAmendmentController.onSubmit
