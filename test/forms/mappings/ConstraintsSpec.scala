@@ -16,6 +16,7 @@
 
 package forms.mappings
 
+import models.{UnderpaymentReason, UnderpaymentReasonValue}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.data.validation.{Invalid, Valid}
 
@@ -191,4 +192,18 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
       nonEmpty(Set()) mustEqual Invalid("error")
     }
   }
+
+  "different" must {
+
+    lazy val diff = different("error.key")
+
+    "return Valid if strings is different" in {
+      diff(UnderpaymentReasonValue("Field1", "NotField1")) mustEqual Valid
+    }
+
+    "return Invalid for identical strings" in {
+      diff(UnderpaymentReasonValue("Field1", "Field1")) mustEqual Invalid("error.key")
+    }
+  }
+
 }
