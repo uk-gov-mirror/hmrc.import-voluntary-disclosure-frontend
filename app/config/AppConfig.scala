@@ -107,11 +107,10 @@ trait AppConfig extends FixedConfig {
 
 trait FixedConfig {
   val euExitDate: LocalDate = LocalDate.of(2021, 1, 1)
-  val countryCurrencyCodes = Seq("GBP","EUR","USD","HKD")
 
   val boxNumberTypes: Map[Int, BoxType] = Map(
     22 -> BoxType(22, "entry","text"),
-    33 -> BoxType(33, "item","text", regex = "^[0-9]{10}[0-9a-zA-Z]{4}$"),
+    33 -> BoxType(33, "item","text", regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)"""),
     34 -> BoxType(34, "item","text"),
     35 -> BoxType(35, "item","text"),
     36 -> BoxType(36, "item","text"),

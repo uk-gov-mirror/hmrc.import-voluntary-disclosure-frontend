@@ -19,7 +19,7 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage}
+import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
 import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
@@ -45,29 +45,31 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
 
   private[controllers] def backLink(boxNumber: Int): Call = {
     appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).boxLevel match {
-      case "item" => controllers.routes.BoxNumberController.onLoad()
+      case "item" => controllers.routes.ItemNumberController.onLoad()
       case _ => controllers.routes.BoxNumberController.onLoad()
     }
   }
 
   def onLoad(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
     val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
+    val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
 
     val form = request.userAnswers.get(UnderpaymentReasonAmendmentPage).fold(formProvider(boxNumber)) {
       formProvider(boxNumber).fill
     }
 
-    Future.successful(routeToView(boxNumber, form))
+    Future.successful(routeToView(boxNumber, itemNumber, form))
   }
 
   def onSubmit(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
     val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
+    val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
     formProvider(boxNumber).bindFromRequest().fold(
       formWithErrors => {
         val newErrors = formWithErrors.errors.map { error =>
           if (error.key.isEmpty) {FormError("amended", error.message)} else {error}
         }
-        Future.successful(routeToView(boxNumber, formWithErrors.copy(errors = newErrors)))
+        Future.successful(routeToView(boxNumber, itemNumber, formWithErrors.copy(errors = newErrors)))
       },
       value => {
         for {
@@ -80,10 +82,10 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
     )
   }
 
-  def routeToView(boxNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages, appConfig: AppConfig) = {
+  def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages) = {
     appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox) match {
-      case box if(box.boxType.equals("text")) => Ok(textAmendmentView(form, box, backLink(boxNumber))(request, messages, appConfig))
-      case box => Ok(textAmendmentView(form, box, backLink(boxNumber))(request, messages, appConfig))
+      case box if(box.boxType.equals("text")) => Ok(textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages))
+      case box => Ok(textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages))
     }
   }
 

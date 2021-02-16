@@ -23,7 +23,7 @@
         inputText: components.inputText
 )
 
-@(form: Form[_], box: BoxType, backLink: Call)(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(form: Form[_], box: BoxType, itemNumber: Int, backLink: Call)(implicit request: Request[_], messages: Messages)
 @bodyMessage=@{
     if (messages(s"box${box.boxNumber}.pageBody").equals(s"box${box.boxNumber}.pageBody")) {
         None
@@ -39,7 +39,7 @@
 
         @errorSummary(form.errors)
 
-        @h1(messages(s"box${box.boxNumber}.pageHeader"))
+        @h1(messages(s"box${box.boxNumber}.pageHeader", itemNumber))
 
         @bodyMessage.map{msg => @p{ @msg } }
 

@@ -64,8 +64,7 @@ trait Mappings extends Formatters with Constraints {
     of(enumerableFormatter[A](requiredKey, invalidKey))
 
   protected def foreignCurrency(requiredKey: String = "error.required",
-                        invalidNumeric: String = "error.invalid"
-                       )(implicit appConfig: AppConfig): FieldMapping[String] =
+                                invalidNumeric: String = "error.invalid"): FieldMapping[String] =
     of(foreignCurrencyFormatter(requiredKey, invalidNumeric))
 
 }

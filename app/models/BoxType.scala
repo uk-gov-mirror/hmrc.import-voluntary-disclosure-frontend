@@ -21,6 +21,6 @@ case class BoxType(
                     boxLevel: String,
                     boxType: String,
                     inputClass: Option[String] = Some("govuk-input--width-20"),
-                    regex: String = "^.*$"
+                    regex: String = """^.*$"""
                   )
 

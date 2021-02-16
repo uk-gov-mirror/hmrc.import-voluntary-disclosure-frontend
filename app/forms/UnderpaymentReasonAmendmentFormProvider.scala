@@ -27,16 +27,16 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
 
   def apply(boxNumber: Int)(implicit messages: Messages, appConfig: AppConfig): Form[UnderpaymentReasonValue] = {
     boxNumber match {
-      case 22 => foreignCurrencyFormMapping(boxNumber)
+      case 22 => foreignCurrencyFormMapping
       case 33 => {
         val regex = appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).regex
-        textFormMapping(regex, boxNumber)
+        textFormMapping(regex)
       }
-      case 62 => foreignCurrencyFormMapping(boxNumber)
+      case 62 => foreignCurrencyFormMapping
     }
   }
 
-  private def foreignCurrencyFormMapping(boxNumber: Int)(implicit messages: Messages, appConfig: AppConfig): Form[UnderpaymentReasonValue] = {
+  private def foreignCurrencyFormMapping: Form[UnderpaymentReasonValue] = {
     Form(
       mapping(
         "original" -> foreignCurrency(
@@ -50,7 +50,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
     )
   }
 
-  private def textFormMapping(regex: String, boxNumber: Int)(implicit messages: Messages): Form[UnderpaymentReasonValue] = {
+  private def textFormMapping(regex: String): Form[UnderpaymentReasonValue] = {
     Form(
       mapping(
         "original" -> text("amendmentValue.error.original.missing")
