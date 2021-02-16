@@ -51,7 +51,6 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
   }
 
   def onLoad(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-    val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
     val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
 
     val form = request.userAnswers.get(UnderpaymentReasonAmendmentPage).fold(formProvider(boxNumber)) {
@@ -62,7 +61,6 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
   }
 
   def onSubmit(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-    val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
     val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
     formProvider(boxNumber).bindFromRequest().fold(
       formWithErrors => {
