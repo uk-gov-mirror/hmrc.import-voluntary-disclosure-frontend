@@ -97,10 +97,10 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
       "return a SEE OTHER item level response when correct data is sent" in new Test {
         override val userAnswers: Option[UserAnswers] = underpaymentReasonBoxNumber
         lazy val result: Future[Result] = controller.onSubmit(
-          fakeRequestGenerator("22")
+          fakeRequestGenerator("33")
         )
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.BoxNumberController.onLoad().url) // Item level
+        redirectLocation(result) mustBe Some(controllers.routes.ItemNumberController.onLoad().url) // Item level
       }
 
       "update the UserAnswers in session" in new Test {
@@ -119,6 +119,13 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
         status(result) mustBe Status.BAD_REQUEST
       }
 
+      "return a BAD_REQUEST correct data is sent but the box number is not part of the list" in new Test {
+        override val userAnswers: Option[UserAnswers] = underpaymentReasonBoxNumber
+        lazy val result: Future[Result] = controller.onSubmit(
+          fakeRequestGenerator("0")
+        )
+        status(result) mustBe Status.BAD_REQUEST
+      }
     }
 
   }

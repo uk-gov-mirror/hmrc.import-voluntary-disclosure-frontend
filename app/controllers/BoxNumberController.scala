@@ -60,7 +60,7 @@ class BoxNumberController @Inject()(identity: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           appConfig.boxNumberTypes.getOrElse(value, appConfig.invalidBox) match {
-            case box if(box.boxLevel.equals("item")) => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(box.boxNumber))
+            case box if(box.boxLevel.equals("item")) => Redirect(controllers.routes.ItemNumberController.onLoad())
             case box if(box.boxLevel.equals("entry")) => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(box.boxNumber))
             case box => BadRequest(view(formProvider(), backLink))
           }

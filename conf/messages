@@ -249,15 +249,15 @@ amendmentValue.error.original.format = Enter the original value in the correct f
 amendmentValue.error.amended.missing = Enter the amended value
 amendmentValue.error.amended.format = Enter the amended value in the correct format
 amendmentValue.error.amended.different = Amended value must be different from original value
-box22.pageTitle = Invoice currency and total amount invoiced amendment
-box22.pageHeader = Invoice currency and total amount invoiced amendment
-box22.pageBody = You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946
-box33.pageTitle = Commodity code amendment details
-box33.pageHeader = Commodity code amendment details
+box22.pageTitle = Box 22 invoice currency and total amount invoiced amendment
+box22.pageHeader = Box 22 invoice currency and total amount invoiced amendment
+box22.pageBody = You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
+box33.pageTitle = Box 33 commodity code amendment for item {0}
+box33.pageHeader = Box 33 commodity code amendment for item {0}
 box33.pageBody = Must be 10 numbers, sometimes followed by a code of 4 characters, for example 1806321000 or 2204109400X411.
-box62.pageTitle = Air transport costs amendment
-box62.pageHeader = Air transport costs amendment
-box62.pageBody = You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946
+box62.pageTitle = Box 62 air transport costs amendment
+box62.pageHeader = Box 62 air transport costs amendment
+box62.pageBody = Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
 
 # Check Your Answers
 cya.pageTitle = Check your answers before sending your disclosure
@@ -293,3 +293,11 @@ cya.payingByDeferment = By deferment?
 cya.numberOfAmendments = Number of amendments
 cya.supportingInformation = Supporting information
 cya.newCustomsProcedure = Amended customs procedure code
+
+# Item Number
+itemNo.pageTitle = What is the item number?
+itemNo.pageHeader = What is the item number?
+itemNo.error.required = Enter an item number
+itemNo.error.outOfRange = Item number must be 99 or fewer
+itemNo.error.wholeNumber = Item number must be a whole number
+itemNo.error.nonNumeric = Item number must be a number
