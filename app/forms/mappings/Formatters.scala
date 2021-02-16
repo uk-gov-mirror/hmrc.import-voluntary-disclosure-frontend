@@ -16,6 +16,7 @@
 
 package forms.mappings
 
+import config.AppConfig
 import models.Enumerable
 import play.api.data.FormError
 import play.api.data.format.Formatter
@@ -136,5 +137,26 @@ trait Formatters {
 
       override def unbind(key: String, value: A): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
+    }
+
+  private[mappings] def foreignCurrencyFormatter(requiredKey: String, invalidKey: String)
+                                                (implicit appConfig: AppConfig): Formatter[String] =
+    new Formatter[String] {
+
+      private val baseFormatter = stringFormatter(requiredKey)
+      val valid2dpCurrency = """(^-?\d*$)|(^-?\d*\.\d{1,2}$)"""
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
+        baseFormatter.bind(key, data).right.flatMap {
+          str =>
+            if (appConfig.countryCurrencyCodes.contains(str.take(3)) && str.drop(3).matches(valid2dpCurrency)) {
+              Right(str)
+            } else {
+              Left(Seq(FormError(key, invalidKey)))
+            }
+        }
+
+      override def unbind(key: String, value: String): Map[String, String] =
+        baseFormatter.unbind(key, value)
     }
 }

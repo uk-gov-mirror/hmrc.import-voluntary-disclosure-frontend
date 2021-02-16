@@ -16,5 +16,11 @@
 
 package models
 
-case class BoxType(boxNumber: Int, boxLevel: String, boxType: String, inputWidth: Int)
+case class BoxType(
+                    boxNumber: Int,
+                    boxLevel: String,
+                    boxType: String,
+                    inputClass: Option[String] = Some("govuk-input--width-20"),
+                    regex: String = "^.*$"
+                  )
 

@@ -17,6 +17,7 @@
 package forms.mappings
 
 import filters.InputFilter
+import models.UnderpaymentReasonValue
 import play.api.data.validation.{Constraint, Invalid, Valid}
 
 trait Constraints extends InputFilter {
@@ -113,4 +114,15 @@ trait Constraints extends InputFilter {
       case _ =>
         Invalid(errorKey)
     }
+
+  protected def different(errorKey: String): Constraint[UnderpaymentReasonValue] =
+    Constraint {
+      input =>
+        if (input.original != input.amended) {
+          Valid
+        } else {
+          Invalid(errorKey)
+        }
+    }
+
 }

@@ -19,7 +19,6 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.BoxNumberFormProvider
-import models.BoxType
 import pages.UnderpaymentReasonBoxNumberPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -60,10 +59,10 @@ class BoxNumberController @Inject()(identity: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonBoxNumberPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          appConfig.boxNumberTypes.getOrElse(value, appConfig.invalidBox).boxLevel match {
-            case "item" => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad())
-            case "entry" => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad())
-            case _ => BadRequest(view(formProvider(), backLink))
+          appConfig.boxNumberTypes.getOrElse(value, appConfig.invalidBox) match {
+            case box if(box.boxLevel.equals("item")) => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(box.boxNumber))
+            case box if(box.boxLevel.equals("entry")) => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(box.boxNumber))
+            case box => BadRequest(view(formProvider(), backLink))
           }
         }
       }

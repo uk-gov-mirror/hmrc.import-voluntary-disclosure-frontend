@@ -19,14 +19,13 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
-import models.BoxType
 import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage}
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.{CommodityAmendmentView, TextAmendmentView}
+import views.html.TextAmendmentView
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -40,8 +39,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
                                                       mcc: MessagesControllerComponents,
                                                       formProvider: UnderpaymentReasonAmendmentFormProvider,
                                                       textAmendmentView: TextAmendmentView,
-                                                      commodityAmendmentView: CommodityAmendmentView,
-                                                      appConfig: AppConfig
+                                                      implicit val appConfig: AppConfig
                                    )
   extends FrontendController(mcc) with I18nSupport {
 
@@ -52,36 +50,40 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
     }
   }
 
-  def onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onLoad(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
     val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
 
-    val form = request.userAnswers.get(UnderpaymentReasonAmendmentPage).fold(formProvider()) {
-      formProvider().fill
+    val form = request.userAnswers.get(UnderpaymentReasonAmendmentPage).fold(formProvider(boxNumber)) {
+      formProvider(boxNumber).fill
     }
 
     Future.successful(routeToView(boxNumber, form))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
     val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
-    formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(routeToView(boxNumber, formWithErrors)),
+    formProvider(boxNumber).bindFromRequest().fold(
+      formWithErrors => {
+        val newErrors = formWithErrors.errors.map { error =>
+          if (error.key.isEmpty) {FormError("amended", error.message)} else {error}
+        }
+        Future.successful(routeToView(boxNumber, formWithErrors.copy(errors = newErrors)))
+      },
       value => {
         for {
           updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonAmendmentPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad())
+          Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(boxNumber))
         }
       }
     )
   }
 
-  def routeToView(boxNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages) = {
+  def routeToView(boxNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages, appConfig: AppConfig) = {
     appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox) match {
-      case box if(box.boxType.equals("commodity")) => Ok(commodityAmendmentView(form, box, backLink(boxNumber))(request, messages))
-      case box if(box.boxType.equals("text")) => Ok(textAmendmentView(form, box, backLink(boxNumber))(request, messages))
-      case box => Ok(textAmendmentView(form, box, backLink(boxNumber))(request, messages))
+      case box if(box.boxType.equals("text")) => Ok(textAmendmentView(form, box, backLink(boxNumber))(request, messages, appConfig))
+      case box => Ok(textAmendmentView(form, box, backLink(boxNumber))(request, messages, appConfig))
     }
   }
 

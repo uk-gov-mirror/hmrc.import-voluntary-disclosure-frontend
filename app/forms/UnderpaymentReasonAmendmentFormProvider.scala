@@ -16,20 +16,49 @@
 
 package forms
 
-import models.{UnderpaymentReasonValue, UnderpaymentType}
+import config.AppConfig
+import models.UnderpaymentReasonValue
+import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms._
 import play.api.i18n.Messages
 
-class UnderpaymentReasonAmendmentFormProvider {
+class UnderpaymentReasonAmendmentFormProvider extends Mappings {
 
-  // TODO: Need to look at how to pass boxnumber in
-  def apply()(implicit messages: Messages): Form[UnderpaymentReasonValue] = {
+  def apply(boxNumber: Int)(implicit messages: Messages, appConfig: AppConfig): Form[UnderpaymentReasonValue] = {
+    boxNumber match {
+      case 22 => foreignCurrencyFormMapping(boxNumber)
+      case 33 => {
+        val regex = appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).regex
+        textFormMapping(regex, boxNumber)
+      }
+      case 62 => foreignCurrencyFormMapping(boxNumber)
+    }
+  }
+
+  private def foreignCurrencyFormMapping(boxNumber: Int)(implicit messages: Messages, appConfig: AppConfig): Form[UnderpaymentReasonValue] = {
     Form(
       mapping(
-        "original" -> text,
-        "amended" -> text
+        "original" -> foreignCurrency(
+          "amendmentValue.error.original.missing",
+          "amendmentValue.error.original.format"),
+        "amended" -> foreignCurrency(
+          "amendmentValue.error.amended.missing",
+          "amendmentValue.error.amended.format")
       )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+        .verifying(different("amendmentValue.error.amended.different"))
+    )
+  }
+
+  private def textFormMapping(regex: String, boxNumber: Int)(implicit messages: Messages): Form[UnderpaymentReasonValue] = {
+    Form(
+      mapping(
+        "original" -> text("amendmentValue.error.original.missing")
+          .verifying(regexp(regex, "amendmentValue.error.original.format")),
+        "amended" -> text("amendmentValue.error.amended.missing")
+          .verifying(regexp(regex, "amendmentValue.error.amended.format"))
+      )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+        .verifying(different("amendmentValue.error.amended.different"))
     )
   }
 

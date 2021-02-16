@@ -107,27 +107,28 @@ trait AppConfig extends FixedConfig {
 
 trait FixedConfig {
   val euExitDate: LocalDate = LocalDate.of(2021, 1, 1)
+  val countryCurrencyCodes = Seq("GBP","EUR","USD","HKD")
 
   val boxNumberTypes: Map[Int, BoxType] = Map(
-    22 -> BoxType(22, "entry","text", 20),
-    33 -> BoxType(33, "item","commodity", 20),
-    34 -> BoxType(34, "item","text", 20),
-    35 -> BoxType(35, "item","text", 20),
-    36 -> BoxType(36, "item","text", 20),
-    37 -> BoxType(37, "item","text", 20),
-    38 -> BoxType(38, "item","text", 20),
-    39 -> BoxType(39, "item","text", 20),
-    41 -> BoxType(41, "item","text", 20),
-    42 -> BoxType(42, "item","text", 20),
-    43 -> BoxType(43, "item","text", 20),
-    45 -> BoxType(45, "item","text", 20),
-    46 -> BoxType(46, "item","text", 20),
-    62 -> BoxType(62, "entry","text", 20),
-    63 -> BoxType(63, "entry","text", 20),
-    66 -> BoxType(66, "entry","text", 20),
-    67 -> BoxType(67, "entry","text", 20),
-    68 -> BoxType(68, "entry","text", 20)
+    22 -> BoxType(22, "entry","text"),
+    33 -> BoxType(33, "item","text", regex = "^[0-9]{10}[0-9a-zA-Z]{4}$"),
+    34 -> BoxType(34, "item","text"),
+    35 -> BoxType(35, "item","text"),
+    36 -> BoxType(36, "item","text"),
+    37 -> BoxType(37, "item","text"),
+    38 -> BoxType(38, "item","text"),
+    39 -> BoxType(39, "item","text"),
+    41 -> BoxType(41, "item","text"),
+    42 -> BoxType(42, "item","text"),
+    43 -> BoxType(43, "item","text"),
+    45 -> BoxType(45, "item","text"),
+    46 -> BoxType(46, "item","text"),
+    62 -> BoxType(62, "entry","text"),
+    63 -> BoxType(63, "entry","text"),
+    66 -> BoxType(66, "entry","text"),
+    67 -> BoxType(67, "entry","text"),
+    68 -> BoxType(68, "entry","text")
   )
-  val invalidBox = BoxType(-1, "invalid", "invalid", -1)
+  val invalidBox = BoxType(-1, "invalid", "invalid")
 
 }

@@ -16,6 +16,7 @@
 
 package forms.mappings
 
+import config.AppConfig
 import models.Enumerable
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
@@ -61,5 +62,10 @@ trait Mappings extends Formatters with Constraints {
   protected def enumerable[A](requiredKey: String = "error.required",
                               invalidKey: String = "error.invalid")(implicit ev: Enumerable[A]): FieldMapping[A] =
     of(enumerableFormatter[A](requiredKey, invalidKey))
+
+  protected def foreignCurrency(requiredKey: String = "error.required",
+                        invalidNumeric: String = "error.invalid"
+                       )(implicit appConfig: AppConfig): FieldMapping[String] =
+    of(foreignCurrencyFormatter(requiredKey, invalidNumeric))
 
 }
