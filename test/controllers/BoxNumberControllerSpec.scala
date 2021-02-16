@@ -91,7 +91,7 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
           fakeRequestGenerator("62")
         )
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.BoxNumberController.onLoad().url) // Entry level
+        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(62).url)
       }
 
       "return a SEE OTHER item level response when correct data is sent" in new Test {
@@ -100,7 +100,7 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
           fakeRequestGenerator("33")
         )
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.ItemNumberController.onLoad().url) // Item level
+        redirectLocation(result) mustBe Some(controllers.routes.ItemNumberController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
