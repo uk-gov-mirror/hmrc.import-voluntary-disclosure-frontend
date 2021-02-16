@@ -19,7 +19,7 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
+import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
 import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
@@ -83,7 +83,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
   def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages) = {
     appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox) match {
       case box if(box.boxType.equals("text")) => Ok(textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages))
-      case box => Ok(textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages))
+      case _ => throw new RuntimeException("Invalid Box Number")
     }
   }
 
