@@ -126,9 +126,9 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
         elementText(govErrorSummaryListClass) mustBe AmendReasonValuesMessages.amendedDifferent
       }
 
-//      "render an error message against the field" in {
-//        elementText(amendedErrorId) mustBe AmendReasonValuesMessages.errorPrefix + AmendReasonValuesMessages.amendedDifferent
-//      }
+      "render an error message against the field" in {
+        elementText(amendedErrorId) mustBe AmendReasonValuesMessages.errorPrefix + AmendReasonValuesMessages.amendedDifferent
+      }
     }
 
     "an error exists (value has been entered in an invalid format for both original and amended)" should {
