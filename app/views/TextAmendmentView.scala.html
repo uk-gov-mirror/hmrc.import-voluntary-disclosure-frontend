@@ -33,7 +33,7 @@
 }
 
     @layout(
-        pageTitle = messages(s"box${box.boxNumber}.pageTitle"),
+        pageTitle = messages(s"box${box.boxNumber}.pageTitle", itemNumber),
         form = Some(form),
         customBackLinkUrl = Some(backLink)) {
 
