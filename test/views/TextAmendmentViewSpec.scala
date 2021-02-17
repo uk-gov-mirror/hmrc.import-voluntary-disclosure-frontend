@@ -22,11 +22,12 @@ import messages.{AmendReasonValuesMessages, BaseMessages}
 import models.{BoxType, UnderpaymentReasonValue}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import play.api.data.Form
+import play.api.data.{Form, FormError}
 import play.api.mvc.Call
 import play.twirl.api.Html
 import views.html.TextAmendmentView
 
+//noinspection ScalaStyle
 class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
 
   private lazy val injectedView: TextAmendmentView = app.injector.instanceOf[TextAmendmentView]
@@ -113,6 +114,8 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (same value has been entered for original and amended amount)" should {
       lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(validValue, validValue)
+        .discardingErrors
+        .withError(FormError("amended", AmendReasonValuesMessages.amendedDifferent))
       lazy val view: Html = injectedView(
         form, box, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
       )(fakeRequest, messages)
@@ -154,8 +157,34 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
         elementText(amendedErrorId) mustBe AmendReasonValuesMessages.errorPrefix + AmendReasonValuesMessages.amendedInvalidFormat
       }
     }
-
   }
+
+    "the correct content" when {
+      val testBoxes = Seq(22,33,62)
+      appConfig.boxNumberTypes.filter(box => testBoxes.contains(box._1)).map { testBox =>
+        checkContent(testBox._2)
+      }
+      def checkContent(box: BoxType) = {
+
+        s"be shown for box ${box.boxNumber}" should {
+          val form: Form[UnderpaymentReasonValue] = formProvider.apply(box.boxNumber)
+          lazy val view: Html = injectedView(
+            form, box, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+          )(fakeRequest, messages)
+          lazy implicit val document: Document = Jsoup.parse(view.body)
+
+          s"have the correct page title" in {
+            document.title mustBe AmendReasonValuesMessages.box22PageTitle
+          }
+
+          s"have the correct p1 text of '${AmendReasonValuesMessages.box22P1}'" in {
+            elementText("#main-content p:nth-of-type(1)") mustBe AmendReasonValuesMessages.box22P1
+          }
+        }
+      }
+
+    }
+
 
   it should {
 
