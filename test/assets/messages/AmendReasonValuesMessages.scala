@@ -18,16 +18,14 @@ package messages
 
 object AmendReasonValuesMessages extends BaseMessages {
 
-  val original: String = "Original value"
-  val amended: String = "Amended value"
-
-  def title(boxPageTitle:String) = s"$boxPageTitle"
-  def title2(boxNumber:String) = s"box$boxNumber" + "PageTitle"
-
-  val box22PageTitle: String = "Box 22 invoice currency and total amount invoiced amendment"
-
+  val originalAmount: String =  "Original value"
+  val amendedAmount: String = "Amended value"
   val originalNonEmpty: String = "Enter the original value"
   val amendedNonEmpty: String = "Enter the amended value"
   val amendedDifferent: String = "Amended value must be different from original value"
+  val originalInvalidFormat: String = "Enter the original value in the correct format"
+  val amendedInvalidFormat: String = "Enter the amended value in the correct format"
+  val box22PageTitle: String = "Box 22 invoice currency and total amount invoiced amendment"
+  val box22P1: String = "You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946."
 
 }
