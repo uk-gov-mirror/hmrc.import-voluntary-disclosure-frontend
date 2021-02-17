@@ -27,12 +27,11 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
 
   def apply(boxNumber: Int)(implicit messages: Messages, appConfig: AppConfig): Form[UnderpaymentReasonValue] = {
     boxNumber match {
-      case 22 => foreignCurrencyFormMapping
+      case 22 | 62 => foreignCurrencyFormMapping
       case 33 => {
         val regex = appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).regex
         textFormMapping(regex)
       }
-      case 62 => foreignCurrencyFormMapping
       case _ => { // TODO: Remove this when all box numbers added to story
         val regex = appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).regex
         textFormMapping(regex)
