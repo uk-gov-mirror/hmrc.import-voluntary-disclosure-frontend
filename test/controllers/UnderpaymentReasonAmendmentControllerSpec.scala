@@ -134,6 +134,15 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
         status(result) mustBe Status.BAD_REQUEST
       }
 
+      "return Bad Request for form with errors when only key is empty" in new Test {
+        val result: Future[Result] = controller.onSubmit(22)(
+          fakeRequest.withFormUrlEncodedBody(
+            "original" -> fifty, "amended" -> fifty
+          )
+        )
+        status(result) mustBe Status.BAD_REQUEST
+      }
+
       "return RuntimeException for invalid box number" in new Test {
         val result: RuntimeException = intercept[RuntimeException](await(controller.onSubmit(0)(fakeRequest)))
         assert(result.getMessage.contains("Invalid Box Number"))
