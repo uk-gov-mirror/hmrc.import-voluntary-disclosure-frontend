@@ -83,5 +83,51 @@ POST        /disclosure/box-22-currency-total-invoice-amendment        controlle
 GET         /disclosure/box-33-commodity-code-amendment                controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 33)
 POST        /disclosure/box-33-commodity-code-amendment                controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 33)
 
+GET         /disclosure/box-34-origin-country-code-amendment           controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 34)
+POST        /disclosure/box-34-origin-country-code-amendment           controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 34)
+
+GET         /disclosure/box-35-gross-mass-amendment                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 35)
+POST        /disclosure/box-35-gross-mass-amendment                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 35)
+
+GET         /disclosure/box-36-preference-amendment                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 36)
+POST        /disclosure/box-36-preference-amendment                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 36)
+
+GET         /disclosure/box-37-customs-procedure-code-amendment        controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 37)
+POST        /disclosure/box-37-customs-procedure-code-amendment        controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 37)
+
+GET         /disclosure/box-38-net-mass-amendment                      controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 38)
+POST        /disclosure/box-38-net-mass-amendment                      controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 38)
+
+GET         /disclosure/box-39-quota-amendment                         controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 39)
+POST        /disclosure/box-39-quota-amendment                         controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 39)
+
+GET         /disclosure/box-41-supplementary-units-amendment           controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 41)
+POST        /disclosure/box-41-supplementary-units-amendment           controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 41)
+
+GET         /disclosure/box-42-item-price-amendment                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 42)
+POST        /disclosure/box-42-item-price-amendment                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 42)
+
+GET         /disclosure/box-43-valuation-method-amendment              controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 43)
+POST        /disclosure/box-43-valuation-method-amendment              controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 43)
+
+GET         /disclosure/box-45-adjustment-amendment                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 45)
+POST        /disclosure/box-45-adjustment-amendment                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 45)
+
+GET         /disclosure/box-46-statistical-value-amendment             controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 46)
+POST        /disclosure/box-46-statistical-value-amendment             controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 46)
+
 GET         /disclosure/box-62-air-transport-costs-amendment           controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 62)
 POST        /disclosure/box-62-air-transport-costs-amendment           controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 62)
+
+GET         /disclosure/box-63-awb-freight-costs-amendment             controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 63)
+POST        /disclosure/box-63-awb-freight-costs-amendment             controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 63)
+
+GET         /disclosure/box-66-insurance-amendment                     controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 66)
+POST        /disclosure/box-66-insurance-amendment                     controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 66)
+
+GET         /disclosure/box-67-other-charges-deductions-amendment      controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 67)
+POST        /disclosure/box-67-other-charges-deductions-amendment      controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 67)
+
+GET         /disclosure/box-68-adjustment-vat-value-amendment          controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 68)
+POST        /disclosure/box-68-adjustment-vat-value-amendment          controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 68)
+

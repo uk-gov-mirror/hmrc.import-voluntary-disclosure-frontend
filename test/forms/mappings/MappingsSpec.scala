@@ -16,7 +16,7 @@
 
 package forms.mappings
 
-import models.Enumerable
+import models.{Enumerable, UnderpaymentReasonValue}
 import org.scalatest.{MustMatchers, OptionValues, WordSpec}
 import play.api.data.{Form, FormError}
 
@@ -167,6 +167,29 @@ class MappingsSpec extends WordSpec with MustMatchers with OptionValues with Map
 
     "not bind an invalid option" in {
       val result = testForm.bind(Map("value" -> "Not Bar"))
+      result.errors must contain(FormError("value", "error.invalid"))
+    }
+
+    "not bind an empty map" in {
+      val result = testForm.bind(Map.empty[String, String])
+      result.errors must contain(FormError("value", "error.required"))
+    }
+  }
+
+  "foreignCurrency" must {
+
+    val testForm: Form[String] =
+      Form[String](
+        "value" -> foreignCurrency()
+      )
+
+    "bind a valid option" in {
+      val result = testForm.bind(Map("value" -> "GBP100.02"))
+      result.errors mustBe Seq.empty
+    }
+
+    "not bind an invalid option" in {
+      val result = testForm.bind(Map("value" -> "123"))
       result.errors must contain(FormError("value", "error.invalid"))
     }
 

@@ -19,7 +19,7 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
+import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
 import play.api.data.{Form, FormError}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
@@ -57,7 +57,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
       formProvider(boxNumber).fill
     }
 
-    Future.successful(routeToView(boxNumber, itemNumber, form))
+    Future.successful(Ok(routeToView(boxNumber, itemNumber, form)))
   }
 
   def onSubmit(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
@@ -67,7 +67,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
         val newErrors = formWithErrors.errors.map { error =>
           if (error.key.isEmpty) {FormError("amended", error.message)} else {error}
         }
-        Future.successful(routeToView(boxNumber, itemNumber, formWithErrors.copy(errors = newErrors)))
+        Future.successful(BadRequest(routeToView(boxNumber, itemNumber, formWithErrors.copy(errors = newErrors))))
       },
       value => {
         for {
@@ -82,8 +82,8 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
 
   def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages) = {
     appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox) match {
-      case box if(box.boxType.equals("text")) => Ok(textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages))
-      case box => Ok(textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages))
+      case box if(box.boxType.equals("text")) => textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages)
+      case _ => throw new RuntimeException("Invalid Box Number")
     }
   }
 
