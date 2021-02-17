@@ -16,6 +16,8 @@
 
 package messages
 
+case class ExpectedContent(title: String, heading: String, body: Option[String])
+
 object AmendReasonValuesMessages extends BaseMessages {
 
   val box22PageTitle: String = "Box 22 invoice currency and total amount invoiced amendment"
@@ -27,5 +29,35 @@ object AmendReasonValuesMessages extends BaseMessages {
   val amendedDifferent: String = "Amended value must be different from original value"
   val originalInvalidFormat: String = "Enter the original value in the correct format"
   val amendedInvalidFormat: String = "Enter the amended value in the correct format"
+
+  val boxContent: Map[Int, ExpectedContent] = Map(
+    22 -> ExpectedContent(
+      "Box 22 invoice currency and total amount invoiced amendment",
+      "Box 22 invoice currency and total amount invoiced amendment",
+      Some("You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.")),
+    33 -> ExpectedContent(
+      "Box 33 commodity code amendment for item 1",
+      "Box 33 commodity code amendment for item 1",
+      Some("Must be 10 numbers, sometimes followed by a code of 4 characters, for example 1806321000 or 2204109400X411.")),
+    34 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    35 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    36 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    37 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    38 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    39 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    41 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    42 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    43 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    45 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    46 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    62 -> ExpectedContent(
+      "Box 62 air transport costs amendment",
+      "Box 62 air transport costs amendment",
+      Some("Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.")),
+    63 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    66 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    67 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    68 -> ExpectedContent("n/a", "n/a", Some("n/a"))
+  )
 
 }

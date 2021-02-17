@@ -27,7 +27,6 @@ import play.api.mvc.Call
 import play.twirl.api.Html
 import views.html.TextAmendmentView
 
-//noinspection ScalaStyle
 class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
 
   private lazy val injectedView: TextAmendmentView = app.injector.instanceOf[TextAmendmentView]
@@ -159,31 +158,37 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     }
   }
 
-    "the correct content" when {
-      val testBoxes = Seq(22,33,62)
-      appConfig.boxNumberTypes.filter(box => testBoxes.contains(box._1)).map { testBox =>
-        checkContent(testBox._2)
-      }
-      def checkContent(box: BoxType) = {
+  "The Underpayment Reason Amendment page" when {
+    val testBoxes = Seq(22,33,62)
+    appConfig.boxNumberTypes.filter(box => testBoxes.contains(box._1)).map { testBox =>
+      checkContent(testBox._2)
+    }
 
-        s"be shown for box ${box.boxNumber}" should {
-          val form: Form[UnderpaymentReasonValue] = formProvider.apply(box.boxNumber)
-          lazy val view: Html = injectedView(
-            form, box, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
-          )(fakeRequest, messages)
-          lazy implicit val document: Document = Jsoup.parse(view.body)
+    def checkContent(box: BoxType) = {
+      s"rendered for box ${box.boxNumber}" should {
+        val form: Form[UnderpaymentReasonValue] = formProvider.apply(box.boxNumber)
+        lazy val view: Html = injectedView(
+          form, box, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+        )(fakeRequest, messages)
+        lazy implicit val document: Document = Jsoup.parse(view.body)
 
-          s"have the correct page title" in {
-            document.title mustBe AmendReasonValuesMessages.box22PageTitle
-          }
+        "have the correct page title" in {
+          document.title mustBe AmendReasonValuesMessages.boxContent.get(box.boxNumber).get.title
+        }
 
-          s"have the correct p1 text of '${AmendReasonValuesMessages.box22P1}'" in {
-            elementText("#main-content p:nth-of-type(1)") mustBe AmendReasonValuesMessages.box22P1
-          }
+        "have the correct page heading" in {
+          elementText("h1") mustBe AmendReasonValuesMessages.boxContent.get(box.boxNumber).get.heading
+        }
+
+        "have the correct body text (if applicable)" in {
+          if (AmendReasonValuesMessages.boxContent.get(box.boxNumber).get.body.isDefined) {
+            elementText("#main-content p:nth-of-type(1)") mustBe AmendReasonValuesMessages.boxContent.get(box.boxNumber).get.body.get
+          } else {assert(true)}
         }
       }
-
     }
+
+  }
 
 
   it should {
