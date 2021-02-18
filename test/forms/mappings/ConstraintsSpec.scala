@@ -191,4 +191,5 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
       nonEmpty(Set()) mustEqual Invalid("error")
     }
   }
+
 }

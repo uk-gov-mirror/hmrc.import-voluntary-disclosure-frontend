@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.BoxNumberFormProvider
 import pages.UnderpaymentReasonBoxNumberPage
@@ -37,8 +36,7 @@ class BoxNumberController @Inject()(identity: IdentifierAction,
                                     sessionRepository: SessionRepository,
                                     mcc: MessagesControllerComponents,
                                     formProvider: BoxNumberFormProvider,
-                                    view: BoxNumberView,
-                                    appConfig: AppConfig
+                                    view: BoxNumberView
                                    )
   extends FrontendController(mcc) with I18nSupport {
 
@@ -59,10 +57,9 @@ class BoxNumberController @Inject()(identity: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonBoxNumberPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          appConfig.boxNumberItems.getOrElse(value, "notValid") match {
-            case "item" => Redirect(controllers.routes.ItemNumberController.onLoad())
-            case "entry" => Redirect(controllers.routes.BoxNumberController.onLoad())
-            case _ => BadRequest(view(formProvider(), backLink))
+          value match {
+            case 22|62|63|66|67|68 => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(value))
+            case _ => Redirect(controllers.routes.ItemNumberController.onLoad())
           }
         }
       }

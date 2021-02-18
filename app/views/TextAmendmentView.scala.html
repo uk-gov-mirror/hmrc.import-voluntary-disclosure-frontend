@@ -1,0 +1,57 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        h1: components.h1,
+        p: components.p,
+        errorSummary: components.errorSummary,
+        button: components.button,
+        inputText: components.inputText
+)
+
+@(form: Form[_], boxNumber: Int, itemNumber: Int, backLink: Call, inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
+@bodyMessage=@{
+    if (messages.isDefinedAt(s"box${boxNumber}.pageBody")) {
+        Some(messages(s"box${boxNumber}.pageBody"))
+    } else {
+        None
+    }
+}
+
+    @layout(
+        pageTitle = messages(s"box${boxNumber}.pageTitle", itemNumber),
+        form = Some(form),
+        customBackLinkUrl = Some(backLink)) {
+
+        @errorSummary(form.errors)
+
+        @h1(messages(s"box${boxNumber}.pageHeader", itemNumber))
+
+        @bodyMessage.map{msg => @p{ @msg } }
+
+        @formHelper(action = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)) {
+            @inputText(form, "original", "original", messages("amendmentValue.originalAmount"), false,
+                classes = inputClass)
+            @inputText(form, "amended", "amended", messages("amendmentValue.amendedAmount"), false,
+                classes = inputClass)
+            @button("common.button.continue")
+        }
+    }
+
+    @{
+        //$COVERAGE-OFF$
+    }

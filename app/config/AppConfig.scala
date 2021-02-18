@@ -106,26 +106,4 @@ trait AppConfig extends FixedConfig {
 
 trait FixedConfig {
   val euExitDate: LocalDate = LocalDate.of(2021, 1, 1)
-
-  val boxNumberItems: Map[Int, String] = Map(
-    22 -> "entry",
-    33 -> "item",
-    34 -> "item",
-    35 -> "item",
-    36 -> "item",
-    37 -> "item",
-    38 -> "item",
-    39 -> "item",
-    41 -> "item",
-    42 -> "item",
-    43 -> "item",
-    45 -> "item",
-    46 -> "item",
-    62 -> "entry",
-    63 -> "entry",
-    66 -> "entry",
-    67 -> "entry",
-    68 -> "entry"
-  )
-
 }

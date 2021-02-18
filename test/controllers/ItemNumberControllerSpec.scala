@@ -22,7 +22,7 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.ItemNumberFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.ItemNumberPage
+import pages.{UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -34,7 +34,8 @@ import scala.concurrent.Future
 class ItemNumberControllerSpec extends ControllerSpecBase {
 
   val userAnswersWithItemNumber: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
-    .set(ItemNumberPage, 1).success.value
+    .set(UnderpaymentReasonBoxNumberPage, 33).success.value
+    .set(UnderpaymentReasonItemNumberPage, 1).success.value
   )
 
   private def fakeRequestGenerator(itemNumber: String): FakeRequest[AnyContentAsFormUrlEncoded] =

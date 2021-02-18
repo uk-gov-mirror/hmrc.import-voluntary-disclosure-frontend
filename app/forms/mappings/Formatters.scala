@@ -137,4 +137,25 @@ trait Formatters {
       override def unbind(key: String, value: A): Map[String, String] =
         baseFormatter.unbind(key, value.toString)
     }
+
+  private[mappings] def foreignCurrencyFormatter(requiredKey: String, invalidKey: String): Formatter[String] =
+    new Formatter[String] {
+
+      private val baseFormatter = stringFormatter(requiredKey)
+      val valid2dpCurrency = """(^-?\d*$)|(^-?\d*\.\d{1,2}$)"""
+      val countryCurrencyRegex = """^[a-zA-Z]{3}$"""
+
+      override def bind(key: String, data: Map[String, String]): Either[Seq[FormError], String] =
+        baseFormatter.bind(key, data).right.flatMap {
+          str =>
+            if (str.take(3).matches(countryCurrencyRegex) && str.drop(3).matches(valid2dpCurrency)) {
+              Right(str)
+            } else {
+              Left(Seq(FormError(key, invalidKey)))
+            }
+        }
+
+      override def unbind(key: String, value: String): Map[String, String] =
+        baseFormatter.unbind(key, value)
+    }
 }
