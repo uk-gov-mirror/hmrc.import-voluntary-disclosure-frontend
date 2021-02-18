@@ -25,7 +25,7 @@ import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}
 import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
+import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import views.html.TextAmendmentView
 
 import scala.concurrent.Future
@@ -71,13 +71,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
 
     "return HTML for valid box number" in new Test {
       override val userAnswers: Option[UserAnswers] = Option(UserAnswers("some-cred-id"))
-      val result: Future[Result] = controller.onLoad(33)(fakeRequest)
-      contentType(result) mustBe Some("text/html")
-      charset(result) mustBe Some("utf-8")
-    }
-
-    "return HTML for 62 valid box number" in new Test {
-      val result: Future[Result] = controller.onLoad(62)(fakeRequest)
+      val result: Future[Result] = controller.onLoad(22)(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
@@ -88,15 +82,15 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
     }
 
     "should redirect the back button to Box Number Controller" in new Test {
-      controller.backLink(22) mustBe Call("GET", controllers.routes.BoxNumberController.onLoad().toString)
+      controller.backLink(22) mustBe controllers.routes.BoxNumberController.onLoad()
     }
 
     "should redirect the back button to Item Number Controller" in new Test {
-      controller.backLink(33) mustBe Call("GET", controllers.routes.ItemNumberController.onLoad().toString)
+      controller.backLink(33) mustBe controllers.routes.ItemNumberController.onLoad()
     }
 
     "should redirect the back button to Box Number Controller when the box number is not in the list" in new Test {
-      controller.backLink(0) mustBe Call("GET", controllers.routes.BoxNumberController.onLoad().toString)
+      controller.backLink(0) mustBe controllers.routes.BoxNumberController.onLoad()
     }
 
   }
@@ -107,6 +101,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
       "return a SEE OTHER response when correct data is sent" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(22)(fakeRequestGenerator(fifty, sixtyFive))
         status(result) mustBe Status.SEE_OTHER
+        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(22).url)
       }
 
       "update the UserAnswers in session" in new Test {
@@ -149,7 +144,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
 
   "routeToView" when {
     def checkRoute(boxNumber: Int, itemNumber: Int, back: Call, expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
-      s"route for box ${boxNumber}" in new Test {
+      s"render the view using the textAmendmentView for box ${boxNumber}" in new Test {
         val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
         result mustBe textAmendmentView(form.apply(boxNumber), boxNumber, itemNumber, back, inputClass = expectedInputClass)(fakeRequest, messages)
       }

@@ -16,7 +16,6 @@
 
 package forms.mappings
 
-import models.{UnderpaymentReason, UnderpaymentReasonValue}
 import org.scalatest.{MustMatchers, WordSpec}
 import play.api.data.validation.{Invalid, Valid}
 
