@@ -20,7 +20,7 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.TraderContactDetailsFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{TraderContactDetails, UserAnswers}
+import models.{ContactDetails, UserAnswers}
 import pages.TraderContactDetailsPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
@@ -67,7 +67,7 @@ class TraderContactDetailsControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] = Option(
         UserAnswers("some-cred-id").set(
           TraderContactDetailsPage,
-          TraderContactDetails("First Second", "email@email.com", "+1234567890")
+          ContactDetails("First Second", "email@email.com", "+1234567890")
         ).success.value
       )
       val result: Future[Result] = controller.onLoad(fakeRequest)

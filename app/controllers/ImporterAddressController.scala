@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.ErrorHandler
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ImporterAddressFormProvider
-import models.TraderAddress
+import models.ContactAddress
 import pages.{ImporterAddressFinalPage, ImporterAddressPage, ImporterAddressTemporaryPage}
 import play.api.Logger
 import play.api.i18n.I18nSupport
@@ -67,7 +67,7 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val traderAddress: TraderAddress = request.userAnswers.get(ImporterAddressTemporaryPage).get
+    val traderAddress: ContactAddress = request.userAnswers.get(ImporterAddressTemporaryPage).get
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, traderAddress))),
       value => {

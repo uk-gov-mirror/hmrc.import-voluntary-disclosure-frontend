@@ -17,22 +17,22 @@
 package connectors.httpParsers
 
 import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
-import models.{ErrorModel, SubmissionResponse, TraderAddress}
+import models.{ErrorModel, SubmissionResponse, ContactAddress}
 import play.api.Logger
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object IVDSubmissionHttpParser {
 
-  implicit object TraderAddressReads extends HttpReads[HttpGetResult[TraderAddress]] {
+  implicit object TraderAddressReads extends HttpReads[HttpGetResult[ContactAddress]] {
 
     private val logger = Logger("application." + getClass.getCanonicalName)
 
-    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[TraderAddress] = {
+    override def read(method: String, url: String, response: HttpResponse): HttpGetResult[ContactAddress] = {
 
       response.status match {
         case Status.OK =>
-          response.json.validate[TraderAddress](TraderAddress.reads).fold(
+          response.json.validate[ContactAddress](ContactAddress.reads).fold(
             invalid => {
               logger.error("Failed to validate JSON with errors: " + invalid)
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from SUB09 API for TraderAddressHttpParser"))

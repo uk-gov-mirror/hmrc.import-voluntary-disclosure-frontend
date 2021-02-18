@@ -16,7 +16,7 @@
 
 package utils
 
-import models.TraderAddress
+import models.ContactAddress
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -25,8 +25,8 @@ trait ReusableValues {
 
   val idOne: String = "1"
 
-  val traderAddress: TraderAddress = TraderAddress("first", "second", Some("third"), "fourth")
-  val traderAddressWithoutPostcode: TraderAddress = TraderAddress("first", "second", Some("None"), "fourth")
+  val traderAddress: ContactAddress = ContactAddress("first", "second", Some("third"), "fourth")
+  val traderAddressWithoutPostcode: ContactAddress = ContactAddress("first", "second", Some("None"), "fourth")
 
   val errorModel: HttpResponse = HttpResponse(Status.NOT_FOUND, "Error Message")
 
