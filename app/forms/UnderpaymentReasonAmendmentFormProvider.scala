@@ -16,26 +16,21 @@
 
 package forms
 
-import config.AppConfig
 import models.UnderpaymentReasonValue
 import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms._
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.i18n.Messages
 
 class UnderpaymentReasonAmendmentFormProvider extends Mappings {
 
-  def apply(boxNumber: Int)(implicit messages: Messages, appConfig: AppConfig): Form[UnderpaymentReasonValue] = {
+  def apply(boxNumber: Int)(implicit messages: Messages): Form[UnderpaymentReasonValue] = {
     boxNumber match {
-      case 22 | 62 => foreignCurrencyFormMapping
-      case 33 => {
-        val regex = appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).regex
-        textFormMapping(regex)
-      }
-      case _ => { // TODO: Remove this when all box numbers added to story
-        val regex = appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).regex
-        textFormMapping(regex)
-      }
+      case 22 => foreignCurrencyFormMapping
+      case 33 => textFormMapping(regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)""")
+      case 62 => foreignCurrencyFormMapping
+      case _ => textFormMapping(regex = """^.*$""") // TODO: Remove this when all box numbers added to story
     }
   }
 
@@ -64,5 +59,15 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
         .verifying(different("amendmentValue.error.amended.different"))
     )
   }
+
+  private[forms] def different(errorKey: String): Constraint[UnderpaymentReasonValue] =
+    Constraint {
+      input =>
+        if (input.original != input.amended) {
+          Valid
+        } else {
+          Invalid(errorKey)
+        }
+    }
 
 }

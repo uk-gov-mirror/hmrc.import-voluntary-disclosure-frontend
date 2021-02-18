@@ -193,17 +193,4 @@ class ConstraintsSpec extends WordSpec with MustMatchers with Constraints {
     }
   }
 
-  "different" must {
-
-    lazy val diff = different("error.key")
-
-    "return Valid if strings is different" in {
-      diff(UnderpaymentReasonValue("Field1", "NotField1")) mustEqual Valid
-    }
-
-    "return Invalid for identical strings" in {
-      diff(UnderpaymentReasonValue("Field1", "Field1")) mustEqual Invalid("error.key")
-    }
-  }
-
 }

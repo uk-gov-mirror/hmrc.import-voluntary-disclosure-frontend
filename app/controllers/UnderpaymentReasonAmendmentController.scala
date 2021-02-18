@@ -16,12 +16,11 @@
 
 package controllers
 
-import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
 import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
 import play.api.data.{Form, FormError}
-import play.api.i18n.{I18nSupport, Messages}
+import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -38,14 +37,13 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
                                                       sessionRepository: SessionRepository,
                                                       mcc: MessagesControllerComponents,
                                                       formProvider: UnderpaymentReasonAmendmentFormProvider,
-                                                      textAmendmentView: TextAmendmentView,
-                                                      implicit val appConfig: AppConfig
+                                                      textAmendmentView: TextAmendmentView
                                    )
   extends FrontendController(mcc) with I18nSupport {
 
   private[controllers] def backLink(boxNumber: Int): Call = {
-    appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox).boxLevel match {
-      case "item" => controllers.routes.ItemNumberController.onLoad()
+    boxNumber match {
+      case 33|34|35|36|37|38|39|41|42|43|45|46 => controllers.routes.ItemNumberController.onLoad()
       case _ => controllers.routes.BoxNumberController.onLoad()
     }
   }
@@ -80,9 +78,11 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
     )
   }
 
-  def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_], messages: Messages) = {
-    appConfig.boxNumberTypes.getOrElse(boxNumber, appConfig.invalidBox) match {
-      case box if(box.boxType.equals("text")) => textAmendmentView(form, box, itemNumber, backLink(boxNumber))(request, messages)
+  private[controllers] def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_]) = {
+    boxNumber match {
+      case 22 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
+      case 33 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-20"))
+      case 62 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case _ => throw new RuntimeException("Invalid Box Number")
     }
   }

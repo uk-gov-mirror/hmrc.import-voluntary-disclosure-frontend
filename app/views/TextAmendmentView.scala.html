@@ -23,31 +23,31 @@
         inputText: components.inputText
 )
 
-@(form: Form[_], box: BoxType, itemNumber: Int, backLink: Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], boxNumber: Int, itemNumber: Int, backLink: Call, inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
 @bodyMessage=@{
-    if (messages(s"box${box.boxNumber}.pageBody").equals(s"box${box.boxNumber}.pageBody")) {
-        None
+    if (messages.isDefinedAt(s"box${boxNumber}.pageBody")) {
+        Some(messages(s"box${boxNumber}.pageBody"))
     } else {
-        Some(messages(s"box${box.boxNumber}.pageBody"))
+        None
     }
 }
 
     @layout(
-        pageTitle = messages(s"box${box.boxNumber}.pageTitle", itemNumber),
+        pageTitle = messages(s"box${boxNumber}.pageTitle", itemNumber),
         form = Some(form),
         customBackLinkUrl = Some(backLink)) {
 
         @errorSummary(form.errors)
 
-        @h1(messages(s"box${box.boxNumber}.pageHeader", itemNumber))
+        @h1(messages(s"box${boxNumber}.pageHeader", itemNumber))
 
         @bodyMessage.map{msg => @p{ @msg } }
 
-        @formHelper(action = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(box.boxNumber)) {
+        @formHelper(action = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)) {
             @inputText(form, "original", "original", messages("amendmentValue.originalAmount"), false,
-                classes = box.inputClass)
+                classes = inputClass)
             @inputText(form, "amended", "amended", messages("amendmentValue.amendedAmount"), false,
-                classes = box.inputClass)
+                classes = inputClass)
             @button("common.button.continue")
         }
     }

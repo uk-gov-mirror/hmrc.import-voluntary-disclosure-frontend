@@ -49,10 +49,9 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
       mockSessionRepository,
       messagesControllerComponents,
       form,
-      textAmendmentView,
-      appConfig
+      textAmendmentView
     )
-    private lazy val textAmendmentView = app.injector.instanceOf[TextAmendmentView]
+    lazy val textAmendmentView = app.injector.instanceOf[TextAmendmentView]
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
     val userAnswers: Option[UserAnswers] = Some(
       UserAnswers("some-cred-id")
@@ -64,7 +63,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
     val form: UnderpaymentReasonAmendmentFormProvider = formProvider
   }
 
-  "GET /" should {
+  "GET onLoad" should {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad(22)(fakeRequest)
       status(result) mustBe Status.OK
@@ -102,10 +101,9 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
 
   }
 
-  "POST /" when {
+  "POST onSubmit" when {
 
     "payload contains valid data" should {
-
       "return a SEE OTHER response when correct data is sent" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(22)(fakeRequestGenerator(fifty, sixtyFive))
         status(result) mustBe Status.SEE_OTHER
@@ -115,11 +113,9 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
         await(controller.onSubmit(22)(fakeRequestGenerator(fifty, sixtyFive)))
         verifyCalls()
       }
-
     }
 
     "payload contains invalid data" should {
-
       "return Ok form with errors when invalid data is sent" in new Test {
         val result: Future[Result] = controller.onSubmit(62)(fakeRequest)
         status(result) mustBe Status.BAD_REQUEST
@@ -147,7 +143,30 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
         val result: RuntimeException = intercept[RuntimeException](await(controller.onSubmit(0)(fakeRequest)))
         assert(result.getMessage.contains("Invalid Box Number"))
       }
+    }
 
+  }
+
+  "routeToView" when {
+    def checkRoute(boxNumber: Int, itemNumber: Int, back: Call, expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
+      s"route for box ${boxNumber}" in new Test {
+        val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
+        result mustBe textAmendmentView(form.apply(boxNumber), boxNumber, itemNumber, back, inputClass = expectedInputClass)(fakeRequest, messages)
+      }
+    }
+
+    "called with entry level box 22" should {checkRoute(22, 0, controllers.routes.BoxNumberController.onLoad())}
+    "called with entry level box 62" should {checkRoute(62, 0, controllers.routes.BoxNumberController.onLoad())}
+
+    "called with item level box 33" should {checkRoute(33, 1, controllers.routes.ItemNumberController.onLoad(), Some("govuk-input--width-20"))}
+
+    "called with an invalid box number" should {
+        s"route for box 0" in new Test {
+          val result = intercept[RuntimeException](
+            controller.routeToView(0, 1, form.apply(0))(fakeRequest)
+          )
+          assert(result.getMessage.contains("Invalid Box Number"))
+        }
     }
 
   }
