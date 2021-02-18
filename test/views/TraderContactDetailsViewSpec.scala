@@ -19,7 +19,7 @@ package views
 import base.ViewBaseSpec
 import forms.TraderContactDetailsFormProvider
 import messages.{BaseMessages, TraderContactDetailsMessages}
-import models.TraderContactDetails
+import models.ContactDetails
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
@@ -35,7 +35,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
   "Rendering the TraderContactDetails page" when {
     "no errors exist" should {
 
-      val form: Form[TraderContactDetails] = formProvider.apply()
+      val form: Form[ContactDetails] = formProvider.apply()
       lazy val view: Html = injectedView(form)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -53,7 +53,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (no values have been entered)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "",
           "email" -> "",
@@ -94,7 +94,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (no value have been entered for full name)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "",
           "email" -> "email@email.com",
@@ -119,7 +119,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (no value have been entered for email)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "first second",
           "email" -> "",
@@ -144,7 +144,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (no value have been entered for phone number)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "first second",
           "email" -> "email@email.com",
@@ -169,7 +169,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (full name entered too short)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "a",
           "email" -> "email@email.com",
@@ -194,7 +194,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (full name entered too long)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
           "email" -> "email@email.com",
@@ -219,7 +219,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (full name entered format invalid)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "first second*",
           "email" -> "email@email.com",
@@ -244,7 +244,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (email address entered format invalid)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "first second",
           "email" -> "email",
@@ -269,7 +269,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "an error exists (phone number entered format invalid)" should {
-      lazy val form: Form[TraderContactDetails] = formProvider().bind(
+      lazy val form: Form[ContactDetails] = formProvider().bind(
         Map(
           "fullName" -> "first second",
           "email" -> "email@email.com",
@@ -297,7 +297,7 @@ class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
 
   it should {
 
-    val form: Form[TraderContactDetails] = formProvider.apply()
+    val form: Form[ContactDetails] = formProvider.apply()
     lazy val view: Html = injectedView(form)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

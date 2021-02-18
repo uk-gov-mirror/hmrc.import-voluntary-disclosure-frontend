@@ -31,7 +31,7 @@ class IVDSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
 
   "Importer Address Connector" should {
 
-    def getAddressResult(): Future[HttpGetResult[TraderAddress]] = Connector.getAddress(idOne)
+    def getAddressResult(): Future[HttpGetResult[ContactAddress]] = Connector.getAddress(idOne)
 
     "return the Right response" in {
       setupMockHttpGet(Connector.getAddressUrl(idOne))(Right(traderAddress))
@@ -55,7 +55,7 @@ class IVDSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
       entryDetails = EntryDetails("123", "123456Q", LocalDate.of(2020, 1, 12)),
       originalCpc = "cpc",
       amendedCpc = None,
-      traderContactDetails = TraderContactDetails("name", "email", "phone"),
+      traderContactDetails = ContactDetails("name", "email", "phone"),
       traderAddress = traderAddress,
       defermentType = None,
       defermentAccountNumber = None,

@@ -23,7 +23,7 @@
         yesNoRadio: components.yesNoRadio
 )
 
-@(form: Form[_], traderAddress: TraderAddress)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], traderAddress: ContactAddress)(implicit request: Request[_], messages: Messages)
 
     @layout(
         pageTitle = messages("importerAddress.pageTitle"),

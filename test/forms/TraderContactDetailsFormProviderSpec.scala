@@ -18,7 +18,7 @@ package forms
 
 import base.SpecBase
 import mocks.config.MockAppConfig
-import models.TraderContactDetails
+import models.ContactDetails
 import play.api.data.{Form, FormError}
 
 class TraderContactDetailsFormProviderSpec extends SpecBase {
@@ -47,7 +47,7 @@ class TraderContactDetailsFormProviderSpec extends SpecBase {
     "phoneNumber" -> phoneNumber
   )
 
-  def formBinder(formValues: Map[String, String] = Map(fullName -> "", email -> "", phoneNumber -> "")): Form[TraderContactDetails] =
+  def formBinder(formValues: Map[String, String] = Map(fullName -> "", email -> "", phoneNumber -> "")): Form[ContactDetails] =
     new TraderContactDetailsFormProvider()(MockAppConfig).apply().bind(formValues)
 
   "Binding a form with invalid data" when {
@@ -133,14 +133,14 @@ class TraderContactDetailsFormProviderSpec extends SpecBase {
     }
 
     "generate the correct model" in {
-      form.value mustBe Some(TraderContactDetails(exampleName, exampleEmail, examplePhoneNumber))
+      form.value mustBe Some(ContactDetails(exampleName, exampleEmail, examplePhoneNumber))
     }
 
   }
 
   "A form built from a valid model" should {
     "generate the correct mapping" in {
-      val model = TraderContactDetails(exampleName, exampleEmail, examplePhoneNumber)
+      val model = ContactDetails(exampleName, exampleEmail, examplePhoneNumber)
       val form = new TraderContactDetailsFormProvider()(MockAppConfig).apply().fill(model)
       form.data mustBe formBuilder("First Second", "email@email.com", "0123456789")
     }

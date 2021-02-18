@@ -17,7 +17,7 @@
 package mocks.services
 
 import base.SpecBase
-import models.{ErrorModel, TraderAddress}
+import models.{ErrorModel, ContactAddress}
 import org.scalamock.scalatest.MockFactory
 import services.ImporterAddressService
 import uk.gov.hmrc.http.HeaderCarrier
@@ -28,7 +28,7 @@ trait MockImporterAddressService extends SpecBase with MockFactory{
 
   val mockImporterAddressService: ImporterAddressService = mock[ImporterAddressService]
 
-  type RetrieveAddressResponse = Either[ErrorModel, TraderAddress]
+  type RetrieveAddressResponse = Either[ErrorModel, ContactAddress]
 
   def setupMockRetrieveAddress(response: RetrieveAddressResponse): Unit  = {
     (mockImporterAddressService.retrieveAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))

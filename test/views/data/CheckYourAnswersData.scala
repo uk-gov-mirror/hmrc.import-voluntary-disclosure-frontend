@@ -17,7 +17,7 @@
 package views.data
 
 import messages.CYAMessages
-import models.TraderAddress
+import models.ContactAddress
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -34,7 +34,7 @@ object CheckYourAnswersData {
   val fullName = "First Second"
   val email = "email@email.com"
   val phone = "1234567890"
-  val traderAddress = TraderAddress("21 Street", "London", Some("SN6PY"), "UK")
+  val traderAddress = ContactAddress("21 Street", "London", Some("SN6PY"), "UK")
   val numberOfEntries = "One"
   val epu = "123"
   val entryNumber = "123456Q"
@@ -361,7 +361,7 @@ object CheckYourAnswersData {
     defermentAnswers
   )
 
-  def buildAddress(address: TraderAddress) =
+  def buildAddress(address: ContactAddress) =
     address.postalCode match {
       case Some(value) => address.streetAndNumber + "<br/>" +
         address.city + "<br/>" +

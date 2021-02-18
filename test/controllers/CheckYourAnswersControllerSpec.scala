@@ -37,7 +37,7 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.connectors.MockIVDSubmissionConnector
 import mocks.repositories.MockSessionRepository
-import models.{EntryDetails, ErrorModel, FileUploadInfo, NumberOfEntries, SubmissionResponse, TraderAddress, TraderContactDetails, UserAnswers, UserType}
+import models.{EntryDetails, ErrorModel, FileUploadInfo, NumberOfEntries, SubmissionResponse, ContactAddress, ContactDetails, UserAnswers, UserType}
 import pages._
 import play.api.http.Status
 import play.api.mvc.Result
@@ -72,11 +72,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         LocalDateTime.now,
         "396f101dd52e8b2ace0dcf5ed09b1d1f030e608938510ce46e7a5c7a4e775100",
         "application/pdf"))).success.value
-      .set(TraderContactDetailsPage,TraderContactDetails(
+      .set(TraderContactDetailsPage,ContactDetails(
         "f",
         "fefewfew@gmail.com",
         "07485939292")).success.value
-      .set(ImporterAddressFinalPage,TraderAddress(
+      .set(ImporterAddressFinalPage,ContactAddress(
         "street", "city", Some("postcode"), "country code")).success.value
       .set(EnterCustomsProcedureCodePage,"3333333").success.value
       .set(DefermentPage,true).success.value

@@ -19,7 +19,7 @@ package viewmodels
 import java.time.LocalDateTime
 
 import base.SpecBase
-import models.{EntryDetails, FileUploadInfo, NumberOfEntries, TraderAddress, TraderContactDetails, UserAnswers}
+import models.{EntryDetails, FileUploadInfo, NumberOfEntries, ContactAddress, ContactDetails, UserAnswers}
 import org.scalatest.{MustMatchers, OptionValues, TryValues}
 import pages._
 import views.data.CheckYourAnswersData._
@@ -44,11 +44,11 @@ class CYASummaryListHelperSpec extends SpecBase with MustMatchers with TryValues
         LocalDateTime.now,
         "396f101dd52e8b2ace0dcf5ed09b1d1f030e608938510ce46e7a5c7a4e775100",
         "application/pdf"))).success.value
-      .set(TraderContactDetailsPage, TraderContactDetails(
+      .set(TraderContactDetailsPage, ContactDetails(
         "First Second",
         "email@email.com",
         "1234567890")).success.value
-      .set(ImporterAddressFinalPage, TraderAddress("21 Street", "London", Some("SN6PY"), "UK")).success.value
+      .set(ImporterAddressFinalPage, ContactAddress("21 Street", "London", Some("SN6PY"), "UK")).success.value
       .set(EnterCustomsProcedureCodePage, "4000C09").success.value
       .set(CPCChangedPage, false).success.value
       .set(DefermentPage, false).success.value

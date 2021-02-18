@@ -18,7 +18,7 @@ package forms
 
 import config.AppConfig
 import forms.mappings.Mappings
-import models.TraderContactDetails
+import models.ContactDetails
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.i18n.Messages
@@ -32,7 +32,7 @@ class TraderContactDetailsFormProvider @Inject()(implicit appConfig: AppConfig) 
   val phoneNumberRegex = "^(\\+)?[0-9 ]{1,15}$"
   val emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 
-  def apply()(implicit messages: Messages): Form[TraderContactDetails] =
+  def apply()(implicit messages: Messages): Form[ContactDetails] =
     Form(
       mapping(
         "fullName" -> text("traderContactDetails.error.nameNonEmpty")
@@ -53,7 +53,7 @@ class TraderContactDetailsFormProvider @Inject()(implicit appConfig: AppConfig) 
               "traderContactDetails.error.phoneNumberInvalidFormat"
             )
           )
-      )(TraderContactDetails.apply)(TraderContactDetails.unapply)
+      )(ContactDetails.apply)(ContactDetails.unapply)
     )
 
 }

@@ -16,10 +16,10 @@
 
 package pages
 
-import models.TraderAddress
+import models.ContactAddress
 import play.api.libs.json.JsPath
 
-case object ImporterAddressFinalPage extends QuestionPage[TraderAddress] {
+case object ImporterAddressFinalPage extends QuestionPage[ContactAddress] {
 
   def path: JsPath = JsPath \ toString
 

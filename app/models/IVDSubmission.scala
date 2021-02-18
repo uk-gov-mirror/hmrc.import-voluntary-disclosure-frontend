@@ -19,21 +19,21 @@ package models
 import play.api.libs.json.{Json, Reads, __}
 
 case class IVDSubmission(
-                        userType: UserType,
-                        numEntries: NumberOfEntries,
-                        acceptanceDate: Option[Boolean],
-                        additionalInfo: Option[String] = Some("Not Applicable"), // TODO: Not implemented yet. Maps to amendmentReason
-                        entryDetails: EntryDetails,
-                        originalCpc: String,
-                        amendedCpc: Option[String] = None, // TODO: Not yet implemented
-                        traderContactDetails: TraderContactDetails, // TODO: This should be Declarant details
-                        traderAddress: TraderAddress,
-                        defermentType: Option[String] = None, // TODO: Not captured yet
-                        defermentAccountNumber: Option[String] = None, // TODO: Not captured yet
-                        additionalDefermentNumber: Option[String] = None, // TODO: Not captured yet
-                        underpaymentReasons: Option[Seq[UnderpaymentReason]] = None, // TODO: Not captured yet (box changes)
-                        underpaymentDetails: Option[Seq[UnderpaymentDetail]] = None, // TODO: Other duties will need to be refactored into this
-                        documentList: Option[Seq[String]] = None // TODO: List of documents the user claims to have uploaded (not the actual docs)
+                          userType: UserType,
+                          numEntries: NumberOfEntries,
+                          acceptanceDate: Option[Boolean],
+                          additionalInfo: Option[String] = Some("Not Applicable"), // TODO: Not implemented yet. Maps to amendmentReason
+                          entryDetails: EntryDetails,
+                          originalCpc: String,
+                          amendedCpc: Option[String] = None, // TODO: Not yet implemented
+                          traderContactDetails: ContactDetails, // TODO: This should be Declarant details
+                          traderAddress: ContactAddress,
+                          defermentType: Option[String] = None, // TODO: Not captured yet
+                          defermentAccountNumber: Option[String] = None, // TODO: Not captured yet
+                          additionalDefermentNumber: Option[String] = None, // TODO: Not captured yet
+                          underpaymentReasons: Option[Seq[UnderpaymentReason]] = None, // TODO: Not captured yet (box changes)
+                          underpaymentDetails: Option[Seq[UnderpaymentDetail]] = None, // TODO: Other duties will need to be refactored into this
+                          documentList: Option[Seq[String]] = None // TODO: List of documents the user claims to have uploaded (not the actual docs)
                         )
 
 object IVDSubmission {
@@ -46,8 +46,8 @@ object IVDSubmission {
       acceptanceDate <- (__ \ "acceptance-date").readNullable[Boolean]
       entryDetails <- (__ \ "entry-details").read[EntryDetails]
       originalCpc <- (__ \ "cpc" \ "original-cpc").read[String]
-      traderContactDetails <- (__ \ "trader-contact-details").read[TraderContactDetails]
-      traderAddress <- (__ \ "final-importer-address").read[TraderAddress]
+      traderContactDetails <- (__ \ "trader-contact-details").read[ContactDetails]
+      traderAddress <- (__ \ "final-importer-address").read[ContactAddress]
       customsDuty <- (__ \ "customs-duty").readNullable[UnderpaymentAmount]
       importVat <- (__ \ "import-vat").readNullable[UnderpaymentAmount]
       exciseDuty <- (__ \ "excise-duty").readNullable[UnderpaymentAmount]

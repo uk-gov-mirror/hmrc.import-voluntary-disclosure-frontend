@@ -18,19 +18,19 @@ package models
 
 import play.api.libs.json.{Format, Json, Reads, _}
 
-case class TraderAddress(streetAndNumber: String, city: String, postalCode: Option[String], countryCode: String)
+case class ContactAddress(streetAndNumber: String, city: String, postalCode: Option[String], countryCode: String)
 
-object TraderAddress {
+object ContactAddress {
 
-  implicit val reads: Reads[TraderAddress] = for {
+  implicit val reads: Reads[ContactAddress] = for {
     streetAndNumber <- (__ \\ "streetAndNumber").read[String]
     city <- (__ \\ "city").read[String]
     postalCode <- (__ \\ "postalCode").readNullable[String]
     countryCode <- (__ \\ "countryCode").read[String]
   } yield {
-    TraderAddress(streetAndNumber, city, postalCode, countryCode)
+    ContactAddress(streetAndNumber, city, postalCode, countryCode)
   }
 
-  implicit val format: Format[TraderAddress] = Json.format[TraderAddress]
+  implicit val format: Format[ContactAddress] = Json.format[ContactAddress]
 
 }
