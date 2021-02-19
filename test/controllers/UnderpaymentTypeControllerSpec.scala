@@ -77,10 +77,6 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
-
-    "should redirect the back button to Customs Procedure Code page" in new Test {
-      controller.backLink mustBe Call("GET", controllers.routes.CustomsProcedureCodeController.onLoad().toString)
-    }
   }
 
   "POST /" when {

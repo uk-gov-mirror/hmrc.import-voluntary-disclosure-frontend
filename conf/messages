@@ -156,11 +156,6 @@ enterCustomsProcedureCode.pageHeader = What is the customs procedure code?
 enterCustomsProcedureCode.cpc.error.required = Enter the customs procedure code
 enterCustomsProcedureCode.cpc.error.format = Enter the customs procedure code in the correct format like 4800003 or 4000C09
 
-# Customs Procedure Code page
-customsProcedureCode.pageTitle = Has the customs procedure code changed?
-customsProcedureCode.heading = Has the customs procedure code changed?
-customsProcedureCode.error.required = Select yes if the customs procedure code has changed
-
 # Upload File page
 uploadFile.pageTitle = Upload supporting documentation
 uploadFile.pageHeader = Upload supporting documentation

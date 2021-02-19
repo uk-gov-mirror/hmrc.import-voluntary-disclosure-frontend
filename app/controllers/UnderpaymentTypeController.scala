@@ -42,6 +42,8 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
                                           )
   extends FrontendController(mcc) with I18nSupport {
 
+  private val backLink: Call = controllers.routes.EnterCustomsProcedureCodeController.onLoad()
+
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     Future.successful(
       Ok(
@@ -83,7 +85,4 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
       }
     )
   }
-
-  private[controllers] def backLink: Call = Call("GET",controllers.routes.CustomsProcedureCodeController.onLoad().url)
-
 }

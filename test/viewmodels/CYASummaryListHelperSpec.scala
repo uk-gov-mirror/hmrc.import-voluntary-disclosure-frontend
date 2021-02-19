@@ -50,7 +50,6 @@ class CYASummaryListHelperSpec extends SpecBase with MustMatchers with TryValues
         "1234567890")).success.value
       .set(ImporterAddressFinalPage, ContactAddress("21 Street", "London", Some("SN6PY"), "UK")).success.value
       .set(EnterCustomsProcedureCodePage, "4000C09").success.value
-      .set(CPCChangedPage, false).success.value
       .set(DefermentPage, false).success.value
 
   }

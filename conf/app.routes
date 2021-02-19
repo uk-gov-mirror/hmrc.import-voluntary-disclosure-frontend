@@ -25,9 +25,6 @@ POST        /disclosure/entry-details                                  controlle
 GET         /disclosure/when-entry-acceptance-date                     controllers.AcceptanceDateController.onLoad
 POST        /disclosure/when-entry-acceptance-date                     controllers.AcceptanceDateController.onSubmit
 
-GET         /disclosure/has-cpc-changed                                controllers.CustomsProcedureCodeController.onLoad
-POST        /disclosure/has-cpc-changed                                controllers.CustomsProcedureCodeController.onSubmit
-
 GET         /disclosure/what-duty-type-underpaid                       controllers.UnderpaymentTypeController.onLoad
 POST        /disclosure/what-duty-type-underpaid                       controllers.UnderpaymentTypeController.onSubmit
 
