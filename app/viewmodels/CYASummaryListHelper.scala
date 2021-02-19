@@ -246,47 +246,6 @@ trait CYASummaryListHelper {
       )
     }
 
-    val customProcedureCodeChangedSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(CPCChangedPage) map { customsProcedure =>
-      val cpcChanged = if (customsProcedure) messages("site.yes") else messages("site.no")
-      Seq(
-        SummaryListRow(
-          key = Key(
-            content = Text(messages("cya.cpcChange")),
-            classes = "govuk-!-width-two-thirds"
-          ),
-          value = Value(
-            content = HtmlContent(cpcChanged)
-          ),
-          actions = Some(Actions(
-            items = Seq(
-              ActionItem("Url", Text(messages("cya.change")))
-            )
-          )
-          )
-        )
-      )
-    }
-
-//    val amendedCustomsProcedureCodeSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(AmendCustomsProcedureCodePage) map { newCustomsProcedure =>
-//      Seq(
-//        SummaryListRow(
-//          key = Key(
-//            content = Text(messages("cya.newCustomsProcedure")),
-//            classes = "govuk-!-width-two-thirds"
-//          ),
-//          value = Value(
-//            content = HtmlContent(newCustomsProcedure)
-//          ),
-//          actions = Some(Actions(
-//            items = Seq(
-//              ActionItem("Url", Text(messages("cya.change")))
-//            )
-//          )
-//          )
-//        )
-//      )
-//    }
-
 //    val numberOfAmendmentsSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(numberOfAmendmentsPage) map { numberOfAmendments =>
 //      Seq(
 //        SummaryListRow(
@@ -327,9 +286,7 @@ trait CYASummaryListHelper {
 //  )
 //}
 
-    val rows = customProcedureCodeSummaryListRow.getOrElse(Seq.empty) ++
-      customProcedureCodeChangedSummaryListRow.getOrElse(Seq.empty)
-//      AmendedCustomsProcedureCodeSummaryListRow.getOrElse(Seq.empty) ++
+    val rows = customProcedureCodeSummaryListRow.getOrElse(Seq.empty)
 //      numberOfAmendmentsSummaryListRow.getOrElse(Seq.empty) ++
 //      supportingInformationSummaryListRow.getOrElse(Seq.empty)
 

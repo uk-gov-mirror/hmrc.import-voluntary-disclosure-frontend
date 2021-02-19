@@ -130,7 +130,6 @@ trait IVDSubmissionTestData extends BaseMessages {
       |            }
       |        ],
       |        "cpc" : {
-      |            "cpc-changed" : false,
       |            "original-cpc" : "4000C09"
       |        },
       |        "underpaymentType" : {
