@@ -16,16 +16,16 @@
 
 package mocks.connectors
 
-import connectors.IVDSubmissionConnector
-import models.{ErrorModel, IVDSubmission, SubmissionResponse, ContactAddress}
+import connectors.IvdSubmissionConnector
+import models.{ErrorModel, IvdSubmission, SubmissionResponse, ContactAddress}
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockIVDSubmissionConnector extends MockFactory {
+trait MockIvdSubmissionConnector extends MockFactory {
 
-  val mockIVDSubmissionConnector: IVDSubmissionConnector = mock[IVDSubmissionConnector]
+  val mockIVDSubmissionConnector: IvdSubmissionConnector = mock[IvdSubmissionConnector]
 
   type TraderAddressResponse = Either[ErrorModel, ContactAddress]
 
@@ -36,7 +36,7 @@ trait MockIVDSubmissionConnector extends MockFactory {
   }
 
   def setupMockPostSubmission(response: Either[ErrorModel, SubmissionResponse]): Unit = {
-    (mockIVDSubmissionConnector.postSubmission(_: IVDSubmission)(_: HeaderCarrier, _: ExecutionContext))
+    (mockIVDSubmissionConnector.postSubmission(_: IvdSubmission)(_: HeaderCarrier, _: ExecutionContext))
       .expects(*, *, *)
       .returns(Future.successful(response))
   }

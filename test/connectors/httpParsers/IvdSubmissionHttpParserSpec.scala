@@ -17,14 +17,14 @@
 package connectors.httpParsers
 
 import base.SpecBase
-import connectors.httpParsers.IVDSubmissionHttpParser.{SubmissionResponseReads, TraderAddressReads}
+import connectors.httpParsers.IvdSubmissionHttpParser.{SubmissionResponseReads, TraderAddressReads}
 import models.{ErrorModel, SubmissionResponse}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
 import utils.ReusableValues
 
-class IVDSubmissionHttpParserSpec extends SpecBase with ReusableValues {
+class IvdSubmissionHttpParserSpec extends SpecBase with ReusableValues {
 
   val traderAddressJsonWithoutPostcode: JsObject = Json.obj(
     "streetAndNumber" -> "first",

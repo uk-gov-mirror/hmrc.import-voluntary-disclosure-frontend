@@ -17,11 +17,11 @@
 package services
 
 import base.SpecBase
-import mocks.connectors.MockIVDSubmissionConnector
+import mocks.connectors.MockIvdSubmissionConnector
 import utils.ReusableValues
 
 
-class ImporterAddressServiceSpec extends SpecBase with MockIVDSubmissionConnector with ReusableValues {
+class ImporterAddressServiceSpec extends SpecBase with MockIvdSubmissionConnector with ReusableValues {
 
   def setup(traderAddressResponse: TraderAddressResponse): ImporterAddressService = {
     setupMockGetAddress(traderAddressResponse)

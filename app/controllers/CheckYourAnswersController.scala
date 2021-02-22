@@ -16,9 +16,9 @@
 
 package controllers
 
-import connectors.IVDSubmissionConnector
+import connectors.IvdSubmissionConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.IVDSubmission
+import models.IvdSubmission
 import play.api.i18n.I18nSupport
 import play.api.libs.json.{JsError, JsSuccess, Json}
 import play.api.mvc._
@@ -34,7 +34,7 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
                                            getData: DataRetrievalAction,
                                            requireData: DataRequiredAction,
                                            mcc: MessagesControllerComponents,
-                                           ivdSubmissionConnector: IVDSubmissionConnector,
+                                           ivdSubmissionConnector: IvdSubmissionConnector,
                                            view: CheckYourAnswersView,
                                            confirmationView: ConfirmationView,
                                            implicit val ec: ExecutionContext)
@@ -54,7 +54,7 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    Json.fromJson[IVDSubmission](request.userAnswers.data) match {
+    Json.fromJson[IvdSubmission](request.userAnswers.data) match {
       case JsSuccess(submission, _) => {
         ivdSubmissionConnector.postSubmission(submission).flatMap {
           case Right(value) => Future.successful(Ok(confirmationView(value.id)))

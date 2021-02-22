@@ -18,15 +18,15 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
-import connectors.httpParsers.IVDSubmissionHttpParser._
-import models.{IVDSubmission, SubmissionResponse, ContactAddress}
+import connectors.httpParsers.IvdSubmissionHttpParser._
+import models.{IvdSubmission, SubmissionResponse, ContactAddress}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IVDSubmissionConnector @Inject()(val http: HttpClient,
+class IvdSubmissionConnector @Inject()(val http: HttpClient,
                                        implicit val config: AppConfig){
 
   private[connectors] def getAddressUrl(id: String) = s"${config.importVoluntaryDisclosureSubmission}/api/address?id=$id"
@@ -36,8 +36,8 @@ class IVDSubmissionConnector @Inject()(val http: HttpClient,
     http.GET[HttpGetResult[ContactAddress]](getAddressUrl(id))
   }
 
-  def postSubmission(submission: IVDSubmission)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[SubmissionResponse]] = {
-    http.POST[IVDSubmission, HttpPostResult[SubmissionResponse]](postSubmissionUrl, submission)
+  def postSubmission(submission: IvdSubmission)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[SubmissionResponse]] = {
+    http.POST[IvdSubmission, HttpPostResult[SubmissionResponse]](postSubmissionUrl, submission)
   }
 
 }

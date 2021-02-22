@@ -17,59 +17,51 @@
 package connectors
 
 import base.SpecBase
-import connectors.httpParsers.ResponseHttpParser.HttpGetResult
 import mocks.MockHttp
 import models._
 import utils.ReusableValues
 
 import java.time.LocalDate
-import scala.concurrent.Future
 
-class IVDSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableValues {
+class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableValues {
 
-  object Connector extends IVDSubmissionConnector(mockHttp, appConfig)
+  lazy val target = new IvdSubmissionConnector(mockHttp, appConfig)
 
   "Importer Address Connector" should {
 
-    def getAddressResult(): Future[HttpGetResult[ContactAddress]] = Connector.getAddress(idOne)
-
     "return the Right response" in {
-      setupMockHttpGet(Connector.getAddressUrl(idOne))(Right(traderAddress))
-      await(getAddressResult()) mustBe Right(traderAddress)
+      setupMockHttpGet(target.getAddressUrl(idOne))(Right(traderAddress))
+      await(target.getAddress(idOne)) mustBe Right(traderAddress)
     }
 
     "return the error response" in {
-      setupMockHttpGet(Connector.getAddressUrl(idOne))(Left(errorModel))
-      await(getAddressResult()) mustBe Left(errorModel)
+      setupMockHttpGet(target.getAddressUrl(idOne))(Left(errorModel))
+      await(target.getAddress(idOne)) mustBe Left(errorModel)
     }
 
   }
 
   "called to post the Submission" should {
 
-    val submission = IVDSubmission(
+    val submission = IvdSubmission(
       userType = UserType.Importer,
       numEntries = NumberOfEntries.OneEntry,
-      acceptanceDate = None,
+      acceptedBeforeBrexit = false,
       additionalInfo = None,
-      entryDetails = EntryDetails("123", "123456Q", LocalDate.of(2020, 1, 12)),
+      entryDetails = EntryDetails("123", "123456Q", LocalDate.parse("2020-01-12")),
       originalCpc = "cpc",
-      amendedCpc = None,
-      traderContactDetails = ContactDetails("name", "email", "phone"),
-      traderAddress = traderAddress,
+      declarantContactDetails = ContactDetails("name", "email", "phone"),
+      declarantAddress = traderAddress,
       defermentType = None,
       defermentAccountNumber = None,
-      additionalDefermentNumber = None,
-      underpaymentReasons = None,
-      underpaymentDetails = None,
-      documentList = None
+      additionalDefermentNumber = None
     )
 
     val submissionResponse = SubmissionResponse("1234")
 
     "return the Right response" in {
-      setupMockHttpPost(Connector.postSubmissionUrl)(Right(submissionResponse))
-      await(Connector.postSubmission(submission)) mustBe Right(submissionResponse)
+      setupMockHttpPost(target.postSubmissionUrl)(Right(submissionResponse))
+      await(target.postSubmission(submission)) mustBe Right(submissionResponse)
     }
   }
 

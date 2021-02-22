@@ -22,7 +22,7 @@ import play.api.Logger
 import play.api.http.Status
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
-object IVDSubmissionHttpParser {
+object IvdSubmissionHttpParser {
 
   implicit object TraderAddressReads extends HttpReads[HttpGetResult[ContactAddress]] {
 

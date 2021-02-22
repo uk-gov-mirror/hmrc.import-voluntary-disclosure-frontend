@@ -14,27 +14,8 @@
  * limitations under the License.
  */
 
-package models
+package base
 
-import assets.IVDSubmissionTestData
-import base.SpecBase
-import play.api.libs.json.Json
+import org.scalatest.{Matchers, WordSpec}
 
-class IVDSubmissionSpec extends SpecBase with IVDSubmissionTestData {
-
-  "IVD Submission model" when {
-    "converting from a user answers" should {
-      "produce a valid model" in {
-        val result = Json.fromJson[IVDSubmission](userAnswersJson).get
-        result mustBe ivdSubmission
-      }
-    }
-    "serialising a model" should {
-      "produce valid json" in {
-        val result = Json.toJson(ivdSubmission)
-        result mustBe ivdSubmissionJson
-      }
-    }
-  }
-
-}
+trait ModelSpecBase extends WordSpec with Matchers

@@ -35,7 +35,7 @@ package controllers
 import java.time.{LocalDate, LocalDateTime}
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import mocks.connectors.MockIVDSubmissionConnector
+import mocks.connectors.MockIvdSubmissionConnector
 import mocks.repositories.MockSessionRepository
 import models.{EntryDetails, ErrorModel, FileUploadInfo, NumberOfEntries, SubmissionResponse, ContactAddress, ContactDetails, UserAnswers, UserType}
 import pages._
@@ -50,7 +50,7 @@ import scala.concurrent.Future
 
 class CheckYourAnswersControllerSpec extends ControllerSpecBase {
 
-  trait Test extends MockSessionRepository with MockIVDSubmissionConnector {
+  trait Test extends MockSessionRepository with MockIvdSubmissionConnector {
 
     private def setupConnectorMock(response: Either[ErrorModel, SubmissionResponse]) = {
       setupMockPostSubmission(response)

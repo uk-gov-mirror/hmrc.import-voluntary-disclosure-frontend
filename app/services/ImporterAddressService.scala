@@ -17,7 +17,7 @@
 package services
 
 import config.AppConfig
-import connectors.IVDSubmissionConnector
+import connectors.IvdSubmissionConnector
 import javax.inject.{Inject, Singleton}
 import models.{ErrorModel, ContactAddress}
 import play.api.i18n.MessagesApi
@@ -26,7 +26,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ImporterAddressService @Inject()(ivdSubmissionConnector: IVDSubmissionConnector,
+class ImporterAddressService @Inject()(ivdSubmissionConnector: IvdSubmissionConnector,
                                        implicit val messagesApi: MessagesApi,
                                        implicit val appConfig: AppConfig) {
 
