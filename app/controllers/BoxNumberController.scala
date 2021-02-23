@@ -18,14 +18,14 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.BoxNumberFormProvider
-import pages.UnderpaymentReasonBoxNumberPage
+import javax.inject.{Inject, Singleton}
+import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.BoxNumberView
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -53,17 +53,33 @@ class BoxNumberController @Inject()(identity: IdentifierAction,
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonBoxNumberPage, value))
-          _ <- sessionRepository.set(updatedAnswers)
-        } yield {
-          value match {
-            case 22|62|63|66|67|68 => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(value))
-            case _ => Redirect(controllers.routes.ItemNumberController.onLoad())
-          }
+        request.userAnswers.get(UnderpaymentReasonBoxNumberPage) match {
+          case Some(oldValue) if oldValue != value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonBoxNumberPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(UnderpaymentReasonItemNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(UnderpaymentReasonAmendmentPage))
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield {
+              navigateTo(value)
+            }
+          case _ =>
+            for {
+              updatedAnswers <- Future.fromTry (request.userAnswers.set (UnderpaymentReasonBoxNumberPage, value) )
+              _ <- sessionRepository.set (updatedAnswers)
+            } yield {
+              navigateTo(value)
+            }
         }
       }
     )
+  }
+
+  private[controllers] def navigateTo(value: Int) = {
+    value match {
+      case 22 | 62 | 63 | 66 | 67 | 68 => Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(value))
+      case _ => Redirect(controllers.routes.ItemNumberController.onLoad())
+    }
   }
 
 }

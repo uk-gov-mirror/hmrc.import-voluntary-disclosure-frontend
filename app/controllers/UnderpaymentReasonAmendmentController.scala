@@ -72,7 +72,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
           updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonAmendmentPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(boxNumber))
+          Redirect(controllers.routes.ConfirmReasonDetailController.onLoad())
         }
       }
     )

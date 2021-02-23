@@ -101,7 +101,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
       "return a SEE OTHER response when correct data is sent" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(22)(fakeRequestGenerator(fifty, sixtyFive))
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(22).url)
+        redirectLocation(result) mustBe Some(controllers.routes.ConfirmReasonDetailController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
