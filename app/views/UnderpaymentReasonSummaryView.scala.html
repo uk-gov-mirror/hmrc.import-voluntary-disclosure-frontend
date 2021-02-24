@@ -1,0 +1,66 @@
+@*
+* Copyright 2021 HM Revenue & Customs
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+* http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*@
+@this(layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        h1: components.h1,
+        errorSummary: components.errorSummary,
+        yesNoRadio: components.yesNoRadio,
+        button: components.button,
+        govukSummaryList: GovukSummaryList
+)
+
+@(form: Form[_], backLink: Call, summaryList: Option[SummaryList])(implicit request: Request[_], messages: Messages)
+
+@titleAndHeader = {
+@summaryList.map { sl =>
+    @if(sl.rows.size == 1) {
+        @messages("underpaymentReasonSummary.pageHeaderSingleReason")
+    } else {
+        @messages("underpaymentReasonSummary.pageHeader", sl.rows.size)
+    }
+}
+}
+
+@layout(
+    form = Some(form),
+    pageTitle = titleAndHeader,
+    customBackLinkUrl = Some(backLink)
+) {
+
+    @errorSummary(form.errors)
+
+    @h1(titleAndHeader)
+
+    @if(summaryList.isDefined) {
+        @govukSummaryList(summaryList.get)
+    }
+
+    @formHelper(action = controllers.routes.UnderpaymentReasonSummaryController.onSubmit()) {
+        @yesNoRadio(
+            form,
+            headingKey = "underpaymentReasonSummary.radioMessage",
+            inline = true,
+            isPageHeading = false,
+            classes = "govuk-fieldset__legend govuk-fieldset__legend--m"
+        )
+        @button("common.button.continue")
+    }
+
+}
+
+@{
+    //$COVERAGE-OFF$
+}

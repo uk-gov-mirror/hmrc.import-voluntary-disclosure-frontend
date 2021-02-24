@@ -65,9 +65,6 @@ POST        /disclosure/address-correct                                  control
 
 GET         /disclosure/reason-introduction                              controllers.BoxGuidanceController.onLoad
 
-GET         /disclosure/check-your-answers                               controllers.CheckYourAnswersController.onLoad
-GET         /disclosure/confirmation                                     controllers.CheckYourAnswersController.onSubmit
-
 GET         /disclosure/box-number                                       controllers.BoxNumberController.onLoad
 POST        /disclosure/box-number                                       controllers.BoxNumberController.onSubmit
 
@@ -128,5 +125,11 @@ POST        /disclosure/box-67-other-charges-deductions-amendment        control
 GET         /disclosure/box-68-adjustment-vat-value-amendment            controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 68)
 POST        /disclosure/box-68-adjustment-vat-value-amendment            controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 68)
 
-GET         /disclosure/confirm-reason-details                         controllers.ConfirmReasonDetailController.onLoad
-GET         /disclosure/confirm-reason-details                         controllers.ConfirmReasonDetailController.onSubmit
+GET         /disclosure/confirm-reason-details                           controllers.ConfirmReasonDetailController.onLoad
+POST        /disclosure/confirm-reason-details                           controllers.ConfirmReasonDetailController.onSubmit
+
+GET         /disclosure/underpayment-reason-summary                      controllers.UnderpaymentReasonSummaryController.onLoad
+POST        /disclosure/underpayment-reason-summary                      controllers.UnderpaymentReasonSummaryController.onSubmit
+
+GET         /disclosure/check-your-answers                               controllers.CheckYourAnswersController.onLoad
+GET         /disclosure/confirmation                                     controllers.CheckYourAnswersController.onSubmit

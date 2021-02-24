@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.{UnderpaymentReason, UserAnswers}
+import models.{UnderpaymentReason, UnderpaymentReasonValue, UserAnswers}
 import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage, UnderpaymentReasonsPage}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -48,25 +48,22 @@ class ConfirmReasonDetailController @Inject()(identify: IdentifierAction,
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    val underpaymentReason = for {
-      boxNumber <- request.userAnswers.get(UnderpaymentReasonBoxNumberPage)
-      itemNumber <- request.userAnswers.get(UnderpaymentReasonItemNumberPage)
-      values <- request.userAnswers.get(UnderpaymentReasonAmendmentPage)
-    } yield {
-      Seq(UnderpaymentReason(boxNumber, itemNumber, values.original, values.amended))
-    }
-
+    val underpaymentReason = Seq(
+      UnderpaymentReason(
+        request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0),
+        request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0),
+        request.userAnswers.get(UnderpaymentReasonAmendmentPage).getOrElse(UnderpaymentReasonValue("", "")).original,
+        request.userAnswers.get(UnderpaymentReasonAmendmentPage).getOrElse(UnderpaymentReasonValue("", "")).amended
+      )
+    )
     val currentReasons = request.userAnswers.get(UnderpaymentReasonsPage).getOrElse(Seq.empty)
-
     for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonsPage, currentReasons ++ underpaymentReason.getOrElse(Seq.empty)))
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonsPage, currentReasons ++ underpaymentReason))
       _ <- sessionRepository.set(updatedAnswers)
     } yield {
-      Redirect(controllers.routes.ConfirmReasonDetailController.onLoad())
+      Redirect(controllers.routes.UnderpaymentReasonSummaryController.onLoad())
     }
   }
-
 
   def summaryList(userAnswers: UserAnswers, boxNumber: Int)(implicit messages: Messages): Option[Seq[SummaryList]] = {
 

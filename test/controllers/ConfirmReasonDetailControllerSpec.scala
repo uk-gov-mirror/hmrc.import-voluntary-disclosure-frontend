@@ -22,8 +22,7 @@ import mocks.repositories.MockSessionRepository
 import models.{UnderpaymentReason, UnderpaymentReasonValue, UserAnswers}
 import pages._
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
-import play.api.test.FakeRequest
+import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import views.data.ConfirmReasonData
 import views.html.ConfirmReasonDetailView
@@ -81,7 +80,7 @@ class ConfirmReasonDetailControllerSpec extends ControllerSpecBase {
       "return a SEE OTHER entry level response when correct data is sent" in new Test {
         lazy val result: Future[Result] = controller.onSubmit()(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.ConfirmReasonDetailController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentReasonSummaryController.onLoad().url)
       }
 
       "return a SEE OTHER item level response when correct data is sent" in new Test {
@@ -93,7 +92,7 @@ class ConfirmReasonDetailControllerSpec extends ControllerSpecBase {
         )
         lazy val result: Future[Result] = controller.onSubmit()(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.ConfirmReasonDetailController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentReasonSummaryController.onLoad().url)
         verifyCalls()
       }
 
@@ -107,7 +106,7 @@ class ConfirmReasonDetailControllerSpec extends ControllerSpecBase {
         )
         lazy val result: Future[Result] = controller.onSubmit()(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.ConfirmReasonDetailController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentReasonSummaryController.onLoad().url)
         verifyCalls()
       }
 
