@@ -19,7 +19,10 @@ package controllers
 import assets.AddressLookupTestConstants.customerAddressMax
 import assets.BaseTestConstants.errorModel
 import base.ControllerSpecBase
+import controllers.actions.FakeDataRetrievalAction
+import mocks.repositories.MockSessionRepository
 import mocks.services.MockAddressLookupService
+import models.UserAnswers
 import models.addressLookup.AddressLookupOnRampModel
 import play.api.http.Status
 import play.api.mvc.Result
@@ -27,87 +30,75 @@ import play.api.test.Helpers.{redirectLocation, _}
 
 import scala.concurrent.Future
 
-class AddressLookupControllerSpec extends ControllerSpecBase with MockAddressLookupService {
+class AddressLookupControllerSpec extends ControllerSpecBase {
+
+  trait Test extends MockAddressLookupService with MockSessionRepository {
+
+    lazy val dataRetrievalAction = new FakeDataRetrievalAction(Some(UserAnswers("some-cred-id")))
+
+    lazy val controller = new AddressLookupController(
+      authenticatedAction,
+      dataRetrievalAction,
+      dataRequiredAction,
+      mockSessionRepository,
+      mockAddressLookupService,
+      errorHandler,
+      messagesControllerComponents,
+      appConfig,
+      ec)
+
+  }
 
   "Calling .callback" must {
 
-    def setup(addressLookupResponse: RetrieveAddressResponse): AddressLookupController = {
-
-      setupMockRetrieveAddress(addressLookupResponse)
-
-      new AddressLookupController(
-        authenticatedAction,
-        mockAddressLookupService,
-        errorHandler,
-        messagesControllerComponents,
-        appConfig,
-        ec)
-    }
-
     "address lookup service returns success" when {
-
-        def controller: AddressLookupController = setup(
-          addressLookupResponse = Right(customerAddressMax),
-        )
 
         "for an Individual" should {
 
-          lazy val result = controller.callback("12345")(fakeRequest)
-
-          "return OK (200)" in {
-            status(result) mustBe Status.OK
+          "redirect the user to the deferment page" in new Test {
+            MockedSessionRepository.set(Future.successful(true))
+            setupMockRetrieveAddress(Right(customerAddressMax))
+            val result: Future[Result] = controller.callback("12345")(fakeRequest)
+            status(result) mustBe Status.SEE_OTHER
+            redirectLocation(result) mustBe Some(controllers.routes.DefermentController.onLoad.url)
+            verifyCalls()
           }
         }
     }
 
       "and business address lookup service returns an error" should {
 
-        lazy val controller = setup(
-          addressLookupResponse = Left(errorModel))
-        lazy val result = controller.callback("12345")(fakeRequest)
-
-        "return InternalServerError" in {
+        "return InternalServerError" in new Test {
+          setupMockRetrieveAddress(Left(errorModel))
+          val result: Future[Result] = controller.callback("12345")(fakeRequest)
           status(result) mustBe Status.INTERNAL_SERVER_ERROR
+
         }
       }
   }
 
       "Calling .initialiseJourney" when {
 
-        def setup(addressLookupResponse: InitialiseJourneyResponse): AddressLookupController = {
-
-          setupMockInitialiseJourney(addressLookupResponse)
-
-          new AddressLookupController(
-            authenticatedAction,
-            mockAddressLookupService,
-            errorHandler,
-            messagesControllerComponents,
-            appConfig,
-            ec)
-        }
-
         "address lookup service returns success" when {
 
-          lazy val controller = setup(addressLookupResponse = Right(AddressLookupOnRampModel("redirect-url")))
-
-          lazy val result: Future[Result] = controller.initialiseJourney(fakeRequest)
-
-            "return redirect to the url returned" in {
+            "return redirect to the url returned" in new Test {
+              setupMockInitialiseJourney(Right(AddressLookupOnRampModel("redirect-url")))
+              val result: Future[Result] = controller.initialiseJourney()(fakeRequest)
               status(result) mustBe Status.SEE_OTHER
             }
 
-            "redirect to url returned" in {
+            "redirect to url returned" in new Test {
+              setupMockInitialiseJourney(Right(AddressLookupOnRampModel("redirect-url")))
+              val result: Future[Result] = controller.initialiseJourney()(fakeRequest)
               redirectLocation(result) mustBe Some("redirect-url")
             }
         }
 
         "address lookup service returns an error" should {
 
-          lazy val controller = setup(addressLookupResponse = Left(errorModel))
-          lazy val result = controller.initialiseJourney(fakeRequest)
-
-          "return InternalServerError" in {
+          "return InternalServerError" in new Test {
+            setupMockInitialiseJourney(Left(errorModel))
+            val result: Future[Result] = controller.initialiseJourney()(fakeRequest)
             status(result) mustBe Status.INTERNAL_SERVER_ERROR
           }
         }

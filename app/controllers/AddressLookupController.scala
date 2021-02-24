@@ -17,24 +17,30 @@
 package controllers
 
 import config.{AppConfig, ErrorHandler}
-import controllers.actions.IdentifierAction
-import javax.inject.{Inject, Singleton}
+import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.ContactAddress
+import pages.ImporterAddressFinalPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import repositories.SessionRepository
 import services.AddressLookupService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
-import scala.concurrent.ExecutionContext
+import javax.inject.{Inject, Singleton}
+import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class AddressLookupController @Inject()(identify: IdentifierAction,
+                                        getData: DataRetrievalAction,
+                                        requireData: DataRequiredAction,
+                                        sessionRepository: SessionRepository,
                                         addressLookupService: AddressLookupService,
                                         val errorHandler: ErrorHandler,
                                         val mcc: MessagesControllerComponents,
                                         implicit val appConfig: AppConfig,
                                         implicit val ec: ExecutionContext) extends FrontendController(mcc) with I18nSupport {
 
-  val initialiseJourney: Action[AnyContent] = identify.async { implicit request =>
+  def initialiseJourney(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     addressLookupService.initialiseJourney map {
       case Right(response) =>
         Redirect(response.redirectUrl)
@@ -43,12 +49,25 @@ class AddressLookupController @Inject()(identify: IdentifierAction,
     }
   }
 
-  val callback: String => Action[AnyContent] = id => identify.async { implicit user =>
-    addressLookupService.retrieveAddress(id) map {
+  def callback(id: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    addressLookupService.retrieveAddress(id) flatMap {
       case Right(address) =>
-       Ok(address.toString)
+        val traderAddress = ContactAddress(
+          streetAndNumber = address.line1.getOrElse(""),
+          city = address.line4.getOrElse(address.line3.getOrElse(address.line2.getOrElse(""))),
+          postalCode = address.postcode,
+          countryCode = address.countryCode.getOrElse("")
+        )
+
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterAddressFinalPage, traderAddress))
+          _ <- sessionRepository.set(updatedAnswers)
+        } yield {
+          Redirect(controllers.routes.DefermentController.onLoad())
+        }
+
       case Left(_) =>
-        errorHandler.showInternalServerError
+        Future.successful(errorHandler.showInternalServerError)
     }
   }
 }

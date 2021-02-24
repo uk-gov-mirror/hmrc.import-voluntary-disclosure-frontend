@@ -86,13 +86,24 @@ class ImporterAddressControllerSpec extends ControllerSpecBase with MockImporter
   "POST /" when {
     "payload contains valid data" should {
 
-      "return a SEE OTHER response" in new Test {
+      "redirect to the deferment page if choosing to use the known address" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(
           UserAnswers("some-cred-id").set(ImporterAddressTemporaryPage, traderAddress).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
+        redirectLocation(result) mustBe Some(controllers.routes.DefermentController.onLoad().url)
+      }
+
+      "handoff to the address lookup frontend if choosing to use a different address" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("some-cred-id").set(ImporterAddressTemporaryPage, traderAddress).success.value
+        )
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        status(result) mustBe Status.SEE_OTHER
+        redirectLocation(result) mustBe Some(controllers.routes.AddressLookupController.initialiseJourney().url)
       }
 
       "update the UserAnswers in session when Trader Address is correct" in new Test {

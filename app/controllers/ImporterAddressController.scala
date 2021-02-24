@@ -85,7 +85,7 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterAddressPage, value))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
-            Redirect(controllers.routes.ImporterAddressController.onLoad())
+            Redirect(controllers.routes.AddressLookupController.initialiseJourney())
           }
         }
       }

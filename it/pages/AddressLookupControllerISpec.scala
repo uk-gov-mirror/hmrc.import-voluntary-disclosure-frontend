@@ -18,11 +18,11 @@ package pages
 
 import config.AppConfig
 import models.addressLookup.AddressLookupOnRampModel
-import play.api.http.Status
 import play.api.http.Status._
+import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
-import stubs.{AddressLookupStub, AuditStub, AuthStub}
+import stubs.{AddressLookupStub, AuditStub, AuthStub, UserAnswersStub}
 import support.IntegrationSpec
 
 class AddressLookupControllerISpec extends IntegrationSpec {
@@ -31,43 +31,53 @@ class AddressLookupControllerISpec extends IntegrationSpec {
 
   "Calling AddressLookupController.initialiseJourney" when {
 
-        "handoff to address lookup frontend with the correct english and welsh messages" in {
+    "Address lookup frontend returns a ACCEPTED response" should {
 
-          AuthStub.authorised()
-          AuditStub.audit()
+      "handoff to address lookup frontend with the correct english and welsh messages" in {
 
-          AddressLookupStub.postInitV2Journey(ACCEPTED, AddressLookupOnRampModel("redirect/url"))
+        AuthStub.authorised()
+        AuditStub.audit()
 
-          val request: WSRequest = buildRequest("/initialise")
+        AddressLookupStub.postInitV2Journey(ACCEPTED, AddressLookupOnRampModel("redirect/url"))
 
-          val response: WSResponse = await(request.get())
+        val request: WSRequest = buildRequest("/address-initialise")
 
-          response.status shouldBe Status.SEE_OTHER
+        val response: WSResponse = await(request.get())
 
-        }
+        response.status shouldBe Status.SEE_OTHER
 
-    "Address Lookup returns UNAUTHORISED" in {
+      }
+    }
 
-      AuthStub.authorised()
-      AuditStub.audit()
+    "Address lookup frontend returns a INTERNAL_SERVER_ERROR response" should {
 
-      AddressLookupStub.postInitV2Journey(UNAUTHORIZED, AddressLookupOnRampModel("redirect/url"))
+      "return an internal server error" in {
 
-      val request: WSRequest = buildRequest("/initialise")
+        AuthStub.authorised()
+        AuditStub.audit()
+        UserAnswersStub.createUserAnswers("some_external_id")
 
-      val response: WSResponse = await(request.get())
+        AddressLookupStub.postInitV2Journey(INTERNAL_SERVER_ERROR, AddressLookupOnRampModel("redirect/url"))
 
-      response.status shouldBe Status.INTERNAL_SERVER_ERROR
+        val request: WSRequest = buildRequest("/address-initialise")
 
+        val response: WSResponse = await(request.get())
+
+        println("\n\n\n\n\n\n\n\nLocation: " + response.header(HeaderNames.LOCATION).getOrElse("UNKNOWN"))
+        response.status shouldBe Status.INTERNAL_SERVER_ERROR
+
+      }
     }
   }
 
   "Calling AddressLookupController.callback" when {
 
-      "Status OK received" in {
+    "Address lookup frontend returns an OK response" should {
+      "redirect the user to the deferment page" in {
 
         AuthStub.authorised()
         AuditStub.audit()
+        UserAnswersStub.createUserAnswers("some_external_id")
 
         AddressLookupStub.getAddress(OK, Json.obj(
           "lines" -> Json.arr("line1", "line2"),
@@ -77,12 +87,13 @@ class AddressLookupControllerISpec extends IntegrationSpec {
           )
         ))
 
-        val request: WSRequest = buildRequest("/callback?id=9999999")
+        val request: WSRequest = buildRequest("/address-callback?id=9999999")
 
         val response: WSResponse = await(request.get())
 
-        response.status shouldBe Status.OK
-
+        response.status shouldBe Status.SEE_OTHER
+        response.header(HeaderNames.LOCATION) shouldBe Some(controllers.routes.DefermentController.onLoad().url)
       }
+    }
   }
 }
