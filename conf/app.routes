@@ -133,3 +133,7 @@ POST        /disclosure/underpayment-reason-summary                      control
 
 GET         /disclosure/check-your-answers                               controllers.CheckYourAnswersController.onLoad
 GET         /disclosure/confirmation                                     controllers.CheckYourAnswersController.onSubmit
+
+GET         /disclosure/provide-information-option                       controllers.HasFurtherInformationController.onLoad
+POST        /disclosure/provide-information-option                       controllers.HasFurtherInformationController.onSubmit
+

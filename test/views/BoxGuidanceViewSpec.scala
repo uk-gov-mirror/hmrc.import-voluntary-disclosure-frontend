@@ -22,6 +22,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
 import views.html.BoxGuidanceView
+import play.api.mvc._
 
 class BoxGuidanceViewSpec extends ViewBaseSpec with BaseMessages {
 
@@ -29,7 +30,7 @@ class BoxGuidanceViewSpec extends ViewBaseSpec with BaseMessages {
 
   "Rendering the Supportdoc page" when {
     "no errors exist" should {
-      lazy val view: Html = injectedView(controllers.routes.BoxGuidanceController.onLoad())(fakeRequest, appConfig, messages)
+      lazy val view: Html = injectedView(Call("GET","backLink"))(fakeRequest, appConfig, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title of '${BoxGuidanceMessages.title}'" in {
@@ -37,7 +38,7 @@ class BoxGuidanceViewSpec extends ViewBaseSpec with BaseMessages {
       }
 
       "it" should {
-        lazy val view: Html = injectedView(controllers.routes.BoxGuidanceController.onLoad())(fakeRequest, appConfig, messages)
+        lazy val view: Html = injectedView(Call("GET","backLink"))(fakeRequest, appConfig, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
         s"have the correct page heading of '${BoxGuidanceMessages.heading}'" in {
           elementText("h1") mustBe BoxGuidanceMessages.heading
@@ -72,7 +73,7 @@ class BoxGuidanceViewSpec extends ViewBaseSpec with BaseMessages {
         }
 
         "render a back link with the correct URL" in {
-          elementAttributes("#back-link") must contain("href" -> controllers.routes.BoxGuidanceController.onLoad().url)
+          elementAttributes("#back-link") must contain("href" -> "backLink")
         }
       }
     }

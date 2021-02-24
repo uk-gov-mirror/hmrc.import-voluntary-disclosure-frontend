@@ -19,7 +19,7 @@
 @(
         form: Form[_],
         headingKey: String,
-        hint: Option[Html] = None,
+        hint: Option[String] = None,
         headingMessageArgs: Seq[String] = Seq(),
         isPageHeading: Boolean = true,
         classes: String = "govuk-fieldset__legend--l",
@@ -32,6 +32,7 @@
     classes = s"${if(inline){"govuk-radios--inline"} else ""}",
     idPrefix = None,
     name = "value",
+    hint = hint.map(txt=>Hint(content = HtmlContent(txt))),
     fieldset = Some(Fieldset(
         legend = Some(Legend(
             content = Text(messages(headingKey, headingMessageArgs:_*)),

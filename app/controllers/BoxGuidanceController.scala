@@ -36,7 +36,7 @@ class BoxGuidanceController @Inject()(identity: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   def onLoad(): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(controllers.routes.BoxNumberController.onLoad())))
+    Future.successful(Ok(view(controllers.routes.UnderpaymentSummaryController.onLoad())))
   }
 
 }

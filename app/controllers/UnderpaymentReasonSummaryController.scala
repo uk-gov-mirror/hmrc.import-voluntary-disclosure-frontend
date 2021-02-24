@@ -63,7 +63,7 @@ class UnderpaymentReasonSummaryController @Inject()(identify: IdentifierAction,
         if (anotherReason) {
           Future.successful(Redirect(controllers.routes.BoxNumberController.onLoad()))
         } else {
-          Future.successful(Redirect(controllers.routes.UploadFileController.onLoad()))
+          Future.successful(Redirect(controllers.routes.HasFurtherInformationController.onLoad()))
         }
       }
     )
