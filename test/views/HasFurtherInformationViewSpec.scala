@@ -31,7 +31,7 @@ class HasFurtherInformationViewSpec extends ViewBaseSpec with BaseMessages {
 
   val formProvider: HasFurtherInformationFormProvider = injector.instanceOf[HasFurtherInformationFormProvider]
 
-  private lazy val backLink = controllers.routes.HasFurtherInformationController.onLoad()
+  private lazy val backLink = controllers.routes.UnderpaymentReasonSummaryController.onLoad()
 
   "Rendering the view" when {
     "no errors exist" should {

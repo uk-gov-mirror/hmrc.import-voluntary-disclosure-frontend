@@ -36,7 +36,7 @@ class SupportingDocController @Inject()(identity: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(controllers.routes.UnderpaymentSummaryController.onLoad())))
+    Future.successful(Ok(view(controllers.routes.HasFurtherInformationController.onLoad())))
 
   }
 }
