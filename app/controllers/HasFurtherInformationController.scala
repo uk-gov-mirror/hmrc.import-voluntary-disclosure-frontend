@@ -41,7 +41,7 @@ class HasFurtherInformationController @Inject()(identify: IdentifierAction,
                                                 view: HasFurtherInformationView)
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.routes.HasFurtherInformationController.onLoad
+  private lazy val backLink: Call = controllers.routes.UnderpaymentReasonSummaryController.onLoad
 
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val form = request.userAnswers.get(HasFurtherInformationPage).fold(formProvider()) {
@@ -67,7 +67,7 @@ class HasFurtherInformationController @Inject()(identify: IdentifierAction,
             updatedAnswers <- Future.fromTry(hasFurtherInfoAnswers.set(FurtherInformationPage, " "))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
-            Redirect(controllers.routes.UploadFileController.onLoad())
+            Redirect(controllers.routes.SupportingDocController.onLoad())
           }
         }
       }
