@@ -116,11 +116,6 @@ class ConfirmReasonDetailControllerSpec extends ControllerSpecBase {
           result mustBe None
         }
       }
-
     }
-
   }
 }
-
-
-

@@ -27,7 +27,7 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
-class BoxGuidanceController @Inject()(identity: IdentifierAction,
+class BoxGuidanceController @Inject()(identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       mcc: MessagesControllerComponents,
                                       requireData: DataRequiredAction,
@@ -35,7 +35,7 @@ class BoxGuidanceController @Inject()(identity: IdentifierAction,
                                       implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  def onLoad(): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     Future.successful(Ok(view(controllers.routes.UnderpaymentSummaryController.onLoad())))
   }
 

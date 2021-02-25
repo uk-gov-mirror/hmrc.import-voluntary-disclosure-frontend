@@ -19,7 +19,6 @@ package views
 import base.ViewBaseSpec
 import forms.EnterCustomsProcedureCodeFormProvider
 import messages.{BaseMessages, EnterCustomsProcedureCodeMessages}
-import models.CustomsProcedureCode
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form

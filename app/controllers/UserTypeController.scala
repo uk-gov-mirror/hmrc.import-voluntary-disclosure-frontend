@@ -18,7 +18,7 @@ package controllers
 
 import controllers.actions.{DataRetrievalAction, IdentifierAction}
 import forms.UserTypeFormProvider
-import models.UserAnswers
+import models.{UserAnswers, UserType}
 import pages.UserTypePage
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
@@ -55,7 +55,6 @@ class UserTypeController @Inject()(identify: IdentifierAction,
 
   def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
-
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
@@ -63,7 +62,10 @@ class UserTypeController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(userAnswers.set(UserTypePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.NumberOfEntriesController.onLoad())
+          value match {
+            case UserType.Importer => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
+            case UserType.Representative => Redirect(controllers.routes.ImporterNameController.onLoad())
+          }
         }
       }
     )

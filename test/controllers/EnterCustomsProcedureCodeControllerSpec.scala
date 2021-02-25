@@ -79,11 +79,11 @@ class EnterCustomsProcedureCodeControllerSpec extends ControllerSpecBase {
 
     "the backLink functionality is called" should {
       "redirect to the Acceptance date page" in new Test {
-        controller.backLink(Some(EntryDetails("false", "true", LocalDate of (2020, 1, 1)))) mustBe Call("GET", controllers.routes.AcceptanceDateController.onLoad().url)
+        controller.backLink(Some(EntryDetails("false", "true", LocalDate of (2020, 1, 1)))) mustBe controllers.routes.AcceptanceDateController.onLoad()
       }
 
       "redirect to the Entry details page" in new Test {
-        controller.backLink(Some(EntryDetails("false", "true", LocalDate of (2021, 1, 1)))) mustBe Call("GET", controllers.routes.EntryDetailsController.onLoad().url)
+        controller.backLink(Some(EntryDetails("false", "true", LocalDate of (2021, 1, 1)))) mustBe controllers.routes.EntryDetailsController.onLoad()
       }
 
     }

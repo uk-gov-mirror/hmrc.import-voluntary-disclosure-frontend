@@ -30,7 +30,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class BoxNumberController @Inject()(identity: IdentifierAction,
+class BoxNumberController @Inject()(identify: IdentifierAction,
                                     getData: DataRetrievalAction,
                                     requireData: DataRequiredAction,
                                     sessionRepository: SessionRepository,
@@ -42,14 +42,14 @@ class BoxNumberController @Inject()(identity: IdentifierAction,
 
   private lazy val backLink: Call = controllers.routes.BoxGuidanceController.onLoad()
 
-  def onLoad: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val form = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).fold(formProvider()) {
       formProvider().fill
     }
     Future.successful(Ok(view(form, backLink)))
   }
 
-  def onSubmit: Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {

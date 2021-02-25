@@ -320,3 +320,13 @@ hasFurtherInformation.pageTitle = Do you want to tell us anything else about the
 hasFurtherInformation.heading = Do you want to tell us anything else about the underpayment?
 hasFurtherInformation.hint = That you have not told us about already.
 hasFurtherInformation.error.required = Select yes if you want to provide more information about the underpayment
+
+# Importer name
+importerName.pageTitle = What is the importer’s name?
+importerName.pageHeader = What is the importer’s name?
+importerName.hint = We will send a copy of the demand for payment note to the importer by post. We will use this name on the envelope and letter.
+importerName.error.nameNonEmpty = Enter the name of the importer
+importerName.error.nameMinLength = Full name must be 2 characters or more
+importerName.error.nameMaxLength = Full name must be 50 characters or fewer
+importerName.error.nameAllowableCharacters = Full name must only include letters a to z, hyphens, spaces and apostrophes
+

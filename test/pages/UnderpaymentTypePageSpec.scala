@@ -16,7 +16,7 @@
 
 package pages
 import base.SpecBase
-import models.{UnderpaymentAmount, UnderpaymentType, UserAnswers}
+import models.{UnderpaymentType, UserAnswers}
 import views.data.UnderpaymentSummaryData._
 
 class UnderpaymentTypePageSpec extends SpecBase {

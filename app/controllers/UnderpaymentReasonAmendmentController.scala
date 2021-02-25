@@ -31,7 +31,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction,
+class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction,
                                                       getData: DataRetrievalAction,
                                                       requireData: DataRequiredAction,
                                                       sessionRepository: SessionRepository,
@@ -48,7 +48,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
     }
   }
 
-  def onLoad(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onLoad(boxNumber: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
 
     val form = request.userAnswers.get(UnderpaymentReasonAmendmentPage).fold(formProvider(boxNumber)) {
@@ -58,7 +58,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identity: IdentifierAction
     Future.successful(Ok(routeToView(boxNumber, itemNumber, form)))
   }
 
-  def onSubmit(boxNumber: Int): Action[AnyContent] = (identity andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(boxNumber: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
     formProvider(boxNumber).bindFromRequest().fold(
       formWithErrors => {

@@ -67,9 +67,9 @@ class EnterCustomsProcedureCodeController @Inject()(identify: IdentifierAction,
 
   private[controllers] def backLink(entryDetails: Option[EntryDetails]): Call =
     if (entryDetails.get.entryDate.isBefore(appConfig.euExitDate)) {
-      Call("GET",controllers.routes.AcceptanceDateController.onLoad().url)
+      controllers.routes.AcceptanceDateController.onLoad()
     } else {
-      Call("GET",controllers.routes.EntryDetailsController.onLoad().url)
+      controllers.routes.EntryDetailsController.onLoad()
     }
 
 }

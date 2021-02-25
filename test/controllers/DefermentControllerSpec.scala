@@ -18,15 +18,15 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.{AcceptanceDateFormProvider, DefermentFormProvider}
+import forms.DefermentFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.{AcceptanceDatePage, DefermentPage}
+import pages.DefermentPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.{AcceptanceDateView, DefermentView}
+import views.html.DefermentView
 
 import scala.concurrent.Future
 

@@ -17,7 +17,6 @@
 package forms
 
 import base.SpecBase
-import models.CustomsProcedureCode
 import play.api.data.Form
 
 class EnterCustomsProcedureCodeFormProviderSpec extends SpecBase {

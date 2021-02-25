@@ -19,7 +19,6 @@ package controllers
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.UploadAnotherFileFormProvider
-import mocks.repositories.MockSessionRepository
 import models.UserAnswers
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}

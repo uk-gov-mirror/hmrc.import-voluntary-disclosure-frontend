@@ -24,7 +24,7 @@ import models.{UnderpaymentType, UserAnswers}
 import pages.UnderpaymentTypePage
 import play.api.http.Status
 import play.api.libs.json.OFormat.oFormatFromReadsAndOWrites
-import play.api.mvc.{Call, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import views.html.UnderpaymentTypeView
 

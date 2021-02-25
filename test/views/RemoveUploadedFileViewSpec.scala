@@ -17,15 +17,14 @@
 package views
 
 import base.ViewBaseSpec
-import forms.{DefermentFormProvider, RemoveUploadedFileFormProvider}
+import forms.RemoveUploadedFileFormProvider
 import messages.{BaseMessages, DefermentMessages, RemoveUploadedFileMessages}
 import models.Index
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
-import play.api.mvc.Call
 import play.twirl.api.Html
-import views.html.{DefermentView, RemoveUploadedFileView}
+import views.html.RemoveUploadedFileView
 
 class RemoveUploadedFileViewSpec extends ViewBaseSpec with BaseMessages {
 
