@@ -139,3 +139,6 @@ POST        /disclosure/provide-information-option                       control
 
 GET         /disclosure/importer-name                                    controllers.ImporterNameController.onLoad
 POST        /disclosure/importer-name                                    controllers.ImporterNameController.onSubmit
+
+GET         /disclosure/importer-eori-number-exists                      controllers.ImporterEORIExistsController.onLoad
+POST        /disclosure/importer-eori-number-exists                      controllers.ImporterEORIExistsController.onSubmit

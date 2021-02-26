@@ -86,7 +86,7 @@ class ImporterNameControllerSpec extends ControllerSpecBase {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
         lazy val result: Future[Result] = controller.onSubmit()(fakeRequestGenerator("test"))
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.ImporterNameController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.ImporterEORIExistsController.onLoad().url)
 
       }
       "update the UserAnswers in session" in new Test {

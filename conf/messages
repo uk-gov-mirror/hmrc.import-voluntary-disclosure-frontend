@@ -330,3 +330,9 @@ importerName.error.nameMinLength = Full name must be 2 characters or more
 importerName.error.nameMaxLength = Full name must be 50 characters or fewer
 importerName.error.nameAllowableCharacters = Full name must only include letters a to z, hyphens, spaces and apostrophes
 
+# Importer EORI Exists
+importerEORIExists.pageTitle = Does the importer have an EORI number?
+importerEORIExists.heading = Does the importer have an EORI number?
+importerEORIExists.hint = The EORI starts with GB and is followed by 12 numbers, for example GB345834921000
+importerEORIExists.error.required = Select yes if the importer has an EORI number
+
