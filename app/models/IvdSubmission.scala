@@ -56,7 +56,12 @@ object IvdSubmission extends FixedConfig {
       "underpaymentDetails" -> data.underpaymentDetails,
       "supportingDocumentTypes" -> data.documentsSupplied,
       "amendedItems" -> data.amendedItems,
-      "supportingDocuments" -> data.supportingDocuments
+      "supportingDocuments" -> data.supportingDocuments,
+      "importer" -> Json.obj(
+        "eori" -> "GB000000000000001",
+        "contactDetails" -> data.declarantContactDetails,
+        "address" -> data.declarantAddress
+      )
     )
   }
 

@@ -174,6 +174,14 @@ class IvdSubmissionSpec extends ModelSpecBase {
         )
       }
 
+      "generate the correct json for the importer" in {
+        data("importer") shouldBe Json.obj(
+          "eori" -> "GB000000000000001",
+          "contactDetails" -> submission.declarantContactDetails,
+          "address" -> submission.declarantAddress
+        )
+      }
+
     }
   }
 }
