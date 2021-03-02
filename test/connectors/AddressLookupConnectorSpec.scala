@@ -24,6 +24,7 @@ import models.addressLookup.{AddressLookupJsonBuilder, AddressLookupOnRampModel,
 import play.api.http.Status
 import uk.gov.hmrc.http.HttpResponse
 import assets.BaseTestConstants._
+import play.api.libs.json.Json
 
 import scala.concurrent.Future
 
@@ -58,7 +59,7 @@ class AddressLookupConnectorSpec extends SpecBase with MockHttp {
 
     val continueUrl = "continue-url"
     def initaliseJourneyResult: Future[HttpPostResult[AddressLookupOnRampModel]] =
-      TestAddressLookupConnector.initialiseJourney(AddressLookupJsonBuilder(continueUrl)(fakeRequest, messagesApi, appConfig))
+      TestAddressLookupConnector.initialiseJourney(Json.toJson(AddressLookupJsonBuilder(continueUrl)(fakeRequest, messagesApi, appConfig)))
 
     "for initialiseJourney method" when {
 

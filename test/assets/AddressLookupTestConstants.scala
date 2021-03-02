@@ -16,7 +16,7 @@
 
 package assets
 
-import messages.{AddressLookupMessages, BaseMessages}
+import messages.{AddressLookupMessages, ImporterAddressLookupMessages, BaseMessages}
 import models.addressLookup.AddressModel
 import play.api.libs.json.{JsObject, Json}
 
@@ -45,6 +45,15 @@ object AddressLookupTestConstants extends BaseMessages {
     Some(addressLine1),
     Some(addressLine2),
     Some(addressLine3),
+    None,
+    Some(postcode),
+    Some(countryCode)
+  )
+
+  val customerAddressMissingLine3: AddressModel = AddressModel(
+    Some(addressLine1),
+    Some(addressLine2),
+    Some(addressLine4),
     None,
     Some(postcode),
     Some(countryCode)
@@ -158,6 +167,87 @@ object AddressLookupTestConstants extends BaseMessages {
           "showConfirmChangeText" -> false
         ),
         "editPageLabels" -> Json.obj(
+          "submitLabel" -> continue
+        )
+      )
+    )
+  )
+
+  val importerAddressLookupV2Json: JsObject = Json.obj(fields =
+    "version" -> 2,
+    "options" -> Json.obj(
+      "continueUrl" -> "/lookup-address/confirmed",
+      "accessibilityFooterUrl" -> "TBC",
+      "deskProServiceName" -> "TBC",
+      "showPhaseBanner" -> true,
+      "ukMode" -> false,
+      "timeoutConfig" -> Json.obj(
+        "timeoutAmount" -> 900,
+        "timeoutUrl" -> "TBC"
+      ),
+      "confirmPageConfig" -> Json.obj(
+        "showSubHeadingAndInfo" -> true,
+        "showSearchAgainLink" -> true
+      )
+    ),
+    "labels" -> Json.obj(
+      "en" -> Json.obj(
+        "appLevelLabels" -> Json.obj(
+          "navTitle" -> "import-voluntary-disclosure-frontend",
+          "phaseBannerHtml" -> phaseBannerHtml
+        ),
+        "selectPageLabels" -> Json.obj(
+          "title" -> ImporterAddressLookupMessages.selectHeading,
+          "heading" -> ImporterAddressLookupMessages.selectHeading,
+          "submitLabel" -> continue,
+          "editAddressLinkText" -> ImporterAddressLookupMessages.editAddressLinkText
+        ),
+        "lookupPageLabels" -> Json.obj(
+          "title" -> ImporterAddressLookupMessages.startHeading,
+          "heading" -> ImporterAddressLookupMessages.startHeading,
+          "filterLabel" -> ImporterAddressLookupMessages.filter,
+          "postcodeLabel" -> ImporterAddressLookupMessages.postcode,
+          "submitLabel" -> ImporterAddressLookupMessages.submitLabel
+        ),
+        "confirmPageLabels" -> Json.obj(
+          "title" -> ImporterAddressLookupMessages.confirmHeading,
+          "heading" -> ImporterAddressLookupMessages.confirmHeading,
+          "infoMessage" -> ImporterAddressLookupMessages.confirmInfoMessage,
+          "showConfirmChangeText" -> false
+        ),
+        "editPageLabels" -> Json.obj(
+          "heading" -> ImporterAddressLookupMessages.editHeading,
+          "townLabel" -> ImporterAddressLookupMessages.editTown,
+          "submitLabel" -> continue
+        )
+      ),
+      "cy" -> Json.obj(
+        "appLevelLabels" -> Json.obj(
+          "navTitle" -> "import-voluntary-disclosure-frontend",
+          "phaseBannerHtml" -> phaseBannerHtml
+        ),
+        "selectPageLabels" -> Json.obj(
+          "title" -> ImporterAddressLookupMessages.selectHeading,
+          "heading" -> ImporterAddressLookupMessages.selectHeading,
+          "submitLabel" -> continue,
+          "editAddressLinkText" -> ImporterAddressLookupMessages.editAddressLinkText
+        ),
+        "lookupPageLabels" -> Json.obj(
+          "title" -> ImporterAddressLookupMessages.startHeading,
+          "heading" -> ImporterAddressLookupMessages.startHeading,
+          "filterLabel" -> ImporterAddressLookupMessages.filter,
+          "postcodeLabel" -> ImporterAddressLookupMessages.postcode,
+          "submitLabel" -> ImporterAddressLookupMessages.submitLabel
+        ),
+        "confirmPageLabels" -> Json.obj(
+          "title" -> ImporterAddressLookupMessages.confirmHeading,
+          "heading" -> ImporterAddressLookupMessages.confirmHeading,
+          "infoMessage" -> ImporterAddressLookupMessages.confirmInfoMessage,
+          "showConfirmChangeText" -> false
+        ),
+        "editPageLabels" -> Json.obj(
+          "heading" -> ImporterAddressLookupMessages.editHeading,
+          "townLabel" -> ImporterAddressLookupMessages.editTown,
           "submitLabel" -> continue
         )
       )

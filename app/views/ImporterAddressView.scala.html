@@ -38,7 +38,7 @@
 
         @if(!traderAddress.postalCode.isEmpty) {
             @p(content = Html(
-                traderAddress.streetAndNumber + "<br/>" +
+                traderAddress.addressLine1 + "<br/>" +
                 traderAddress.city + "<br/>" +
                 traderAddress.postalCode.getOrElse("") + "<br/>" +
                 traderAddress.countryCode
@@ -47,7 +47,7 @@
         } else {
             @p(
                 Html(
-                    traderAddress.streetAndNumber + "<br/>" +
+                    traderAddress.addressLine1 + "<br/>" +
                     traderAddress.city + "<br/>" +
                     traderAddress.countryCode
                 )

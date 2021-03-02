@@ -33,7 +33,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     entryDetails = EntryDetails("123", "123456Q", LocalDate.parse("2020-12-12")),
     originalCpc = "4000C09",
     declarantContactDetails = ContactDetails("John Smith", "test@test.com", "0123456789"),
-    declarantAddress = ContactAddress("99 Avenue Road", "Any Old Town", Some("99JZ 1AA"), "United Kingdom"),
+    declarantAddress = ContactAddress("99 Avenue Road", None, "Any Old Town", Some("99JZ 1AA"), "United Kingdom"),
     defermentType = None,
     defermentAccountNumber = None,
     additionalDefermentNumber = None,
@@ -127,7 +127,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
 
       "generate the correct json for the declarantAddress" in {
         data("declarantAddress") shouldBe Json.obj(
-          "streetAndNumber" -> "99 Avenue Road",
+          "addressLine1" -> "99 Avenue Road",
           "city" -> "Any Old Town",
           "postalCode" -> "99JZ 1AA",
           "countryCode" -> "United Kingdom"

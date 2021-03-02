@@ -44,4 +44,10 @@ trait MockAddressLookupService extends SpecBase with MockFactory {
       .expects(*,*,*)
       .returns(Future.successful(response))
   }
+
+  def setupMockInitialiseImporterJourney(response: InitialiseJourneyResponse): Unit  = {
+    (mockAddressLookupService.initialiseImporterJourney(_: HeaderCarrier, _: ExecutionContext, _: Request[AnyContent]))
+      .expects(*,*,*)
+      .returns(Future.successful(response))
+  }
 }

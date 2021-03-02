@@ -8,6 +8,8 @@ GET         /                                                            control
 GET         /address-initialise                                          controllers.AddressLookupController.initialiseJourney
 GET         /address-callback                                            controllers.AddressLookupController.callback(id: String)
 
+GET         /importer-address-initialise                                 controllers.AddressLookupController.initialiseImporterJourney
+
 GET         /hello-world                                                 controllers.HelloWorldController.onLoad
 POST        /hello-world                                                 controllers.HelloWorldController.onSubmit
 

@@ -46,6 +46,23 @@ address_lookupPage.selectPage.editLink = Edit the address manually
 address_lookupPage.confirmPage.heading = Confirm address
 address_lookupPage.lookupPage.submit = Find Address
 
+#Importer Address Lookup
+importerAddress_lookupPage.title = What address should we send the importer’s copy of the demand note to?
+importerAddress_lookupPage.heading = What address should we send the importer’s copy of the demand note to?
+importerAddress_lookupPage.filter = Property name or number (optional)
+importerAddress_lookupPage.postcode = UK postcode
+importerAddress_lookupPage.postcode.hint = UK postcode hint
+importerAddress_lookupPage.selectPage.heading = Select the importer’s address
+importerAddress_lookupPage.selectPage.editLink = Enter the address manually
+importerAddress_lookupPage.confirmPage.heading = Confirm the importer’s address
+importerAddress_lookupPage.confirmPage.infoSubheading = Needs a subheading
+importerAddress_lookupPage.confirmPage.infoMessage = We will send a copy of the C18 post clearance demand note to this address.
+importerAddress_lookupPage.lookupPage.submit = Find Address
+importerAddress_lookupPage.editPage.heading = Enter the importer’s address
+importerAddress_lookupPage.editPage.townOrCity = Town or city
+importerAddress_lookupPage.editPage.postcode = Postcode
+importerAddress_lookupPage.editPage.country = Country
+
 error.date.length = You have entered too many numbers for {0}
 error.year.length = Year must be 4 numbers
 

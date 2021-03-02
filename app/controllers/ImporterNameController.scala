@@ -55,7 +55,7 @@ class ImporterNameController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterNamePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.ImporterEORIExistsController.onLoad())
+          Redirect(controllers.routes.AddressLookupController.initialiseImporterJourney())
         }
       }
     )

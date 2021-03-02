@@ -20,8 +20,10 @@ import config.AppConfig
 import connectors.httpParsers.AddressLookupHttpParser.AddressLookupReads
 import connectors.httpParsers.InitialiseAddressLookupHttpParser.InitialiseAddressLookupReads
 import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
+
 import javax.inject.{Inject, Singleton}
-import models.addressLookup.{AddressLookupJsonBuilder, AddressLookupOnRampModel, AddressModel}
+import models.addressLookup.{AddressLookupJsonBuilder, AddressLookupOnRampModel, AddressModel, ImporterAddressLookupJsonBuilder}
+import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -30,12 +32,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class AddressLookupConnector @Inject()(val http: HttpClient,
                                        implicit val config: AppConfig) {
 
-  def initialiseJourney(addressLookupJsonBuilder: AddressLookupJsonBuilder)
+  def initialiseJourney(addressLookupJsonBuilder: JsValue)
                       (implicit hc: HeaderCarrier,ec: ExecutionContext): Future[HttpPostResult[AddressLookupOnRampModel]] = {
 
     val url = s"${config.addressLookupFrontend}${config.addressLookupInitialise}"
 
-    http.POST[AddressLookupJsonBuilder, HttpPostResult[AddressLookupOnRampModel]](
+    http.POST[JsValue, HttpPostResult[AddressLookupOnRampModel]](
       url, addressLookupJsonBuilder
     )(implicitly, InitialiseAddressLookupReads, hc, ec)
   }

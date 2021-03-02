@@ -22,11 +22,11 @@ import play.api.libs.json._
 import play.api.mvc.{AnyContent, Request}
 
 
-case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Request[AnyContent], messagesApi: MessagesApi, config: AppConfig) {
+case class ImporterAddressLookupJsonBuilder(continueUrl: String)(implicit request: Request[AnyContent], messagesApi: MessagesApi, config: AppConfig) {
 
   // general journey overrides
   val showPhaseBanner: Boolean = true
-  val ukMode: Boolean = true
+  val ukMode: Boolean = false
   val conf: AppConfig = config
   val deskproServiceName: String = "TBC" //TODO: Needs to contain name if we need it
   val accessibilityFooterUrl: String = "TBC" //TODO: Needs to point somewhere
@@ -40,32 +40,40 @@ case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Reque
 
     val navTitle: Messages => String = message => conf.appName
 
+    val confirmPageConfig: JsObject = Json.obj(
+      "showSubHeadingAndInfo" -> true,
+      "showSearchAgainLink" -> true
+    )
+
     val timeoutConfig: JsObject = Json.obj(
       "timeoutAmount" -> conf.timeoutPeriod,
       "timeoutUrl" -> "TBC" //TODO: Needs to point somewhere
     )
     val selectPageLabels: Messages => JsObject = message => Json.obj(
-      "title" -> message("address_lookupPage.selectPage.heading"),
-      "heading" -> message("address_lookupPage.selectPage.heading"),
+      "title" -> message("importerAddress_lookupPage.selectPage.heading"),
+      "heading" -> message("importerAddress_lookupPage.selectPage.heading"),
       "submitLabel" -> message("common.continue"),
-      "editAddressLinkText" -> message("address_lookupPage.selectPage.editLink")
+      "editAddressLinkText" -> message("importerAddress_lookupPage.selectPage.editLink")
     )
 
     val lookupPageLabels: Messages => JsObject = message => Json.obj(
-      "title" -> message("address_lookupPage.heading"),
-      "heading" -> message("address_lookupPage.heading"),
-      "filterLabel" -> message("address_lookupPage.filter"),
-      "postcodeLabel" -> message("address_lookupPage.postcode"),
-      "submitLabel" -> message("address_lookupPage.lookupPage.submit")
+      "title" -> message("importerAddress_lookupPage.heading"),
+      "heading" -> message("importerAddress_lookupPage.heading"),
+      "filterLabel" -> message("importerAddress_lookupPage.filter"),
+      "postcodeLabel" -> message("importerAddress_lookupPage.postcode"),
+      "submitLabel" -> message("importerAddress_lookupPage.lookupPage.submit")
     )
 
     val confirmPageLabels: Messages => JsObject = message => Json.obj(
-      "title" -> message("address_lookupPage.confirmPage.heading"),
-      "heading" -> message("address_lookupPage.confirmPage.heading"),
+      "title" -> message("importerAddress_lookupPage.confirmPage.heading"),
+      "heading" -> message("importerAddress_lookupPage.confirmPage.heading"),
+      "infoMessage" -> message("importerAddress_lookupPage.confirmPage.infoMessage"),
       "showConfirmChangeText" -> false
     )
 
     val editPageLabels: Messages => JsObject = message => Json.obj(
+      "heading" -> message("importerAddress_lookupPage.editPage.heading"),
+      "townLabel" -> message("importerAddress_lookupPage.editPage.townOrCity"),
       "submitLabel" -> message("common.continue")
     )
 
@@ -77,10 +85,10 @@ case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Reque
 
 }
 
-object AddressLookupJsonBuilder {
+object ImporterAddressLookupJsonBuilder {
 
-  implicit val writes: Writes[AddressLookupJsonBuilder] = new Writes[AddressLookupJsonBuilder] {
-    def writes(data: AddressLookupJsonBuilder): JsObject =
+  implicit val writes: Writes[ImporterAddressLookupJsonBuilder] = new Writes[ImporterAddressLookupJsonBuilder] {
+    def writes(data: ImporterAddressLookupJsonBuilder): JsObject =
     {
       Json.obj(fields =
         "version" -> 2,
@@ -90,7 +98,8 @@ object AddressLookupJsonBuilder {
           "deskProServiceName" -> data.deskproServiceName,
           "showPhaseBanner" -> data.showPhaseBanner,
           "ukMode" -> data.ukMode,
-          "timeoutConfig" -> data.Version2.timeoutConfig
+          "timeoutConfig" -> data.Version2.timeoutConfig,
+          "confirmPageConfig" -> data.Version2.confirmPageConfig
         ),
         "labels" -> Json.obj(
           "en" -> Json.obj(

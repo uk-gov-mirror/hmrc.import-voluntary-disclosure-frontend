@@ -25,8 +25,8 @@ trait ReusableValues {
 
   val idOne: String = "1"
 
-  val traderAddress: ContactAddress = ContactAddress("first", "second", Some("third"), "fourth")
-  val traderAddressWithoutPostcode: ContactAddress = ContactAddress("first", "second", Some("None"), "fourth")
+  val traderAddress: ContactAddress = ContactAddress("first", None, "second", Some("third"), "fourth")
+  val traderAddressWithoutPostcode: ContactAddress = ContactAddress("first", None, "second", Some("None"), "fourth")
 
   val errorModel: HttpResponse = HttpResponse(Status.NOT_FOUND, "Error Message")
 

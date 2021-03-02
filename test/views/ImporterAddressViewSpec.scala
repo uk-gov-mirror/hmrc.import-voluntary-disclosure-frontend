@@ -57,7 +57,7 @@ class ImporterAddressViewSpec extends ViewBaseSpec with BaseMessages with Reusab
     "no errors exist with trader details without postcode" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form, ContactAddress("first", "second", None, "fourth"))(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, ContactAddress("first", None, "second", None, "fourth"))(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {

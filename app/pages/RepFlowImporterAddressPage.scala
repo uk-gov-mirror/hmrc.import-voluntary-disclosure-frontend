@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package services
+package pages
 
-import javax.inject.Singleton
-import models.{UserAnswers, UserType}
-import pages.{ImporterEORIExistsPage, UserTypePage}
+import models.ContactAddress
+import play.api.libs.json.JsPath
 
-@Singleton
-class FlowService {
+case object RepFlowImporterAddressPage extends QuestionPage[ContactAddress] {
 
-  def isRepFlow(userAnswers: UserAnswers): Boolean =
-    userAnswers.get(UserTypePage) match {
-      case Some(userType) => userType == UserType.Representative
-      case _ => false
-    }
+  def path: JsPath = JsPath \ toString
 
-  def doesImporterEORIExist(userAnswers: UserAnswers): Boolean =
-    userAnswers.get(ImporterEORIExistsPage) match {
-      case Some(value) => value
-      case _ => false
-    }
+  override def toString: String = "rep-flow-importer-address"
 
 }

@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package services
+package mocks.services
 
-import javax.inject.Singleton
-import models.{UserAnswers, UserType}
-import pages.{ImporterEORIExistsPage, UserTypePage}
+import base.SpecBase
+import org.scalamock.scalatest.MockFactory
+import services.FlowService
 
-@Singleton
-class FlowService {
+trait MockFlowService extends SpecBase with MockFactory {
 
-  def isRepFlow(userAnswers: UserAnswers): Boolean =
-    userAnswers.get(UserTypePage) match {
-      case Some(userType) => userType == UserType.Representative
-      case _ => false
+  val mockFlowService: FlowService = mock[FlowService]
+
+  object MockedFlowService {
+    def isRepFlow(response: Boolean) = {
+      (mockFlowService.isRepFlow(_))
+        .expects(*)
+        .returns(response)
     }
-
-  def doesImporterEORIExist(userAnswers: UserAnswers): Boolean =
-    userAnswers.get(ImporterEORIExistsPage) match {
-      case Some(value) => value
-      case _ => false
+    def doesImporterEORIExist(response: Boolean) = {
+      (mockFlowService.doesImporterEORIExist(_))
+        .expects(*)
+        .returns(response)
     }
-
+  }
 }

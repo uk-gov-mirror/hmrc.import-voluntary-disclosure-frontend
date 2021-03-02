@@ -20,6 +20,7 @@ import assets.AddressLookupTestConstants.customerAddressJsonError
 import base.SpecBase
 import connectors.httpParsers.InitialiseAddressLookupHttpParser.InitialiseAddressLookupReads
 import models.ErrorModel
+import models.addressLookup.AddressLookupOnRampModel
 import play.api.http.Status
 import uk.gov.hmrc.http.HttpResponse
 
@@ -32,9 +33,13 @@ class InitialiseAddressLookupHttpParserSpec extends SpecBase {
     "the http response status is OK" should {
 
       "return a InitialiseAddressLookupModel" in {
-        InitialiseAddressLookupReads.read("", "",
-          HttpResponse(Status.ACCEPTED, None, Map.empty[String, Seq[String]])) mustBe
-          Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"Response Header did not contain location redirect"))
+        val validResponse = HttpResponse(
+          Status.ACCEPTED,
+          None,
+          Map("Location" -> Seq("redirectUrl"))
+        )
+        InitialiseAddressLookupReads.read("", "", validResponse) mustBe
+          Right(AddressLookupOnRampModel("redirectUrl"))
       }
     }
 

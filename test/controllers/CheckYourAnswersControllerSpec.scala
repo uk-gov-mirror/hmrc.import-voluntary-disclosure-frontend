@@ -77,7 +77,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         "fefewfew@gmail.com",
         "07485939292")).success.value
       .set(ImporterAddressFinalPage,ContactAddress(
-        "street", "city", Some("postcode"), "country code")).success.value
+        "street", None, "city", Some("postcode"), "country code")).success.value
       .set(EnterCustomsProcedureCodePage,"3333333").success.value
       .set(DefermentPage,true).success.value
     )

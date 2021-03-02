@@ -14,25 +14,25 @@
  * limitations under the License.
  */
 
-package services
+package models.addressLookup
 
-import javax.inject.Singleton
-import models.{UserAnswers, UserType}
-import pages.{ImporterEORIExistsPage, UserTypePage}
+import assets.AddressLookupTestConstants.importerAddressLookupV2Json
+import base.SpecBase
+import mocks.config.MockAppConfig
+import play.api.libs.json.Json
 
-@Singleton
-class FlowService {
+class ImporterAddressLookupJsonBuilderSpec extends SpecBase {
 
-  def isRepFlow(userAnswers: UserAnswers): Boolean =
-    userAnswers.get(UserTypePage) match {
-      case Some(userType) => userType == UserType.Representative
-      case _ => false
+  "ImporterAddressLookupJsonBuilder" must {
+
+    "Serialize to new address lookup Json when using importerAddressLookup v2" when {
+
+      "the continueUrl is given to the user" in {
+
+        Json.toJson(ImporterAddressLookupJsonBuilder("/lookup-address/confirmed")(fakeRequest, messagesApi, MockAppConfig)) mustBe importerAddressLookupV2Json
+      }
     }
-
-  def doesImporterEORIExist(userAnswers: UserAnswers): Boolean =
-    userAnswers.get(ImporterEORIExistsPage) match {
-      case Some(value) => value
-      case _ => false
-    }
+  }
 
 }
+

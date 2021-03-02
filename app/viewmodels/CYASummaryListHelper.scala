@@ -386,11 +386,11 @@ trait CYASummaryListHelper {
 
     val addressSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(ImporterAddressFinalPage) map { address =>
       val addressString = address.postalCode match {
-        case Some(value) => address.streetAndNumber + "<br/>" +
+        case Some(value) => address.addressLine1 + "<br/>" +
           address.city + "<br/>" +
           address.postalCode.get + "<br/>" +
           address.countryCode
-        case None => address.streetAndNumber + "<br/>" +
+        case None => address.addressLine1 + "<br/>" +
           address.city + "<br/>" +
           address.countryCode
       }
