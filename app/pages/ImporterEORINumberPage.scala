@@ -16,22 +16,12 @@
 
 package pages
 
-import models.UserAnswers
 import play.api.libs.json.JsPath
 
-import scala.util.Try
-
-case object ImporterEORIExistsPage extends QuestionPage[Boolean] {
+case object ImporterEORINumberPage extends QuestionPage[String] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "importer-eori-exists"
+  override def toString: String = "importer-eori-number"
 
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    if (value.get) {
-      Try(userAnswers)
-    } else {
-      Try(userAnswers.remove(ImporterEORINumberPage).getOrElse(userAnswers))
-    }
-  }
 }

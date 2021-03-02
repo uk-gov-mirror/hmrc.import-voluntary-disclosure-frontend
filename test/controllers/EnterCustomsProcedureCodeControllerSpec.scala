@@ -25,7 +25,7 @@ import mocks.repositories.MockSessionRepository
 import models.{ EntryDetails, UserAnswers}
 import pages.EntryDetailsPage
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}
+import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
 import views.html.EnterCustomsProcedureCodeView

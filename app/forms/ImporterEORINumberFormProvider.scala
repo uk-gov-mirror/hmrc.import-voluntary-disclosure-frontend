@@ -14,24 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package forms
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
+import play.api.i18n.Messages
 
-import scala.util.Try
+class ImporterEORINumberFormProvider @Inject() extends Mappings {
 
-case object ImporterEORIExistsPage extends QuestionPage[Boolean] {
+  def apply()(implicit messages: Messages): Form[String] =
+    Form(
+      "importerEORI" -> text("importerEORINumber.error.nonEmpty")
+        .verifying(regexp("^(?i)GB[0-9]{12,15}$", "importerEORINumber.error.incorrectFormat"))
+    )
 
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "importer-eori-exists"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    if (value.get) {
-      Try(userAnswers)
-    } else {
-      Try(userAnswers.remove(ImporterEORINumberPage).getOrElse(userAnswers))
-    }
-  }
 }

@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package pages
+package services
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+import javax.inject.Singleton
+import models.{UserAnswers, UserType}
+import pages.{ImporterEORIExistsPage, UserTypePage}
 
-import scala.util.Try
+@Singleton
+class FlowService {
 
-case object ImporterEORIExistsPage extends QuestionPage[Boolean] {
-
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "importer-eori-exists"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    if (value.get) {
-      Try(userAnswers)
-    } else {
-      Try(userAnswers.remove(ImporterEORINumberPage).getOrElse(userAnswers))
+  def isRepFlow(userAnswers: UserAnswers): Boolean =
+    userAnswers.get(UserTypePage) match {
+      case Some(userType) => userType == UserType.Representative
+      case _ => false
     }
-  }
+
+  def doesImporterEORIExist(userAnswers: UserAnswers): Boolean =
+    userAnswers.get(ImporterEORIExistsPage) match {
+      case Some(value) => value
+      case _ => false
+    }
+
 }

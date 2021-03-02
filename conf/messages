@@ -336,3 +336,9 @@ importerEORIExists.heading = Does the importer have an EORI number?
 importerEORIExists.hint = The EORI starts with GB and is followed by 12 numbers, for example GB345834921000
 importerEORIExists.error.required = Select yes if the importer has an EORI number
 
+# Importer EORI Number
+importerEORINumber.pageTitle = What is the importer’s EORI number?
+importerEORINumber.pageHeader = What is the importer’s EORI number?
+importerEORINumber.hint = The EORI starts with GB and is followed by 12 numbers, for example GB345834921000.
+importerEORINumber.error.nonEmpty = Enter the importer’s EORI number
+importerEORINumber.error.incorrectFormat = Enter an EORI number in the correct format

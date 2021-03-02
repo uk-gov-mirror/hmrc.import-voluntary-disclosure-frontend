@@ -14,36 +14,34 @@
  * limitations under the License.
  *@
 
-@import models.NumberOfEntries
-
 @this(layout: templates.Layout,
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
-        inputRadio: components.inputRadio,
-        button: components.button)
+        button: components.button,
+        inputText: components.inputText
+)
 
 @(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("numberOfEntries.pageTitle"),
+    pageTitle = messages("importerEORINumber.pageTitle"),
     form = Some(form),
-    customBackLinkUrl = Some(backLink)
-) {
+    customBackLinkUrl = Some(backLink)) {
 
     @errorSummary(form.errors)
 
-    @formHelper(action = controllers.routes.NumberOfEntriesController.onSubmit()) {
-        @inputRadio(
+    @formHelper(action = controllers.routes.ImporterEORINumberController.onSubmit()) {
+        @inputText(
             form = form,
-            legend = messages("numberOfEntries.title"),
-            items = NumberOfEntries.options(form),
-            inline = true,
-            legendAsHeading = true
+            id = "importerEORI",
+            name = "importerEORI",
+            label = "importerEORINumber.pageHeader",
+            classes = Some("govuk-input govuk-!-width-one-third"),
+            isPageHeading = true,
+            hint = Some(Html(messages("importerEORINumber.hint")))
         )
-
         @button("common.button.continue")
     }
-
 }
 
 @{

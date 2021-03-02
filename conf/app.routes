@@ -142,3 +142,6 @@ POST        /disclosure/importer-name                                    control
 
 GET         /disclosure/importer-eori-number-exists                      controllers.ImporterEORIExistsController.onLoad
 POST        /disclosure/importer-eori-number-exists                      controllers.ImporterEORIExistsController.onSubmit
+
+GET         /disclosure/importer-eori-number                             controllers.ImporterEORINumberController.onLoad
+POST        /disclosure/importer-eori-number                             controllers.ImporterEORINumberController.onSubmit

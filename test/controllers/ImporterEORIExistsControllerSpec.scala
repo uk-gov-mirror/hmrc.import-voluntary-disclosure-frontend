@@ -18,15 +18,15 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.{AcceptanceDateFormProvider, ImporterEORIExistsFormProvider}
+import forms.ImporterEORIExistsFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.{AcceptanceDatePage, ImporterEORIExistsPage}
+import pages.ImporterEORIExistsPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.{AcceptanceDateView, ImporterEORIExistsView}
+import views.html.ImporterEORIExistsView
 
 import scala.concurrent.Future
 
@@ -76,7 +76,7 @@ class ImporterEORIExistsControllerSpec extends ControllerSpecBase {
       "return the correct location header for true request" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.ImporterEORIExistsController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.ImporterEORINumberController.onLoad().url)
       }
 
       "return a SEE OTHER for false request" in new Test {
@@ -88,7 +88,7 @@ class ImporterEORIExistsControllerSpec extends ControllerSpecBase {
       "return the correct location header for false request" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.ImporterEORIExistsController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.NumberOfEntriesController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {

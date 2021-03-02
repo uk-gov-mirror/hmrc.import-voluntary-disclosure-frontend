@@ -14,24 +14,14 @@
  * limitations under the License.
  */
 
-package pages
+package messages
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+object ImporterEORINumberMessages extends BaseMessages {
 
-import scala.util.Try
+  val title: String = "What is the importer’s EORI number?"
+  val h1: String = "What is the importer’s EORI number?"
+  val hint: String = "The EORI starts with GB and is followed by 12 numbers, for example GB345834921000."
+  val nonEmpty: String = "Enter the importer’s EORI number"
+  val incorrectFormat: String = "Enter an EORI number in the correct format"
 
-case object ImporterEORIExistsPage extends QuestionPage[Boolean] {
-
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "importer-eori-exists"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    if (value.get) {
-      Try(userAnswers)
-    } else {
-      Try(userAnswers.remove(ImporterEORINumberPage).getOrElse(userAnswers))
-    }
-  }
 }

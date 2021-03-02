@@ -20,12 +20,14 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.NumberOfEntriesFormProvider
 import mocks.repositories.MockSessionRepository
+import models.UserType.Representative
 import models.{NumberOfEntries, UserAnswers}
-import pages.NumberOfEntriesPage
+import pages.{ImporterEORIExistsPage, ImporterEORINumberPage, NumberOfEntriesPage, UserTypePage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import services.FlowService
 import views.html.NumberOfEntriesView
 
 import scala.concurrent.Future
@@ -35,21 +37,27 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
   trait Test extends MockSessionRepository {
     private lazy val numberOfEntriesPage: NumberOfEntriesView = app.injector.instanceOf[NumberOfEntriesView]
 
-    val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
-
+    val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+      .set(UserTypePage, Representative).success.value
+      .set(ImporterEORIExistsPage, false).success.value)
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
     val formProvider: NumberOfEntriesFormProvider = injector.instanceOf[NumberOfEntriesFormProvider]
     val form: NumberOfEntriesFormProvider = formProvider
+    val flowService: FlowService = app.injector.instanceOf[FlowService]
 
     MockedSessionRepository.set(Future.successful(true))
 
     lazy val controller = new NumberOfEntriesController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, appConfig, messagesControllerComponents, form, numberOfEntriesPage)
+      mockSessionRepository, appConfig, messagesControllerComponents, flowService, form, numberOfEntriesPage)
   }
 
   "GET /" should {
     "return OK" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+        .set(UserTypePage, Representative).success.value
+        .set(ImporterEORIExistsPage, true).success.value
+        .set(ImporterEORINumberPage, "GB345834921000").success.value)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
@@ -112,6 +120,7 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
         await(controller.onSubmit(request))
         verifyCalls()
       }
+
     }
 
     "payload contains invalid data" should {

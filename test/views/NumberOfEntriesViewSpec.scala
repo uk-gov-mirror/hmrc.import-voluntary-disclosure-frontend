@@ -32,11 +32,12 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
 
   val formProvider: NumberOfEntriesFormProvider = injector.instanceOf[NumberOfEntriesFormProvider]
 
+
   "Rendering the NumberOfEntries page" when {
     "no errors exist" should {
 
       val form: Form[NumberOfEntries] = formProvider.apply()
-      lazy val view: Html = injectedView(form)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, controllers.routes.UserTypeController.onLoad())(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -54,7 +55,7 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[NumberOfEntries] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, controllers.routes.UserTypeController.onLoad())(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -75,7 +76,7 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
   it should {
 
     val form: Form[NumberOfEntries] = formProvider.apply()
-    lazy val view: Html = injectedView(form)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form, controllers.routes.UserTypeController.onLoad())(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${NumberOfEntriesMessages.h1}'" in {
@@ -91,9 +92,6 @@ class NumberOfEntriesViewSpec extends ViewBaseSpec with BaseMessages {
         s"${NumberOfEntriesMessages.radioButtonTwo} ${NumberOfEntriesMessages.hint}"
     }
 
-    "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.UserTypeController.onLoad().url)
-    }
 
   }
 }

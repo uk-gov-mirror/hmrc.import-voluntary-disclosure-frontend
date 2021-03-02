@@ -17,57 +17,48 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.ImporterEORIExistsFormProvider
+import forms.ImporterEORINumberFormProvider
 import javax.inject.{Inject, Singleton}
-import pages.ImporterEORIExistsPage
+import pages.ImporterEORINumberPage
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.ImporterEORIExistsView
+import views.html.ImporterEORINumberView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class ImporterEORIExistsController @Inject()(identify: IdentifierAction,
+class ImporterEORINumberController @Inject()(identify: IdentifierAction,
                                              getData: DataRetrievalAction,
                                              requireData: DataRequiredAction,
                                              sessionRepository: SessionRepository,
                                              mcc: MessagesControllerComponents,
-                                             formProvider: ImporterEORIExistsFormProvider,
-                                             view: ImporterEORIExistsView
-                                            )
-  extends FrontendController(mcc) with I18nSupport {
+                                             formProvider: ImporterEORINumberFormProvider,
+                                             view: ImporterEORINumberView
+                                            ) extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.routes.ImporterNameController.onLoad()
+  private lazy val backLink = controllers.routes.ImporterEORIExistsController.onLoad()
 
-  def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(ImporterEORIExistsPage).fold(formProvider()) {
+  def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val form = request.userAnswers.get(ImporterEORINumberPage).fold(formProvider()) {
       formProvider().fill
     }
     Future.successful(Ok(view(form, backLink)))
-
   }
 
-  def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
-      eoriExists => {
+      value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterEORIExistsPage, eoriExists))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterEORINumberPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          if (eoriExists) {
-            Redirect(controllers.routes.ImporterEORINumberController.onLoad())
-          }
-          else {
-            Redirect(controllers.routes.NumberOfEntriesController.onLoad())
-          }
+          Redirect(controllers.routes.NumberOfEntriesController.onLoad())
         }
       }
     )
-
   }
-
 }
