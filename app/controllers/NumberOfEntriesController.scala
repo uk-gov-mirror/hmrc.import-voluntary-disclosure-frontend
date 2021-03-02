@@ -80,7 +80,6 @@ class NumberOfEntriesController @Inject()(identify: IdentifierAction,
     (flowService.isRepFlow(userAnswers), flowService.doesImporterEORIExist(userAnswers)) match {
       case (true, true) => controllers.routes.ImporterEORINumberController.onLoad()
       case (true, false) => controllers.routes.ImporterEORIExistsController.onLoad()
-      case (false, false) => controllers.routes.UserTypeController.onLoad()
-
+      case _ => controllers.routes.UserTypeController.onLoad()
     }
 }
