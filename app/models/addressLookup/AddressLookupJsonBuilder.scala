@@ -26,7 +26,7 @@ case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Reque
 
   // general journey overrides
   val showPhaseBanner: Boolean = true
-  val ukMode: Boolean = true
+  val ukMode: Boolean = false
   val conf: AppConfig = config
   val deskproServiceName: String = "TBC" //TODO: Needs to contain name if we need it
   val accessibilityFooterUrl: String = "TBC" //TODO: Needs to point somewhere
@@ -39,6 +39,11 @@ case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Reque
     val version: Int = 2
 
     val navTitle: Messages => String = message => conf.appName
+
+    val confirmPageConfig: JsObject = Json.obj(
+      "showSubHeadingAndInfo" -> true,
+      "showSearchAgainLink" -> true
+    )
 
     val timeoutConfig: JsObject = Json.obj(
       "timeoutAmount" -> conf.timeoutPeriod,
@@ -62,10 +67,13 @@ case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Reque
     val confirmPageLabels: Messages => JsObject = message => Json.obj(
       "title" -> message("address_lookupPage.confirmPage.heading"),
       "heading" -> message("address_lookupPage.confirmPage.heading"),
+      "infoMessage" -> message("address_lookupPage.confirmPage.infoMessage"),
       "showConfirmChangeText" -> false
     )
 
     val editPageLabels: Messages => JsObject = message => Json.obj(
+      "heading" -> message("address_lookupPage.editPage.heading"),
+      "townLabel" -> message("address_lookupPage.editPage.townOrCity"),
       "submitLabel" -> message("common.continue")
     )
 
@@ -90,7 +98,8 @@ object AddressLookupJsonBuilder {
           "deskProServiceName" -> data.deskproServiceName,
           "showPhaseBanner" -> data.showPhaseBanner,
           "ukMode" -> data.ukMode,
-          "timeoutConfig" -> data.Version2.timeoutConfig
+          "timeoutConfig" -> data.Version2.timeoutConfig,
+          "confirmPageConfig" -> data.Version2.confirmPageConfig
         ),
         "labels" -> Json.obj(
           "en" -> Json.obj(

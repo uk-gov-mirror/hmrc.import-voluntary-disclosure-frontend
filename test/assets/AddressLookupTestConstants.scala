@@ -109,10 +109,14 @@ object AddressLookupTestConstants extends BaseMessages {
       "accessibilityFooterUrl" -> "TBC",
       "deskProServiceName" -> "TBC",
       "showPhaseBanner" -> true,
-      "ukMode" -> true,
+      "ukMode" -> false,
       "timeoutConfig" -> Json.obj(
         "timeoutAmount" -> 900,
         "timeoutUrl" -> "TBC"
+      ),
+      "confirmPageConfig" -> Json.obj(
+        "showSubHeadingAndInfo" -> true,
+        "showSearchAgainLink" -> true
       )
     ),
     "labels" -> Json.obj(
@@ -137,10 +141,13 @@ object AddressLookupTestConstants extends BaseMessages {
         "confirmPageLabels" -> Json.obj(
           "title" -> AddressLookupMessages.confirmHeading,
           "heading" -> AddressLookupMessages.confirmHeading,
+          "infoMessage" -> AddressLookupMessages.infoMessage,
           "showConfirmChangeText" -> false
         ),
         "editPageLabels" -> Json.obj(
-          "submitLabel" -> continue
+          "heading" -> AddressLookupMessages.editPageHeading,
+          "submitLabel" -> continue,
+          "townLabel" -> AddressLookupMessages.townOrCity
         )
       ),
       "cy" -> Json.obj(
@@ -164,10 +171,13 @@ object AddressLookupTestConstants extends BaseMessages {
         "confirmPageLabels" -> Json.obj(
           "title" -> AddressLookupMessages.confirmHeading,
           "heading" -> AddressLookupMessages.confirmHeading,
+          "infoMessage" -> AddressLookupMessages.infoMessage,
           "showConfirmChangeText" -> false
         ),
         "editPageLabels" -> Json.obj(
-          "submitLabel" -> continue
+          "heading" -> AddressLookupMessages.editPageHeading,
+          "submitLabel" -> continue,
+          "townLabel" -> AddressLookupMessages.townOrCity
         )
       )
     )
