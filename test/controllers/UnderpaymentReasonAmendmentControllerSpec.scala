@@ -152,6 +152,10 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
 
     "called with entry level box 22" should {checkRoute(22, 0, controllers.routes.BoxNumberController.onLoad())}
     "called with entry level box 62" should {checkRoute(62, 0, controllers.routes.BoxNumberController.onLoad())}
+    "called with entry level box 63" should {checkRoute(63, 0, controllers.routes.BoxNumberController.onLoad())}
+    "called with entry level box 66" should {checkRoute(66, 0, controllers.routes.BoxNumberController.onLoad())}
+    "called with entry level box 67" should {checkRoute(67, 0, controllers.routes.BoxNumberController.onLoad())}
+    "called with entry level box 68" should {checkRoute(68, 0, controllers.routes.BoxNumberController.onLoad())}
 
     "called with item level box 33" should {checkRoute(33, 1, controllers.routes.ItemNumberController.onLoad(), Some("govuk-input--width-20"))}
 

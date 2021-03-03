@@ -271,6 +271,18 @@ box33.pageBody = Must be 10 numbers, sometimes followed by a code of 4 character
 box62.pageTitle = Box 62 air transport costs amendment
 box62.pageHeader = Box 62 air transport costs amendment
 box62.pageBody = Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
+box63.pageTitle = Box 63 AWB or freight charges amendment
+box63.pageHeader = Box 63 AWB or freight charges amendment
+box63.pageBody = Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
+box66.pageTitle = Box 66 insurance amendment
+box66.pageHeader = Box 66 insurance amendment
+box66.pageBody = Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
+box67.pageTitle = Box 67 other charges or deductions amendment
+box67.pageHeader = Box 67 other charges or deductions amendment
+box67.pageBody = Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
+box68.pageTitle = Box 68 adjustment for VAT value amendment
+box68.pageHeader = Box 68 adjustment for VAT value amendment
+box68.pageBody = Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.
 
 # Check Your Answers
 cya.pageTitle = Check your answers before sending your disclosure
