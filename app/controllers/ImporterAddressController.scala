@@ -57,9 +57,9 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
     importerAddressService.retrieveAddress("1").flatMap {
       case Right(traderAddress) =>
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterAddressTemporaryPage, traderAddress))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterAddressTemporaryPage, traderAddress.address))
           _ <- sessionRepository.set(updatedAnswers)
-        } yield Ok(view(form, traderAddress))
+        } yield Ok(view(form, traderAddress.address))
       case Left(error) =>
         logger.error(error.message + " " + error.status)
         Future.successful(NotFound(error.message + " " + error.status))
