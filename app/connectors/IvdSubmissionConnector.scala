@@ -29,12 +29,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class IvdSubmissionConnector @Inject()(val http: HttpClient,
                                        implicit val config: AppConfig) {
 
-  private[connectors] def getAddressUrl(id: String) = s"${config.importVoluntaryDisclosureSubmission}/api/eoriDetails?id=$id"
+  private[connectors] def getEoriDetailsUrl(id: String) = s"${config.importVoluntaryDisclosureSubmission}/api/eoriDetails?id=$id"
 
   private[connectors] def postSubmissionUrl = s"${config.importVoluntaryDisclosureSubmission}/api/case"
 
-  def getAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[EoriDetails]] = {
-    http.GET[HttpGetResult[EoriDetails]](getAddressUrl(id))
+  def getEoriDetails(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[EoriDetails]] = {
+    http.GET[HttpGetResult[EoriDetails]](getEoriDetailsUrl(id))
   }
 
   def postSubmission(submission: IvdSubmission)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[SubmissionResponse]] = {

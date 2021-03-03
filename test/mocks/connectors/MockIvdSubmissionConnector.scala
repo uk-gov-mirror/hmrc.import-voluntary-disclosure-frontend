@@ -17,7 +17,7 @@
 package mocks.connectors
 
 import connectors.IvdSubmissionConnector
-import models.{ErrorModel, IvdSubmission, SubmissionResponse, ContactAddress}
+import models.{EoriDetails, ErrorModel, IvdSubmission, SubmissionResponse}
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
 
@@ -27,11 +27,11 @@ trait MockIvdSubmissionConnector extends MockFactory {
 
   val mockIVDSubmissionConnector: IvdSubmissionConnector = mock[IvdSubmissionConnector]
 
-  type TraderAddressResponse = Either[ErrorModel, ContactAddress]
+  type EoriDetailsResponse = Either[ErrorModel, EoriDetails]
 
-  def setupMockGetAddress(response: Either[ErrorModel, ContactAddress]): Unit = {
-    (mockIVDSubmissionConnector.getAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*,*,*)
+  def setupMockGetEoriDetails(response: Either[ErrorModel, EoriDetails]): Unit = {
+    (mockIVDSubmissionConnector.getEoriDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 

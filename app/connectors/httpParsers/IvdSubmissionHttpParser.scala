@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.{HttpReads, HttpResponse}
 
 object IvdSubmissionHttpParser {
 
-  implicit object TraderAddressReads extends HttpReads[HttpGetResult[EoriDetails]] {
+  implicit object EoriDetailsReads extends HttpReads[HttpGetResult[EoriDetails]] {
 
     private val logger = Logger("application." + getClass.getCanonicalName)
 
@@ -35,13 +35,13 @@ object IvdSubmissionHttpParser {
           response.json.validate[EoriDetails].fold(
             invalid => {
               logger.error("Failed to validate JSON with errors: " + invalid)
-              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from SUB09 API for TraderAddressHttpParser"))
+              Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from SUB09 API for EoriDetailsHttpParser"))
             },
             valid => Right(valid)
           )
         case status =>
           logger.error("Failed to validate JSON with status: " + status + " body: " + response.body)
-          Left(ErrorModel(status, "Downstream error returned when retrieving TraderAddress model from back end"))
+          Left(ErrorModel(status, "Downstream error returned when retrieving EoriDetails model from back end"))
       }
     }
   }

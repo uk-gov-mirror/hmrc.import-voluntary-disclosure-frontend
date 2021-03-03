@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-package services
+package mocks.services
 
-import config.AppConfig
-import connectors.IvdSubmissionConnector
-
-import javax.inject.{Inject, Singleton}
+import base.SpecBase
 import models.{ContactAddress, EoriDetails, ErrorModel}
-import play.api.i18n.MessagesApi
+import org.scalamock.scalatest.MockFactory
+import services.EoriDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-@Singleton
-class ImporterAddressService @Inject()(ivdSubmissionConnector: IvdSubmissionConnector,
-                                       implicit val messagesApi: MessagesApi,
-                                       implicit val appConfig: AppConfig) {
+trait MockEoriDetailsService extends SpecBase with MockFactory {
 
-  def retrieveAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, EoriDetails]] = {
-    ivdSubmissionConnector.getAddress(id)
+  val mockEoriDetailsService: EoriDetailsService = mock[EoriDetailsService]
+
+  type RetrieveEoriDetailsResponse = Either[ErrorModel, EoriDetails]
+
+  def setupMockRetrieveAddress(response: RetrieveEoriDetailsResponse): Unit = {
+    (mockEoriDetailsService.retrieveEoriDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
+      .returns(Future.successful(response))
   }
 
 }

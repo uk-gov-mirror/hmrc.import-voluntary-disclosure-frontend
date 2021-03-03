@@ -16,13 +16,12 @@
 
 package pages
 
-import models.ContactAddress
 import play.api.libs.json.JsPath
 
-case object ImporterAddressTemporaryPage extends QuestionPage[ContactAddress] {
+case object EoriDetailsPage extends QuestionPage[Boolean] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "temporary-importer-address"
+  override def toString: String = "eori-details"
 
 }

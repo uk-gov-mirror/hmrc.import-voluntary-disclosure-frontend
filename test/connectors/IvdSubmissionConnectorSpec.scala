@@ -27,16 +27,16 @@ class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
 
   lazy val target = new IvdSubmissionConnector(mockHttp, appConfig)
 
-  "Importer Address Connector" should {
+  "Ivd Submission Connector" should {
 
     "return the Right response" in {
-      setupMockHttpGet(target.getAddressUrl(idOne))(Right(traderAddress))
-      await(target.getAddress(idOne)) mustBe Right(traderAddress)
+      setupMockHttpGet(target.getEoriDetailsUrl(idOne))(Right(eoriDetails))
+      await(target.getEoriDetails(idOne)) mustBe Right(eoriDetails)
     }
 
     "return the error response" in {
-      setupMockHttpGet(target.getAddressUrl(idOne))(Left(errorModel))
-      await(target.getAddress(idOne)) mustBe Left(errorModel)
+      setupMockHttpGet(target.getEoriDetailsUrl(idOne))(Left(errorModel))
+      await(target.getEoriDetails(idOne)) mustBe Left(errorModel)
     }
 
   }
@@ -51,7 +51,7 @@ class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
       entryDetails = EntryDetails("123", "123456Q", LocalDate.parse("2020-01-12")),
       originalCpc = "cpc",
       declarantContactDetails = ContactDetails("name", "email", "phone"),
-      declarantAddress = traderAddress,
+      declarantAddress = addressDetails,
       defermentType = None,
       defermentAccountNumber = None,
       additionalDefermentNumber = None

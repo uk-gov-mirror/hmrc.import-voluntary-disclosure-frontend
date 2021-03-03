@@ -17,8 +17,8 @@
 package connectors.httpParsers
 
 import base.SpecBase
-import connectors.httpParsers.IvdSubmissionHttpParser.{SubmissionResponseReads, TraderAddressReads}
-import models.{ErrorModel, SubmissionResponse}
+import connectors.httpParsers.IvdSubmissionHttpParser.{SubmissionResponseReads, EoriDetailsReads}
+import models.{ContactAddress, EoriDetails, ErrorModel, SubmissionResponse}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -26,11 +26,16 @@ import utils.ReusableValues
 
 class IvdSubmissionHttpParserSpec extends SpecBase with ReusableValues {
 
-  val traderAddressJsonWithoutPostcode: JsObject = Json.obj(
-    "streetAndNumber" -> "first",
-    "city" -> "second",
-    "postalCode" -> Some("None"),
-    "countryCode" -> "fourth"
+  val eoriDetailsJson: EoriDetails = EoriDetails(
+    "GB987654321000",
+    "Fast Food ltd",
+    ContactAddress(
+      addressLine1 = "99 Avenue Road",
+      addressLine2 = None,
+      city = "Anyold Town",
+      postalCode = Some("99JZ 1AA"),
+      countryCode = "GB"
+    )
   )
 
   val submissionResponseJson: JsObject = Json.obj(
@@ -41,29 +46,28 @@ class IvdSubmissionHttpParserSpec extends SpecBase with ReusableValues {
 
   "IVD Submission HttpParser" when {
 
-    "called to parse a Trader Address" should {
-      "the http response status is OK with valid Json" in {
-        TraderAddressReads.read("", "",
-          HttpResponse(Status.OK, traderAddressJson, Map.empty[String, Seq[String]])) mustBe Right(traderAddress)
+    "called to parse a Eori Details" should {
+      "the http response status is OK and valid content" in {
+        EoriDetailsReads.read("", "",
+          HttpResponse(Status.OK, cleanedDetailsJson, Map.empty[String, Seq[String]])) mustBe Right(eoriDetails)
       }
 
-      "the http response status is OK with valid Json - postcode none" in {
-        TraderAddressReads.read("", "",
-          HttpResponse(Status.OK, traderAddressJsonWithoutPostcode, Map.empty[String, Seq[String]])) mustBe Right(traderAddressWithoutPostcode)
+      "the http response status is OK with valid Json" in {
+        EoriDetailsReads.read("", "",
+          HttpResponse(Status.OK, cleanedDetailsJson, Map.empty[String, Seq[String]])) mustBe Right(eoriDetailsJson)
       }
 
       "return an ErrorModel when invalid Json is returned" in {
-        TraderAddressReads.read("", "",
+        EoriDetailsReads.read("", "",
           HttpResponse(Status.OK, Json.obj(), Map.empty[String, Seq[String]])) mustBe
-          Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,
-            "Invalid Json returned from SUB09 API for TraderAddressHttpParser"))
+          Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from SUB09 API for EoriDetailsHttpParser"))
       }
 
       "return an ErrorModel when NOT_FOUND is returned" in {
-        TraderAddressReads.read("", "",
+        EoriDetailsReads.read("", "",
           HttpResponse(Status.NOT_FOUND, "")) mustBe
           Left(ErrorModel(Status.NOT_FOUND,
-            "Downstream error returned when retrieving TraderAddress model from back end"))
+            "Downstream error returned when retrieving EoriDetails model from back end"))
       }
     }
 

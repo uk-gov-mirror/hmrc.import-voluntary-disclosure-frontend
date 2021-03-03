@@ -21,19 +21,19 @@ import mocks.connectors.MockIvdSubmissionConnector
 import utils.ReusableValues
 
 
-class ImporterAddressServiceSpec extends SpecBase with MockIvdSubmissionConnector with ReusableValues {
+class EoriDetailsServiceSpec extends SpecBase with MockIvdSubmissionConnector with ReusableValues {
 
-  def setup(traderAddressResponse: TraderAddressResponse): ImporterAddressService = {
-    setupMockGetAddress(traderAddressResponse)
-    new ImporterAddressService(mockIVDSubmissionConnector, messagesApi, appConfig)
+  def setup(eoriDetailsResponse: EoriDetailsResponse): EoriDetailsService = {
+    setupMockGetEoriDetails(eoriDetailsResponse)
+    new EoriDetailsService(mockIVDSubmissionConnector, messagesApi, appConfig)
   }
 
   "connector call is successful" should {
-    lazy val service = setup(Right(traderAddress))
-    lazy val result = service.retrieveAddress(idOne)
+    lazy val service = setup(Right(eoriDetails))
+    lazy val result = service.retrieveEoriDetails(idOne)
 
-    "return successful RetrieveAddressResponse" in {
-      await(result) mustBe Right(traderAddress)
+    "return successful RetrieveEoriDetailsResponse" in {
+      await(result) mustBe Right(eoriDetails)
     }
   }
 }
