@@ -16,10 +16,10 @@
 
 package pages
 
-import models.ContactAddress
+import models.EoriDetails
 import play.api.libs.json.JsPath
 
-case object EoriDetailsTemporaryPage extends QuestionPage[ContactAddress] {
+case object EoriDetailsTemporaryPage extends QuestionPage[EoriDetails] {
 
   def path: JsPath = JsPath \ toString
 

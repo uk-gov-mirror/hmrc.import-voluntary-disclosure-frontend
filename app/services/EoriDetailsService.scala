@@ -18,12 +18,11 @@ package services
 
 import config.AppConfig
 import connectors.IvdSubmissionConnector
-
-import javax.inject.{Inject, Singleton}
-import models.{ContactAddress, EoriDetails, ErrorModel}
+import models.{EoriDetails, ErrorModel}
 import play.api.i18n.MessagesApi
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
