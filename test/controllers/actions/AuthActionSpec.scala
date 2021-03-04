@@ -22,11 +22,15 @@ import play.api.http.Status
 import play.api.mvc.{Action, AnyContent, BodyParsers, Results}
 import play.api.test.Helpers._
 import uk.gov.hmrc.auth.core._
+import uk.gov.hmrc.auth.core.syntax.retrieved.authSyntaxForRetrieved
 import views.html.errors.UnauthorisedView
 
 import scala.concurrent.Future
 
 class AuthActionSpec extends SpecBase {
+  val singleEnrolment = Enrolments(Set(
+    Enrolment("HMRC-CTS-ORG", Seq(EnrolmentIdentifier("EORINumber", "GB987654321000")), "Activated")
+  ))
 
   trait Test extends MockAuthConnector {
 
@@ -54,11 +58,10 @@ class AuthActionSpec extends SpecBase {
       }
     }
 
-
     "user is logged in and has an external ID" must {
 
       "execute the action block" in new Test {
-        MockedAuthConnector.authorise(Future.successful(Some("a")))
+        MockedAuthConnector.authorise(Future.successful(Some("abc") and singleEnrolment))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.OK
       }
@@ -67,7 +70,7 @@ class AuthActionSpec extends SpecBase {
     "user is logged in and has no external ID" must {
 
       "receive an authorised response" in new Test {
-        MockedAuthConnector.authorise(Future.successful(None))
+        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.UNAUTHORIZED
       }

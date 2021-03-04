@@ -23,8 +23,9 @@ import play.api.Logger
 import play.api.i18n.{I18nSupport, MessagesApi}
 import play.api.mvc.Results.{Redirect, Unauthorized}
 import play.api.mvc._
-import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals.externalId
-import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisationException, AuthorisedFunctions, NoActiveSession}
+import uk.gov.hmrc.auth.core.retrieve.v2.Retrievals._
+import uk.gov.hmrc.auth.core.retrieve.~
+import uk.gov.hmrc.auth.core.{AuthConnector, AuthorisationException, AuthorisedFunctions, Enrolment, NoActiveSession}
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.HeaderCarrierConverter
 
@@ -50,11 +51,18 @@ class AuthenticatedIdentifierAction @Inject()(override val authConnector: AuthCo
       request = Some(request)
     )
 
-    authorised().retrieve(externalId) {
-      case Some(userId) =>
-        val req = IdentifierRequest(request, userId)
+    authorised(Enrolment("HMRC-CTS-ORG")).retrieve(externalId and authorisedEnrolments) {
+      case Some(userId) ~ allEnrolments =>
+        val Some(eori) =
+          for {
+            enrolment <- allEnrolments.getEnrolment("HMRC-CTS-ORG")
+            identifier <- enrolment.getIdentifier("EORINumber")
+          } yield {
+            identifier.value
+          }
+        val req = IdentifierRequest(request, userId, eori)
         block(req)
-      case None =>
+      case _ =>
         logger.warn("Unable to retrieve the external ID for the user")
         Future.successful(Unauthorized(unauthorisedView()(request, request2Messages(request))))
     } recover {
