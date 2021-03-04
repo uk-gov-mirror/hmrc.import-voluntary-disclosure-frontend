@@ -24,12 +24,13 @@ import scala.concurrent.{ExecutionContext, Future}
 object FakeIdentifierAction {
 
   def identifierAction(bodyParser: BodyParser[AnyContent],
-                       externalId: String): IdentifierAction = new IdentifierAction {
+                       externalId: String,
+                       eori: String): IdentifierAction = new IdentifierAction {
 
     override implicit protected def executionContext: ExecutionContext = scala.concurrent.ExecutionContext.global
 
     override def invokeBlock[A](request: Request[A], block: IdentifierRequest[A] => Future[Result]): Future[Result] =
-      block(IdentifierRequest(request, externalId))
+      block(IdentifierRequest(request, externalId, eori))
 
     override def parser: BodyParser[AnyContent] = bodyParser
   }

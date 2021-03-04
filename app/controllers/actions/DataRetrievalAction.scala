@@ -30,7 +30,7 @@ class DataRetrievalActionImpl @Inject()(sessionRepository: SessionRepository)
   override protected def transform[A](request: IdentifierRequest[A]): Future[OptionalDataRequest[A]] =
     sessionRepository
       .get(request.credId)
-      .map(OptionalDataRequest(request, request.credId, _))
+      .map(OptionalDataRequest(request, request.credId, request.eori, _))
 }
 
 trait DataRetrievalAction extends ActionTransformer[IdentifierRequest, OptionalDataRequest]

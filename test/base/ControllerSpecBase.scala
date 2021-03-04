@@ -20,7 +20,7 @@ import controllers.actions._
 
 trait ControllerSpecBase extends SpecBase {
   lazy val authenticatedAction: IdentifierAction =
-    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id")
+    FakeIdentifierAction.identifierAction(messagesControllerComponents.parsers.anyContent, "some_external_id", "GB987654321000")
 
   lazy val dataRequiredAction: DataRequiredAction = injector.instanceOf[DataRequiredActionImpl]
 }

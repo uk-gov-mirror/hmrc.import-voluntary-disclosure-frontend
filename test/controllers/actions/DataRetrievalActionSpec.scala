@@ -34,7 +34,7 @@ class DataRetrievalActionSpec extends SpecBase {
     val mockSessionRepository: SessionRepository = mock[SessionRepository]
     val action = new Harness(mockSessionRepository)
 
-    val request: IdentifierRequest[_] = IdentifierRequest(fakeRequest, "some cred ID")
+    val request: IdentifierRequest[_] = IdentifierRequest(fakeRequest, "some cred ID", "GB987654321000")
   }
 
   "Data Retrieval Action" when {

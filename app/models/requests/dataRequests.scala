@@ -19,8 +19,8 @@ package models.requests
 import models.UserAnswers
 import play.api.mvc.WrappedRequest
 
-case class OptionalDataRequest[A](request: IdentifierRequest[A], credId: String, userAnswers: Option[UserAnswers])
+case class OptionalDataRequest[A](request: IdentifierRequest[A], credId: String, eori: String, userAnswers: Option[UserAnswers])
   extends WrappedRequest[A](request)
 
-case class DataRequest[A](request: OptionalDataRequest[A], credId: String, userAnswers: UserAnswers)
+case class DataRequest[A](request: OptionalDataRequest[A], credId: String, eori: String, userAnswers: UserAnswers)
   extends WrappedRequest[A](request)
