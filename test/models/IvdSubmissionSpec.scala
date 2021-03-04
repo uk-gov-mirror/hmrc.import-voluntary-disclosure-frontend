@@ -62,7 +62,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(CustomsDutyPage, UnderpaymentAmount(BigDecimal("123.0"), BigDecimal("233.33")))
     answers <- answers.set(ImportVATPage, UnderpaymentAmount(BigDecimal("111.11"), BigDecimal("1234")))
     answers <- answers.set(ExciseDutyPage, UnderpaymentAmount(BigDecimal("123.22"), BigDecimal("4409.55")))
-    answers <- answers.set(EoriDetailsPage, true)
+    answers <- answers.set(ReuseKnowAddressPage, true)
     answers <- answers.set(TraderContactDetailsPage, submission.declarantContactDetails)
     answers <- answers.set(ImporterAddressFinalPage, submission.declarantAddress)
     answers <- answers.set(ImporterAddressFinalPage, submission.declarantAddress)

@@ -32,7 +32,7 @@ object IvdSubmissionHttpParser {
 
       response.status match {
         case Status.OK =>
-          response.json.validate[EoriDetails].fold(
+          response.json.validate[EoriDetails](EoriDetails.reads).fold(
             invalid => {
               logger.error("Failed to validate JSON with errors: " + invalid)
               Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Invalid Json returned from SUB09 API for EoriDetailsHttpParser"))

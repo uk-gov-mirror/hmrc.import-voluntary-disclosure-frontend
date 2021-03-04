@@ -22,7 +22,7 @@ import forms.ImporterAddressFormProvider
 import mocks.repositories.MockSessionRepository
 import mocks.services.MockEoriDetailsService
 import models.{ErrorModel, UserAnswers}
-import pages.{EoriDetailsPage, EoriDetailsTemporaryPage}
+import pages.{ReuseKnowAddressPage, KnownEoriDetails}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -32,7 +32,7 @@ import views.html.ImporterAddressView
 
 import scala.concurrent.Future
 
-class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsService with ReusableValues {
+class ImporterAddressControllerSpec extends ControllerSpecBase with MockEoriDetailsService with ReusableValues {
 
   trait Test extends MockSessionRepository {
     lazy val controller = new ImporterAddressController(
@@ -75,7 +75,7 @@ class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsS
     "return HTML" in new Test {
       setupMockRetrieveAddress(Right(eoriDetails))
       override val userAnswers: Option[UserAnswers] = Some(
-        UserAnswers("some-cred-id").set(EoriDetailsPage, importerAddressYes).success.value
+        UserAnswers("some-cred-id").set(ReuseKnowAddressPage, importerAddressYes).success.value
       )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
@@ -88,7 +88,7 @@ class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsS
 
       "redirect to the deferment page if choosing to use the known address" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(
-          UserAnswers("some-cred-id").set(EoriDetailsTemporaryPage, addressDetails).success.value
+          UserAnswers("some-cred-id").set(KnownEoriDetails, eoriDetails).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
@@ -98,7 +98,7 @@ class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsS
 
       "handoff to the address lookup frontend if choosing to use a different address" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(
-          UserAnswers("some-cred-id").set(EoriDetailsTemporaryPage, addressDetails).success.value
+          UserAnswers("some-cred-id").set(KnownEoriDetails, eoriDetails).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         lazy val result: Future[Result] = controller.onSubmit(request)
@@ -108,7 +108,7 @@ class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsS
 
       "update the UserAnswers in session when Trader Address is correct" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(
-          UserAnswers("some-cred-id").set(EoriDetailsTemporaryPage, addressDetails).success.value
+          UserAnswers("some-cred-id").set(KnownEoriDetails, eoriDetails).success.value
         )
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         await(controller.onSubmit(request))
@@ -117,7 +117,7 @@ class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsS
 
       "update the UserAnswers in session Trader Address is incorrect" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(
-          UserAnswers("some-cred-id").set(EoriDetailsTemporaryPage, addressDetails).success.value
+          UserAnswers("some-cred-id").set(KnownEoriDetails, eoriDetails).success.value
         )
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         await(controller.onSubmit(request))
@@ -127,7 +127,7 @@ class EoriDetailsControllerSpec extends ControllerSpecBase with MockEoriDetailsS
       "payload contains invalid data" should {
         "return a BAD REQUEST" in new Test {
           override val userAnswers: Option[UserAnswers] = Some(
-            UserAnswers("some-cred-id").set(EoriDetailsTemporaryPage, addressDetails).success.value
+            UserAnswers("some-cred-id").set(KnownEoriDetails, eoriDetails).success.value
           )
           val result: Future[Result] = controller.onSubmit(fakeRequest)
           status(result) mustBe Status.BAD_REQUEST

@@ -16,7 +16,7 @@
 
 package models
 
-import play.api.libs.json.{Reads, __}
+import play.api.libs.json.{Json, Reads, __}
 
 case class EoriDetails(eori: String, name: String, address: ContactAddress)
 
@@ -29,5 +29,7 @@ object EoriDetails {
   } yield {
     EoriDetails(eori, name, address)
   }
+
+  implicit val format = Json.format[EoriDetails]
 
 }

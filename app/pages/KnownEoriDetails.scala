@@ -19,10 +19,10 @@ package pages
 import models.EoriDetails
 import play.api.libs.json.JsPath
 
-case object EoriDetailsTemporaryPage extends QuestionPage[EoriDetails] {
+case object KnownEoriDetails extends QuestionPage[EoriDetails] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "temporary-eori-details"
+  override def toString: String = "known-eori-details"
 
 }

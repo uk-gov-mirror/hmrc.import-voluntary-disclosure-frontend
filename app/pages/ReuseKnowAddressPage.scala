@@ -18,10 +18,10 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object EoriDetailsPage extends QuestionPage[Boolean] {
+case object ReuseKnowAddressPage extends QuestionPage[Boolean] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "eori-details"
+  override def toString: String = "reuse-known-address"
 
 }

@@ -21,7 +21,7 @@ import config.ErrorHandler
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ImporterAddressFormProvider
 import models.ContactAddress
-import pages.{EoriDetailsPage, EoriDetailsTemporaryPage, ImporterAddressFinalPage}
+import pages.{ImporterAddressFinalPage, KnownEoriDetails, ReuseKnowAddressPage}
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -50,16 +50,16 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
   private val logger = Logger("application." + getClass.getCanonicalName)
 
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(EoriDetailsPage).fold(formProvider()) {
+    val form = request.userAnswers.get(ReuseKnowAddressPage).fold(formProvider()) {
       formProvider().fill
     }
     // TODO - need the EORI id
-    eoriDetailsService.retrieveEoriDetails("1").flatMap {
-      case Right(traderAddress) =>
+    eoriDetailsService.retrieveEoriDetails("GB987654321000").flatMap {
+      case Right(eoriDetails) =>
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(EoriDetailsTemporaryPage, traderAddress.address))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(KnownEoriDetails, eoriDetails))
           _ <- sessionRepository.set(updatedAnswers)
-        } yield Ok(view(form, traderAddress.address))
+        } yield Ok(view(form, eoriDetails.address))
       case Left(error) =>
         logger.error(error.message + " " + error.status)
         Future.successful(NotFound(error.message + " " + error.status))
@@ -67,22 +67,22 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val traderAddress: ContactAddress = request.userAnswers.get(EoriDetailsTemporaryPage).get
+    val traderAddress: ContactAddress = request.userAnswers.get(KnownEoriDetails).get.address
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, traderAddress))),
       value => {
         if (value) {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EoriDetailsPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ReuseKnowAddressPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ImporterAddressFinalPage, traderAddress))
-            updatedAnswers <- Future.fromTry(updatedAnswers.remove(EoriDetailsTemporaryPage))
+            updatedAnswers <- Future.fromTry(updatedAnswers.remove(KnownEoriDetails))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             Redirect(controllers.routes.DefermentController.onLoad())
           }
         } else {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(EoriDetailsPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(ReuseKnowAddressPage, value))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             Redirect(controllers.routes.AddressLookupController.initialiseJourney())
