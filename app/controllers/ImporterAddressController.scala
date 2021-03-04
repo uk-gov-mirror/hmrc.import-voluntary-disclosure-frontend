@@ -75,7 +75,6 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(ReuseKnowAddressPage, value))
             updatedAnswers <- Future.fromTry(updatedAnswers.set(ImporterAddressFinalPage, traderAddress))
-            updatedAnswers <- Future.fromTry(updatedAnswers.remove(KnownEoriDetails))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             Redirect(controllers.routes.DefermentController.onLoad())
