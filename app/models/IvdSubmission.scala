@@ -25,7 +25,7 @@ import java.time.LocalDate
 case class IvdSubmission(userType: UserType,
                          numEntries: NumberOfEntries,
                          acceptedBeforeBrexit: Boolean,
-                         additionalInfo: String = "Not Applicable",
+                         additionalInfo: String,
                          entryDetails: EntryDetails,
                          originalCpc: String,
                          declarantContactDetails: ContactDetails,
@@ -78,7 +78,7 @@ object IvdSubmission extends FixedConfig {
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
-      additionalInfo <- MoreInformationPage.path.read[String]
+      additionalInfo <- MoreInformationPage.path.readNullable[String]
     } yield {
 
       val underpaymentDetails = Seq(
@@ -99,7 +99,7 @@ object IvdSubmission extends FixedConfig {
         declarantAddress = traderAddress,
         underpaymentDetails = underpaymentDetails,
         supportingDocuments = supportingDocuments,
-        additionalInfo = additionalInfo
+        additionalInfo = additionalInfo.getOrElse("Not Applicable")
       )
     }
 }
