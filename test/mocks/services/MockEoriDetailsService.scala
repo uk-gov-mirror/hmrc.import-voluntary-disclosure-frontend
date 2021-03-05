@@ -17,22 +17,22 @@
 package mocks.services
 
 import base.SpecBase
-import models.{ErrorModel, ContactAddress}
+import models.{ContactAddress, EoriDetails, ErrorModel}
 import org.scalamock.scalatest.MockFactory
-import services.ImporterAddressService
+import services.EoriDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockImporterAddressService extends SpecBase with MockFactory{
+trait MockEoriDetailsService extends SpecBase with MockFactory {
 
-  val mockImporterAddressService: ImporterAddressService = mock[ImporterAddressService]
+  val mockEoriDetailsService: EoriDetailsService = mock[EoriDetailsService]
 
-  type RetrieveAddressResponse = Either[ErrorModel, ContactAddress]
+  type RetrieveEoriDetailsResponse = Either[ErrorModel, EoriDetails]
 
-  def setupMockRetrieveAddress(response: RetrieveAddressResponse): Unit  = {
-    (mockImporterAddressService.retrieveAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*,*,*)
+  def setupMockRetrieveAddress(response: RetrieveEoriDetailsResponse): Unit = {
+    (mockEoriDetailsService.retrieveEoriDetails(_: String)(_: HeaderCarrier, _: ExecutionContext))
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 

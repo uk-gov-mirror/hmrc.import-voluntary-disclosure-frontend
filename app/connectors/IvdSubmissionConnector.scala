@@ -17,9 +17,9 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
 import connectors.httpParsers.IvdSubmissionHttpParser._
-import models.{IvdSubmission, SubmissionResponse, ContactAddress}
+import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
+import models.{EoriDetails, IvdSubmission, SubmissionResponse}
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 
 import javax.inject.{Inject, Singleton}
@@ -27,13 +27,14 @@ import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
 class IvdSubmissionConnector @Inject()(val http: HttpClient,
-                                       implicit val config: AppConfig){
+                                       implicit val config: AppConfig) {
 
-  private[connectors] def getAddressUrl(id: String) = s"${config.importVoluntaryDisclosureSubmission}/api/address?id=$id"
+  private[connectors] def getEoriDetailsUrl(id: String) = s"${config.importVoluntaryDisclosureSubmission}/api/eoriDetails?id=$id"
+
   private[connectors] def postSubmissionUrl = s"${config.importVoluntaryDisclosureSubmission}/api/case"
 
-  def getAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[ContactAddress]] = {
-    http.GET[HttpGetResult[ContactAddress]](getAddressUrl(id))
+  def getEoriDetails(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[EoriDetails]] = {
+    http.GET[HttpGetResult[EoriDetails]](getEoriDetailsUrl(id))
   }
 
   def postSubmission(submission: IvdSubmission)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[SubmissionResponse]] = {

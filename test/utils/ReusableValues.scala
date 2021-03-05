@@ -16,7 +16,7 @@
 
 package utils
 
-import models.ContactAddress
+import models.{ContactAddress, EoriDetails}
 import play.api.http.Status
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.http.HttpResponse
@@ -25,16 +25,48 @@ trait ReusableValues {
 
   val idOne: String = "1"
 
-  val traderAddress: ContactAddress = ContactAddress("first", None, "second", Some("third"), "fourth")
-  val traderAddressWithoutPostcode: ContactAddress = ContactAddress("first", None, "second", Some("None"), "fourth")
+  val addressDetails: ContactAddress = ContactAddress(
+    addressLine1 = "99 Avenue Road",
+    addressLine2 = None,
+    city = "Anyold Town",
+    postalCode = Some("99JZ 1AA"),
+    countryCode = "GB"
+  )
+
+  val eoriDetails: EoriDetails = EoriDetails(
+    "GB987654321000",
+    "Fast Food ltd",
+    ContactAddress(
+      addressLine1 = "99 Avenue Road",
+      addressLine2 = None,
+      city = "Anyold Town",
+      postalCode = Some("99JZ 1AA"),
+      countryCode = "GB"
+    )
+  )
 
   val errorModel: HttpResponse = HttpResponse(Status.NOT_FOUND, "Error Message")
 
-  val traderAddressJson: JsObject = Json.obj(
-    "streetAndNumber" -> "first",
-    "city" -> "second",
-    "postalCode" -> Some("third"),
-    "countryCode" -> "fourth"
+  val detailsJson: JsObject = Json.obj(
+    "responseDetail" -> Json.obj(
+      "EORINo" -> "GB987654321000",
+      "CDSFullName" -> "Fast Food ltd",
+      "CDSEstablishmentAddress" -> Json.obj(
+        "streetAndNumber" -> "99 Avenue Road",
+        "city" -> "Anyold Town",
+        "postalCode" -> "99JZ 1AA",
+        "countryCode" -> "GB"
+      )
+    )
+  )
+
+  val cleanedDetailsJson: JsObject = Json.obj(
+    "eori" -> "GB987654321000",
+    "name" -> "Fast Food ltd",
+    "streetAndNumber" -> "99 Avenue Road",
+    "city" -> "Anyold Town",
+    "postalCode" -> "99JZ 1AA",
+    "countryCode" -> "GB"
   )
 
 }

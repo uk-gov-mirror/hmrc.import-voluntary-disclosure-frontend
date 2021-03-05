@@ -18,20 +18,20 @@ package services
 
 import config.AppConfig
 import connectors.IvdSubmissionConnector
-import javax.inject.{Inject, Singleton}
-import models.{ErrorModel, ContactAddress}
+import models.{EoriDetails, ErrorModel}
 import play.api.i18n.MessagesApi
 import uk.gov.hmrc.http.HeaderCarrier
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class ImporterAddressService @Inject()(ivdSubmissionConnector: IvdSubmissionConnector,
+class EoriDetailsService @Inject()(ivdSubmissionConnector: IvdSubmissionConnector,
                                        implicit val messagesApi: MessagesApi,
                                        implicit val appConfig: AppConfig) {
 
-  def retrieveAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, ContactAddress]] = {
-    ivdSubmissionConnector.getAddress(id)
+  def retrieveEoriDetails(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, EoriDetails]] = {
+    ivdSubmissionConnector.getEoriDetails(id)
   }
 
 }

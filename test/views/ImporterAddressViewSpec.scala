@@ -38,7 +38,7 @@ class ImporterAddressViewSpec extends ViewBaseSpec with BaseMessages with Reusab
     "no errors exist with full trader details" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form, traderAddress)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, addressDetails)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -75,7 +75,7 @@ class ImporterAddressViewSpec extends ViewBaseSpec with BaseMessages with Reusab
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form, traderAddress)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, addressDetails)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -97,7 +97,7 @@ class ImporterAddressViewSpec extends ViewBaseSpec with BaseMessages with Reusab
   it should {
 
     val form: Form[Boolean] = formProvider.apply()
-    lazy val view: Html = injectedView(form, traderAddress)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form, addressDetails)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${ImporterAddressMessages.h1}'" in {
