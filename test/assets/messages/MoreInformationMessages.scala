@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-package pages
+package messages
 
-import models.UserAnswers
-import play.api.libs.json.JsPath
+object MoreInformationMessages extends BaseMessages {
 
-import scala.util.Try
-
-case object HasFurtherInformationPage extends QuestionPage[Boolean] {
-
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "has-further-info"
-
-  override def cleanup(value: Option[Boolean], userAnswers: UserAnswers): Try[UserAnswers] = {
-    value match {
-      case Some(answer) if !answer => Try(userAnswers.remove(MoreInformationPage).getOrElse(userAnswers))
-      case _ => super.cleanup(value, userAnswers)
-    }
-  }
+  val title: String = "Tell us the extra information about the underpayment"
+  val h1: String = "Tell us the extra information about the underpayment"
+  val requiredError: String = "Enter more information"
+  val maxLengthError: String = "More information must be 1500 characters or fewer"
 
 }

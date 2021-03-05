@@ -78,6 +78,7 @@ object IvdSubmission extends FixedConfig {
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
+      additionalInfo <- MoreInformationPage.path.read[String]
     } yield {
 
       val underpaymentDetails = Seq(
@@ -97,7 +98,8 @@ object IvdSubmission extends FixedConfig {
         declarantContactDetails = traderContactDetails,
         declarantAddress = traderAddress,
         underpaymentDetails = underpaymentDetails,
-        supportingDocuments = supportingDocuments
+        supportingDocuments = supportingDocuments,
+        additionalInfo = additionalInfo
       )
     }
 }

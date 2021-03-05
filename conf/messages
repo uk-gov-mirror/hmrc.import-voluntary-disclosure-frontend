@@ -353,6 +353,12 @@ hasFurtherInformation.heading = Do you want to tell us anything else about the u
 hasFurtherInformation.hint = That you have not told us about already.
 hasFurtherInformation.error.required = Select yes if you want to provide more information about the underpayment
 
+# More Information
+moreInformation.pageTitle = Tell us the extra information about the underpayment
+moreInformation.heading = Tell us the extra information about the underpayment
+moreInformation.error.required = Enter more information
+moreInformation.error.maxLength = More information must be 1500 characters or fewer
+
 # Importer name
 importerName.pageTitle = What is the importer’s name?
 importerName.pageHeader = What is the importer’s name?

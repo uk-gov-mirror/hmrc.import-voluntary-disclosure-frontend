@@ -47,7 +47,7 @@ class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
       userType = UserType.Importer,
       numEntries = NumberOfEntries.OneEntry,
       acceptedBeforeBrexit = false,
-      additionalInfo = None,
+      additionalInfo = "some text",
       entryDetails = EntryDetails("123", "123456Q", LocalDate.parse("2020-01-12")),
       originalCpc = "cpc",
       declarantContactDetails = ContactDetails("name", "email", "phone"),

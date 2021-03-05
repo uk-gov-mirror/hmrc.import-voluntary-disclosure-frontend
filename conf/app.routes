@@ -139,6 +139,9 @@ GET         /disclosure/confirmation                                     control
 GET         /disclosure/provide-information-option                       controllers.HasFurtherInformationController.onLoad
 POST        /disclosure/provide-information-option                       controllers.HasFurtherInformationController.onSubmit
 
+GET         /disclosure/more-information                                 controllers.MoreInformationController.onLoad
+POST        /disclosure/more-information                                 controllers.MoreInformationController.onSubmit
+
 GET         /disclosure/importer-name                                    controllers.ImporterNameController.onLoad
 POST        /disclosure/importer-name                                    controllers.ImporterNameController.onSubmit
 

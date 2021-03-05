@@ -50,7 +50,8 @@ class IvdSubmissionSpec extends ModelSpecBase {
         checksum = "the file checksum",
         fileMimeType = "application/pdf"
       )
-    )
+    ),
+    additionalInfo = "some text"
   )
 
   val userAnswers: UserAnswers = (for {
@@ -69,6 +70,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(EnterCustomsProcedureCodePage, submission.originalCpc)
     answers <- answers.set(FileUploadPage, submission.supportingDocuments)
     answers <- answers.set(DefermentPage, false)
+    answers <- answers.set(MoreInformationPage, "some text")
   } yield answers).getOrElse(new UserAnswers("some-cred-id"))
 
   val userAnswersJson: JsValue = userAnswers.data
@@ -102,7 +104,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
       }
 
       "generate the correct json for the additionalInfo" in {
-        data("additionalInfo") shouldBe JsString("Not Applicable")
+        data("additionalInfo") shouldBe JsString("some text")
       }
 
       "generate the correct json for the entryDetails" in {

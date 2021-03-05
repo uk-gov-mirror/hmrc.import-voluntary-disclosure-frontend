@@ -18,33 +18,33 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.HasFurtherInformationFormProvider
+import forms.MoreInformationFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.HasFurtherInformationPage
+import pages.MoreInformationPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.HasFurtherInformationView
+import views.html.MoreInformationView
 
 import scala.concurrent.Future
 
 
-class HasFurtherInformationControllerSpec extends ControllerSpecBase {
+class MoreInformationControllerSpec extends ControllerSpecBase {
 
   trait Test extends MockSessionRepository {
-    private lazy val view: HasFurtherInformationView = app.injector.instanceOf[HasFurtherInformationView]
+    private lazy val view: MoreInformationView = app.injector.instanceOf[MoreInformationView]
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
-    val formProvider: HasFurtherInformationFormProvider = injector.instanceOf[HasFurtherInformationFormProvider]
-    val form: HasFurtherInformationFormProvider = formProvider
+    val formProvider: MoreInformationFormProvider = injector.instanceOf[MoreInformationFormProvider]
+    val form: MoreInformationFormProvider = formProvider
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new HasFurtherInformationController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+    lazy val controller = new MoreInformationController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
       mockSessionRepository, messagesControllerComponents, form, view)
   }
 
@@ -55,7 +55,7 @@ class HasFurtherInformationControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(HasFurtherInformationPage, true).success.value)
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id").set(MoreInformationPage, "some text").success.value)
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -66,25 +66,19 @@ class HasFurtherInformationControllerSpec extends ControllerSpecBase {
     "payload contains valid data" should {
 
       "return a SEE OTHER response" in new Test {
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "some text")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
       }
 
-      "return the correct location header for Yes response" in new Test {
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
-        lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.MoreInformationController.onLoad().url)
-      }
-
-      "return the correct location header for No response" in new Test {
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
+      "return the correct location header for the response" in new Test {
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "some text")
         lazy val result: Future[Result] = controller.onSubmit(request)
         redirectLocation(result) mustBe Some(controllers.routes.SupportingDocController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
-        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "some text")
         await(controller.onSubmit(request))
         verifyCalls()
       }

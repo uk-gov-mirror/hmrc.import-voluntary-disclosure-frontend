@@ -17,34 +17,34 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.HasFurtherInformationFormProvider
-import pages.HasFurtherInformationPage
+import forms.MoreInformationFormProvider
+import javax.inject.{Inject, Singleton}
+import pages.MoreInformationPage
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.HasFurtherInformationView
+import views.html.MoreInformationView
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 
 @Singleton
-class HasFurtherInformationController @Inject()(identify: IdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                sessionRepository: SessionRepository,
-                                                mcc: MessagesControllerComponents,
-                                                formProvider: HasFurtherInformationFormProvider,
-                                                view: HasFurtherInformationView)
+class MoreInformationController @Inject()(identify: IdentifierAction,
+                                          getData: DataRetrievalAction,
+                                          requireData: DataRequiredAction,
+                                          sessionRepository: SessionRepository,
+                                          mcc: MessagesControllerComponents,
+                                          formProvider: MoreInformationFormProvider,
+                                          view: MoreInformationView)
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.routes.UnderpaymentReasonSummaryController.onLoad
+  private lazy val backLink: Call = controllers.routes.HasFurtherInformationController.onLoad()
 
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(HasFurtherInformationPage).fold(formProvider()) {
+    val form = request.userAnswers.get(MoreInformationPage).fold(formProvider()) {
       formProvider().fill
     }
     Future.successful(Ok(view(form, backLink)))
@@ -53,17 +53,14 @@ class HasFurtherInformationController @Inject()(identify: IdentifierAction,
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
-      hasFurtherInfo =>
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(HasFurtherInformationPage, hasFurtherInfo))
-          _ <- sessionRepository.set(updatedAnswers)
-        } yield {
-          if (hasFurtherInfo) {
-            Redirect(controllers.routes.MoreInformationController.onLoad())
-          } else {
+      moreInfo => {
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(MoreInformationPage, moreInfo))
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield {
             Redirect(controllers.routes.SupportingDocController.onLoad())
           }
-        }
+      }
     )
   }
 

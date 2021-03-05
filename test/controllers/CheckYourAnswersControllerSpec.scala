@@ -80,6 +80,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         "street", None, "city", Some("postcode"), "country code")).success.value
       .set(EnterCustomsProcedureCodePage,"3333333").success.value
       .set(DefermentPage,true).success.value
+      .set(MoreInformationPage, "some text").success.value
     )
 
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)

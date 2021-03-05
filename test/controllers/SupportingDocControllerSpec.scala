@@ -20,6 +20,7 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
+import pages.HasFurtherInformationPage
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
@@ -38,17 +39,36 @@ class SupportingDocControllerSpec extends ControllerSpecBase {
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
   }
 
-  "GET /" should {
+  "GET onLoad" should {
     "return 200" in new Test {
-      val result: Future[Result] = controller.onLoad(fakeRequest)
+      val result: Future[Result] = controller.onLoad()(fakeRequest)
       status(result) mustBe Status.OK
     }
 
     "return HTML" in new Test {
-      val result: Future[Result] = controller.onLoad(fakeRequest)
+      val result: Future[Result] = controller.onLoad()(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
+  }
 
+  "Back link" should {
+    "return to Has further information page if further information not required" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("some-cred-id")
+          .set(HasFurtherInformationPage, false).success.value
+      )
+
+      controller.backLink(userAnswers.get) mustBe controllers.routes.HasFurtherInformationController.onLoad()
+    }
+
+    "return to More information page if further information is required" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("some-cred-id")
+          .set(HasFurtherInformationPage, true).success.value
+      )
+
+      controller.backLink(userAnswers.get) mustBe controllers.routes.MoreInformationController.onLoad()
+    }
   }
 }

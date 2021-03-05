@@ -19,8 +19,10 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import javax.inject.{Inject, Singleton}
+import models.UserAnswers
+import pages.HasFurtherInformationPage
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.SupportingDocView
 
@@ -35,8 +37,15 @@ class SupportingDocController @Inject()(identify: IdentifierAction,
                                      implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(controllers.routes.HasFurtherInformationController.onLoad())))
+  private[controllers] def backLink(userAnswers: UserAnswers): Call = {
+    userAnswers.get(HasFurtherInformationPage) match {
+      case Some(value) if value => controllers.routes.MoreInformationController.onLoad()
+      case _ => controllers.routes.HasFurtherInformationController.onLoad()
+    }
+  }
+
+  def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    Future.successful(Ok(view(backLink(request.userAnswers))))
 
   }
 }
