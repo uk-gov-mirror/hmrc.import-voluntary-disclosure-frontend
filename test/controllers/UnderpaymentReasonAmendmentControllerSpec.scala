@@ -26,7 +26,7 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.TextAmendmentView
+import views.html.{TextAmendmentView, WeightAmendmentView}
 
 import scala.concurrent.Future
 
@@ -49,9 +49,11 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
       mockSessionRepository,
       messagesControllerComponents,
       form,
-      textAmendmentView
+      textAmendmentView,
+      weightAmendmentView
     )
     lazy val textAmendmentView = app.injector.instanceOf[TextAmendmentView]
+    lazy val weightAmendmentView = app.injector.instanceOf[WeightAmendmentView]
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
     val userAnswers: Option[UserAnswers] = Some(
       UserAnswers("some-cred-id")
@@ -142,7 +144,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
 
   }
 
-  "routeToView" when {
+  "routeToView for Text Amendment" when {
     def checkRoute(boxNumber: Int, itemNumber: Int, back: Call, expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
       s"render the view using the textAmendmentView for box ${boxNumber}" in new Test {
         val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
@@ -167,7 +169,27 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
           assert(result.getMessage.contains("Invalid Box Number"))
         }
     }
+  }
 
+  "routeToView for Weight Amendment" when {
+    def checkRoute(boxNumber: Int, itemNumber: Int, back: Call, expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
+      s"render the view using the weightAmendmentView for box ${boxNumber}" in new Test {
+        val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
+        result mustBe weightAmendmentView(form.apply(boxNumber), boxNumber, itemNumber, back, inputClass = expectedInputClass)(fakeRequest, messages)
+      }
+    }
+
+    "called with item level box 35" should {checkRoute(35, 1, controllers.routes.ItemNumberController.onLoad())}
+    "called with item level box 38" should {checkRoute(38, 1, controllers.routes.ItemNumberController.onLoad())}
+
+    "called with an invalid box number" should {
+      s"route for box 0" in new Test {
+        val result = intercept[RuntimeException](
+          controller.routeToView(0, 1, form.apply(0))(fakeRequest)
+        )
+        assert(result.getMessage.contains("Invalid Box Number"))
+      }
+    }
   }
 
 }

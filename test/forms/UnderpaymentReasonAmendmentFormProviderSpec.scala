@@ -29,6 +29,14 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val originalMissingMessageKey = "amendmentValue.error.original.missing"
   val amendedMissingMessageKey = "amendmentValue.error.amended.missing"
   val keysDifferentMessageKey = "amendmentValue.error.amended.different"
+  val originalWeightMissingMessageKey = "amendmentValue.error.original.weight.missing"
+  val amendedWeightMissingMessageKey = "amendmentValue.error.amended.weight.missing"
+  val originalWeightFormatMessageKey = "amendmentValue.error.original.weight.nonNumeric"
+  val amendedWeightFormatMessageKey = "amendmentValue.error.amended.weight.nonNumeric"
+  val originalWeightDecimalMessageKey = "amendmentValue.error.original.weight.invalidDecimals"
+  val amendedWeightDecimalMessageKey = "amendmentValue.error.amended.weight.invalidDecimals"
+  val originalWeightRangeMessageKey = "amendmentValue.error.original.weight.outOfRange"
+  val amendedWeightRangeMessageKey = "amendmentValue.error.amended.weight.outOfRange"
   val commodityCodeAmendedValue = "2204109400X411"
   val commodityCodeOriginalValue = "2204109400X412"
   val invalidBoxAmendedValue = "2204109400X411"
@@ -36,6 +44,11 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val foreignCurrencyAmendedValue = "GBP50"
   val foreignCurrencyOriginalValue = "GBP40"
   val nonNumeric = "@£$%FGB"
+  val weightOriginalValue = 1500
+  val weightAmendedValue = 3593.44
+  val tooManyDecimalValue = 950.3829
+  val outOfRangeValue = 95043953
+
 
   def formBuilder(original: String = "", amended: String = ""): Map[String, String] = Map(
     originalKey -> original,
@@ -248,6 +261,114 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
           Seq(
             FormError("", keysDifferentMessageKey)
           )
+      }
+    }
+  }
+
+  "Binding a form with invalid data for a weight box selected" when {
+    "no values provided" should {
+      "result in a form with errors" in {
+        formBinderBox(box = 35).errors mustBe Seq(
+          FormError(originalKey, originalWeightMissingMessageKey),
+          FormError(amendedKey, amendedWeightMissingMessageKey)
+        )
+      }
+    }
+
+    "no amended value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = weightOriginalValue.toString), box = 35).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedWeightMissingMessageKey)
+          )
+      }
+    }
+
+    "non numeric values provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = nonNumeric, amended = nonNumeric), box = 35).errors mustBe Seq(
+          FormError(originalKey, originalWeightFormatMessageKey),
+          FormError(amendedKey, amendedWeightFormatMessageKey)
+        )
+      }
+    }
+
+    "non numeric amended value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = weightOriginalValue.toString, amended = nonNumeric), box = 35).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedWeightFormatMessageKey)
+          )
+      }
+    }
+
+    "too many decimal values provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = tooManyDecimalValue.toString, amended = tooManyDecimalValue.toString), box = 35).errors mustBe Seq(
+          FormError(originalKey, originalWeightDecimalMessageKey),
+          FormError(amendedKey, amendedWeightDecimalMessageKey)
+        )
+      }
+    }
+
+    "too many decimal original value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = tooManyDecimalValue.toString, amended = weightAmendedValue.toString), box = 35).errors mustBe
+          Seq(
+            FormError(originalKey, originalWeightDecimalMessageKey)
+          )
+      }
+    }
+
+    "too many decimal amended value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = weightOriginalValue.toString, amended = tooManyDecimalValue.toString), box = 35).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedWeightDecimalMessageKey)
+          )
+      }
+    }
+
+    "out of range values provided" should {
+      "result in a form with errors" in {
+        val rangeValueArgs = Seq(0, 9999999.999)
+        formBinderBox(formBuilder(original = outOfRangeValue.toString, amended = outOfRangeValue.toString), box = 35).errors mustBe Seq(
+          FormError(originalKey, originalWeightRangeMessageKey, rangeValueArgs),
+          FormError(amendedKey, amendedWeightRangeMessageKey,  rangeValueArgs)
+        )
+      }
+    }
+
+    "original and amended value are the same" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = weightAmendedValue.toString, amended = weightAmendedValue.toString), box = 35).errors mustBe
+          Seq(
+            FormError("", keysDifferentMessageKey)
+          )
+      }
+    }
+  }
+
+  "Binding a form with valid data for a weightForm box selected" when {
+    "provided with valid values" should {
+      "result in a form with no errors" in {
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = weightOriginalValue.toString, amended = weightAmendedValue.toString), box = 35)
+        form.hasErrors mustBe false
+      }
+
+      "generate the correct model" in {
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = weightOriginalValue.toString, amended = weightAmendedValue.toString), box = 35)
+        form.value mustBe Some(UnderpaymentReasonValue(weightOriginalValue.toString, weightAmendedValue.toString))
+      }
+    }
+  }
+
+  "A weight form " when {
+    "built from a valid model" should {
+      "generate the correct mapping" in {
+        val model: UnderpaymentReasonValue = UnderpaymentReasonValue(weightOriginalValue.toString, weightAmendedValue.toString)
+        val form: Form[UnderpaymentReasonValue] = new UnderpaymentReasonAmendmentFormProvider()(35).fill(model)
+        form.data mustBe formBuilder(original = weightOriginalValue.toString, amended = weightAmendedValue.toString)
       }
     }
   }

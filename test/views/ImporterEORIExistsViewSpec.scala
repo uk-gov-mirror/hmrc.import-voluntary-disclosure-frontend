@@ -17,14 +17,14 @@
 package views
 
 import base.ViewBaseSpec
-import forms.{AcceptanceDateFormProvider, ImporterEORIExistsFormProvider}
-import messages.{AcceptanceDateMessages, BaseMessages, ImporterEORIExistsMessages}
+import forms.ImporterEORIExistsFormProvider
+import messages.{BaseMessages, ImporterEORIExistsMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.mvc.Call
 import play.twirl.api.Html
-import views.html.{AcceptanceDateView, ImporterEORIExistsView}
+import views.html.ImporterEORIExistsView
 
 class ImporterEORIExistsViewSpec extends ViewBaseSpec with BaseMessages {
 

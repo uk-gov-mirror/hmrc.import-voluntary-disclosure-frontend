@@ -29,6 +29,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
     boxNumber match {
       case 22 | 62 | 63 | 66 | 67 | 68 => foreignCurrencyFormMapping
       case 33 => textFormMapping(regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)""")
+      case 35 | 38 => weightFormMapping
       case _ => textFormMapping(regex = """^.*$""") // TODO: Remove this when all box numbers added to story
     }
   }
@@ -55,6 +56,26 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
         "amended" -> text("amendmentValue.error.amended.missing")
           .verifying(regexp(regex, "amendmentValue.error.amended.format"))
       )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+        .verifying(different("amendmentValue.error.amended.different"))
+    )
+  }
+
+  private def weightFormMapping: Form[UnderpaymentReasonValue] = {
+    Form(
+      mapping(
+        "original" -> weightNumeric(
+          requiredKey = "amendmentValue.error.original.weight.missing",
+          nonNumericKey = "amendmentValue.error.original.weight.nonNumeric",
+          invalidDecimalPoints = "amendmentValue.error.original.weight.invalidDecimals")
+          .verifying(inRange[BigDecimal](0, 9999999.999, "amendmentValue.error.original.weight.outOfRange")),
+        "amended" -> weightNumeric(
+          requiredKey = "amendmentValue.error.amended.weight.missing",
+          nonNumericKey = "amendmentValue.error.amended.weight.nonNumeric",
+          invalidDecimalPoints = "amendmentValue.error.amended.weight.invalidDecimals")
+          .verifying(inRange[BigDecimal](0, 9999999.999, "amendmentValue.error.amended.weight.outOfRange"))
+      )
+      ((original, amended) => UnderpaymentReasonValue.apply(original.toString(), amended.toString()))
+      (value => Some(BigDecimal(value.original), BigDecimal(value.amended)))
         .verifying(different("amendmentValue.error.amended.different"))
     )
   }

@@ -24,7 +24,7 @@ import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.TextAmendmentView
+import views.html.{TextAmendmentView, WeightAmendmentView}
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -37,7 +37,8 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
                                                       sessionRepository: SessionRepository,
                                                       mcc: MessagesControllerComponents,
                                                       formProvider: UnderpaymentReasonAmendmentFormProvider,
-                                                      textAmendmentView: TextAmendmentView
+                                                      textAmendmentView: TextAmendmentView,
+                                                      weightAmendmentView: WeightAmendmentView
                                    )
   extends FrontendController(mcc) with I18nSupport {
 
@@ -82,6 +83,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
     boxNumber match {
       case 22 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case 33 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-20"))
+      case 35 | 38 => weightAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case 62 | 63 | 66 | 67 | 68 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case _ => throw new RuntimeException("Invalid Box Number")
     }
