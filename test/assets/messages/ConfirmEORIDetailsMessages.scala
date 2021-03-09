@@ -14,23 +14,14 @@
  * limitations under the License.
  */
 
-package controllers
+package messages
 
-import config.AppConfig
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+object ConfirmEORIDetailsMessages {
 
-import javax.inject.Inject
-import scala.concurrent.Future
-
-class IndexController  @Inject()(appConfig: AppConfig,
-                                 mcc: MessagesControllerComponents)
-  extends FrontendController(mcc) {
-
-  implicit val config: AppConfig = appConfig
-
-  val onPageLoad: Action[AnyContent] = Action.async { _ =>
-    Future.successful(Redirect(controllers.routes.ConfirmEORIDetailsController.onLoad()))
-  }
+  val title = "Confirm your EORI details"
+  val h1 = "Confirm your EORI details"
+  val eoriNumber = "EORI number"
+  val name = "Name"
+  val continue = "Confirm and continue"
 
 }

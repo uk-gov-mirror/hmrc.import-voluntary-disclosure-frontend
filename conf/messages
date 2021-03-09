@@ -397,3 +397,9 @@ importerEORINumber.pageHeader = What is the importer’s EORI number?
 importerEORINumber.hint = The EORI starts with GB and is followed by 12 numbers, for example GB345834921000.
 importerEORINumber.error.nonEmpty = Enter the importer’s EORI number
 importerEORINumber.error.incorrectFormat = Enter an EORI number in the correct format
+
+# Confirm EORI Details
+confirmEORI.pageTitle = Confirm your EORI details
+confirmEORI.heading = Confirm your EORI details
+confirmEORI.eoriNumber = EORI number
+confirmEORI.name = Name

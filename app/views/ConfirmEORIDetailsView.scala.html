@@ -1,4 +1,4 @@
-/*
+@*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,24 +12,29 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *@
 
-package controllers
+@this(layout: templates.Layout,
+      govukSummaryList: GovukSummaryList,
+      h1: components.h1,
+      linkButton: components.linkButton
+      )
 
-import base.ControllerSpecBase
-import play.api.http.Status
-import play.api.test.Helpers._
+@(details: SummaryList)(implicit request: Request[_], messages: Messages)
 
-class IndexControllerSpec extends ControllerSpecBase {
+@layout(
+    pageTitle = messages("confirmEORI.pageTitle"),
+    showBackLink = false) {
 
-  private lazy val controller = new IndexController(appConfig, messagesControllerComponents)
+    @h1(messages("confirmEORI.heading"))
 
-  "GET /" should {
-    "return 303" in {
-      val result = controller.onPageLoad(fakeRequest)
-      status(result) mustBe Status.SEE_OTHER
-      redirectLocation(result) mustBe Some(controllers.routes.ConfirmEORIDetailsController.onLoad().url)
-    }
+    @govukSummaryList(details)
 
-  }
+@linkButton( url = controllers.routes.UserTypeController.onLoad().url, messages(("common.button.confirmAndContinue")), id = Some("value"))
+
+
+}
+
+@{
+//$COVERAGE-OFF$
 }

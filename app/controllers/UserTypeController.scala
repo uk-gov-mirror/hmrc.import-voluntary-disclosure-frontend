@@ -41,6 +41,8 @@ class UserTypeController @Inject()(identify: IdentifierAction,
                                    view: UserTypeView)
   extends FrontendController(mcc) with I18nSupport {
 
+  private lazy val backLink: Call = controllers.routes.ConfirmEORIDetailsController.onLoad()
+
   val onLoad: Action[AnyContent] = (identify andThen getData).async { implicit request =>
 
     val form = for {
@@ -50,13 +52,13 @@ class UserTypeController @Inject()(identify: IdentifierAction,
       formProvider().fill(data)
     }
 
-    Future.successful(Ok(view(form.getOrElse(formProvider()))))
+    Future.successful(Ok(view(form.getOrElse(formProvider()), backLink)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData).async { implicit request =>
     val userAnswers = request.userAnswers.getOrElse(UserAnswers(request.credId))
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {
         for {
           updatedAnswers <- Future.fromTry(userAnswers.set(UserTypePage, value))
