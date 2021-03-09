@@ -160,6 +160,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
     "called with entry level box 68" should {checkRoute(68, 0, controllers.routes.BoxNumberController.onLoad())}
 
     "called with item level box 33" should {checkRoute(33, 1, controllers.routes.ItemNumberController.onLoad(), Some("govuk-input--width-20"))}
+    "called with item level box 34" should {checkRoute(34, 1, controllers.routes.ItemNumberController.onLoad(), Some("govuk-input--width-3"))}
 
     "called with an invalid box number" should {
         s"route for box 0" in new Test {

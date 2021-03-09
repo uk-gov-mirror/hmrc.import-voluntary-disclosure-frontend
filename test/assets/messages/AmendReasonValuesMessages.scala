@@ -49,7 +49,10 @@ object AmendReasonValuesMessages extends BaseMessages {
       "Box 33 commodity code amendment for item 1",
       "Box 33 commodity code amendment for item 1",
       Some("Must be 10 numbers, sometimes followed by a code of 4 characters, for example 1806321000 or 2204109400X411.")),
-    34 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    34 -> ExpectedContent(
+      "Box 34 country of origin code amendment for item 1",
+      "Box 34 country of origin code amendment for item 1",
+      Some("Must be 2 characters, for example GB or CN.")),
     35 -> ExpectedContent(
       "Box 35 gross mass amendment for item 1",
       "Box 35 gross mass amendment for item 1",
@@ -70,10 +73,22 @@ object AmendReasonValuesMessages extends BaseMessages {
       "Box 62 air transport costs amendment",
       "Box 62 air transport costs amendment",
       Some("Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.")),
-    63 -> ExpectedContent("n/a", "n/a", Some("n/a")),
-    66 -> ExpectedContent("n/a", "n/a", Some("n/a")),
-    67 -> ExpectedContent("n/a", "n/a", Some("n/a")),
-    68 -> ExpectedContent("n/a", "n/a", Some("n/a"))
+    63 -> ExpectedContent(
+      "Box 63 AWB or freight charges amendment",
+      "Box 63 AWB or freight charges amendment",
+      Some("Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.")),
+    66 -> ExpectedContent(
+      "Box 66 insurance amendment",
+      "Box 66 insurance amendment",
+      Some("Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.")),
+    67 -> ExpectedContent(
+      "Box 67 other charges or deductions amendment",
+      "Box 67 other charges or deductions amendment",
+      Some("Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946.")),
+    68 -> ExpectedContent(
+      "Box 68 adjustment for VAT value amendment",
+      "Box 68 adjustment for VAT value amendment",
+      Some("Must be the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946."))
   )
 
 }

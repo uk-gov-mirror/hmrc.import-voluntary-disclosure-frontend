@@ -39,10 +39,12 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val amendedWeightRangeMessageKey = "amendmentValue.error.amended.weight.outOfRange"
   val commodityCodeAmendedValue = "2204109400X411"
   val commodityCodeOriginalValue = "2204109400X412"
+  val commodityCodeOriginalLowerValue = "2204109400x412"
   val invalidBoxAmendedValue = "2204109400X411"
   val invalidBoxOriginalValue = "2204109400X412"
   val foreignCurrencyAmendedValue = "GBP50"
   val foreignCurrencyOriginalValue = "GBP40"
+  val foreignCurrencyOriginalLowerValue = "gbp40"
   val nonNumeric = "@£$%FGB"
   val weightOriginalValue = 1500
   val weightAmendedValue = 3593.44
@@ -148,7 +150,7 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
       }
 
       "generate the correct model" in {
-        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = foreignCurrencyOriginalValue, amended = foreignCurrencyAmendedValue), box = 22)
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = foreignCurrencyOriginalLowerValue, amended = foreignCurrencyAmendedValue), box = 22)
         form.value mustBe Some(UnderpaymentReasonValue(foreignCurrencyOriginalValue, foreignCurrencyAmendedValue))
       }
     }
@@ -211,7 +213,7 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
       }
 
       "generate the correct model" in {
-        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = commodityCodeOriginalValue, amended = commodityCodeAmendedValue), box = 33)
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = commodityCodeOriginalLowerValue, amended = commodityCodeAmendedValue), box = 33)
         form.value mustBe Some(UnderpaymentReasonValue(commodityCodeOriginalValue, commodityCodeAmendedValue))
       }
     }
