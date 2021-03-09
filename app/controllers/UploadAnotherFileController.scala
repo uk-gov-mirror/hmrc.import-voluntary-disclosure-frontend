@@ -60,7 +60,7 @@ class UploadAnotherFileController @Inject()(identify: IdentifierAction,
           if (value) {
             Future.successful(Redirect(controllers.routes.UploadFileController.onLoad()))
           } else {
-            Future.successful(Redirect(controllers.routes.TraderContactDetailsController.onLoad()))
+            Future.successful(Redirect(controllers.routes.DeclarantContactDetailsController.onLoad()))
           }
       }
     )

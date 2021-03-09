@@ -26,16 +26,16 @@
 @(form: Form[_])(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("traderContactDetails.pageTitle"),
+    pageTitle = messages("declarantContactDetails.pageTitle"),
     form = Some(form),
     customBackLinkUrl = Some(controllers.routes.UploadAnotherFileController.onLoad())) {
 
     @errorSummary(form.errors)
 
-    @h1(messages("traderContactDetails.h1"))
-    @p(Html(messages("traderContactDetails.p")))
+    @h1(messages("declarantContactDetails.h1"))
+    @p(Html(messages("declarantContactDetails.p")))
 
-    @formHelper(action = controllers.routes.TraderContactDetailsController.onSubmit()) {
+    @formHelper(action = controllers.routes.DeclarantContactDetailsController.onSubmit()) {
         @inputText(
             form = form,
             id = "fullName",

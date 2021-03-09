@@ -26,15 +26,15 @@
 @(form: Form[_], traderAddress: ContactAddress)(implicit request: Request[_], messages: Messages)
 
     @layout(
-        pageTitle = messages("importerAddress.pageTitle"),
+        pageTitle = messages("traderAddressCorrect.pageTitle"),
         form = Some(form),
-        customBackLinkUrl = Some(controllers.routes.TraderContactDetailsController.onLoad)) {
+        customBackLinkUrl = Some(controllers.routes.DeclarantContactDetailsController.onLoad)) {
 
         @errorSummary(form.errors)
 
-        @h1(messages("importerAddress.h1"))
+        @h1(messages("traderAddressCorrect.h1"))
 
-        @p(content = Html(messages("importerAddress.p")))
+        @p(content = Html(messages("traderAddressCorrect.p")))
 
         @if(!traderAddress.postalCode.isEmpty) {
             @p(content = Html(
@@ -54,7 +54,7 @@
             )
         }
 
-        @formHelper(action = controllers.routes.ImporterAddressController.onSubmit()) {
+        @formHelper(action = controllers.routes.TraderAddressCorrectController.onSubmit()) {
             @yesNoRadio(
                 form = form,
                 headingKey = "",

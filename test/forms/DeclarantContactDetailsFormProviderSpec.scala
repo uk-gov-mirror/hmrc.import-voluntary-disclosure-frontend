@@ -21,7 +21,7 @@ import mocks.config.MockAppConfig
 import models.ContactDetails
 import play.api.data.{Form, FormError}
 
-class TraderContactDetailsFormProviderSpec extends SpecBase {
+class DeclarantContactDetailsFormProviderSpec extends SpecBase {
 
   private final val fullName = "fullName"
   private final val email = "email"
@@ -29,14 +29,14 @@ class TraderContactDetailsFormProviderSpec extends SpecBase {
   private final val exampleName = "First Second"
   private final val exampleEmail = "email@email.com"
   private final val examplePhoneNumber = "0123456789"
-  private final val fullNameNonEmptyKey = "traderContactDetails.error.nameNonEmpty"
-  private final val emailNonEmptyKey = "traderContactDetails.error.emailNonEmpty"
-  private final val phoneNumberNonEmptyKey = "traderContactDetails.error.phoneNumberNonEmpty"
-  private final val fullNameTooShortKey = "traderContactDetails.error.nameMinLength"
-  private final val fullNameTooLongKey = "traderContactDetails.error.nameMaxLength"
-  private final val fullNameInvalidCharactersKey = "traderContactDetails.error.nameAllowableCharacters"
-  private final val emailInvalidFormatKey = "traderContactDetails.error.emailInvalidFormat"
-  private final val phoneNumberInvalidFormatKey = "traderContactDetails.error.phoneNumberInvalidFormat"
+  private final val fullNameNonEmptyKey = "declarantContactDetails.error.nameNonEmpty"
+  private final val emailNonEmptyKey = "declarantContactDetails.error.emailNonEmpty"
+  private final val phoneNumberNonEmptyKey = "declarantContactDetails.error.phoneNumberNonEmpty"
+  private final val fullNameTooShortKey = "declarantContactDetails.error.nameMinLength"
+  private final val fullNameTooLongKey = "declarantContactDetails.error.nameMaxLength"
+  private final val fullNameInvalidCharactersKey = "declarantContactDetails.error.nameAllowableCharacters"
+  private final val emailInvalidFormatKey = "declarantContactDetails.error.emailInvalidFormat"
+  private final val phoneNumberInvalidFormatKey = "declarantContactDetails.error.phoneNumberInvalidFormat"
   private final val emailRegex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
   private final val phoneRegex = "^(\\+)?[0-9 ]{1,15}$"
   private final val nameRegex = "^[a-zA-Z '-]+$"
@@ -48,7 +48,7 @@ class TraderContactDetailsFormProviderSpec extends SpecBase {
   )
 
   def formBinder(formValues: Map[String, String] = Map(fullName -> "", email -> "", phoneNumber -> "")): Form[ContactDetails] =
-    new TraderContactDetailsFormProvider()(MockAppConfig).apply().bind(formValues)
+    new DeclarantContactDetailsFormProvider()(MockAppConfig).apply().bind(formValues)
 
   "Binding a form with invalid data" when {
     "no values provided" should {
@@ -141,7 +141,7 @@ class TraderContactDetailsFormProviderSpec extends SpecBase {
   "A form built from a valid model" should {
     "generate the correct mapping" in {
       val model = ContactDetails(exampleName, exampleEmail, examplePhoneNumber)
-      val form = new TraderContactDetailsFormProvider()(MockAppConfig).apply().fill(model)
+      val form = new DeclarantContactDetailsFormProvider()(MockAppConfig).apply().fill(model)
       form.data mustBe formBuilder("First Second", "email@email.com", "0123456789")
     }
   }

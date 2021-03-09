@@ -19,11 +19,12 @@ package controllers
 import config.{AppConfig, ErrorHandler}
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.ContactAddress
-import pages.{ImporterAddressFinalPage, RepFlowImporterAddressPage}
+import models.addressLookup.AddressModel
+import pages.{TraderAddressPage, ImporterAddressPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.{AddressLookupService, FlowService}
+import services.AddressLookupService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 
 import javax.inject.{Inject, Singleton}
@@ -35,7 +36,6 @@ class AddressLookupController @Inject()(identify: IdentifierAction,
                                         requireData: DataRequiredAction,
                                         sessionRepository: SessionRepository,
                                         addressLookupService: AddressLookupService,
-                                        flowService: FlowService,
                                         val errorHandler: ErrorHandler,
                                         val mcc: MessagesControllerComponents,
                                         implicit val appConfig: AppConfig,
@@ -62,40 +62,48 @@ class AddressLookupController @Inject()(identify: IdentifierAction,
   def callback(id: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     addressLookupService.retrieveAddress(id) flatMap {
       case Right(address) =>
-        val city = address.line4.getOrElse(address.line3.getOrElse(address.line2.getOrElse("")))
-        val addressLine2: Option[String] = (address.line2, address.line3) match {
-          case (Some(line2), _) if line2 == city => None
-          case (Some(line2), Some(line3)) if line3 == city => Some(line2)
-          case (Some(line2), Some(line3))  => Some(line2 + ", " + line3)
-          case _ => None
-        }
-
-        val contactAddress = ContactAddress(
-          addressLine1 = address.line1.getOrElse(""),
-          addressLine2 = addressLine2,
-          city = city,
-          postalCode = address.postcode,
-          countryCode = address.countryCode.getOrElse("")
-        )
-
-        if (flowService.isRepFlow(request.userAnswers)) {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(RepFlowImporterAddressPage, contactAddress))
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield {
-            Redirect(controllers.routes.ImporterEORIExistsController.onLoad())
-          }
-        } else {
-          for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterAddressFinalPage, contactAddress))
-            _ <- sessionRepository.set(updatedAnswers)
-          } yield {
-            Redirect(controllers.routes.DefermentController.onLoad())
-          }
+         for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderAddressPage, formatAddress(address)))
+          _ <- sessionRepository.set(updatedAnswers)
+        } yield {
+          Redirect(controllers.routes.DefermentController.onLoad())
         }
 
       case Left(_) =>
         Future.successful(errorHandler.showInternalServerError)
     }
+  }
+
+  def importerCallback(id: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    addressLookupService.retrieveAddress(id) flatMap {
+      case Right(address) =>
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterAddressPage, formatAddress(address)))
+          _ <- sessionRepository.set(updatedAnswers)
+        } yield {
+          Redirect(controllers.routes.ImporterEORIExistsController.onLoad())
+        }
+
+      case Left(_) =>
+        Future.successful(errorHandler.showInternalServerError)
+    }
+  }
+
+  private def formatAddress(address: AddressModel): ContactAddress = {
+    val city = address.line4.getOrElse(address.line3.getOrElse(address.line2.getOrElse("")))
+    val addressLine2: Option[String] = (address.line2, address.line3) match {
+      case (Some(line2), _) if line2 == city => None
+      case (Some(line2), Some(line3)) if line3 == city => Some(line2)
+      case (Some(line2), Some(line3))  => Some(line2 + ", " + line3)
+      case _ => None
+    }
+
+    ContactAddress(
+      addressLine1 = address.line1.getOrElse(""),
+      addressLine2 = addressLine2,
+      city = city,
+      postalCode = address.postcode,
+      countryCode = address.countryCode.getOrElse("")
+    )
   }
 }

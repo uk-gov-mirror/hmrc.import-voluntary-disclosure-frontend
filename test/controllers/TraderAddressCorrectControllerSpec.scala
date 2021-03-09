@@ -18,24 +18,24 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.ImporterAddressFormProvider
+import forms.TraderAddressCorrectFormProvider
 import mocks.repositories.MockSessionRepository
 import mocks.services.MockEoriDetailsService
 import models.{ErrorModel, UserAnswers}
-import pages.{ReuseKnowAddressPage, KnownEoriDetails}
+import pages.{TraderAddressCorrectPage, KnownEoriDetails}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
 import utils.ReusableValues
-import views.html.ImporterAddressView
+import views.html.TraderAddressCorrectView
 
 import scala.concurrent.Future
 
-class ImporterAddressControllerSpec extends ControllerSpecBase with MockEoriDetailsService with ReusableValues {
+class TraderAddressCorrectControllerSpec extends ControllerSpecBase with MockEoriDetailsService with ReusableValues {
 
   trait Test extends MockSessionRepository {
-    lazy val controller = new ImporterAddressController(
+    lazy val controller = new TraderAddressCorrectController(
       authenticatedAction,
       dataRetrievalAction,
       dataRequiredAction,
@@ -44,14 +44,14 @@ class ImporterAddressControllerSpec extends ControllerSpecBase with MockEoriDeta
       errorHandler,
       messagesControllerComponents,
       form,
-      importerAddressView)
+      traderAddressCorrectView)
 
-    private lazy val importerAddressView: ImporterAddressView = app.injector.instanceOf[ImporterAddressView]
+    private lazy val traderAddressCorrectView: TraderAddressCorrectView = app.injector.instanceOf[TraderAddressCorrectView]
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
-    val formProvider: ImporterAddressFormProvider = injector.instanceOf[ImporterAddressFormProvider]
-    val form: ImporterAddressFormProvider = formProvider
+    val formProvider: TraderAddressCorrectFormProvider = injector.instanceOf[TraderAddressCorrectFormProvider]
+    val form: TraderAddressCorrectFormProvider = formProvider
 
     MockedSessionRepository.set(Future.successful(true))
 
@@ -75,7 +75,7 @@ class ImporterAddressControllerSpec extends ControllerSpecBase with MockEoriDeta
     "return HTML" in new Test {
       setupMockRetrieveAddress(Right(eoriDetails))
       override val userAnswers: Option[UserAnswers] = Some(
-        UserAnswers("some-cred-id").set(ReuseKnowAddressPage, importerAddressYes).success.value
+        UserAnswers("some-cred-id").set(TraderAddressCorrectPage, importerAddressYes).success.value
       )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")

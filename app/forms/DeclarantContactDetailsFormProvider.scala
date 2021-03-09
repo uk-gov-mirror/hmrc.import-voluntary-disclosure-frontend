@@ -26,7 +26,7 @@ import play.api.i18n.Messages
 import javax.inject.Inject
 
 
-class TraderContactDetailsFormProvider @Inject()(implicit appConfig: AppConfig) extends Mappings {
+class DeclarantContactDetailsFormProvider @Inject()(implicit appConfig: AppConfig) extends Mappings {
 
   val fullNameRegex = "^[a-zA-Z '-]+$"
   val phoneNumberRegex = "^(\\+)?[0-9 ]{1,15}$"
@@ -35,22 +35,22 @@ class TraderContactDetailsFormProvider @Inject()(implicit appConfig: AppConfig) 
   def apply()(implicit messages: Messages): Form[ContactDetails] =
     Form(
       mapping(
-        "fullName" -> text("traderContactDetails.error.nameNonEmpty")
-          .verifying("traderContactDetails.error.nameMinLength", value => value.length >= 2)
-          .verifying("traderContactDetails.error.nameMaxLength", value => value.length <= 50)
-          .verifying(regexp(fullNameRegex, "traderContactDetails.error.nameAllowableCharacters")),
-        "email" -> text("traderContactDetails.error.emailNonEmpty")
+        "fullName" -> text("declarantContactDetails.error.nameNonEmpty")
+          .verifying("declarantContactDetails.error.nameMinLength", value => value.length >= 2)
+          .verifying("declarantContactDetails.error.nameMaxLength", value => value.length <= 50)
+          .verifying(regexp(fullNameRegex, "declarantContactDetails.error.nameAllowableCharacters")),
+        "email" -> text("declarantContactDetails.error.emailNonEmpty")
           .verifying(
             regexp(
               emailRegex,
-              "traderContactDetails.error.emailInvalidFormat"
+              "declarantContactDetails.error.emailInvalidFormat"
             )
           ),
-        "phoneNumber" -> text("traderContactDetails.error.phoneNumberNonEmpty")
+        "phoneNumber" -> text("declarantContactDetails.error.phoneNumberNonEmpty")
           .verifying(
             regexp(
               phoneNumberRegex,
-              "traderContactDetails.error.phoneNumberInvalidFormat"
+              "declarantContactDetails.error.phoneNumberInvalidFormat"
             )
           )
       )(ContactDetails.apply)(ContactDetails.unapply)

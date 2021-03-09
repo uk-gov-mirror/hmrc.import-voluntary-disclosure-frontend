@@ -16,13 +16,12 @@
 
 package pages
 
-import models.ContactDetails
 import play.api.libs.json.JsPath
 
-case object TraderContactDetailsPage extends QuestionPage[ContactDetails] {
+case object TraderAddressCorrectPage extends QuestionPage[Boolean] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "trader-contact-details"
+  override def toString: String = "trader-address-correct"
 
 }

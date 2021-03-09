@@ -77,11 +77,11 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         LocalDateTime.now,
         "396f101dd52e8b2ace0dcf5ed09b1d1f030e608938510ce46e7a5c7a4e775100",
         "application/pdf"))).success.value
-      .set(TraderContactDetailsPage,ContactDetails(
+      .set(DeclarantContactDetailsPage,ContactDetails(
         "f",
         "fefewfew@gmail.com",
         "07485939292")).success.value
-      .set(ImporterAddressFinalPage,ContactAddress(
+      .set(TraderAddressPage,ContactAddress(
         "street", None, "city", Some("postcode"), "country code")).success.value
       .set(EnterCustomsProcedureCodePage,"3333333").success.value
       .set(DefermentPage,true).success.value

@@ -17,20 +17,20 @@
 package views
 
 import base.ViewBaseSpec
-import forms.TraderContactDetailsFormProvider
+import forms.DeclarantContactDetailsFormProvider
 import messages.{BaseMessages, TraderContactDetailsMessages}
 import models.ContactDetails
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.Html
-import views.html.TraderContactDetailsView
+import views.html.DeclarantContactDetailsView
 
-class TraderContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
+class DeclarantContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
 
-  private lazy val injectedView: TraderContactDetailsView = app.injector.instanceOf[TraderContactDetailsView]
+  private lazy val injectedView: DeclarantContactDetailsView = app.injector.instanceOf[DeclarantContactDetailsView]
 
-  val formProvider: TraderContactDetailsFormProvider = injector.instanceOf[TraderContactDetailsFormProvider]
+  val formProvider: DeclarantContactDetailsFormProvider = injector.instanceOf[DeclarantContactDetailsFormProvider]
 
   "Rendering the TraderContactDetails page" when {
     "no errors exist" should {

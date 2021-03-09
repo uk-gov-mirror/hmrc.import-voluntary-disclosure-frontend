@@ -19,42 +19,41 @@ package controllers
 import com.google.inject.Inject
 import config.ErrorHandler
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.ImporterAddressFormProvider
+import forms.TraderAddressCorrectFormProvider
 import models.ContactAddress
-import pages.{ImporterAddressFinalPage, KnownEoriDetails, ReuseKnowAddressPage}
+import pages.{TraderAddressPage, KnownEoriDetails, TraderAddressCorrectPage}
 import play.api.Logger
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import services.EoriDetailsService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.ImporterAddressView
+import views.html.TraderAddressCorrectView
 
 import javax.inject.Singleton
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class ImporterAddressController @Inject()(identify: IdentifierAction,
-                                          getData: DataRetrievalAction,
-                                          requireData: DataRequiredAction,
-                                          sessionRepository: SessionRepository,
-                                          eoriDetailsService: EoriDetailsService,
-                                          val errorHandler: ErrorHandler,
-                                          mcc: MessagesControllerComponents,
-                                          formProvider: ImporterAddressFormProvider,
-                                          view: ImporterAddressView
+class TraderAddressCorrectController @Inject()(identify: IdentifierAction,
+                                               getData: DataRetrievalAction,
+                                               requireData: DataRequiredAction,
+                                               sessionRepository: SessionRepository,
+                                               eoriDetailsService: EoriDetailsService,
+                                               val errorHandler: ErrorHandler,
+                                               mcc: MessagesControllerComponents,
+                                               formProvider: TraderAddressCorrectFormProvider,
+                                               view: TraderAddressCorrectView
                                          )
   extends FrontendController(mcc) with I18nSupport {
 
   private val logger = Logger("application." + getClass.getCanonicalName)
 
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(ReuseKnowAddressPage).fold(formProvider()) {
+    val form = request.userAnswers.get(TraderAddressCorrectPage).fold(formProvider()) {
       formProvider().fill
     }
-    // TODO - need the EORI id
-    eoriDetailsService.retrieveEoriDetails("GB987654321000").flatMap {
+    eoriDetailsService.retrieveEoriDetails(request.eori).flatMap {
       case Right(eoriDetails) =>
         for {
           updatedAnswers <- Future.fromTry(request.userAnswers.set(KnownEoriDetails, eoriDetails))
@@ -73,15 +72,15 @@ class ImporterAddressController @Inject()(identify: IdentifierAction,
       value => {
         if (value) {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ReuseKnowAddressPage, value))
-            updatedAnswers <- Future.fromTry(updatedAnswers.set(ImporterAddressFinalPage, traderAddress))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderAddressCorrectPage, value))
+            updatedAnswers <- Future.fromTry(updatedAnswers.set(TraderAddressPage, traderAddress))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             Redirect(controllers.routes.DefermentController.onLoad())
           }
         } else {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(ReuseKnowAddressPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderAddressCorrectPage, value))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             Redirect(controllers.routes.AddressLookupController.initialiseJourney())

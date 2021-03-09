@@ -18,19 +18,19 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.TraderContactDetailsFormProvider
+import forms.DeclarantContactDetailsFormProvider
 import mocks.repositories.MockSessionRepository
 import models.{ContactDetails, UserAnswers}
-import pages.TraderContactDetailsPage
+import pages.DeclarantContactDetailsPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
-import views.html.TraderContactDetailsView
+import views.html.DeclarantContactDetailsView
 
 import scala.concurrent.Future
 
-class TraderContactDetailsControllerSpec extends ControllerSpecBase {
+class DeclarantContactDetailsControllerSpec extends ControllerSpecBase {
 
   private def fakeRequestGenerator(fullName: String, email: String, phoneNumber: String): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequest.withFormUrlEncodedBody(
@@ -40,21 +40,21 @@ class TraderContactDetailsControllerSpec extends ControllerSpecBase {
     )
 
   trait Test extends MockSessionRepository {
-    lazy val controller = new TraderContactDetailsController(
+    lazy val controller = new DeclarantContactDetailsController(
       authenticatedAction,
       dataRetrievalAction,
       dataRequiredAction,
       mockSessionRepository,
       messagesControllerComponents,
       form,
-      traderContactDetailsView
+      declarantContactDetailsView
     )
-    private lazy val traderContactDetailsView = app.injector.instanceOf[TraderContactDetailsView]
+    private lazy val declarantContactDetailsView = app.injector.instanceOf[DeclarantContactDetailsView]
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
-    val formProvider: TraderContactDetailsFormProvider = injector.instanceOf[TraderContactDetailsFormProvider]
+    val formProvider: DeclarantContactDetailsFormProvider = injector.instanceOf[DeclarantContactDetailsFormProvider]
     MockedSessionRepository.set(Future.successful(true))
-    val form: TraderContactDetailsFormProvider = formProvider
+    val form: DeclarantContactDetailsFormProvider = formProvider
   }
 
   "GET /" when {
@@ -66,7 +66,7 @@ class TraderContactDetailsControllerSpec extends ControllerSpecBase {
     "return HTML" in new Test {
       override val userAnswers: Option[UserAnswers] = Option(
         UserAnswers("some-cred-id").set(
-          TraderContactDetailsPage,
+          DeclarantContactDetailsPage,
           ContactDetails("First Second", "email@email.com", "+1234567890")
         ).success.value
       )

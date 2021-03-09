@@ -49,6 +49,8 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
     s"$contactHost/contact/beta-feedback?service=$contactFormServiceIdentifier"
   lazy val addressLookupCallbackUrl: String = servicesConfig.getString("urls.host") +
     controllers.routes.AddressLookupController.callback("").url
+  lazy val importerAddressLookupCallbackUrl: String = servicesConfig.getString("urls.host") +
+    controllers.routes.AddressLookupController.importerCallback("").url
   lazy val timeoutPeriod: Int = servicesConfig.getInt("timeout.period")
   lazy val cacheTtl = servicesConfig.getInt("mongodb.timeToLiveInSeconds")
   lazy val allowedUploadFileTypes: Seq[String] = config.get[Seq[String]]("uploads.allowedFileTypes")
@@ -85,6 +87,7 @@ trait AppConfig extends FixedConfig {
   val addressLookupInitialise: String
   val addressLookupFeedbackUrl: String
   val addressLookupCallbackUrl: String
+  val importerAddressLookupCallbackUrl: String
   val timeoutPeriod: Int
   val cacheTtl: Int
   val allowedUploadFileTypes: Seq[String]

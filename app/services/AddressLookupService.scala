@@ -43,7 +43,7 @@ class AddressLookupService @Inject()(addressLookupConnector: AddressLookupConnec
   def initialiseImporterJourney(implicit hc: HeaderCarrier, ec: ExecutionContext, request: Request[AnyContent]):
     Future[Either[ErrorModel, AddressLookupOnRampModel]] =
       addressLookupConnector.initialiseJourney(
-        Json.toJson(ImporterAddressLookupJsonBuilder(appConfig.addressLookupCallbackUrl))
+        Json.toJson(ImporterAddressLookupJsonBuilder(appConfig.importerAddressLookupCallbackUrl))
       )
 
   def retrieveAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[ErrorModel, AddressModel]] =

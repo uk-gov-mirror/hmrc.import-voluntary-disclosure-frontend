@@ -202,23 +202,23 @@ deferment.heading = Are you paying by deferment?
 deferment.error.required = Select yes if you are paying by deferment
 
 # Trader Contact Details
-traderContactDetails.pageTitle = Enter contact details
-traderContactDetails.h1 = What are your contact details?
-traderContactDetails.p = We will only use these details if we have questions about this underpayment disclosure.
-traderContactDetails.error.nameNonEmpty = Enter a name
-traderContactDetails.error.emailNonEmpty = Enter an email address
-traderContactDetails.error.phoneNumberNonEmpty = Enter a UK telephone number
-traderContactDetails.error.nameMinLength = Name must be 2 characters or more
-traderContactDetails.error.nameMaxLength = Name must be 50 characters or fewer
-traderContactDetails.error.nameAllowableCharacters = Name must only include letters a to z, hyphens, spaces and apostrophes
-traderContactDetails.error.emailInvalidFormat = Enter an email address in the correct format, like name@example.com
-traderContactDetails.error.phoneNumberInvalidFormat = Enter a UK telephone number, like 01632 960 001 or 07700 900 982
+declarantContactDetails.pageTitle = Enter contact details
+declarantContactDetails.h1 = What are your contact details?
+declarantContactDetails.p = We will only use these details if we have questions about this underpayment disclosure.
+declarantContactDetails.error.nameNonEmpty = Enter a name
+declarantContactDetails.error.emailNonEmpty = Enter an email address
+declarantContactDetails.error.phoneNumberNonEmpty = Enter a UK telephone number
+declarantContactDetails.error.nameMinLength = Name must be 2 characters or more
+declarantContactDetails.error.nameMaxLength = Name must be 50 characters or fewer
+declarantContactDetails.error.nameAllowableCharacters = Name must only include letters a to z, hyphens, spaces and apostrophes
+declarantContactDetails.error.emailInvalidFormat = Enter an email address in the correct format, like name@example.com
+declarantContactDetails.error.phoneNumberInvalidFormat = Enter a UK telephone number, like 01632 960 001 or 07700 900 982
 
 # Importer Address
-importerAddress.pageTitle = Is this correct destination address for C18 notice - importer
-importerAddress.h1 = Is this your correct address?
-importerAddress.p = We will send the demand for payment notice to this address.
-importerAddress.error.required = Select yes if this is the correct address to send the demand for payment to
+traderAddressCorrect.pageTitle = Is this correct destination address for C18 notice - importer
+traderAddressCorrect.h1 = Is this your correct address?
+traderAddressCorrect.p = We will send the demand for payment notice to this address.
+traderAddressCorrect.error.required = Select yes if this is the correct address to send the demand for payment to
 
 # File Upload Summary page
 uploadAnotherFile.pageTitle = You have uploaded {0} {1}

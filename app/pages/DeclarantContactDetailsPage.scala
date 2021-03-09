@@ -16,13 +16,13 @@
 
 package pages
 
-import models.ContactAddress
+import models.ContactDetails
 import play.api.libs.json.JsPath
 
-case object RepFlowImporterAddressPage extends QuestionPage[ContactAddress] {
+case object DeclarantContactDetailsPage extends QuestionPage[ContactDetails] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "rep-flow-importer-address"
+  override def toString: String = "declarant-contact-details"
 
 }

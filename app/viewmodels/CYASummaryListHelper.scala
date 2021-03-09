@@ -340,7 +340,7 @@ trait CYASummaryListHelper {
   }
 
   def buildYourDetailsSummaryList(answer: UserAnswers)(implicit messages: Messages): Option[CYASummaryList] = {
-    val detailsSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(TraderContactDetailsPage) map { details =>
+    val detailsSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(DeclarantContactDetailsPage) map { details =>
       Seq(
         SummaryListRow(
           key = Key(
@@ -384,7 +384,7 @@ trait CYASummaryListHelper {
       )
     }
 
-    val addressSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(ImporterAddressFinalPage) map { address =>
+    val addressSummaryListRow: Option[Seq[SummaryListRow]] = answer.get(TraderAddressPage) map { address =>
       val addressString = address.postalCode match {
         case Some(value) => address.addressLine1 + "<br/>" +
           address.city + "<br/>" +

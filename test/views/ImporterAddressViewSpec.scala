@@ -17,7 +17,7 @@
 package views
 
 import base.ViewBaseSpec
-import forms.ImporterAddressFormProvider
+import forms.TraderAddressCorrectFormProvider
 import messages.{BaseMessages, ImporterAddressMessages}
 import models.ContactAddress
 import org.jsoup.Jsoup
@@ -25,14 +25,14 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.Html
 import utils.ReusableValues
-import views.html.ImporterAddressView
+import views.html.TraderAddressCorrectView
 
-class ImporterAddressViewSpec extends ViewBaseSpec with BaseMessages with ReusableValues {
+class TraderAddressCorrectViewSpec extends ViewBaseSpec with BaseMessages with ReusableValues {
 
 
-  private lazy val injectedView: ImporterAddressView = app.injector.instanceOf[ImporterAddressView]
+  private lazy val injectedView: TraderAddressCorrectView = app.injector.instanceOf[TraderAddressCorrectView]
 
-  val formProvider: ImporterAddressFormProvider = injector.instanceOf[ImporterAddressFormProvider]
+  val formProvider: TraderAddressCorrectFormProvider = injector.instanceOf[TraderAddressCorrectFormProvider]
 
   "Rendering the AcceptanceDate page" when {
     "no errors exist with full trader details" should {
@@ -118,7 +118,7 @@ class ImporterAddressViewSpec extends ViewBaseSpec with BaseMessages with Reusab
 
     "render a back link with the correct URL" in {
       elementAttributes("#back-link") must contain(
-        "href" -> controllers.routes.TraderContactDetailsController.onLoad().url
+        "href" -> controllers.routes.DeclarantContactDetailsController.onLoad().url
       )
     }
 

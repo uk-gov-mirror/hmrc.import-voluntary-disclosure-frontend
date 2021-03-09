@@ -52,7 +52,7 @@ object IvdSubmission extends FixedConfig {
       Json.obj(
         "importer" -> Json.obj(
           "eori" -> data.knownDetails.eori,
-          "contactDetails" -> data.traderContactDetails.copy(fullName = data.knownDetails.name),
+          "contactDetails" -> data.declarantContactDetails.copy(fullName = data.knownDetails.name),
           "address" -> data.traderAddress
         )
       )
@@ -110,11 +110,11 @@ object IvdSubmission extends FixedConfig {
       acceptanceDate <- AcceptanceDatePage.path.readNullable[Boolean]
       entryDetails <- EntryDetailsPage.path.read[EntryDetails]
       originalCpc <- EnterCustomsProcedureCodePage.path.read[String]
-      declarantContactDetails <- TraderContactDetailsPage.path.read[ContactDetails]
-      traderAddress <- ImporterAddressFinalPage.path.read[ContactAddress]
+      declarantContactDetails <- DeclarantContactDetailsPage.path.read[ContactDetails]
+      traderAddress <- TraderAddressPage.path.read[ContactAddress]
       importerEori <- ImporterEORINumberPage.path.readNullable[String]
       importerName <- ImporterNamePage.path.readNullable[String]
-      importerAddress <- RepFlowImporterAddressPage.path.readNullable[ContactAddress]
+      importerAddress <- ImporterAddressPage.path.readNullable[ContactAddress]
       customsDuty <- CustomsDutyPage.path.readNullable[UnderpaymentAmount]
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]

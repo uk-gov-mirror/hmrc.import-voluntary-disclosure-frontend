@@ -18,14 +18,14 @@ package forms
 
 import base.SpecBase
 
-class ImporterAddressFormProviderSpec extends SpecBase {
+class TraderAddressCorrectFormProviderSpec extends SpecBase {
 
   "Binding a form with invalid data" when {
 
     "the no value selected" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = new ImporterAddressFormProvider()().bind(missingOption)
+      val form = new TraderAddressCorrectFormProvider()().bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors mustBe true
@@ -36,7 +36,7 @@ class ImporterAddressFormProviderSpec extends SpecBase {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message mustBe "importerAddress.error.required"
+        form.errors.head.message mustBe "traderAddressCorrect.error.required"
       }
     }
   }
@@ -44,7 +44,7 @@ class ImporterAddressFormProviderSpec extends SpecBase {
   "Binding a form with valid data" should {
 
     val data = Map("value" -> "true")
-    val form = new ImporterAddressFormProvider()().bind(data)
+    val form = new TraderAddressCorrectFormProvider()().bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors mustBe false

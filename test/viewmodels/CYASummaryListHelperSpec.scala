@@ -44,11 +44,11 @@ class CYASummaryListHelperSpec extends SpecBase with MustMatchers with TryValues
         LocalDateTime.now,
         "396f101dd52e8b2ace0dcf5ed09b1d1f030e608938510ce46e7a5c7a4e775100",
         "application/pdf"))).success.value
-      .set(TraderContactDetailsPage, ContactDetails(
+      .set(DeclarantContactDetailsPage, ContactDetails(
         "First Second",
         "email@email.com",
         "1234567890")).success.value
-      .set(ImporterAddressFinalPage, ContactAddress("21 Street", None, "London", Some("SN6PY"), "UK")).success.value
+      .set(TraderAddressPage, ContactAddress("21 Street", None, "London", Some("SN6PY"), "UK")).success.value
       .set(EnterCustomsProcedureCodePage, "4000C09").success.value
       .set(DefermentPage, false).success.value
 

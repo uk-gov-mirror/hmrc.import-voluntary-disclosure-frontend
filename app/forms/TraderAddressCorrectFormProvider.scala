@@ -21,11 +21,11 @@ import play.api.data.Form
 
 import javax.inject.Inject
 
-class ImporterAddressFormProvider @Inject() extends Mappings {
+class TraderAddressCorrectFormProvider @Inject() extends Mappings {
 
   def apply(): Form[Boolean] =
     Form(
-      "value" -> boolean("importerAddress.error.required")
+      "value" -> boolean("traderAddressCorrect.error.required")
     )
 
 }

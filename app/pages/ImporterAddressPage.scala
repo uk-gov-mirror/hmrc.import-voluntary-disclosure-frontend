@@ -16,12 +16,13 @@
 
 package pages
 
+import models.ContactAddress
 import play.api.libs.json.JsPath
 
-case object ReuseKnowAddressPage extends QuestionPage[Boolean] {
+case object ImporterAddressPage extends QuestionPage[ContactAddress] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "reuse-known-address"
+  override def toString: String = "importer-address"
 
 }

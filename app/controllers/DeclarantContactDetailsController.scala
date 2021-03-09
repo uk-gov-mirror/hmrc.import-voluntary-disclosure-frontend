@@ -17,29 +17,29 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.TraderContactDetailsFormProvider
-import pages.TraderContactDetailsPage
+import forms.DeclarantContactDetailsFormProvider
+import pages.DeclarantContactDetailsPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.TraderContactDetailsView
+import views.html.DeclarantContactDetailsView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class TraderContactDetailsController @Inject()(identify: IdentifierAction,
-                                               getData: DataRetrievalAction,
-                                               requireData: DataRequiredAction,
-                                               sessionRepository: SessionRepository,
-                                               mcc: MessagesControllerComponents,
-                                               formProvider: TraderContactDetailsFormProvider,
-                                               view: TraderContactDetailsView)
+class DeclarantContactDetailsController @Inject()(identify: IdentifierAction,
+                                                  getData: DataRetrievalAction,
+                                                  requireData: DataRequiredAction,
+                                                  sessionRepository: SessionRepository,
+                                                  mcc: MessagesControllerComponents,
+                                                  formProvider: DeclarantContactDetailsFormProvider,
+                                                  view: DeclarantContactDetailsView)
   extends FrontendController(mcc) with I18nSupport {
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(TraderContactDetailsPage).fold(formProvider()) {
+    val form = request.userAnswers.get(DeclarantContactDetailsPage).fold(formProvider()) {
       formProvider().fill
     }
     Future.successful(Ok(view(form)))
@@ -50,10 +50,10 @@ class TraderContactDetailsController @Inject()(identify: IdentifierAction,
       formWithErrors => Future.successful(BadRequest(view(formWithErrors))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(TraderContactDetailsPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(DeclarantContactDetailsPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.ImporterAddressController.onLoad())
+          Redirect(controllers.routes.TraderAddressCorrectController.onLoad())
         }
       }
     )
