@@ -26,14 +26,19 @@ class IvdSubmissionSpec extends ModelSpecBase {
 
   private val currentTimestamp = LocalDateTime.now()
 
+  private val contactDetails = ContactDetails("John Smith", "test@test.com", "0123456789")
+  private val address = ContactAddress("99 Avenue Road", None, "Any Old Town", Some("99JZ 1AA"), "GB")
+
   val submission: IvdSubmission = IvdSubmission(
     userType = UserType.Importer,
+    knownDetails = EoriDetails("GB0000000000001", "Importer Inc.", address),
     numEntries = NumberOfEntries.OneEntry,
     acceptedBeforeBrexit = true,
     entryDetails = EntryDetails("123", "123456Q", LocalDate.parse("2020-12-12")),
     originalCpc = "4000C09",
-    declarantContactDetails = ContactDetails("John Smith", "test@test.com", "0123456789"),
-    declarantAddress = ContactAddress("99 Avenue Road", None, "Any Old Town", Some("99JZ 1AA"), "United Kingdom"),
+    declarantContactDetails = contactDetails,
+    traderContactDetails = ContactDetails("Importer Inc.", contactDetails.email, contactDetails.phoneNumber),
+    traderAddress = address,
     defermentType = None,
     defermentAccountNumber = None,
     additionalDefermentNumber = None,
@@ -51,12 +56,14 @@ class IvdSubmissionSpec extends ModelSpecBase {
         fileMimeType = "application/pdf"
       )
     ),
-    additionalInfo = "some text"
+    additionalInfo = "some text",
+    amendedItems = Seq(UnderpaymentReason(1, 0, "GBP100", "GBP200"))
   )
 
   val userAnswers: UserAnswers = (for {
     answers <- new UserAnswers("some-cred-id").set(UserTypePage, submission.userType)
     answers <- answers.set(EntryDetailsPage, submission.entryDetails)
+    answers <- answers.set(KnownEoriDetails, submission.knownDetails)
     answers <- answers.set(NumberOfEntriesPage, submission.numEntries)
     answers <- answers.set(AcceptanceDatePage, submission.acceptedBeforeBrexit)
     answers <- answers.set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true))
@@ -65,12 +72,12 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(ExciseDutyPage, UnderpaymentAmount(BigDecimal("123.22"), BigDecimal("4409.55")))
     answers <- answers.set(ReuseKnowAddressPage, true)
     answers <- answers.set(TraderContactDetailsPage, submission.declarantContactDetails)
-    answers <- answers.set(ImporterAddressFinalPage, submission.declarantAddress)
-    answers <- answers.set(ImporterAddressFinalPage, submission.declarantAddress)
+    answers <- answers.set(ImporterAddressFinalPage, submission.traderAddress)
     answers <- answers.set(EnterCustomsProcedureCodePage, submission.originalCpc)
     answers <- answers.set(FileUploadPage, submission.supportingDocuments)
     answers <- answers.set(DefermentPage, false)
     answers <- answers.set(MoreInformationPage, "some text")
+    answers <- answers.set(UnderpaymentReasonsPage, submission.amendedItems)
   } yield answers).getOrElse(new UserAnswers("some-cred-id"))
 
   val userAnswersJson: JsValue = userAnswers.data
@@ -80,34 +87,36 @@ class IvdSubmissionSpec extends ModelSpecBase {
     case _ => fail(s"data expected at path '$path' not found")
   }
 
-  "IVD Submission model" when {
-    "converting from a user answers" should {
-      "produce a valid model" in {
-        val result = Json.fromJson[IvdSubmission](userAnswersJson).get
-        result shouldBe submission
+  "IVD Submission model representing an importer journey" when {
+    "building a model from user answers" should {
+      "result in a valid submission model" in {
+        userAnswersJson.validate[IvdSubmission] match {
+          case JsSuccess(result, _) => result shouldBe submission
+          case JsError(errors) => fail(s"Failed to parse JSON with: $errors")
+        }
       }
     }
 
-    "serialising a model" should {
+    "building a submission payload" should {
       implicit lazy val result: JsValue = Json.toJson(submission)
 
-      "generate the correct json for the userType" in {
+      "generate the correct JSON for the userType" in {
         data("userType") shouldBe JsString("importer")
       }
 
-      "generate the correct json for the isBulkEntry" in {
+      "generate the correct JSON for the isBulkEntry" in {
         data("isBulkEntry") shouldBe JsBoolean(false)
       }
 
-      "generate the correct json for the isEuropeanUnionDuty" in {
+      "generate the correct JSON for the isEuropeanUnionDuty" in {
         data("isEuropeanUnionDuty") shouldBe JsBoolean(true)
       }
 
-      "generate the correct json for the additionalInfo" in {
+      "generate the correct JSON for the additionalInfo" in {
         data("additionalInfo") shouldBe JsString("some text")
       }
 
-      "generate the correct json for the entryDetails" in {
+      "generate the correct JSON for the entryDetails" in {
         data("entryDetails") shouldBe Json.obj(
           "epu" -> "123",
           "entryNumber" -> "123456Q",
@@ -115,11 +124,11 @@ class IvdSubmissionSpec extends ModelSpecBase {
         )
       }
 
-      "generate the correct json for the customsProcessingCode" in {
+      "generate the correct JSON for the customsProcessingCode" in {
         data("customsProcessingCode") shouldBe JsString("4000C09")
       }
 
-      "generate the correct json for the declarantContactDetails" in {
+      "generate the correct JSON for the declarantContactDetails" in {
         data("declarantContactDetails") shouldBe Json.obj(
           "fullName" -> "John Smith",
           "email" -> "test@test.com",
@@ -127,16 +136,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
         )
       }
 
-      "generate the correct json for the declarantAddress" in {
-        data("declarantAddress") shouldBe Json.obj(
-          "addressLine1" -> "99 Avenue Road",
-          "city" -> "Any Old Town",
-          "postalCode" -> "99JZ 1AA",
-          "countryCode" -> "United Kingdom"
-        )
-      }
-
-      "generate the correct json for the underpaymentDetails" in {
+      "generate the correct JSON for the underpaymentDetails" in {
         data("underpaymentDetails") shouldBe Json.arr(
           Json.obj(
             "duty" -> "customsDuty",
@@ -156,15 +156,24 @@ class IvdSubmissionSpec extends ModelSpecBase {
         )
       }
 
-      "generate the correct json for the supportingDocumentTypes" in {
+      "generate the correct JSON for the supportingDocumentTypes" in {
         data("supportingDocumentTypes") shouldBe Json.arr()
       }
 
-      "generate the correct json for the amendedItems" in {
-        data("amendedItems") shouldBe Json.arr()
+      "generate the correct JSON for the amendedItems" in {
+        val item = submission.amendedItems.head
+
+        data("amendedItems") shouldBe Json.arr(
+          Json.obj(
+            "boxNumber" -> item.boxNumber,
+            "itemNumber" -> item.itemNumber,
+            "original" -> item.original,
+            "amended" -> item.amended
+          )
+        )
       }
 
-      "generate the correct json for the supportingDocuments" in {
+      "generate the correct JSON for the supportingDocuments" in {
         data("supportingDocuments") shouldBe Json.arr(
           Json.obj(
             "fileName" -> "TestDocument.pdf",
@@ -176,14 +185,113 @@ class IvdSubmissionSpec extends ModelSpecBase {
         )
       }
 
-      "generate the correct json for the importer" in {
+      "generate the correct JSON for the importer" in {
         data("importer") shouldBe Json.obj(
-          "eori" -> "GB000000000000001",
-          "contactDetails" -> submission.declarantContactDetails,
-          "address" -> submission.declarantAddress
+          "eori" -> submission.knownDetails.eori,
+          "contactDetails" -> submission.traderContactDetails,
+          "address" -> submission.traderAddress
+        )
+      }
+
+      "not generate representative details" in {
+        result.as[JsObject].keys shouldNot contain("representative")
+      }
+
+    }
+  }
+
+  "IVD Submission model representing a representative journey" when {
+
+    "the correct answers are supplied" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address)
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON for the representative" in {
+        data("representative") shouldBe Json.obj(
+          "eori" -> repSubmission.knownDetails.eori,
+          "contactDetails" -> repSubmission.declarantContactDetails,
+          "address" -> repSubmission.traderAddress
+        )
+      }
+
+      "render a property for an importer" in {
+        result.as[JsObject].keys should contain("importer")
+      }
+
+    }
+
+    "the importer name has not been supplied" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerAddress = Some(address)
+      )
+
+      "throw an exception" in {
+        val error = intercept[RuntimeException](Json.toJson(repSubmission))
+        error.getMessage shouldBe "Importer details not captured in representative flow"
+      }
+    }
+
+    "the importer address has not been supplied" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+      )
+
+      "throw an exception" in {
+        val error = intercept[RuntimeException](Json.toJson(repSubmission))
+        error.getMessage shouldBe "Importer details not captured in representative flow"
+      }
+    }
+
+    "the importer's EORI is supplied" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerEori = Some("GB01"),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address)
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON for the importer" in {
+        data("importer") shouldBe Json.obj(
+          "eori" -> "GB01",
+          "contactDetails" -> ContactDetails(repSubmission.importerName.get),
+          "address" -> repSubmission.importerAddress
         )
       }
 
     }
+
+    "the importer's EORI is not supplied" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address)
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON for the importer using the default EORI" in {
+        data("importer") shouldBe Json.obj(
+          "eori" -> "GBPR",
+          "contactDetails" -> ContactDetails(repSubmission.importerName.get),
+          "address" -> repSubmission.importerAddress
+        )
+      }
+
+    }
+
   }
 }

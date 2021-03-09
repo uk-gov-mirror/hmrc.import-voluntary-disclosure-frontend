@@ -18,18 +18,21 @@ package models
 
 import config.FixedConfig
 import pages._
-import play.api.libs.json.{Json, Reads, Writes}
-
-import java.time.LocalDate
+import play.api.libs.json.{JsObject, Json, Reads, Writes}
 
 case class IvdSubmission(userType: UserType,
+                         knownDetails: EoriDetails,
                          numEntries: NumberOfEntries,
                          acceptedBeforeBrexit: Boolean,
-                         additionalInfo: String,
+                         additionalInfo: String = "Not Applicable",
                          entryDetails: EntryDetails,
                          originalCpc: String,
                          declarantContactDetails: ContactDetails,
-                         declarantAddress: ContactAddress,
+                         traderContactDetails: ContactDetails,
+                         traderAddress: ContactAddress,
+                         importerEori: Option[String] = None,
+                         importerName: Option[String] = None,
+                         importerAddress: Option[ContactAddress] = None,
                          defermentType: Option[String] = None,
                          defermentAccountNumber: Option[String] = None,
                          additionalDefermentNumber: Option[String] = None,
@@ -41,10 +44,48 @@ case class IvdSubmission(userType: UserType,
 object IvdSubmission extends FixedConfig {
   implicit val writes: Writes[IvdSubmission] = (data: IvdSubmission) => {
 
+    val DEFAULT_EORI: String = "GBPR"
     val isEuropeanUnionDuty: Boolean = data.entryDetails.entryDate.isBefore(euExitDate) && data.acceptedBeforeBrexit
     val isBulkEntry = data.numEntries == NumberOfEntries.MoreThanOneEntry
 
-    Json.obj(
+    val importerDetails: JsObject = if (data.userType == UserType.Importer) {
+      Json.obj(
+        "importer" -> Json.obj(
+          "eori" -> data.knownDetails.eori,
+          "contactDetails" -> data.traderContactDetails.copy(fullName = data.knownDetails.name),
+          "address" -> data.traderAddress
+        )
+      )
+    } else {
+      val details = for {
+        eori <- data.importerEori.orElse(Some(DEFAULT_EORI))
+        name <- data.importerName
+        address <- data.importerAddress
+      } yield {
+        Json.obj(
+          "importer" -> Json.obj(
+            "eori" -> eori,
+            "contactDetails" -> ContactDetails(name),
+            "address" -> address
+          )
+        )
+      }
+      details.getOrElse(throw new RuntimeException("Importer details not captured in representative flow"))
+    }
+
+    val representativeDetails = if (data.userType == UserType.Representative) {
+      Json.obj(
+        "representative" -> Json.obj(
+          "eori" -> data.knownDetails.eori,
+          "contactDetails" -> data.declarantContactDetails,
+          "address" -> data.traderAddress
+        )
+      )
+    } else {
+      Json.obj()
+    }
+
+    val payload = Json.obj(
       "userType" -> data.userType,
       "isBulkEntry" -> isBulkEntry,
       "isEuropeanUnionDuty" -> isEuropeanUnionDuty,
@@ -52,33 +93,34 @@ object IvdSubmission extends FixedConfig {
       "entryDetails" -> data.entryDetails,
       "customsProcessingCode" -> data.originalCpc,
       "declarantContactDetails" -> data.declarantContactDetails,
-      "declarantAddress" -> data.declarantAddress,
       "underpaymentDetails" -> data.underpaymentDetails,
       "supportingDocumentTypes" -> data.documentsSupplied,
       "amendedItems" -> data.amendedItems,
-      "supportingDocuments" -> data.supportingDocuments,
-      "importer" -> Json.obj(
-        "eori" -> "GB000000000000001",
-        "contactDetails" -> data.declarantContactDetails,
-        "address" -> data.declarantAddress
-      )
+      "supportingDocuments" -> data.supportingDocuments
     )
+
+    payload ++ importerDetails ++ representativeDetails
   }
 
   implicit val reads: Reads[IvdSubmission] =
     for {
       userType <- UserTypePage.path.read[UserType]
+      knownDetails <- KnownEoriDetails.path.read[EoriDetails]
       numEntries <- NumberOfEntriesPage.path.read[NumberOfEntries]
       acceptanceDate <- AcceptanceDatePage.path.readNullable[Boolean]
       entryDetails <- EntryDetailsPage.path.read[EntryDetails]
       originalCpc <- EnterCustomsProcedureCodePage.path.read[String]
-      traderContactDetails <- TraderContactDetailsPage.path.read[ContactDetails]
+      declarantContactDetails <- TraderContactDetailsPage.path.read[ContactDetails]
       traderAddress <- ImporterAddressFinalPage.path.read[ContactAddress]
+      importerEori <- ImporterEORINumberPage.path.readNullable[String]
+      importerName <- ImporterNamePage.path.readNullable[String]
+      importerAddress <- RepFlowImporterAddressPage.path.readNullable[ContactAddress]
       customsDuty <- CustomsDutyPage.path.readNullable[UnderpaymentAmount]
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
       additionalInfo <- MoreInformationPage.path.readNullable[String]
+      amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
     } yield {
 
       val underpaymentDetails = Seq(
@@ -89,17 +131,29 @@ object IvdSubmission extends FixedConfig {
         case (key, Some(details)) => UnderpaymentDetail(key, details.original, details.amended)
       }
 
+      val traderContactDetails = ContactDetails(
+        knownDetails.name,
+        declarantContactDetails.email,
+        declarantContactDetails.phoneNumber
+      )
+
       IvdSubmission(
         userType = userType,
+        knownDetails = knownDetails,
         numEntries = numEntries,
         acceptedBeforeBrexit = acceptanceDate.getOrElse(false),
         entryDetails = entryDetails,
         originalCpc = originalCpc,
-        declarantContactDetails = traderContactDetails,
-        declarantAddress = traderAddress,
+        declarantContactDetails = declarantContactDetails,
+        traderContactDetails = traderContactDetails,
+        traderAddress = traderAddress,
+        importerEori = importerEori,
+        importerName = importerName,
+        importerAddress = importerAddress,
         underpaymentDetails = underpaymentDetails,
         supportingDocuments = supportingDocuments,
-        additionalInfo = additionalInfo.getOrElse("Not Applicable")
+        additionalInfo = additionalInfo.getOrElse("Not Applicable"),
+        amendedItems = amendedItems
       )
     }
 }

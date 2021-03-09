@@ -45,13 +45,15 @@ class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
 
     val submission = IvdSubmission(
       userType = UserType.Importer,
+      knownDetails = EoriDetails("GB000000000001", "Importers Inc.", addressDetails),
       numEntries = NumberOfEntries.OneEntry,
       acceptedBeforeBrexit = false,
       additionalInfo = "some text",
       entryDetails = EntryDetails("123", "123456Q", LocalDate.parse("2020-01-12")),
       originalCpc = "cpc",
       declarantContactDetails = ContactDetails("name", "email", "phone"),
-      declarantAddress = addressDetails,
+      traderContactDetails = ContactDetails("Importer Inc.", "email", "phone"),
+      traderAddress = addressDetails,
       defermentType = None,
       defermentAccountNumber = None,
       additionalDefermentNumber = None
