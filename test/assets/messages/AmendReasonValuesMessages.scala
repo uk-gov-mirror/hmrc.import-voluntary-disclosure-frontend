@@ -58,7 +58,10 @@ object AmendReasonValuesMessages extends BaseMessages {
       "Box 35 gross mass amendment for item 1",
       Some("Must be in kilograms and can be up to 3 decimal places.")),
     36 -> ExpectedContent("n/a", "n/a", Some("n/a")),
-    37 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    37 -> ExpectedContent(
+      "Box 37 customs procedure code amendment for item 1",
+      "Box 37 customs procedure code amendment for item 1",
+      Some("Must be 7 numbers, sometimes including a letter, for example 4000000 or 4000C10.")),
     38 -> ExpectedContent(
       "Box 38 net mass amendment for item 1",
       "Box 38 net mass amendment for item 1",

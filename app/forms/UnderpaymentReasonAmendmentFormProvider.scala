@@ -31,6 +31,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
       case 33 => textFormMapping(regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)""")
       case 34 => textFormMapping(regex = """^([a-zA-Z]{2}$)""")
       case 35 | 38 => weightFormMapping
+      case 37 => textFormMapping(regex = """^([0-9]{4}[A-Za-z0-9][0-9]{2}$)""")
       case _ => textFormMapping(regex = """^.*$""") // TODO: Remove this when all box numbers added to story
     }
   }

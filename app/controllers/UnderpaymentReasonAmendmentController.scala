@@ -81,11 +81,10 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
 
   private[controllers] def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_]) = {
     boxNumber match {
-      case 22 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
+      case 22 | 37 | 62 | 63 | 66 | 67 | 68 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case 33 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-20"))
       case 34 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-3"))
       case 35 | 38 => weightAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
-      case 62 | 63 | 66 | 67 | 68 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case _ => throw new RuntimeException("Invalid Box Number")
     }
   }
