@@ -34,8 +34,6 @@
 
         @h1(messages("traderAddressCorrect.h1"))
 
-        @p(content = Html(messages("traderAddressCorrect.p")))
-
         @if(!traderAddress.postalCode.isEmpty) {
             @p(content = Html(
                 traderAddress.addressLine1 + "<br/>" +

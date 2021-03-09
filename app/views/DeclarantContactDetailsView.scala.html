@@ -19,7 +19,6 @@
         errorSummary: components.errorSummary,
         button: components.button,
         h1: components.h1,
-        p: components.p,
         inputText: components.inputText
 )
 
@@ -33,7 +32,6 @@
     @errorSummary(form.errors)
 
     @h1(messages("declarantContactDetails.h1"))
-    @p(Html(messages("declarantContactDetails.p")))
 
     @formHelper(action = controllers.routes.DeclarantContactDetailsController.onSubmit()) {
         @inputText(

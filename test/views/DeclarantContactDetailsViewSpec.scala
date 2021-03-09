@@ -305,10 +305,6 @@ class DeclarantContactDetailsViewSpec extends ViewBaseSpec with BaseMessages {
       elementText("h1") mustBe TraderContactDetailsMessages.h1
     }
 
-    s"have the correct p of '${TraderContactDetailsMessages.p}'" in {
-      elementText("p") mustBe TraderContactDetailsMessages.p
-    }
-
     s"have the correct value for the text field of Name" in {
       elementText("#main-content > div > div > form > div:nth-child(2) > label") mustBe "Name"
     }

@@ -18,9 +18,8 @@ package messages
 
 object ImporterAddressMessages extends BaseMessages {
 
-  val pageTitle = "Is this correct destination address for C18 notice - importer"
-  val h1 = "Is this your correct address?"
-  val p = "We will send the demand for payment notice to this address."
+  val pageTitle = "Is this the correct address to send the demand for payment to?"
+  val h1 = "Is this the correct address to send the demand for payment to?"
   val errorRequired = "Select yes if this is the correct address to send the demand for payment to"
 
 }
