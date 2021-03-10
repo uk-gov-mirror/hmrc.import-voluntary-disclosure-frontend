@@ -139,6 +139,12 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
             FormError("", keysDifferentMessageKey)
           )
       }
+      "result in a form with errors due to case sensitive diff" in {
+        formBinderBox(formBuilder(original = foreignCurrencyAmendedValue.toUpperCase, amended = foreignCurrencyAmendedValue.toLowerCase), box = 22).errors mustBe
+          Seq(
+            FormError("", keysDifferentMessageKey)
+          )
+      }
     }
   }
 
@@ -147,11 +153,6 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
       "result in a form with no errors" in {
         val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = foreignCurrencyOriginalValue, amended = foreignCurrencyAmendedValue), box = 22)
         form.hasErrors mustBe false
-      }
-
-      "generate the correct model" in {
-        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = foreignCurrencyOriginalLowerValue, amended = foreignCurrencyAmendedValue), box = 22)
-        form.value mustBe Some(UnderpaymentReasonValue(foreignCurrencyOriginalValue, foreignCurrencyAmendedValue))
       }
     }
   }
@@ -202,6 +203,12 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
             FormError("", keysDifferentMessageKey)
           )
       }
+      "result in a form with errors if difference is case sensitivity" in {
+        formBinderBox(formBuilder(original = commodityCodeAmendedValue.toUpperCase, amended = commodityCodeAmendedValue.toLowerCase), box = 33).errors mustBe
+          Seq(
+            FormError("", keysDifferentMessageKey)
+          )
+      }
     }
   }
 
@@ -210,11 +217,6 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
       "result in a form with no errors" in {
         val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = commodityCodeOriginalValue, amended = commodityCodeAmendedValue), box = 33)
         form.hasErrors mustBe false
-      }
-
-      "generate the correct model" in {
-        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = commodityCodeOriginalLowerValue, amended = commodityCodeAmendedValue), box = 33)
-        form.value mustBe Some(UnderpaymentReasonValue(commodityCodeOriginalValue, commodityCodeAmendedValue))
       }
     }
   }
@@ -260,6 +262,14 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
     "original and amended value are the same" should {
       "result in a form with errors" in {
         formBinderBox(formBuilder(original = invalidBoxAmendedValue, amended = invalidBoxAmendedValue), box = 0).errors mustBe
+          Seq(
+            FormError("", keysDifferentMessageKey)
+          )
+      }
+      "result in a form with errors due to case sensitive diff" in {
+        formBinderBox(formBuilder(
+          original = invalidBoxAmendedValue.toUpperCase,
+          amended = invalidBoxAmendedValue.toLowerCase), box = 0).errors mustBe
           Seq(
             FormError("", keysDifferentMessageKey)
           )
