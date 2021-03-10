@@ -159,7 +159,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
   }
 
   "The Underpayment Reason Amendment page" when {
-    Seq(22,33,34,36,37,62,63,66,67,68).map { testBox =>
+    Seq(22,33,34,36,37,39,62,63,66,67,68).map { testBox =>
       checkContent(testBox)
     }
 

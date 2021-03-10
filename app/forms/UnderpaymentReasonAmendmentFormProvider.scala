@@ -27,17 +27,18 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
 
   def apply(boxNumber: Int)(implicit messages: Messages): Form[UnderpaymentReasonValue] = {
     boxNumber match {
-      case 22 | 62 | 63 | 66 | 67 | 68 => foreignCurrencyFormMapping()
+      case 22 | 62 | 63 | 66 | 67 | 68 => foreignCurrencyFormMapping
       case 33 => textFormMapping(regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)""")
       case 34 => textFormMapping(regex = """^[a-zA-Z]{2}$""")
       case 35 | 38 => weightFormMapping
       case 36 => textFormMapping(regex = """^[0-9]{3}$""")
       case 37 => textFormMapping(regex = """^[0-9]{4}[A-Za-z0-9][0-9]{2}$""")
+      case 39 => textFormMapping(regex = """^[0-9a-zA-Z]{7}$""")
       case _ => textFormMapping(regex = """^.*$""") // TODO: Remove this when all box numbers added to story
     }
   }
 
-  private def foreignCurrencyFormMapping(toUpper: Boolean = true): Form[UnderpaymentReasonValue] = {
+  private def foreignCurrencyFormMapping: Form[UnderpaymentReasonValue] = {
     Form(
       mapping(
         "original" -> foreignCurrency(
@@ -51,7 +52,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
     )
   }
 
-  private def textFormMapping(regex: String, toUpper: Boolean = true): Form[UnderpaymentReasonValue] = {
+  private def textFormMapping(regex: String): Form[UnderpaymentReasonValue] = {
     Form(
       mapping(
         "original" -> text("amendmentValue.error.original.missing")
