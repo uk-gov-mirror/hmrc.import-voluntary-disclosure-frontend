@@ -25,7 +25,6 @@ import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Req
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{TextAmendmentView, WeightAmendmentView}
-
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -39,7 +38,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
                                                       formProvider: UnderpaymentReasonAmendmentFormProvider,
                                                       textAmendmentView: TextAmendmentView,
                                                       weightAmendmentView: WeightAmendmentView
-                                   )
+                                                     )
   extends FrontendController(mcc) with I18nSupport {
 
   private[controllers] def backLink(boxNumber: Int): Call = {
@@ -81,7 +80,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
 
   private[controllers] def routeToView(boxNumber: Int, itemNumber: Int, form: Form[_])(implicit request: Request[_]) = {
     boxNumber match {
-      case 22 | 37 | 39 | 41 | 62 | 63 | 66 | 67 | 68 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
+      case 22 | 37 | 39 | 41 | 42 | 62 | 63 | 66 | 67 | 68 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case 33 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-20"))
       case 34 | 36 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-3"))
       case 35 | 38 => weightAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
