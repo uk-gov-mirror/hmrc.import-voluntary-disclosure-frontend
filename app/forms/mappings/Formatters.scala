@@ -79,13 +79,14 @@ trait Formatters {
     }
 
   private[mappings] def numericFormatter(isCurrency: Boolean = false,
+                                         numDecimalPlaces: Int = 2,
                                          requiredKey: String,
-                                         invalidNumericKey: String,
+                                         invalidDecimalPlacesKey: String,
                                          nonNumericKey: String,
                                          args: Seq[String] = Seq.empty): Formatter[BigDecimal] =
     new Formatter[BigDecimal] {
 
-      val is2dp = """(^-?\d*$)|(^-?\d*\.\d{1,2}$)"""
+      val correctDecimalPlaces = """(^-?\d*$)|(^-?\d*\.\d{1,""" + numDecimalPlaces + """}$)"""
       val validNumeric = """(^-?\d*$)|(^-?\d*\.\d*$)"""
 
       private val baseFormatter = stringFormatter(requiredKey)
@@ -102,8 +103,8 @@ trait Formatters {
         val validation: PartialFunction[String, Either[Seq[FormError], BigDecimal]] = {
           case s if !s.matches(validNumeric) =>
             Left(Seq(FormError(key, nonNumericKey, args)))
-          case s if !s.matches(is2dp) =>
-            Left(Seq(FormError(key, invalidNumericKey, args)))
+          case s if !s.matches(correctDecimalPlaces) =>
+            Left(Seq(FormError(key, invalidDecimalPlacesKey, args)))
           case s =>
             nonFatalCatch
               .either(BigDecimal(s))
@@ -157,33 +158,6 @@ trait Formatters {
 
       override def unbind(key: String, value: String): Map[String, String] =
         baseFormatter.unbind(key, value)
-    }
-
-  private[mappings] def weightNumericFormatter(requiredKey: String,
-                                               nonNumericKey: String,
-                                               invalidDecimalPoints: String,
-                                               args: Seq[String] = Seq.empty): Formatter[BigDecimal] =
-    new Formatter[BigDecimal] {
-
-      private val baseFormatter = stringFormatter(requiredKey)
-      val validNumeric = """(^-?\d*$)|(^-?\d*\.\d*$)"""
-      val validDecimalPoints = """(^-?\d*$)|(^-?\d*\.\d{1,3}$)"""
-
-      override def bind(key: String, data: Map[String, String]) = {
-        baseFormatter.bind(key, data).right.flatMap {
-          case s if !s.matches(validNumeric) =>
-            Left(Seq(FormError(key, nonNumericKey, args)))
-          case s if !s.matches(validDecimalPoints) =>
-            Left(Seq(FormError(key, invalidDecimalPoints, args)))
-          case s =>
-            nonFatalCatch
-              .either(BigDecimal(s))
-              .left.map(_ => Seq(FormError(key, nonNumericKey, args)))
-            }
-        }
-
-      override def unbind(key: String, value: BigDecimal) =
-        baseFormatter.unbind(key, value.toString)
     }
 
 }

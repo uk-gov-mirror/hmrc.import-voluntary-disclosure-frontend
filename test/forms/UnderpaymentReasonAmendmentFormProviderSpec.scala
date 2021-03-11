@@ -18,7 +18,7 @@ package forms
 
 import base.SpecBase
 import models.UnderpaymentReasonValue
-import play.api.data.validation.{Invalid, Valid}
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError}
 
 class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
@@ -37,6 +37,14 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val amendedWeightDecimalMessageKey = "amendmentValue.error.amended.weight.invalidDecimals"
   val originalWeightRangeMessageKey = "amendmentValue.error.original.weight.outOfRange"
   val amendedWeightRangeMessageKey = "amendmentValue.error.amended.weight.outOfRange"
+  val originalUnitMissingMessageKey = "amendmentValue.error.original.unit.missing"
+  val amendedUnitMissingMessageKey = "amendmentValue.error.amended.unit.missing"
+  val originalUnitFormatMessageKey = "amendmentValue.error.original.unit.nonNumeric"
+  val amendedUnitFormatMessageKey = "amendmentValue.error.amended.unit.nonNumeric"
+  val originalUnitDecimalMessageKey = "amendmentValue.error.original.unit.invalidDecimals"
+  val amendedUnitDecimalMessageKey = "amendmentValue.error.amended.unit.invalidDecimals"
+  val originalUnitRangeMessageKey = "amendmentValue.error.original.unit.outOfRange"
+  val amendedUnitRangeMessageKey = "amendmentValue.error.amended.unit.outOfRange"
   val commodityCodeAmendedValue = "2204109400X411"
   val commodityCodeOriginalValue = "2204109400X412"
   val commodityCodeOriginalLowerValue = "2204109400x412"
@@ -48,6 +56,8 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val nonNumeric = "@£$%FGB"
   val weightOriginalValue = 1500
   val weightAmendedValue = 3593.44
+  val unitOriginalValue = 1500
+  val unitAmendedValue = 3593.44
   val tooManyDecimalValue = 950.3829
   val outOfRangeValue = 95043953
 
@@ -346,7 +356,7 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
         val rangeValueArgs = Seq(0, 9999999.999)
         formBinderBox(formBuilder(original = outOfRangeValue.toString, amended = outOfRangeValue.toString), box = 35).errors mustBe Seq(
           FormError(originalKey, originalWeightRangeMessageKey, rangeValueArgs),
-          FormError(amendedKey, amendedWeightRangeMessageKey,  rangeValueArgs)
+          FormError(amendedKey, amendedWeightRangeMessageKey, rangeValueArgs)
         )
       }
     }
@@ -385,6 +395,114 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
     }
   }
 
+  "Binding a form with invalid data for a unit box selected" when {
+    "no values provided" should {
+      "result in a form with errors" in {
+        formBinderBox(box = 41).errors mustBe Seq(
+          FormError(originalKey, originalUnitMissingMessageKey),
+          FormError(amendedKey, amendedUnitMissingMessageKey)
+        )
+      }
+    }
+
+    "no amended value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = unitOriginalValue.toString), box = 41).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedUnitMissingMessageKey)
+          )
+      }
+    }
+
+    "non numeric values provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = nonNumeric, amended = nonNumeric), box = 41).errors mustBe Seq(
+          FormError(originalKey, originalUnitFormatMessageKey),
+          FormError(amendedKey, amendedUnitFormatMessageKey)
+        )
+      }
+    }
+
+    "non numeric amended value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = unitOriginalValue.toString, amended = nonNumeric), box = 41).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedUnitFormatMessageKey)
+          )
+      }
+    }
+
+    "too many decimal values provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = tooManyDecimalValue.toString, amended = tooManyDecimalValue.toString), box = 41).errors mustBe Seq(
+          FormError(originalKey, originalUnitDecimalMessageKey),
+          FormError(amendedKey, amendedUnitDecimalMessageKey)
+        )
+      }
+    }
+
+    "too many decimal original value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = tooManyDecimalValue.toString, amended = unitAmendedValue.toString), box = 41).errors mustBe
+          Seq(
+            FormError(originalKey, originalUnitDecimalMessageKey)
+          )
+      }
+    }
+
+    "too many decimal amended value provided" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = unitOriginalValue.toString, amended = tooManyDecimalValue.toString), box = 41).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedUnitDecimalMessageKey)
+          )
+      }
+    }
+
+    "out of range values provided" should {
+      "result in a form with errors" in {
+        val rangeValueArgs = Seq(0, 9999999.999)
+        formBinderBox(formBuilder(original = outOfRangeValue.toString, amended = outOfRangeValue.toString), box = 41).errors mustBe Seq(
+          FormError(originalKey, originalUnitRangeMessageKey, rangeValueArgs),
+          FormError(amendedKey, amendedUnitRangeMessageKey, rangeValueArgs)
+        )
+      }
+    }
+
+    "original and amended value are the same" should {
+      "result in a form with errors" in {
+        formBinderBox(formBuilder(original = unitAmendedValue.toString, amended = unitAmendedValue.toString), box = 41).errors mustBe
+          Seq(
+            FormError("", keysDifferentMessageKey)
+          )
+      }
+    }
+  }
+
+  "Binding a form with valid data for a unitForm box selected" when {
+    "provided with valid values" should {
+      "result in a form with no errors" in {
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = unitOriginalValue.toString, amended = unitAmendedValue.toString), box = 41)
+        form.hasErrors mustBe false
+      }
+
+      "generate the correct model" in {
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = unitOriginalValue.toString, amended = unitAmendedValue.toString), box = 41)
+        form.value mustBe Some(UnderpaymentReasonValue(unitOriginalValue.toString, unitAmendedValue.toString))
+      }
+    }
+  }
+
+  "A unit form " when {
+    "built from a valid model" should {
+      "generate the correct mapping" in {
+        val model: UnderpaymentReasonValue = UnderpaymentReasonValue(unitOriginalValue.toString, unitAmendedValue.toString)
+        val form: Form[UnderpaymentReasonValue] = new UnderpaymentReasonAmendmentFormProvider()(41).fill(model)
+        form.data mustBe formBuilder(original = unitOriginalValue.toString, amended = unitAmendedValue.toString)
+      }
+    }
+  }
+
   "Binding a form with valid data for an unrecognised box selected" when {
     "provided with valid values" should {
       "result in a form with no errors" in {
@@ -419,6 +537,43 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
 
     "return Invalid for identical strings" in {
       diff(UnderpaymentReasonValue("Field1", "Field1")) mustEqual Invalid("error.key")
+    }
+  }
+
+  "minMaxRange Constraint" must {
+
+    val minAmount = BigDecimal(0)
+    val maxAmount = BigDecimal(100)
+    lazy val rangeResult = new UnderpaymentReasonAmendmentFormProvider().minMaxRange(Some(minAmount), Some(maxAmount),"error.key")
+    lazy val minResult: Constraint[BigDecimal] = new UnderpaymentReasonAmendmentFormProvider().minMaxRange(Some(minAmount), None,"error.key")
+    lazy val maxResult = new UnderpaymentReasonAmendmentFormProvider().minMaxRange(None, Some(maxAmount),"error.key")
+
+    "return Valid if value is greater than Min" in {
+      minResult(BigDecimal(5)) mustEqual Valid
+    }
+
+    "return Invalid if value is less than Min" in {
+      minResult(BigDecimal(-1)) mustEqual Invalid("error.key", minAmount)
+    }
+
+    "return Valid if value is less than Max" in {
+      maxResult(BigDecimal(5)) mustEqual Valid
+    }
+
+    "return Invalid if value is greater than Max" in {
+      maxResult(BigDecimal(101)) mustEqual Invalid("error.key", maxAmount)
+    }
+
+    "return Valid if value is in Range" in {
+      rangeResult(BigDecimal(5)) mustEqual Valid
+    }
+
+    "return Invalid if value is greater than Range" in {
+      rangeResult(BigDecimal(101)) mustEqual Invalid("error.key", minAmount, maxAmount)
+    }
+
+    "return Invalid if value is less than Range" in {
+      rangeResult(BigDecimal(-1)) mustEqual Invalid("error.key", minAmount, maxAmount)
     }
   }
 }

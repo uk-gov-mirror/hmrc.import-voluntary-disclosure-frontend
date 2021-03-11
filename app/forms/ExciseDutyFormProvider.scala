@@ -34,7 +34,7 @@ class ExciseDutyFormProvider @Inject()(implicit appConfig: AppConfig) extends Ma
         "original" -> numeric(
           isCurrency = true,
           requiredKey = "exciseDuty.error.originalNonEmpty",
-          invalidNumeric = "exciseDuty.error.originalNonNumber",
+          invalidDecimalPlacesKey = "exciseDuty.error.originalNonNumber",
           nonNumericKey = "exciseDuty.error.originalNonNumber"
         ).verifying(
           messages("exciseDuty.error.originalUpperLimit"),
@@ -43,7 +43,7 @@ class ExciseDutyFormProvider @Inject()(implicit appConfig: AppConfig) extends Ma
         "amended" -> numeric(
           isCurrency = true,
           requiredKey = "exciseDuty.error.amendedNonEmpty",
-          invalidNumeric = "exciseDuty.error.originalNonNumber",
+          invalidDecimalPlacesKey = "exciseDuty.error.originalNonNumber",
           nonNumericKey = "exciseDuty.error.amendedNonNumber"
         )
       )(UnderpaymentAmount.apply)(UnderpaymentAmount.unapply)

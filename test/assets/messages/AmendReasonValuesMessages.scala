@@ -24,7 +24,7 @@ object AmendReasonValuesMessages extends BaseMessages {
   val box22P1: String = "You must include the currency code followed by the invoice price or the customs value, for example GBP871.12 or EUR2908946."
   val box35PageTitle: String = "Box 35 gross mass amendment for item 1"
   val box35P1: String = "Must be in kilograms and can be up to 3 decimal places."
-  val originalAmount: String =  "Original value"
+  val originalAmount: String = "Original value"
   val amendedAmount: String = "Amended value"
   val originalNonEmpty: String = "Enter the original value"
   val amendedNonEmpty: String = "Enter the amended value"
@@ -37,8 +37,8 @@ object AmendReasonValuesMessages extends BaseMessages {
   val amendedInvalidWeightFormat: String = "Amended value must be a number"
   val originalInvalidWeightDecimal: String = "Original value must have 3 decimal places or fewer"
   val amendedInvalidWeightDecimal: String = "Amended value must have 3 decimal places or fewer"
-  val originalInvalidWeightOutOfRange: String = "Original value must be 9999999.999kg or fewer"
-  val amendedInvalidWeightOutOfRange: String = "Amended value must be 9999999.999kg or fewer"
+  val originalInvalidWeightOutOfRange: String = "Original value must be between 0 and 9999999.999kg"
+  val amendedInvalidWeightOutOfRange: String = "Amended value must be between 0 and 9999999.999kg"
 
   val boxContent: Map[Int, ExpectedContent] = Map(
     22 -> ExpectedContent(
@@ -73,7 +73,9 @@ object AmendReasonValuesMessages extends BaseMessages {
       "Box 39 quota amendment for item 1",
       "Box 39 quota amendment for item 1",
       Some("Must be 7 characters.")),
-    41 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    41 -> ExpectedContent(
+      "Box 41 supplementary units amendment for item 1",
+      "Box 41 supplementary units amendment for item 1", None),
     42 -> ExpectedContent("n/a", "n/a", Some("n/a")),
     43 -> ExpectedContent("n/a", "n/a", Some("n/a")),
     45 -> ExpectedContent("n/a", "n/a", Some("n/a")),

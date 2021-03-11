@@ -34,7 +34,7 @@ class CustomsDutyFormProvider @Inject()(implicit appConfig: AppConfig) extends M
         "original" -> numeric(
           isCurrency = true,
           requiredKey = "customsDuty.error.originalNonEmpty",
-          invalidNumeric = "customsDuty.error.originalNonNumber",
+          invalidDecimalPlacesKey = "customsDuty.error.originalNonNumber",
           nonNumericKey = "customsDuty.error.originalNonNumber"
         ).verifying(
           messages("customsDuty.error.originalUpperLimit"),
@@ -43,7 +43,7 @@ class CustomsDutyFormProvider @Inject()(implicit appConfig: AppConfig) extends M
         "amended" -> numeric(
           isCurrency = true,
           requiredKey = "customsDuty.error.amendedNonEmpty",
-          invalidNumeric = "customsDuty.error.amendedNonNumber",
+          invalidDecimalPlacesKey = "customsDuty.error.amendedNonNumber",
           nonNumericKey = "customsDuty.error.amendedNonNumber"
         )
       )(UnderpaymentAmount.apply)(UnderpaymentAmount.unapply)

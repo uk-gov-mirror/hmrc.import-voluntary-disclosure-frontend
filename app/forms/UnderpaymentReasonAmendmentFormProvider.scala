@@ -30,10 +30,27 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
       case 22 | 62 | 63 | 66 | 67 | 68 => foreignCurrencyFormMapping
       case 33 => textFormMapping(regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)""")
       case 34 => textFormMapping(regex = """^[a-zA-Z]{2}$""")
-      case 35 | 38 => weightFormMapping
+      case 35 | 38  => decimalFormMapping(
+        requiredKey = "weight.missing",
+        nonNumericKey = "weight.nonNumeric",
+        invalidDecimalPlacesKey = "weight.invalidDecimals",
+        outOfRangeKey = "weight.outOfRange",
+        numDecimalPlaces = 3,
+        rangeMin = Some(BigDecimal(0)),
+        rangeMax = Some(BigDecimal(9999999.999))
+      )
       case 36 => textFormMapping(regex = """^[0-9]{3}$""")
       case 37 => textFormMapping(regex = """^[0-9]{4}[A-Za-z0-9][0-9]{2}$""")
       case 39 => textFormMapping(regex = """^[0-9a-zA-Z]{7}$""")
+      case 41  => decimalFormMapping(
+        requiredKey = "unit.missing",
+        nonNumericKey = "unit.nonNumeric",
+        invalidDecimalPlacesKey = "unit.invalidDecimals",
+        outOfRangeKey = "unit.outOfRange",
+        numDecimalPlaces = 3,
+        rangeMin = Some(BigDecimal(0)),
+        rangeMax = Some(BigDecimal(9999999.999))
+      )
       case _ => textFormMapping(regex = """^.*$""") // TODO: Remove this when all box numbers added to story
     }
   }
@@ -64,19 +81,29 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
     )
   }
 
-  private def weightFormMapping: Form[UnderpaymentReasonValue] = {
+  private def decimalFormMapping(
+                                  requiredKey: String,
+                                  nonNumericKey: String,
+                                  invalidDecimalPlacesKey: String,
+                                  outOfRangeKey: String,
+                                  numDecimalPlaces: Int,
+                                  rangeMin: Option[BigDecimal] = None,
+                                  rangeMax: Option[BigDecimal] = None
+                                ): Form[UnderpaymentReasonValue] = {
     Form(
       mapping(
-        "original" -> weightNumeric(
-          requiredKey = "amendmentValue.error.original.weight.missing",
-          nonNumericKey = "amendmentValue.error.original.weight.nonNumeric",
-          invalidDecimalPoints = "amendmentValue.error.original.weight.invalidDecimals")
-          .verifying(inRange[BigDecimal](0, 9999999.999, "amendmentValue.error.original.weight.outOfRange")),
-        "amended" -> weightNumeric(
-          requiredKey = "amendmentValue.error.amended.weight.missing",
-          nonNumericKey = "amendmentValue.error.amended.weight.nonNumeric",
-          invalidDecimalPoints = "amendmentValue.error.amended.weight.invalidDecimals")
-          .verifying(inRange[BigDecimal](0, 9999999.999, "amendmentValue.error.amended.weight.outOfRange"))
+        "original" -> numeric(
+          numDecimalPlaces = numDecimalPlaces,
+          requiredKey = "amendmentValue.error.original." + requiredKey,
+          nonNumericKey = "amendmentValue.error.original." + nonNumericKey,
+          invalidDecimalPlacesKey = "amendmentValue.error.original." + invalidDecimalPlacesKey)
+          .verifying(minMaxRange(rangeMin, rangeMax, "amendmentValue.error.original." + outOfRangeKey)),
+        "amended" -> numeric(
+          numDecimalPlaces = numDecimalPlaces,
+          requiredKey = "amendmentValue.error.amended." + requiredKey,
+          nonNumericKey = "amendmentValue.error.amended." + nonNumericKey,
+          invalidDecimalPlacesKey = "amendmentValue.error.amended." + invalidDecimalPlacesKey)
+          .verifying(minMaxRange(rangeMin, rangeMax, "amendmentValue.error.amended." + outOfRangeKey))
       )
       ((original, amended) => UnderpaymentReasonValue.apply(original.toString(), amended.toString()))
       (value => Some(BigDecimal(value.original), BigDecimal(value.amended)))
@@ -93,4 +120,14 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
           Invalid(errorKey)
         }
     }
+
+  private[forms] def minMaxRange(rangeMin: Option[BigDecimal] = None,
+                                  rangeMax: Option[BigDecimal] = None,
+                                  errorKey: String): Constraint[BigDecimal] = {
+    (rangeMin, rangeMax) match {
+      case (Some(min), Some(max)) => inRange(min, max, errorKey)
+      case (Some(min), None) => minimumValue(min, errorKey)
+      case (None, Some(max)) => maximumValue(max, errorKey)
+    }
+  }
 }

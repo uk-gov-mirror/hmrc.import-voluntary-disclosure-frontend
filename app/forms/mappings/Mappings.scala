@@ -35,14 +35,15 @@ trait Mappings extends Formatters with Constraints {
     of(intFormatter(requiredKey, wholeNumberKey, nonNumericKey))
 
   protected def numeric(isCurrency: Boolean = false,
+                        numDecimalPlaces: Int = 2,
                         requiredKey: String = "error.required",
-                        invalidNumeric: String = "error.invalidNumeric",
+                        invalidDecimalPlacesKey: String = "error.invalidNumeric",
                         nonNumericKey: String = "error.nonNumeric"
                        ): FieldMapping[BigDecimal] =
     if (isCurrency) {
-      of(numericFormatter(isCurrency = true, requiredKey, invalidNumeric, nonNumericKey))
+      of(numericFormatter(isCurrency = true, numDecimalPlaces, requiredKey, invalidDecimalPlacesKey, nonNumericKey))
     } else {
-      of(numericFormatter(isCurrency = false, requiredKey, invalidNumeric, nonNumericKey))
+      of(numericFormatter(isCurrency = false, numDecimalPlaces, requiredKey, invalidDecimalPlacesKey, nonNumericKey))
     }
 
   protected def boolean(requiredKey: String = "error.required",
@@ -66,11 +67,4 @@ trait Mappings extends Formatters with Constraints {
   protected def foreignCurrency(requiredKey: String = "error.required",
                                 invalidNumeric: String = "error.invalid"): FieldMapping[String] =
     of(foreignCurrencyFormatter(requiredKey, invalidNumeric))
-
-  protected def weightNumeric(requiredKey: String = "error.required",
-                              nonNumericKey: String = "error.nonNumeric",
-                              invalidDecimalPoints: String = "error.invalidDecimalPoints"
-                             ): FieldMapping[BigDecimal] =
-    of(weightNumericFormatter(requiredKey,nonNumericKey, invalidDecimalPoints))
-
 }
