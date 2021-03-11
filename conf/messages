@@ -420,3 +420,8 @@ confirmEORI.pageTitle = Confirm your EORI details
 confirmEORI.heading = Confirm your EORI details
 confirmEORI.eoriNumber = EORI number
 confirmEORI.name = Name
+
+# Importer Dan page
+importerDan.pageTitle = What is the customs procedure code?
+importerDan.pageHeader = What is the customs procedure code?
+importerDan.error.required = Enter the customs procedure code

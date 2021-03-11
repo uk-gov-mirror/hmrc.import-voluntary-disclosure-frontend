@@ -153,3 +153,6 @@ GET         /disclosure/importer-eori-number                             control
 POST        /disclosure/importer-eori-number                             controllers.ImporterEORINumberController.onSubmit
 
 GET         /confirm-eori                                                controllers.ConfirmEORIDetailsController.onLoad
+
+GET         /importer/dan                                                controllers.ImporterDanController.onLoad
+POST        /importer/dan                                                controllers.ImporterDanController.onSubmit
