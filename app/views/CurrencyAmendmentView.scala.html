@@ -1,0 +1,47 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        h1: components.h1,
+        errorSummary: components.errorSummary,
+        button: components.button,
+        currencyInput: components.currencyInput
+)
+
+@(form: Form[_], boxNumber: Int, itemNumber: Int, backLink: Call, inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
+
+@layout(
+    pageTitle = messages(s"box${boxNumber}.pageTitle", itemNumber),
+    form = Some(form),
+    customBackLinkUrl = Some(backLink)) {
+
+    @errorSummary(form.errors)
+
+    @h1(messages(s"box${boxNumber}.pageHeader", itemNumber))
+
+    @formHelper(action = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)) {
+        @currencyInput(form, "original", messages("amendmentValue.originalAmount"), 10, false,
+            classes = inputClass)
+        @currencyInput(form, "amended", messages("amendmentValue.amendedAmount"), 10, false,
+            classes = inputClass)
+        @button("common.button.continue")
+    }
+}
+
+@{
+    //$COVERAGE-OFF$
+}
