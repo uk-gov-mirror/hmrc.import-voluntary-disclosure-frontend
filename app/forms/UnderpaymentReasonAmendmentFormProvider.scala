@@ -31,6 +31,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
       case 33 => textFormMapping(regex = """^([0-9]{10})($|[0-9a-zA-Z]{4}$)""")
       case 34 => textFormMapping(regex = """^[a-zA-Z]{2}$""")
       case 35 | 38  => decimalFormMapping(
+        isCurrency = false,
         requiredKey = "weight.missing",
         nonNumericKey = "weight.nonNumeric",
         invalidDecimalPlacesKey = "weight.invalidDecimals",
@@ -41,8 +42,9 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
       )
       case 36 => textFormMapping(regex = """^[0-9]{3}$""")
       case 37 => textFormMapping(regex = """^[0-9]{4}[A-Za-z0-9][0-9]{2}$""")
-      case 39 => textFormMapping(regex = """^[0-9a-zA-Z]{7}$""")
+      case 39 => textFormMapping(regex = """^[0-9]{6}$""")
       case 41  => decimalFormMapping(
+        isCurrency = false,
         requiredKey = "unit.missing",
         nonNumericKey = "unit.nonNumeric",
         invalidDecimalPlacesKey = "unit.invalidDecimals",
@@ -50,6 +52,26 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
         numDecimalPlaces = 3,
         rangeMin = Some(BigDecimal(0)),
         rangeMax = Some(BigDecimal(9999999.999))
+      )
+      case 42 => decimalFormMapping(
+        isCurrency = false,
+        requiredKey = "decimal.missing",
+        nonNumericKey = "decimal.nonNumeric",
+        invalidDecimalPlacesKey = "decimal.invalidDecimals",
+        outOfRangeKey = "decimal.outOfRange",
+        numDecimalPlaces = 2,
+        rangeMin = Some(BigDecimal(0)),
+        rangeMax = Some(BigDecimal(999999999999.99))
+      )
+      case 46  => decimalFormMapping(
+        isCurrency = true,
+        requiredKey = "currency.missing",
+        nonNumericKey = "currency.nonNumeric",
+        invalidDecimalPlacesKey = "currency.invalidDecimals",
+        outOfRangeKey = "currency.outOfRange",
+        numDecimalPlaces = 2,
+        rangeMin = Some(BigDecimal(0)),
+        rangeMax = Some(BigDecimal(999999999999.99))
       )
       case _ => textFormMapping(regex = """^.*$""") // TODO: Remove this when all box numbers added to story
     }
@@ -82,6 +104,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
   }
 
   private def decimalFormMapping(
+                                  isCurrency: Boolean,
                                   requiredKey: String,
                                   nonNumericKey: String,
                                   invalidDecimalPlacesKey: String,
@@ -93,12 +116,14 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
     Form(
       mapping(
         "original" -> numeric(
+          isCurrency = isCurrency,
           numDecimalPlaces = numDecimalPlaces,
           requiredKey = "amendmentValue.error.original." + requiredKey,
           nonNumericKey = "amendmentValue.error.original." + nonNumericKey,
           invalidDecimalPlacesKey = "amendmentValue.error.original." + invalidDecimalPlacesKey)
           .verifying(minMaxRange(rangeMin, rangeMax, "amendmentValue.error.original." + outOfRangeKey)),
         "amended" -> numeric(
+          isCurrency = isCurrency,
           numDecimalPlaces = numDecimalPlaces,
           requiredKey = "amendmentValue.error.amended." + requiredKey,
           nonNumericKey = "amendmentValue.error.amended." + nonNumericKey,
