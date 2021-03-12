@@ -86,6 +86,7 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
       case 33 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-20"))
       case 34 | 36 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-3"))
       case 35 | 38 => weightAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
+      case 45 => textAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber), inputClass = Some("govuk-input--width-4"))
       case 46 => currencyAmendmentView(form, boxNumber, itemNumber, backLink(boxNumber))
       case _ => throw new RuntimeException("Invalid Box Number")
     }

@@ -63,6 +63,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
         rangeMin = Some(BigDecimal(0)),
         rangeMax = Some(BigDecimal(999999999999.99))
       )
+      case 45 => textFormMapping(regex = """^[A-M]{1}$|^[A-M]{1}[0-9]{1,2}$|^[A-M]{1}[0-9]{1,2}[.][0-9]{1}$""")
       case 46  => decimalFormMapping(
         isCurrency = true,
         requiredKey = "currency.missing",
