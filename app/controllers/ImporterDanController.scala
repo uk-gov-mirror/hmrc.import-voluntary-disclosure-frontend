@@ -19,14 +19,13 @@ package controllers
 import com.google.inject.Inject
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.EnterCustomsProcedureCodeFormProvider
-import models.EntryDetails
-import pages.{EnterCustomsProcedureCodePage, EntryDetailsPage}
+import forms.ImporterDanFormProvider
+import pages.ImporterDanPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.EnterCustomsProcedureCodeView
+import views.html.ImporterDanView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,33 +36,31 @@ class ImporterDanController @Inject()(identify: IdentifierAction,
                                       appConfig: AppConfig,
                                       sessionRepository: SessionRepository,
                                       mcc: MessagesControllerComponents,
-                                      formProvider: EnterCustomsProcedureCodeFormProvider,
+                                      formProvider: ImporterDanFormProvider,
                                       view: ImporterDanView
                                      )
   extends FrontendController(mcc) with I18nSupport {
 
+  lazy val backLink: Call = controllers.routes.DefermentController.onLoad()
+
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(EnterCustomsProcedureCodePage).fold(formProvider()) {
+    val form = request.userAnswers.get(ImporterDanPage).fold(formProvider()) {
       formProvider().fill
     }
-    Future.successful(Ok(view(form, backLink())))
+    Future.successful(Ok(view(form, backLink)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink()))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(EnterCustomsProcedureCodePage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterDanPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.ImporterDanController.onLoad())
+          Redirect(controllers.routes.CheckYourAnswersController.onLoad())
         }
       }
     )
   }
-
-  private[controllers] def backLink(): Call =
-      controllers.routes.DefermentController.onLoad()
-
 }

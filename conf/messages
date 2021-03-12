@@ -422,6 +422,7 @@ confirmEORI.eoriNumber = EORI number
 confirmEORI.name = Name
 
 # Importer Dan page
-importerDan.pageTitle = What is the customs procedure code?
-importerDan.pageHeader = What is the customs procedure code?
-importerDan.error.required = Enter the customs procedure code
+importerDan.pageTitle = What is the deferment account number?
+importerDan.pageHeader = What is the deferment account number?
+importerDan.error.required = Enter the deferment account number
+importerDan.error.format = Enter the deferment account number in the correct format, like 1234567
