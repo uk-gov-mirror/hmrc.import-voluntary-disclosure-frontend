@@ -197,9 +197,14 @@ uploadProgress.message = Waiting for uploaded file to be scanned
 uploadProgress.request = Please refresh to view latest progress
 uploadProgress.refresh = Refresh
 
-deferment.pageTitle = Are you paying by deferment?
-deferment.heading = Are you paying by deferment?
-deferment.error.required = Select yes if you are paying by deferment
+# Deferement page
+deferment.headingOnlyVAT = How will you pay for the import VAT owed?
+deferment.headingVATandDuty = How will you pay for the import VAT and duty owed?
+deferment.headingDutyOnly = How will you pay for the duty owed?
+deferment.hint = This can include BACS, CHAPS, Faster Payments, cheque, or banker’s draft. More information will be sent to you with the C18 Post Clearance Demand Note.
+deferment.payingByDeferment = By duty deferment account
+deferment.payingByOther = Another payment method
+deferment.error.required = Select how you will pay for the underpayment
 
 # Declarant Contact Details
 declarantContactDetails.pageTitle = Who should we contact if we have questions about this disclosure?

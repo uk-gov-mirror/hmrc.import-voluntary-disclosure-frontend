@@ -28,3 +28,4 @@ class DefermentFormProvider @Inject() extends Mappings {
       "value" -> boolean("deferment.error.required")
     )
 }
+

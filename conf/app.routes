@@ -54,8 +54,8 @@ GET         /disclosure/upload-file/polling                              control
 GET         /disclosure/your-contact-details                             controllers.DeclarantContactDetailsController.onLoad
 POST        /disclosure/your-contact-details                             controllers.DeclarantContactDetailsController.onSubmit
 
-GET         /disclosure/paying-by-deferment                              controllers.DefermentController.onLoad
-POST        /disclosure/paying-by-deferment                              controllers.DefermentController.onSubmit
+GET         /disclosure/how-will-you-pay                                 controllers.DefermentController.onLoad
+POST        /disclosure/how-will-you-pay                                 controllers.DefermentController.onSubmit
 
 GET         /disclosure/upload-another-file                              controllers.UploadAnotherFileController.onLoad
 POST        /disclosure/upload-another-file                              controllers.UploadAnotherFileController.onSubmit

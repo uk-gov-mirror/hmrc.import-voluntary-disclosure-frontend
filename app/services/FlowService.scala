@@ -16,9 +16,10 @@
 
 package services
 
+import models.{UnderpaymentType, UserAnswers, UserType}
+import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
+
 import javax.inject.Singleton
-import models.{UserAnswers, UserType}
-import pages.{ImporterEORIExistsPage, UserTypePage}
 
 @Singleton
 class FlowService {
