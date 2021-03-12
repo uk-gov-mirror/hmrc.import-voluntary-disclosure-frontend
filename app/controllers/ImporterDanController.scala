@@ -33,7 +33,6 @@ import scala.concurrent.Future
 class ImporterDanController @Inject()(identify: IdentifierAction,
                                       getData: DataRetrievalAction,
                                       requireData: DataRequiredAction,
-                                      appConfig: AppConfig,
                                       sessionRepository: SessionRepository,
                                       mcc: MessagesControllerComponents,
                                       formProvider: ImporterDanFormProvider,
