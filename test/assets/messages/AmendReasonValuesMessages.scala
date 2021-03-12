@@ -89,7 +89,10 @@ object AmendReasonValuesMessages extends BaseMessages {
       "Box 42 item price amendment for item 1",
       "Box 42 item price amendment for item 1",
       Some("The currency of the item price should be the same as the currency used for box 22 (invoice currency and total amount invoiced).")),
-    43 -> ExpectedContent("n/a", "n/a", Some("n/a")),
+    43 -> ExpectedContent(
+      "Box 43 valuation method code amendment for item 1",
+      "Box 43 valuation method code amendment for item 1",
+      Some("Must be a single number, for example 1 or 4.")),
     45 -> ExpectedContent("Box 45 adjustment amendment for item 1",
       "Box 45 adjustment amendment for item 1",
       Some("Must be a letter followed by the percentage adjustment, for example A12.5 or D0.")),
