@@ -42,7 +42,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings {
       )
       case 36 => textFormMapping(regex = """^[0-9]{3}$""")
       case 37 => textFormMapping(regex = """^[0-9]{4}[A-Za-z0-9][0-9]{2}$""")
-      case 39 => textFormMapping(regex = """^[0-9a-zA-Z]{7}$""")
+      case 39 => textFormMapping(regex = """^[0-9]{6}$""")
       case 41  => decimalFormMapping(
         isCurrency = false,
         requiredKey = "unit.missing",
