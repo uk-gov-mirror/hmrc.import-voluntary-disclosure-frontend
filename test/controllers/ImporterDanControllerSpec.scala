@@ -21,7 +21,7 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.ImporterDanFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.ImporterDanPage
+import pages.DefermentAccountPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 class ImporterDanControllerSpec extends ControllerSpecBase {
 
   val userAnswersWithImporterDan: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
-    .set(ImporterDanPage, "1234567").success.value
+    .set(DefermentAccountPage, "1234567").success.value
   )
 
   private def fakeRequestGenerator(dan: String): FakeRequest[AnyContentAsFormUrlEncoded] =

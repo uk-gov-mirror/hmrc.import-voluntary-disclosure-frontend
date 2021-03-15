@@ -20,7 +20,7 @@ import com.google.inject.Inject
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ImporterDanFormProvider
-import pages.ImporterDanPage
+import pages.DefermentAccountPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
@@ -43,7 +43,7 @@ class ImporterDanController @Inject()(identify: IdentifierAction,
   lazy val backLink: Call = controllers.routes.DefermentController.onLoad()
 
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(ImporterDanPage).fold(formProvider()) {
+    val form = request.userAnswers.get(DefermentAccountPage).fold(formProvider()) {
       formProvider().fill
     }
     Future.successful(Ok(view(form, backLink)))
@@ -54,7 +54,7 @@ class ImporterDanController @Inject()(identify: IdentifierAction,
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(ImporterDanPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(DefermentAccountPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           Redirect(controllers.routes.CheckYourAnswersController.onLoad())

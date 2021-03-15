@@ -85,6 +85,29 @@ object IvdSubmission extends FixedConfig {
       Json.obj()
     }
 
+    val defermentDetails = if (data.defermentAccountNumber.isDefined) {
+      data.userType match {
+        case UserType.Importer =>
+          Json.obj(
+            "defermentType" -> "D",
+            "defermentAccountNumber" -> data.defermentAccountNumber.get
+          )
+        case UserType.Representative if data.additionalDefermentNumber.isDefined =>
+          Json.obj(
+            "defermentType" -> data.defermentType.get,
+            "defermentAccountNumber" -> data.defermentAccountNumber.get,
+            "additionalDefermentAccountNumber" -> data.additionalDefermentNumber.get
+          )
+        case _ =>
+          Json.obj(
+            "defermentType" -> data.defermentType.get,
+            "defermentAccountNumber" -> data.defermentAccountNumber.get
+          )
+      }
+    } else {
+      Json.obj()
+    }
+
     val payload = Json.obj(
       "userType" -> data.userType,
       "isBulkEntry" -> isBulkEntry,
@@ -99,7 +122,7 @@ object IvdSubmission extends FixedConfig {
       "supportingDocuments" -> data.supportingDocuments
     )
 
-    payload ++ importerDetails ++ representativeDetails
+    payload ++ defermentDetails ++ importerDetails ++ representativeDetails
   }
 
   implicit val reads: Reads[IvdSubmission] =
@@ -119,6 +142,9 @@ object IvdSubmission extends FixedConfig {
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
+      defermentType <- DefermentTypePage.path.readNullable[String]
+      defermentAccountNumber <- DefermentAccountPage.path.readNullable[String]
+      additionalDefermentNumber <- AdditionalDefermentNumberPage.path.readNullable[String]
       additionalInfo <- MoreInformationPage.path.readNullable[String]
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
     } yield {
@@ -152,6 +178,9 @@ object IvdSubmission extends FixedConfig {
         importerAddress = importerAddress,
         underpaymentDetails = underpaymentDetails,
         supportingDocuments = supportingDocuments,
+        defermentType = defermentType,
+        defermentAccountNumber = defermentAccountNumber,
+        additionalDefermentNumber = additionalDefermentNumber,
         additionalInfo = additionalInfo.getOrElse("Not Applicable"),
         amendedItems = amendedItems
       )

@@ -18,10 +18,10 @@ package pages
 
 import play.api.libs.json.JsPath
 
-case object ImporterDanPage extends QuestionPage[String] {
+case object DefermentAccountPage extends QuestionPage[String] {
 
   def path: JsPath = JsPath \ toString
 
-  override def toString: String = "importer-dan"
+  override def toString: String = "deferment-account"
 
 }
