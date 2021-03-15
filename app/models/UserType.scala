@@ -16,7 +16,6 @@
 
 package models
 
-import models.{UserType, Enumerable}
 import play.api.data.Form
 import play.api.i18n.Messages
 import uk.gov.hmrc.govukfrontend.views.Aliases.Text

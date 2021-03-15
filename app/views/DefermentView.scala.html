@@ -14,17 +14,18 @@
  * limitations under the License.
  *@
 
-@this(layout: templates.Layout,
-formHelper: FormWithCSRF,
-errorSummary: components.errorSummary,
-inputRadio: components.inputRadio,
-button: components.button,
-yesNoRadio: components.yesNoRadio)
+@this(
+    layout: templates.Layout,
+    formHelper: FormWithCSRF,
+    errorSummary: components.errorSummary,
+    inputRadio: components.inputRadio,
+    button: components.button
+)
 
-@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, headerAndTitleMessage: String, radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("deferment.pageTitle"),
+    pageTitle = messages(headerAndTitleMessage),
     form = Some(form),
     customBackLinkUrl = Some(backLink)
 ) {
@@ -32,11 +33,12 @@ yesNoRadio: components.yesNoRadio)
    @errorSummary(form.errors)
 
    @formHelper(action = controllers.routes.DefermentController.onSubmit()) {
-        @yesNoRadio(
-        form,
-        headingKey = "deferment.heading",
-        inline = true
-        )
+       @inputRadio(
+           form = form,
+           legend = messages(headerAndTitleMessage),
+           items = radioItems,
+           legendAsHeading = true
+       )
 
    @button("common.button.continue")
    }

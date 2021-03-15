@@ -71,6 +71,8 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val decimalOriginalValue = 1500
   val decimalAmendedValue = 3593.44
   val decimalOutOfRangeValue: BigDecimal = 9999999999999.99
+  val vmNumberOriginalValue = "2"
+  val vmNumberAmendedValue = "3"
 
   def formBuilder(original: String = "", amended: String = ""): Map[String, String] = Map(
     originalKey -> original,
@@ -93,6 +95,10 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
       "produce the correct form for box 62" in {
         val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = foreignCurrencyOriginalValue, amended = foreignCurrencyAmendedValue), box = 62)
         form.value mustBe Some(UnderpaymentReasonValue(foreignCurrencyOriginalValue, foreignCurrencyAmendedValue))
+      }
+      "produce the correct form for box 43" in {
+        val form: Form[UnderpaymentReasonValue] = formBinderBox(formBuilder(original = vmNumberOriginalValue, amended = vmNumberAmendedValue), box = 43)
+        form.value mustBe Some(UnderpaymentReasonValue(vmNumberOriginalValue, vmNumberAmendedValue))
       }
     }
   }

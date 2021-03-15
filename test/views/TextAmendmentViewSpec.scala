@@ -50,7 +50,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist" should {
       val form: Form[UnderpaymentReasonValue] = formProvider.apply(boxNumber)
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -74,7 +74,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     "an error exists (no value has been specified for original amount)" should {
       lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(emptyString, validValue)
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -94,7 +94,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     "an error exists (no value has been specified for amended amount)" should {
       lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(validValue, emptyString)
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -116,7 +116,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
         .discardingErrors
         .withError(FormError("amended", AmendReasonValuesMessages.amendedDifferent))
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -136,7 +136,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     "an error exists (value has been entered in an invalid format for both original and amended)" should {
       lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(invalidValue, invalidValue2)
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -159,7 +159,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
   }
 
   "The Underpayment Reason Amendment page" when {
-    Seq(22,33,34,36,37,39,41,42,62,63,66,67,68).map { testBox =>
+    Seq(22,33,34,36,37,39,41,42,43,45,62,63,66,67,68).map { testBox =>
       checkContent(testBox)
     }
 
@@ -167,7 +167,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
       s"rendered for box ${boxNumber}" should {
         val form: Form[UnderpaymentReasonValue] = formProvider.apply(boxNumber)
         lazy val view: Html = injectedView(
-          form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+          form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
         )(fakeRequest, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -194,7 +194,7 @@ class TextAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
 
     lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(validValue, emptyString)
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, Call("GET", controllers.routes.BoxNumberController.onLoad().url)
+      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

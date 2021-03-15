@@ -197,9 +197,14 @@ uploadProgress.message = Waiting for uploaded file to be scanned
 uploadProgress.request = Please refresh to view latest progress
 uploadProgress.refresh = Refresh
 
-deferment.pageTitle = Are you paying by deferment?
-deferment.heading = Are you paying by deferment?
-deferment.error.required = Select yes if you are paying by deferment
+# Deferement page
+deferment.headingOnlyVAT = How will you pay for the import VAT owed?
+deferment.headingVATandDuty = How will you pay for the import VAT and duty owed?
+deferment.headingDutyOnly = How will you pay for the duty owed?
+deferment.hint = This can include BACS, CHAPS, Faster Payments, cheque, or banker’s draft. More information will be sent to you with the C18 Post Clearance Demand Note.
+deferment.payingByDeferment = By duty deferment account
+deferment.payingByOther = Another payment method
+deferment.error.required = Select how you will pay for the underpayment
 
 # Declarant Contact Details
 declarantContactDetails.pageTitle = Who should we contact if we have questions about this disclosure?
@@ -324,6 +329,12 @@ box41.pageHeader = Box 41 supplementary units amendment for item {0}
 box42.pageTitle = Box 42 item price amendment for item {0}
 box42.pageHeader = Box 42 item price amendment for item {0}
 box42.pageBody = The currency of the item price should be the same as the currency used for box 22 (invoice currency and total amount invoiced).
+box43.pageTitle = Box 43 valuation method code amendment for item {0}
+box43.pageHeader = Box 43 valuation method code amendment for item {0}
+box43.pageBody = Must be a single number, for example 1 or 4.
+box45.pageTitle = Box 45 adjustment amendment for item {0}
+box45.pageHeader = Box 45 adjustment amendment for item {0}
+box45.pageBody = Must be a letter followed by the percentage adjustment, for example A12.5 or D0.
 box46.pageTitle = Box 46 statistical value amendment for item {0}
 box46.pageHeader = Box 46 statistical value amendment for item {0}
 box62.pageTitle = Box 62 air transport costs amendment
