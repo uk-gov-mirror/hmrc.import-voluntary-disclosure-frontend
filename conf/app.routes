@@ -11,9 +11,6 @@ GET         /importer-address-callback                                   control
 
 GET         /importer-address-initialise                                 controllers.AddressLookupController.initialiseImporterJourney
 
-GET         /hello-world                                                 controllers.HelloWorldController.onLoad
-POST        /hello-world                                                 controllers.HelloWorldController.onSubmit
-
 GET         /who-is-disclosing                                           controllers.UserTypeController.onLoad
 POST        /who-is-disclosing                                           controllers.UserTypeController.onSubmit
 
