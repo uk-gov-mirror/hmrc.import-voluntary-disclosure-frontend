@@ -39,6 +39,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     declarantContactDetails = contactDetails,
     traderContactDetails = ContactDetails("Importer Inc.", contactDetails.email, contactDetails.phoneNumber),
     traderAddress = address,
+    paymentByDeferment = true,
     defermentType = None,
     defermentAccountNumber = Some("1234567"),
     additionalDefermentNumber = None,
@@ -75,7 +76,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(TraderAddressPage, submission.traderAddress)
     answers <- answers.set(EnterCustomsProcedureCodePage, submission.originalCpc)
     answers <- answers.set(FileUploadPage, submission.supportingDocuments)
-    answers <- answers.set(DefermentPage, false)
+    answers <- answers.set(DefermentPage, true)
     answers <- answers.set(DefermentAccountPage, "1234567")
     answers <- answers.set(MoreInformationPage, "some text")
     answers <- answers.set(UnderpaymentReasonsPage, submission.amendedItems)
@@ -327,6 +328,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
         knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
         importerName = Some("Importer Inc."),
         importerAddress = Some(address),
+        paymentByDeferment = false,
         defermentAccountNumber = None
       )
 

@@ -33,6 +33,7 @@ case class IvdSubmission(userType: UserType,
                          importerEori: Option[String] = None,
                          importerName: Option[String] = None,
                          importerAddress: Option[ContactAddress] = None,
+                         paymentByDeferment: Boolean,
                          defermentType: Option[String] = None,
                          defermentAccountNumber: Option[String] = None,
                          additionalDefermentNumber: Option[String] = None,
@@ -85,24 +86,25 @@ object IvdSubmission extends FixedConfig {
       Json.obj()
     }
 
-    val defermentDetails = if (data.defermentAccountNumber.isDefined) {
-      data.userType match {
-        case UserType.Importer =>
+    val defermentDetails = if (data.paymentByDeferment) {
+      (data.defermentType, data.defermentAccountNumber, data.additionalDefermentNumber) match {
+        case (Some(dt), Some(dan), Some(add)) if data.userType == UserType.Representative => // TODO: Needs guard to check user has selected split
+          Json.obj(
+            "defermentType" -> dt,
+            "defermentAccountNumber" -> dan,
+            "additionalDefermentAccountNumber" -> add
+          )
+        case (Some(dt), Some(dan), _) if data.userType == UserType.Representative =>
+          Json.obj(
+            "defermentType" -> dt,
+            "defermentAccountNumber" -> dan
+          )
+        case (_, Some(dan), _) if data.userType == UserType.Importer =>
           Json.obj(
             "defermentType" -> "D",
-            "defermentAccountNumber" -> data.defermentAccountNumber.get
+            "defermentAccountNumber" -> dan
           )
-        case UserType.Representative if data.additionalDefermentNumber.isDefined =>
-          Json.obj(
-            "defermentType" -> data.defermentType.get,
-            "defermentAccountNumber" -> data.defermentAccountNumber.get,
-            "additionalDefermentAccountNumber" -> data.additionalDefermentNumber.get
-          )
-        case _ =>
-          Json.obj(
-            "defermentType" -> data.defermentType.get,
-            "defermentAccountNumber" -> data.defermentAccountNumber.get
-          )
+        case _ => Json.obj()
       }
     } else {
       Json.obj()
@@ -142,6 +144,7 @@ object IvdSubmission extends FixedConfig {
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
+      paymentByDeferment <- DefermentPage.path.read[Boolean]
       defermentType <- DefermentTypePage.path.readNullable[String]
       defermentAccountNumber <- DefermentAccountPage.path.readNullable[String]
       additionalDefermentNumber <- AdditionalDefermentNumberPage.path.readNullable[String]
@@ -178,6 +181,7 @@ object IvdSubmission extends FixedConfig {
         importerAddress = importerAddress,
         underpaymentDetails = underpaymentDetails,
         supportingDocuments = supportingDocuments,
+        paymentByDeferment = paymentByDeferment,
         defermentType = defermentType,
         defermentAccountNumber = defermentAccountNumber,
         additionalDefermentNumber = additionalDefermentNumber,

@@ -54,6 +54,7 @@ class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
       declarantContactDetails = ContactDetails("name", "email", "phone"),
       traderContactDetails = ContactDetails("Importer Inc.", "email", "phone"),
       traderAddress = addressDetails,
+      paymentByDeferment = false,
       defermentType = None,
       defermentAccountNumber = None,
       additionalDefermentNumber = None
