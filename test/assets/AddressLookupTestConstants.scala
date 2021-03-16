@@ -122,7 +122,7 @@ object AddressLookupTestConstants extends BaseMessages {
     "labels" -> Json.obj(
       "en" -> Json.obj(
         "appLevelLabels" -> Json.obj(
-          "navTitle" -> "import-voluntary-disclosure-frontend",
+          "navTitle" -> AddressLookupMessages.navTitle,
           "phaseBannerHtml" -> phaseBannerHtml
         ),
         "selectPageLabels" -> Json.obj(
@@ -152,7 +152,7 @@ object AddressLookupTestConstants extends BaseMessages {
       ),
       "cy" -> Json.obj(
         "appLevelLabels" -> Json.obj(
-          "navTitle" -> "import-voluntary-disclosure-frontend",
+          "navTitle" -> AddressLookupMessages.navTitle,
           "phaseBannerHtml" -> phaseBannerHtml
         ),
         "selectPageLabels" -> Json.obj(
@@ -203,7 +203,7 @@ object AddressLookupTestConstants extends BaseMessages {
     "labels" -> Json.obj(
       "en" -> Json.obj(
         "appLevelLabels" -> Json.obj(
-          "navTitle" -> "import-voluntary-disclosure-frontend",
+          "navTitle" -> ImporterAddressLookupMessages.navTitle,
           "phaseBannerHtml" -> phaseBannerHtml
         ),
         "selectPageLabels" -> Json.obj(
@@ -233,7 +233,7 @@ object AddressLookupTestConstants extends BaseMessages {
       ),
       "cy" -> Json.obj(
         "appLevelLabels" -> Json.obj(
-          "navTitle" -> "import-voluntary-disclosure-frontend",
+          "navTitle" -> ImporterAddressLookupMessages.navTitle,
           "phaseBannerHtml" -> phaseBannerHtml
         ),
         "selectPageLabels" -> Json.obj(
