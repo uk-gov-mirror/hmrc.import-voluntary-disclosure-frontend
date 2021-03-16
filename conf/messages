@@ -458,3 +458,12 @@ importerDan.pageTitle = What is the deferment account number?
 importerDan.pageHeader = What is the deferment account number?
 importerDan.error.required = Enter the deferment account number
 importerDan.error.format = Enter the deferment account number in the correct format, like 1234567
+
+# Underpayment Start page
+underpaymentStart.pageTitle = Tell us what was underpaid
+underpaymentStart.heading = Tell us what was underpaid
+underpaymentStart.p1 = You will need to tell us about each type of tax or duty where not enough was paid for the original import. It does not matter which you tell us about first.
+underpaymentStart.p2 = You will need to provide:
+underpaymentStart.bullet1 = the type of duty or tax that was underpaid
+underpaymentStart.bullet2 = the amount of tax or duty that was paid to HMRC with the original import declaration
+underpaymentStart.bullet3 = the amount that should have been paid to HMRC

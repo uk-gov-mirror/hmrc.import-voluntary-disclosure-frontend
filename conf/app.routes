@@ -153,3 +153,5 @@ GET         /confirm-eori                                                control
 
 GET         /disclosure/importer-deferment-account-number                controllers.ImporterDanController.onLoad
 POST        /disclosure/importer-deferment-account-number                controllers.ImporterDanController.onSubmit
+
+GET         /disclosure/underpayment-introduction                        controllers.UnderpaymentStartController.onLoad
