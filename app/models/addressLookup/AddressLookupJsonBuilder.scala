@@ -38,7 +38,7 @@ case class AddressLookupJsonBuilder(continueUrl: String)(implicit request: Reque
 
     val version: Int = 2
 
-    val navTitle: Messages => String = message => conf.appName
+    val navTitle: Messages => String = message => message("service.name")
 
     val confirmPageConfig: JsObject = Json.obj(
       "showSubHeadingAndInfo" -> true,

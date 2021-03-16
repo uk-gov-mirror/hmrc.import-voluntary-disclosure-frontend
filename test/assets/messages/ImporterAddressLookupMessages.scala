@@ -18,6 +18,7 @@ package messages
 
 object ImporterAddressLookupMessages {
 
+  val navTitle = "Disclose an underpayment of import duties"
   val startHeading = "What address should we send the importer’s copy of the demand note to?"
   val filter = "Property name or number (optional)"
   val postcode = "UK postcode"
