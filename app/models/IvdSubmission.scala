@@ -33,6 +33,7 @@ case class IvdSubmission(userType: UserType,
                          importerEori: Option[String] = None,
                          importerName: Option[String] = None,
                          importerAddress: Option[ContactAddress] = None,
+                         paymentByDeferment: Boolean,
                          defermentType: Option[String] = None,
                          defermentAccountNumber: Option[String] = None,
                          additionalDefermentNumber: Option[String] = None,
@@ -85,6 +86,30 @@ object IvdSubmission extends FixedConfig {
       Json.obj()
     }
 
+    val defermentDetails = if (data.paymentByDeferment) {
+      (data.defermentType, data.defermentAccountNumber, data.additionalDefermentNumber) match {
+        case (Some(dt), Some(dan), Some(add)) if data.userType == UserType.Representative => // TODO: Needs guard to check user has selected split
+          Json.obj(
+            "defermentType" -> dt,
+            "defermentAccountNumber" -> s"$dt$dan",
+            "additionalDefermentAccountNumber" -> add // TODO: This needs to include the additionalDefermentType on the front
+          )
+        case (Some(dt), Some(dan), _) if data.userType == UserType.Representative =>
+          Json.obj(
+            "defermentType" -> dt,
+            "defermentAccountNumber" -> s"$dt$dan"
+          )
+        case (_, Some(dan), _) if data.userType == UserType.Importer =>
+          Json.obj(
+            "defermentType" -> "D",
+            "defermentAccountNumber" -> s"D$dan"
+          )
+        case _ => Json.obj()
+      }
+    } else {
+      Json.obj()
+    }
+
     val payload = Json.obj(
       "userType" -> data.userType,
       "isBulkEntry" -> isBulkEntry,
@@ -99,7 +124,7 @@ object IvdSubmission extends FixedConfig {
       "supportingDocuments" -> data.supportingDocuments
     )
 
-    payload ++ importerDetails ++ representativeDetails
+    payload ++ defermentDetails ++ importerDetails ++ representativeDetails
   }
 
   implicit val reads: Reads[IvdSubmission] =
@@ -119,6 +144,10 @@ object IvdSubmission extends FixedConfig {
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
+      paymentByDeferment <- DefermentPage.path.read[Boolean]
+      defermentType <- DefermentTypePage.path.readNullable[String]
+      defermentAccountNumber <- DefermentAccountPage.path.readNullable[String]
+      additionalDefermentNumber <- AdditionalDefermentNumberPage.path.readNullable[String]
       additionalInfo <- MoreInformationPage.path.readNullable[String]
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
     } yield {
@@ -152,6 +181,10 @@ object IvdSubmission extends FixedConfig {
         importerAddress = importerAddress,
         underpaymentDetails = underpaymentDetails,
         supportingDocuments = supportingDocuments,
+        paymentByDeferment = paymentByDeferment,
+        defermentType = defermentType,
+        defermentAccountNumber = defermentAccountNumber,
+        additionalDefermentNumber = additionalDefermentNumber,
         additionalInfo = additionalInfo.getOrElse("Not Applicable"),
         amendedItems = amendedItems
       )

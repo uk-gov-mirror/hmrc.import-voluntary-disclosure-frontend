@@ -39,8 +39,9 @@ class IvdSubmissionSpec extends ModelSpecBase {
     declarantContactDetails = contactDetails,
     traderContactDetails = ContactDetails("Importer Inc.", contactDetails.email, contactDetails.phoneNumber),
     traderAddress = address,
+    paymentByDeferment = true,
     defermentType = None,
-    defermentAccountNumber = None,
+    defermentAccountNumber = Some("1234567"),
     additionalDefermentNumber = None,
     underpaymentDetails = Seq(
       UnderpaymentDetail("customsDuty", BigDecimal(123.0), BigDecimal(233.33)),
@@ -75,7 +76,8 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(TraderAddressPage, submission.traderAddress)
     answers <- answers.set(EnterCustomsProcedureCodePage, submission.originalCpc)
     answers <- answers.set(FileUploadPage, submission.supportingDocuments)
-    answers <- answers.set(DefermentPage, false)
+    answers <- answers.set(DefermentPage, true)
+    answers <- answers.set(DefermentAccountPage, "1234567")
     answers <- answers.set(MoreInformationPage, "some text")
     answers <- answers.set(UnderpaymentReasonsPage, submission.amendedItems)
   } yield answers).getOrElse(new UserAnswers("some-cred-id"))
@@ -160,6 +162,14 @@ class IvdSubmissionSpec extends ModelSpecBase {
         data("supportingDocumentTypes") shouldBe Json.arr()
       }
 
+      "generate the correct JSON for the defermentType" in {
+        data("defermentType") shouldBe JsString("D")
+      }
+
+      "generate the correct JSON for the defermentAccountNumber" in {
+        data("defermentAccountNumber") shouldBe JsString("D1234567")
+      }
+
       "generate the correct JSON for the amendedItems" in {
         val item = submission.amendedItems.head
 
@@ -198,6 +208,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
       }
 
     }
+
   }
 
   "IVD Submission model representing a representative journey" when {
@@ -207,7 +218,9 @@ class IvdSubmissionSpec extends ModelSpecBase {
         userType = UserType.Representative,
         knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
         importerName = Some("Importer Inc."),
-        importerAddress = Some(address)
+        importerAddress = Some(address),
+        defermentType = Some("B"),
+        additionalDefermentNumber = Some("C1234567")
       )
 
       implicit lazy val result: JsValue = Json.toJson(repSubmission)
@@ -220,6 +233,18 @@ class IvdSubmissionSpec extends ModelSpecBase {
         )
       }
 
+      "generate the correct JSON for the defermentType" in {
+        data("defermentType") shouldBe JsString("B")
+      }
+
+      "generate the correct JSON for the defermentAccountNumber" in {
+        data("defermentAccountNumber") shouldBe JsString("B1234567")
+      }
+
+      "generate the correct JSON for the additionalDefermentAccountNumber" in {
+        data("additionalDefermentAccountNumber") shouldBe JsString("C1234567")
+      }
+
       "render a property for an importer" in {
         result.as[JsObject].keys should contain("importer")
       }
@@ -230,7 +255,8 @@ class IvdSubmissionSpec extends ModelSpecBase {
       val repSubmission = submission.copy(
         userType = UserType.Representative,
         knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
-        importerAddress = Some(address)
+        importerAddress = Some(address),
+        defermentType = Some("B")
       )
 
       "throw an exception" in {
@@ -244,6 +270,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
         userType = UserType.Representative,
         knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
         importerName = Some("Importer Inc."),
+        defermentType = Some("B")
       )
 
       "throw an exception" in {
@@ -258,7 +285,8 @@ class IvdSubmissionSpec extends ModelSpecBase {
         knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
         importerEori = Some("GB01"),
         importerName = Some("Importer Inc."),
-        importerAddress = Some(address)
+        importerAddress = Some(address),
+        defermentType = Some("B")
       )
 
       implicit lazy val result: JsValue = Json.toJson(repSubmission)
@@ -278,7 +306,8 @@ class IvdSubmissionSpec extends ModelSpecBase {
         userType = UserType.Representative,
         knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
         importerName = Some("Importer Inc."),
-        importerAddress = Some(address)
+        importerAddress = Some(address),
+        defermentType = Some("B")
       )
 
       implicit lazy val result: JsValue = Json.toJson(repSubmission)
@@ -289,6 +318,32 @@ class IvdSubmissionSpec extends ModelSpecBase {
           "contactDetails" -> ContactDetails(repSubmission.importerName.get),
           "address" -> repSubmission.importerAddress
         )
+      }
+
+    }
+
+    "no deferment option required" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address),
+        paymentByDeferment = false,
+        defermentAccountNumber = None
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON without defermentType details" in {
+        (result \ "defermentType").toOption shouldBe None
+      }
+
+      "generate the correct JSON without defermentAccountNumber details" in {
+        (result \ "defermentAccountNumber").toOption shouldBe None
+      }
+
+      "generate the correct JSON without additionalDefermentNumber details" in {
+        (result \ "additionalDefermentNumber").toOption shouldBe None
       }
 
     }

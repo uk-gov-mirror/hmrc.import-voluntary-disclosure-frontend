@@ -69,7 +69,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           if (value) {
-            Redirect(controllers.routes.DefermentController.onLoad())
+            Redirect(controllers.routes.ImporterDanController.onLoad())
           } else {
             Redirect(controllers.routes.CheckYourAnswersController.onLoad())
           }

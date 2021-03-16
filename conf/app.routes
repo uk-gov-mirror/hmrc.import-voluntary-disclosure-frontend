@@ -151,5 +151,7 @@ POST        /disclosure/importer-eori-number                             control
 
 GET         /confirm-eori                                                controllers.ConfirmEORIDetailsController.onLoad
 
-GET         /disclosure/underpayment-introduction                        controllers.UnderpaymentStartController.onLoad
+GET         /disclosure/importer-deferment-account-number                controllers.ImporterDanController.onLoad
+POST        /disclosure/importer-deferment-account-number                controllers.ImporterDanController.onSubmit
 
+GET         /disclosure/underpayment-introduction                        controllers.UnderpaymentStartController.onLoad
