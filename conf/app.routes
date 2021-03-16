@@ -150,3 +150,6 @@ GET         /disclosure/importer-eori-number                             control
 POST        /disclosure/importer-eori-number                             controllers.ImporterEORINumberController.onSubmit
 
 GET         /confirm-eori                                                controllers.ConfirmEORIDetailsController.onLoad
+
+GET         /disclosure/underpayment-introduction                        controllers.UnderpaymentStartController.onLoad
+
