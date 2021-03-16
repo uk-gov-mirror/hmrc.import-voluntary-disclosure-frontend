@@ -91,18 +91,18 @@ object IvdSubmission extends FixedConfig {
         case (Some(dt), Some(dan), Some(add)) if data.userType == UserType.Representative => // TODO: Needs guard to check user has selected split
           Json.obj(
             "defermentType" -> dt,
-            "defermentAccountNumber" -> dan,
-            "additionalDefermentAccountNumber" -> add
+            "defermentAccountNumber" -> s"$dt$dan",
+            "additionalDefermentAccountNumber" -> add // TODO: This needs to include the additionalDefermentType on the front
           )
         case (Some(dt), Some(dan), _) if data.userType == UserType.Representative =>
           Json.obj(
             "defermentType" -> dt,
-            "defermentAccountNumber" -> dan
+            "defermentAccountNumber" -> s"$dt$dan"
           )
         case (_, Some(dan), _) if data.userType == UserType.Importer =>
           Json.obj(
             "defermentType" -> "D",
-            "defermentAccountNumber" -> dan
+            "defermentAccountNumber" -> s"D$dan"
           )
         case _ => Json.obj()
       }

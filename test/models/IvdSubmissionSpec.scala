@@ -167,7 +167,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
       }
 
       "generate the correct JSON for the defermentAccountNumber" in {
-        data("defermentAccountNumber") shouldBe JsString("1234567")
+        data("defermentAccountNumber") shouldBe JsString("D1234567")
       }
 
       "generate the correct JSON for the amendedItems" in {
@@ -238,7 +238,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
       }
 
       "generate the correct JSON for the defermentAccountNumber" in {
-        data("defermentAccountNumber") shouldBe JsString("1234567")
+        data("defermentAccountNumber") shouldBe JsString("B1234567")
       }
 
       "generate the correct JSON for the additionalDefermentAccountNumber" in {
