@@ -16,13 +16,13 @@
 
 package config
 
+import java.time.LocalDate
+
+import javax.inject.{Inject, Singleton}
 import play.api.Configuration
 import play.api.mvc.RequestHeader
 import uk.gov.hmrc.play.bootstrap.binders.SafeRedirectUrl
 import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
-
-import java.time.LocalDate
-import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
@@ -43,6 +43,8 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val loginUrl: String = servicesConfig.getString("urls.login")
   lazy val signOutUrl: String = servicesConfig.getString("urls.signOut")
   lazy val loginContinueUrl: String = servicesConfig.getString("urls.loginContinue")
+
+
   lazy val addressLookupFrontend: String = servicesConfig.baseUrl("address-lookup-frontend")
   lazy val addressLookupInitialise: String = servicesConfig.getString("urls.addressLookupInitialiseUri")
   val addressLookupFeedbackUrl: String =
@@ -51,6 +53,20 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
     controllers.routes.AddressLookupController.callback("").url
   lazy val importerAddressLookupCallbackUrl: String = servicesConfig.getString("urls.host") +
     controllers.routes.AddressLookupController.importerCallback("").url
+
+
+  lazy val importVoluntaryDisclosureStub: String = servicesConfig.baseUrl("import-voluntary-disclosure-stub")
+  lazy val retrieveAddressFromStub: Boolean = servicesConfig.getBoolean("features.retrieveAddressFromStub")
+
+  def retrieveAddressUrl: String = {
+    if (retrieveAddressFromStub) {
+      importVoluntaryDisclosureStub
+    } else {
+      addressLookupFrontend
+    }
+  }
+
+
   lazy val timeoutPeriod: Int = servicesConfig.getInt("timeout.period")
   lazy val cacheTtl = servicesConfig.getInt("mongodb.timeToLiveInSeconds")
   lazy val allowedUploadFileTypes: Seq[String] = config.get[Seq[String]]("uploads.allowedFileTypes")
@@ -65,7 +81,7 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val upScanMaxFileSize: Int = servicesConfig.getInt("upscan.maxFileSize")
   lazy val upScanPollingDelayMilliSeconds: Int = servicesConfig.getInt("upscan.upScanPollingDelayMilliSeconds")
   lazy val upScanInitiateBaseUrl: String = servicesConfig.baseUrl("upscan-initiate")
-  lazy val upScanAcceptedFileTypes: String = allowedUploadFileTypes.map(x=>"."+x).mkString(",").toLowerCase
+  lazy val upScanAcceptedFileTypes: String = allowedUploadFileTypes.map(x => "." + x).mkString(",").toLowerCase
 
   lazy val fileRepositoryTtl: Int = servicesConfig.getInt("upscan.fileRepositoryTtl")
 
@@ -78,7 +94,11 @@ trait AppConfig extends FixedConfig {
   val contactFormServiceIdentifier: String
   val contactUrl: String
   val host: String
+
   def feedbackUrl(implicit request: RequestHeader): String
+
+  def retrieveAddressUrl: String
+
   val appName: String
   val loginUrl: String
   val signOutUrl: String

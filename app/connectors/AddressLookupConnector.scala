@@ -42,7 +42,7 @@ class AddressLookupConnector @Inject()(val http: HttpClient,
     )(implicitly, InitialiseAddressLookupReads, hc, ec)
   }
 
-  private[connectors] def getAddressUrl(id: String) = s"${config.addressLookupFrontend}/api/confirmed?id=$id"
+  private[connectors] def getAddressUrl(id: String) = s"${config.retrieveAddressUrl}/api/confirmed?id=$id"
 
   def getAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[AddressModel]] ={
     http.GET[HttpGetResult[AddressModel]](getAddressUrl(id))
