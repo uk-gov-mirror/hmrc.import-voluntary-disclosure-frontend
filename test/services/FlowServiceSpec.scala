@@ -18,8 +18,8 @@ package services
 
 import base.SpecBase
 import models.UserType.{Importer, Representative}
-import models.{UserAnswers, UserType}
-import pages.{ImporterEORIExistsPage, UserTypePage}
+import models.{UnderpaymentType, UserAnswers, UserType}
+import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
 
 
 class FlowServiceSpec extends SpecBase {
@@ -30,6 +30,9 @@ class FlowServiceSpec extends SpecBase {
 
     def setupUserAnswersForRepFlow = UserAnswers("some-cred-id").set(UserTypePage, userType).success.value
     def setupUserAnswersForEoriExists(exists: Boolean) = UserAnswers("some-cred-id").set(ImporterEORIExistsPage, exists).success.value
+
+    val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+
   }
 
   "isRep call" should {
@@ -52,6 +55,30 @@ class FlowServiceSpec extends SpecBase {
 
     "return false if EORI does not exist" in new Test {
       service.doesImporterEORIExist(setupUserAnswersForEoriExists(false)) mustBe false
+    }
+  }
+
+  "dutyType call" should {
+    "return vat if only vat is present" in new Test {
+      override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+        .set(UnderpaymentTypePage,UnderpaymentType(customsDuty = false, importVAT = true, exciseDuty = false)).success.value
+      service.dutyType(setupUserAnswersForDutyType) mustBe "vat"
+    }
+
+    "return duty if only duty is present" in new Test {
+      override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+        .set(UnderpaymentTypePage,UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = true)).success.value
+      service.dutyType(setupUserAnswersForDutyType) mustBe "duty"
+    }
+
+    "return both if both are present" in new Test {
+      override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+        .set(UnderpaymentTypePage,UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true)).success.value
+      service.dutyType(setupUserAnswersForDutyType) mustBe "both"
+    }
+
+    "return none if none present" in new Test {
+      service.dutyType(setupUserAnswersForDutyType) mustBe "none"
     }
   }
 

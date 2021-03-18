@@ -23,15 +23,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import views.ViewUtils.hint
 
-case class UnderpaymentType(customsDuty: Boolean, importVAT: Boolean, exciseDuty: Boolean) {
-  def dutyType: String = {
-    this match {
-      case UnderpaymentType(false, true, false) => "vat"
-      case UnderpaymentType(_, false, _) => "duty"
-      case _ => "both"
-    }
-  }
-}
+case class UnderpaymentType(customsDuty: Boolean, importVAT: Boolean, exciseDuty: Boolean)
 
 object UnderpaymentType {
   implicit val format = Json.format[UnderpaymentType]

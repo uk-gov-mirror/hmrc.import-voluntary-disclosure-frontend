@@ -36,4 +36,13 @@ class FlowService {
       case _ => false
     }
 
+  def dutyType(userAnswers: UserAnswers): String = {
+    userAnswers.get(UnderpaymentTypePage) match {
+      case Some(UnderpaymentType(false, true, false)) => "vat"
+      case Some(UnderpaymentType(_, false, _)) => "duty"
+      case Some(_) => "both"
+      case _ => "none"
+    }
+  }
+
 }

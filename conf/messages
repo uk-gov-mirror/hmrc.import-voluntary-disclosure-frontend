@@ -482,3 +482,14 @@ underpaymentStart.p2 = You will need to provide:
 underpaymentStart.bullet1 = the type of duty or tax that was underpaid
 underpaymentStart.bullet2 = the amount of tax or duty that was paid to HMRC with the original import declaration
 underpaymentStart.bullet3 = the amount that should have been paid to HMRC
+
+# Split Payment page
+splitPayment.pageTitle = Do you want to split payment between two deferment accounts?
+splitPayment.heading = Do you want to split payment between two deferment accounts?
+splitPayment.yes = Yes, I want to use two deferment accounts
+splitPayment.no = No, I want to use one deferment account
+splitPayment.error.required = Select yes if you want to split payment between two deferment accounts
+
+
+
+

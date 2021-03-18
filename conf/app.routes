@@ -156,6 +156,9 @@ POST        /disclosure/importer-deferment-account-number                control
 
 GET         /disclosure/underpayment-introduction                        controllers.underpayments.UnderpaymentStartController.onLoad
 
+GET         /disclosure/split-deferment-payment                          controllers.SplitPaymentController.onLoad
+POST        /disclosure/split-deferment-payment                          controllers.SplitPaymentController.onSubmit
+
 # Underpayments
 GET         /disclosure/select-duty-type-underpaid                       controllers.underpayments.UnderpaymentTypeController.onLoad
 POST        /disclosure/select-duty-type-underpaid                       controllers.underpayments.UnderpaymentTypeController.onSubmit

@@ -18,16 +18,17 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.DefermentFormProvider
+import javax.inject.{Inject, Singleton}
 import models.{UnderpaymentType, UserAnswers}
-import pages.{DefermentPage, UnderpaymentTypePage}
+import pages.DefermentPage
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
 import repositories.SessionRepository
+import services.FlowService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DefermentView
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -39,6 +40,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
                                     sessionRepository: SessionRepository,
                                     mcc: MessagesControllerComponents,
                                     formProvider: DefermentFormProvider,
+                                    flowService: FlowService,
                                     view: DefermentView)
   extends FrontendController(mcc) with I18nSupport {
 
@@ -69,7 +71,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           if (value) {
-            Redirect(controllers.routes.ImporterDanController.onLoad())
+            redirectToSplitPayment(request.userAnswers)
           } else {
             Redirect(controllers.routes.CheckYourAnswersController.onLoad())
           }
@@ -78,14 +80,25 @@ class DefermentController @Inject()(identify: IdentifierAction,
     )
   }
 
+  private[controllers] def redirectToSplitPayment(userAnswers: UserAnswers): Result = {
+    if (flowService.isRepFlow(userAnswers)) {
+      flowService.dutyType(userAnswers) match {
+        case underpaymentType if underpaymentType == "vat" => Redirect(controllers.routes.SplitPaymentController.onLoad()) //TODO - routing to be updated as part of CIVDT-264
+        case underpaymentType if underpaymentType == "duty" => Redirect(controllers.routes.SplitPaymentController.onLoad()) //TODO - routing to be updated as part of CIVDT-264
+        case underpaymentType if underpaymentType == "both" => Redirect(controllers.routes.SplitPaymentController.onLoad())
+        case _ => InternalServerError("Couldn't find Underpayment types")
+      }
+    } else {
+      Redirect(controllers.routes.ImporterDanController.onLoad())
+    }
+  }
+
   private[controllers] def getHeaderMessage(userAnswers: UserAnswers): String = {
-    userAnswers.get(UnderpaymentTypePage).fold("not set") {
-      value => value.dutyType match {
+    flowService.dutyType(userAnswers) match {
         case "vat" => "deferment.headingOnlyVAT"
         case "duty" => "deferment.headingDutyOnly"
         case "both" => "deferment.headingVATandDuty"
       }
     }
-  }
 
 }
