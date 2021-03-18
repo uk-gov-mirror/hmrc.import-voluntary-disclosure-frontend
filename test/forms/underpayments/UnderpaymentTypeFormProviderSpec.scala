@@ -17,16 +17,15 @@
 package forms.underpayments
 
 import base.SpecBase
-import forms.UnderpaymentTypeFormProviderV2
 
-class UnderpaymentTypeFormProviderV2Spec extends SpecBase {
+class UnderpaymentTypeFormProviderSpec extends SpecBase {
 
   "Binding a form with invalid data" when {
 
     "the no value selected" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = new UnderpaymentTypeFormProviderV2()().bind(missingOption)
+      val form = new UnderpaymentTypeFormProvider()().bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors mustBe true
@@ -45,7 +44,7 @@ class UnderpaymentTypeFormProviderV2Spec extends SpecBase {
   "Binding a form with valid data" should {
 
     val data = Map("value" -> "B00")
-    val form = new UnderpaymentTypeFormProviderV2()().bind(data)
+    val form = new UnderpaymentTypeFormProvider()().bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors mustBe false

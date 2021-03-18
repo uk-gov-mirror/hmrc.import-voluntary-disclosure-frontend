@@ -45,7 +45,7 @@
         @if(useOldUnderpaymentType) {
             @linkButton(url = controllers.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
         } else {
-            @linkButton(url = controllers.routes.UnderpaymentTypeControllerV2.onLoad().url, messages("common.button.continue"))
+            @linkButton(url = controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
         }
 
     }

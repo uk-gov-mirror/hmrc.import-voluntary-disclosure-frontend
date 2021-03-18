@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package views
+package views.underpayments
 
 import base.ViewBaseSpec
 import messages.{BaseMessages, UnderpaymentStartMessages}
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.twirl.api.Html
-import views.html.UnderpaymentStartView
+import views.html.underpayments.UnderpaymentStartView
 
 class UnderpaymentStartViewSpec extends ViewBaseSpec with BaseMessages {
 

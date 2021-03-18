@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package forms
+package forms.underpayments
 
 import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.i18n.Messages
 
-class UnderpaymentTypeFormProviderV2 extends Mappings {
+class UnderpaymentTypeFormProvider extends Mappings {
 
   def apply()(implicit messages: Messages): Form[String] =
     Form(

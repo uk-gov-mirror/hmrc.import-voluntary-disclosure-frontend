@@ -32,7 +32,7 @@
 
         @errorSummary(form.errors)
 
-        @formHelper(action = controllers.routes.UnderpaymentTypeControllerV2.onSubmit()) {
+        @formHelper(action = controllers.underpayments.routes.UnderpaymentTypeController.onSubmit()) {
 
             @inputRadio(
                 form = form,

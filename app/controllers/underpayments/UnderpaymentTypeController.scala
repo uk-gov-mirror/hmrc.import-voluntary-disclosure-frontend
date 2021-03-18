@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.UnderpaymentTypeFormProviderV2
-import pages.UnderpaymentTypePageV2
+import forms.underpayments.UnderpaymentTypeFormProvider
+import pages.underpayments.UnderpaymentTypePage
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -26,26 +26,26 @@ import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.UnderpaymentTypeViewV2
+import views.html.underpayments.UnderpaymentTypeView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnderpaymentTypeControllerV2 @Inject()(identify: IdentifierAction,
-                                             getData: DataRetrievalAction,
-                                             requireData: DataRequiredAction,
-                                             sessionRepository: SessionRepository,
-                                             mcc: MessagesControllerComponents,
-                                             underpaymentTypeView: UnderpaymentTypeViewV2,
-                                             formProvider: UnderpaymentTypeFormProviderV2)
+class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
+                                           getData: DataRetrievalAction,
+                                           requireData: DataRequiredAction,
+                                           sessionRepository: SessionRepository,
+                                           mcc: MessagesControllerComponents,
+                                           underpaymentTypeView: UnderpaymentTypeView,
+                                           formProvider: UnderpaymentTypeFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.routes.UnderpaymentStartController.onLoad()
+  private lazy val backLink: Call = controllers.underpayments.routes.UnderpaymentStartController.onLoad()
   private val underpaymentTypes = Seq("B00", "A00", "E00", "A20", "A30", "A35", "A40", "A45", "A10", "D10")
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(UnderpaymentTypePageV2).fold(formProvider()) {
+    val form = request.userAnswers.get(UnderpaymentTypePage).fold(formProvider()) {
       formProvider().fill
     }
     Future.successful(
@@ -62,17 +62,17 @@ class UnderpaymentTypeControllerV2 @Inject()(identify: IdentifierAction,
       },
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentTypePageV2, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentTypePage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.UnderpaymentTypeControllerV2.onLoad())
+          Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
         }
       }
     )
   }
 
   private def createRadioButton(form: Form[_], values: Seq[String])(implicit messages: Messages): Seq[RadioItem] = {
-    values.map( keyValue =>
+    values.map(keyValue =>
       RadioItem(
         value = Some(keyValue),
         content = Text(messages(s"underpaymentTypeTemp.$keyValue.radio")),

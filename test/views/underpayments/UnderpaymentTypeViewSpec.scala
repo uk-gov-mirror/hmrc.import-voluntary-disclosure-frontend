@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package views
+package views.underpayments
 
 import base.ViewBaseSpec
-import forms.UnderpaymentTypeFormProviderV2
+import forms.underpayments.UnderpaymentTypeFormProvider
 import messages.BaseMessages
 import messages.underpayments.UnderpaymentTypeMessages
 import org.jsoup.Jsoup
@@ -25,15 +25,15 @@ import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.twirl.api.Html
 import utils.ReusableValues
-import views.html.UnderpaymentTypeViewV2
+import views.html.underpayments.UnderpaymentTypeView
 
-class UnderpaymentTypeViewV2Spec extends ViewBaseSpec with BaseMessages with ReusableValues {
+class UnderpaymentTypeViewSpec extends ViewBaseSpec with BaseMessages with ReusableValues {
 
-  private lazy val injectedView: UnderpaymentTypeViewV2 = app.injector.instanceOf[UnderpaymentTypeViewV2]
+  private lazy val injectedView: UnderpaymentTypeView = app.injector.instanceOf[UnderpaymentTypeView]
 
-  val formProvider: UnderpaymentTypeFormProviderV2 = injector.instanceOf[UnderpaymentTypeFormProviderV2]
+  val formProvider: UnderpaymentTypeFormProvider = injector.instanceOf[UnderpaymentTypeFormProvider]
 
-  private lazy val backLink = controllers.routes.UnderpaymentStartController.onLoad()
+  private lazy val backLink = controllers.underpayments.routes.UnderpaymentStartController.onLoad()
 
   "Rendering the UnderpaymentType page" when {
     "no errors exist" should {

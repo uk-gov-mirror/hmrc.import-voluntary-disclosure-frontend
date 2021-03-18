@@ -14,35 +14,35 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.underpayments
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.UnderpaymentTypeFormProviderV2
+import forms.underpayments.UnderpaymentTypeFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.UnderpaymentTypePageV2
+import pages.underpayments.UnderpaymentTypePage
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import views.html.UnderpaymentTypeViewV2
+import views.html.underpayments.UnderpaymentTypeView
 
 import scala.concurrent.Future
 
-class UnderpaymentTypeControllerV2Spec extends ControllerSpecBase {
+class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
 
   trait Test extends MockSessionRepository {
-    private lazy val underpaymentTypeView: UnderpaymentTypeViewV2 = app.injector.instanceOf[UnderpaymentTypeViewV2]
+    private lazy val underpaymentTypeView: UnderpaymentTypeView = app.injector.instanceOf[UnderpaymentTypeView]
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
-    val formProvider: UnderpaymentTypeFormProviderV2 = injector.instanceOf[UnderpaymentTypeFormProviderV2]
-    val form: UnderpaymentTypeFormProviderV2 = formProvider
+    val formProvider: UnderpaymentTypeFormProvider = injector.instanceOf[UnderpaymentTypeFormProvider]
+    val form: UnderpaymentTypeFormProvider = formProvider
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new UnderpaymentTypeControllerV2(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+    lazy val controller = new UnderpaymentTypeController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
       mockSessionRepository, messagesControllerComponents, underpaymentTypeView, form)
   }
 
@@ -54,7 +54,7 @@ class UnderpaymentTypeControllerV2Spec extends ControllerSpecBase {
 
     "return HTML" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(
-        UserAnswers("credId").set(UnderpaymentTypePageV2, "A00").success.value
+        UserAnswers("credId").set(UnderpaymentTypePage, "A00").success.value
       )
       val result: Future[Result] = controller.onLoad()(fakeRequest)
       contentType(result) mustBe Some("text/html")
@@ -72,7 +72,7 @@ class UnderpaymentTypeControllerV2Spec extends ControllerSpecBase {
           fakeRequest.withFormUrlEncodedBody("value" -> "A00")
         )
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.UnderpaymentTypeControllerV2.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {

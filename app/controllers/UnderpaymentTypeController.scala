@@ -42,7 +42,7 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
                                           )
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.routes.UnderpaymentStartController.onLoad()
+  private lazy val backLink: Call = controllers.underpayments.routes.UnderpaymentStartController.onLoad()
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     Future.successful(

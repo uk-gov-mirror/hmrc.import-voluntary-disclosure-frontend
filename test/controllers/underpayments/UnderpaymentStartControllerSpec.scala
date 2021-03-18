@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package controllers
+package controllers.underpayments
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
@@ -23,7 +23,7 @@ import models.UserAnswers
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import views.html.UnderpaymentStartView
+import views.html.underpayments.UnderpaymentStartView
 
 import scala.concurrent.Future
 
