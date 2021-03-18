@@ -16,9 +16,13 @@
 
 package utils
 
+import messages.underpayments.UnderpaymentTypeMessages
 import models.{ContactAddress, EoriDetails}
 import play.api.http.Status
+import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
+import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import uk.gov.hmrc.http.HttpResponse
 
 trait ReusableValues {
@@ -68,5 +72,26 @@ trait ReusableValues {
     "postalCode" -> "99JZ 1AA",
     "countryCode" -> "GB"
   )
+
+  val underpaymentTypeRadioButtons = Seq(
+      createRadioButton("B00", UnderpaymentTypeMessages.importVAT),
+      createRadioButton("A00", UnderpaymentTypeMessages.customsDuty),
+      createRadioButton("E00", UnderpaymentTypeMessages.exciseDuty),
+      createRadioButton("A20", UnderpaymentTypeMessages.additionalDuty),
+      createRadioButton("A30", UnderpaymentTypeMessages.definitiveAntiDumpingDuty),
+      createRadioButton("A35", UnderpaymentTypeMessages.provisionalAntiDumpingDuty),
+      createRadioButton("A40", UnderpaymentTypeMessages.definitiveCountervailingDuty),
+      createRadioButton("A45", UnderpaymentTypeMessages.provisionalCountervailingDuty),
+      createRadioButton("A10", UnderpaymentTypeMessages.agriculturalDuty),
+      createRadioButton("D10", UnderpaymentTypeMessages.compensatoryDuty)
+  )
+
+  private def createRadioButton(value: String, message: String): RadioItem = {
+    RadioItem(
+      value = Some(value),
+      content = Text(message),
+      checked = false
+    )
+  }
 
 }

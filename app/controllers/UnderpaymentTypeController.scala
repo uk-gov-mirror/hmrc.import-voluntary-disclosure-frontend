@@ -19,8 +19,8 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentTypeFormProvider
-import models.{EntryDetails, UnderpaymentType}
-import pages.{EntryDetailsPage, UnderpaymentTypePage}
+import models.UnderpaymentType
+import pages.UnderpaymentTypePage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository

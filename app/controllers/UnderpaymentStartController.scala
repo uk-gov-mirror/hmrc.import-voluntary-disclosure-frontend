@@ -18,12 +18,12 @@ package controllers
 
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import javax.inject.{Inject, Singleton}
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.UnderpaymentStartView
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.Future
 
 @Singleton
@@ -31,13 +31,14 @@ class UnderpaymentStartController @Inject()(identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             mcc: MessagesControllerComponents,
                                             requireData: DataRequiredAction,
-                                            view: UnderpaymentStartView)
+                                            view: UnderpaymentStartView,
+                                            appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
   private lazy val backLink: Call = controllers.routes.EnterCustomsProcedureCodeController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(backLink)))
-
+    Future.successful(Ok(view(backLink, appConfig.useOldUnderpaymentType)))
   }
+
 }

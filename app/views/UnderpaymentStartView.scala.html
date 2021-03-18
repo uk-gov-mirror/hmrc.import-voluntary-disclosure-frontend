@@ -14,36 +14,43 @@
  * limitations under the License.
  *@
 
-@import config.AppConfig
-
 @this(layout: templates.Layout,
-      h1: components.h1,
-      p: components.p,
-      bullets: components.bullets,
-      linkButton: components.linkButton
-      )
+        h1: components.h1,
+        p: components.p,
+        bullets: components.bullets,
+        linkButton: components.linkButton
+)
 
-@(backLink: Call)(implicit request: Request[_], messages: Messages)
+@(backLink: Call, useOldUnderpaymentType: Boolean)(implicit request: Request[_], messages: Messages)
 
-@layout(pageTitle = messages("underpaymentStart.pageTitle"),
-    customBackLinkUrl = Some(backLink)) {
+    @layout(pageTitle = messages("underpaymentStart.pageTitle"),
+        customBackLinkUrl = Some(backLink)) {
 
-    @h1(messages("underpaymentStart.heading"))
+        @h1(messages("underpaymentStart.heading"))
 
-    @p{ @messages("underpaymentStart.p1") }
+        @p {
+            @messages("underpaymentStart.p1")
+        }
 
-    @p{ @messages("underpaymentStart.p2") }
+        @p {
+            @messages("underpaymentStart.p2")
+        }
 
-    @bullets(Seq(
-        Html(messages("underpaymentStart.bullet1")),
-        Html(messages("underpaymentStart.bullet2")),
-        Html(messages("underpaymentStart.bullet3"))
+        @bullets(Seq(
+            Html(messages("underpaymentStart.bullet1")),
+            Html(messages("underpaymentStart.bullet2")),
+            Html(messages("underpaymentStart.bullet3"))
         ))
 
-    @linkButton(url = controllers.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
-}
+        @if(useOldUnderpaymentType) {
+            @linkButton(url = controllers.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
+        } else {
+            @linkButton(url = controllers.routes.UnderpaymentTypeControllerV2.onLoad().url, messages("common.button.continue"))
+        }
+
+    }
 
 
-@{
-    //$COVERAGE-OFF$
-}
+    @{
+        //$COVERAGE-OFF$
+    }

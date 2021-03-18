@@ -137,6 +137,21 @@ underpaymentType.customsDuty = Customs Duty
 underpaymentType.importVAT = Import VAT
 underpaymentType.exciseDuty = Excise Duty
 
+# Underpayment Type Temp
+underpaymentTypeTemp.pageTitle = Which type of tax or duty was underpaid?
+underpaymentTypeTemp.pageHeader = Which type of tax or duty was underpaid?
+underpaymentTypeTemp.error.required = Select the type of tax or duty that was underpaid
+underpaymentTypeTemp.B00.radio = Import VAT (B00)
+underpaymentTypeTemp.A00.radio = Customs Duty (A00)
+underpaymentTypeTemp.E00.radio = Excise Duty
+underpaymentTypeTemp.A20.radio = Additional Duty (A20)
+underpaymentTypeTemp.A30.radio = Definitive Anti-Dumping Duty (A30)
+underpaymentTypeTemp.A35.radio = Provisional Anti-Dumping Duty (A35)
+underpaymentTypeTemp.A40.radio = Definitive Countervailing Duty (A40)
+underpaymentTypeTemp.A45.radio = Provisional Countervailing Duty (A45)
+underpaymentTypeTemp.A10.radio = Customs Duty on Agricultural products (A10)
+underpaymentTypeTemp.D10.radio = Compensatory Duty (D10)
+
 # Customs Duty page
 customsDuty.pageTitle = Customs Duty underpayment details
 customsDuty.pageHeader = Customs Duty underpayment details

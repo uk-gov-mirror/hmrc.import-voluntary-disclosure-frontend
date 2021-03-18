@@ -30,7 +30,7 @@ class UnderpaymentStartViewSpec extends ViewBaseSpec with BaseMessages {
 
   "Rendering the Underpayment start page" when {
     "no errors exist" should {
-      lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad())(fakeRequest, messages)
+      lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad(), false)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title of '${UnderpaymentStartMessages.pageTitle}'" in {
@@ -40,7 +40,7 @@ class UnderpaymentStartViewSpec extends ViewBaseSpec with BaseMessages {
   }
 
   "it" should {
-    lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad())(fakeRequest, messages)
+    lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad(), true)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
     s"have the correct page heading of '${UnderpaymentStartMessages.heading}'" in {
       elementText("h1") mustBe UnderpaymentStartMessages.heading
