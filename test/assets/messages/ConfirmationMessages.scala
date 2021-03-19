@@ -31,6 +31,7 @@ object ConfirmationMessages extends BaseMessages {
     "This demand note will confirm what is owed to HMRC and will tell you how to pay. " +
     "Payment must be made within 10 days of receiving the demand note, otherwise interest will become due."
   val p3 = "If you have any questions or have not received the demand note within 10 days contact the C18 team by email npcc@hmrc.gov.uk."
-
+  val helpImproveService = "Help us improve this service"
+  val helpImproveServiceLink = "What did you think of this service? (takes 30 seconds)"
 
 }

@@ -23,6 +23,7 @@ object MockAppConfig extends AppConfig {
   override val footerLinkItems: Seq[String] = Seq("TBC")
   override val contactFormServiceIdentifier: String = "TBC"
   override val contactUrl: String = "TBC"
+  override val surveyUrl: String = "TBC"
   override val host: String = "TBC"
 
   override def feedbackUrl(implicit request: RequestHeader): String = "TBC"

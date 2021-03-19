@@ -97,7 +97,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
     lazy val controller = {
       setupConnectorMock(connectorMock)
       new CheckYourAnswersController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-        messagesControllerComponents, mockIVDSubmissionConnector, checkYourAnswersView, confirmationView, ec)
+        messagesControllerComponents, mockIVDSubmissionConnector, checkYourAnswersView, confirmationView, ec, appConfig)
     }
   }
 

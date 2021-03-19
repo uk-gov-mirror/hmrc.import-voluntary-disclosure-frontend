@@ -16,6 +16,7 @@
 
 package controllers
 
+import config.AppConfig
 import connectors.IvdSubmissionConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.IvdSubmission
@@ -37,7 +38,8 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
                                            ivdSubmissionConnector: IvdSubmissionConnector,
                                            view: CheckYourAnswersView,
                                            confirmationView: ConfirmationView,
-                                           implicit val ec: ExecutionContext)
+                                           implicit val ec: ExecutionContext,
+                                           implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport with CYASummaryListHelper {
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
