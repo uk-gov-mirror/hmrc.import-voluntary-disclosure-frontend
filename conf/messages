@@ -259,6 +259,9 @@ confirmation.printSaveRestOfMessage = as we will not send you an email confirmat
 confirmation.whatHappensNext = What happens next
 confirmation.p2 = We will check the information you have provided. We will send a C18 Post Clearance Demand Note in the post within 10 days. This demand note will confirm what is owed to HMRC and will tell you how to pay. Payment must be made within 10 days of receiving the demand note, otherwise interest will become due.
 confirmation.p3 = If you have any questions or have not received the demand note within 10 days contact the C18 team by email npcc@hmrc.gov.uk.
+confirmation.helpImproveService = Help us improve this service
+confirmation.helpImproveServiceLink = What did you think of this service?
+confirmation.helpImproveServiceLinkTime = ' (takes 30 seconds)'
 
 # Box Guidance page
 boxGuidance.pageTitle = You must tell us the reason for the underpayment

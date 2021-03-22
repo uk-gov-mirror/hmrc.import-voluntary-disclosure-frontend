@@ -16,7 +16,8 @@
 
 @this(layout: templates.Layout,
         h2: components.h2,
-        p: components.p
+        p: components.p,
+        appConfig: AppConfig
 )
 
 @(reference: String = "")(implicit request: Request[_], messages: Messages)
@@ -41,10 +42,16 @@
     <a id = "printSaveRestOfMessage" class="print-this__link govuk-body">@messages("confirmation.printSaveRestOfMessage")</a>
 
     @h2(messages("confirmation.whatHappensNext"), id = Some("whatHappensNext"))
-
     @p(Html(messages("confirmation.p2")), id = Some("p2"))
-
     @p(Html(messages("confirmation.p3")), id = Some("p3"))
+
+    @h2(messages("confirmation.helpImproveService"), id = Some("helpImproveService"))
+    <div id="helpImproveServiceLink">
+        @p{
+            @Html(<a href={appConfig.surveyUrl} class="govuk-link">{messages("confirmation.helpImproveServiceLink")}</a>)
+            @Html(messages("confirmation.helpImproveServiceLinkTime"))
+        }
+    </div>
 
 }
 

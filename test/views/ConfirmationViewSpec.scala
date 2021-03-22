@@ -82,6 +82,14 @@ class ConfirmationViewSpec extends ViewBaseSpec {
         elementText("#p3") mustBe ConfirmationMessages.p3
       }
 
+      s"have the '${ConfirmationMessages.helpImproveService}' sub-heading" in {
+        elementText("#helpImproveService") mustBe ConfirmationMessages.helpImproveService
+      }
+
+      s"have the '${ConfirmationMessages.helpImproveServiceLink}' sub-heading" in {
+        elementText("#helpImproveServiceLink") mustBe ConfirmationMessages.helpImproveServiceLink
+      }
+
     }
 
   }
