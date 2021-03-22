@@ -16,7 +16,6 @@
 
 package controllers
 
-import config.AppConfig
 import connectors.IvdSubmissionConnector
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.IvdSubmission
