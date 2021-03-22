@@ -21,7 +21,8 @@ import controllers.Assets.Redirect
 import controllers.actions.FakeDataRetrievalAction
 import forms.ImportVATFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{UnderpaymentAmount, UnderpaymentType, UserAnswers}
+import models.underpayments.UnderpaymentAmount
+import models.{UnderpaymentType, UserAnswers}
 import pages.{ImportVATPage, UnderpaymentTypePage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}

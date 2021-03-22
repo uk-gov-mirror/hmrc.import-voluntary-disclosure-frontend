@@ -18,8 +18,9 @@ package forms
 
 import config.AppConfig
 import forms.mappings.Mappings
+import models.underpayments.UnderpaymentAmount
+
 import javax.inject.Inject
-import models.UnderpaymentAmount
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.i18n.Messages

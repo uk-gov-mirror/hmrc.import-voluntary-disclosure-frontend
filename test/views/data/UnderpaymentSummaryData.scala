@@ -17,7 +17,7 @@
 package views.data
 
 import messages.UnderpaymentSummaryMessages
-import models.UnderpaymentAmount
+import models.underpayments.UnderpaymentAmount
 import uk.gov.hmrc.govukfrontend.views.Aliases.HtmlContent
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryList, SummaryListRow, Value}

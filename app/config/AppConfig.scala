@@ -67,7 +67,7 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val upScanMaxFileSize: Int = servicesConfig.getInt("upscan.maxFileSize")
   lazy val upScanPollingDelayMilliSeconds: Int = servicesConfig.getInt("upscan.upScanPollingDelayMilliSeconds")
   lazy val upScanInitiateBaseUrl: String = servicesConfig.baseUrl("upscan-initiate")
-  lazy val upScanAcceptedFileTypes: String = allowedUploadFileTypes.map(x=>"."+x).mkString(",").toLowerCase
+  lazy val upScanAcceptedFileTypes: String = allowedUploadFileTypes.map(x => "." + x).mkString(",").toLowerCase
 
   lazy val fileRepositoryTtl: Int = servicesConfig.getInt("upscan.fileRepositoryTtl")
 
@@ -82,7 +82,9 @@ trait AppConfig extends FixedConfig {
   val contactUrl: String
   val surveyUrl: String
   val host: String
+
   def feedbackUrl(implicit request: RequestHeader): String
+
   val appName: String
   val loginUrl: String
   val signOutUrl: String

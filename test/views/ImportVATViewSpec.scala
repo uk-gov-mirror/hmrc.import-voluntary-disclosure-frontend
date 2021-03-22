@@ -19,7 +19,7 @@ package views
 import base.ViewBaseSpec
 import forms.ImportVATFormProvider
 import messages.{BaseMessages, ImportVATMessages}
-import models.UnderpaymentAmount
+import models.underpayments.UnderpaymentAmount
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form

@@ -19,7 +19,7 @@ package views
 import base.ViewBaseSpec
 import forms.CustomsDutyFormProvider
 import messages.{BaseMessages, CustomsDutyMessages}
-import models.UnderpaymentAmount
+import models.underpayments.UnderpaymentAmount
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form

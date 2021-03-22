@@ -16,7 +16,7 @@
 
 package pages
 
-import models.UnderpaymentAmount
+import models.underpayments.UnderpaymentAmount
 import play.api.libs.json.JsPath
 
 case object ImportVATPage extends QuestionPage[UnderpaymentAmount] {

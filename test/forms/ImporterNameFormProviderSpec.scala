@@ -108,15 +108,18 @@ class ImporterNameFormProviderSpec extends SpecBase {
       }
     }
 
-    "Binding a form with valid data" when {
+  }
 
-      "Valid data present" should {
-        val form = formBinder(formBuilder("First Second"))
+  "Binding a form with valid data" when {
 
-        "result in a form with no errors" in {
-          form.hasErrors mustBe false
-        }
+    "Valid data present" should {
+      val form = formBinder(formBuilder("First Second"))
+
+      "result in a form with no errors" in {
+        form.hasErrors mustBe false
       }
     }
+
   }
+
 }

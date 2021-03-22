@@ -152,6 +152,37 @@ underpaymentTypeTemp.A45.radio = Provisional Countervailing Duty (A45)
 underpaymentTypeTemp.A10.radio = Customs Duty on Agricultural products (A10)
 underpaymentTypeTemp.D10.radio = Compensatory Duty (D10)
 
+# Underpayment Details
+underpaymentDetails.originalAmount = Amount that was paid to HMRC
+underpaymentDetails.amendedAmount = Amount that should have been paid
+underpaymentDetails.B00.pageTitle = Import VAT underpayment details
+underpaymentDetails.B00.pageHeader = Import VAT underpayment details
+underpaymentDetails.A00.pageTitle = Customs Duty underpayment details
+underpaymentDetails.A00.pageHeader = Customs Duty underpayment details
+underpaymentDetails.E00.pageTitle = Excise duty underpayment details
+underpaymentDetails.E00.pageHeader = Excise duty underpayment details
+underpaymentDetails.A20.pageTitle = Additional Duty underpayment details
+underpaymentDetails.A20.pageHeader = Additional Duty underpayment details
+underpaymentDetails.A30.pageTitle = Definitive Anti-Dumping Duty underpayment details
+underpaymentDetails.A30.pageHeader = Definitive Anti-Dumping Duty underpayment details
+underpaymentDetails.A35.pageTitle = Provisional Anti-Dumping Duty underpayment details
+underpaymentDetails.A35.pageHeader = Provisional Anti-Dumping Duty underpayment details
+underpaymentDetails.A40.pageTitle = Definitive Countervailing Duty underpayment details
+underpaymentDetails.A40.pageHeader = Definitive Countervailing Duty underpayment details
+underpaymentDetails.A45.pageTitle = Provisional Countervailing Duty underpayment details
+underpaymentDetails.A45.pageHeader = Provisional Countervailing Duty underpayment details
+underpaymentDetails.A10.pageTitle = Customs Duty on Agricultural Products underpayment details
+underpaymentDetails.A10.pageHeader = Customs Duty on Agricultural Products underpayment details
+underpaymentDetails.D10.pageTitle = Compensatory Duty underpayment details
+underpaymentDetails.D10.pageHeader = Compensatory Duty underpayment details
+underpaymentDetails.error.originalNonEmpty = Enter the amount that was paid to HMRC, in pounds
+underpaymentDetails.error.originalNonNumber = Amount that was paid to HMRC must be a number like 7235 or 67.39
+underpaymentDetails.error.originalOutOfRange = Amount that was paid to HMRC must be between £0 and £9,999,999,999.99
+underpaymentDetails.error.amendedNonEmpty = Enter the amount that should have been paid, in pounds
+underpaymentDetails.error.amendedNonNumber = Amount that should have been paid must be a number like 7235 or 67.39
+underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
+underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
+
 # Customs Duty page
 customsDuty.pageTitle = Customs Duty underpayment details
 customsDuty.pageHeader = Customs Duty underpayment details

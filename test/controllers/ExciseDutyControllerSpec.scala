@@ -20,7 +20,8 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.ExciseDutyFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{UnderpaymentAmount, UnderpaymentType, UserAnswers}
+import models.underpayments.UnderpaymentAmount
+import models.{UnderpaymentType, UserAnswers}
 import pages.{ExciseDutyPage, UnderpaymentTypePage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}

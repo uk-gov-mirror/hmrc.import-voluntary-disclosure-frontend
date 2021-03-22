@@ -142,7 +142,9 @@ trait CYASummaryListHelper {
           )
         )
       )
-    } else None
+    } else {
+      None
+    }
   }
 
   def buildUnderpaymentDetailsSummaryList(answer: UserAnswers)(implicit messages: Messages): Option[CYASummaryList] = {
@@ -221,7 +223,9 @@ trait CYASummaryListHelper {
           )
         )
       )
-    } else None
+    } else {
+      None
+    }
   }
 
   def buildAmendmentDetailsSummaryList(answer: UserAnswers)(implicit messages: Messages): Option[CYASummaryList] = {
@@ -300,7 +304,9 @@ trait CYASummaryListHelper {
           )
         )
       )
-    } else None
+    } else {
+      None
+    }
   }
 
   def buildSupportingDocumentsSummaryList(answer: UserAnswers)(implicit messages: Messages): Option[CYASummaryList] = {
@@ -336,7 +342,9 @@ trait CYASummaryListHelper {
           )
         )
       )
-    } else None
+    } else {
+      None
+    }
   }
 
   def buildYourDetailsSummaryList(answer: UserAnswers)(implicit messages: Messages): Option[CYASummaryList] = {
@@ -424,7 +432,9 @@ trait CYASummaryListHelper {
           )
         )
       )
-    } else None
+    } else {
+      None
+    }
   }
 
   def buildPaymentInformationSummaryList(answer: UserAnswers)(implicit messages: Messages): Option[CYASummaryList] = {
@@ -457,7 +467,9 @@ trait CYASummaryListHelper {
           )
         )
       )
-    } else None
+    } else {
+      None
+    }
   }
 
 }

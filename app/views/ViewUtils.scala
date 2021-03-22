@@ -30,5 +30,5 @@ object ViewUtils  {
   val monetaryFormatter: NumberFormat = NumberFormat.getNumberInstance
   monetaryFormatter.setMinimumFractionDigits(2)
 
-  def displayMoney(amountInPence: BigDecimal) = s"£${monetaryFormatter.format(amountInPence.setScale(2))}"
+  def displayMoney(amountInPence: BigDecimal): String = s"£${monetaryFormatter.format(amountInPence.setScale(2))}"
 }

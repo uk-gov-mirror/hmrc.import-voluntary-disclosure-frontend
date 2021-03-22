@@ -66,7 +66,6 @@ class ConfirmReasonDetailController @Inject()(identify: IdentifierAction,
   }
 
   def summaryList(userAnswers: UserAnswers, boxNumber: Int)(implicit messages: Messages): Option[Seq[SummaryList]] = {
-
     val boxNumberSummaryListRow: Option[Seq[SummaryListRow]] = userAnswers.get(UnderpaymentReasonBoxNumberPage) map { boxNumber =>
       Seq(
         SummaryListRow(
@@ -85,7 +84,6 @@ class ConfirmReasonDetailController @Inject()(identify: IdentifierAction,
         )
       )
     }
-
     val itemNumberSummaryListRow: Option[Seq[SummaryListRow]] = userAnswers.get(UnderpaymentReasonItemNumberPage) map { itemNumber =>
       Seq(
         SummaryListRow(
@@ -136,7 +134,7 @@ class ConfirmReasonDetailController @Inject()(identify: IdentifierAction,
         )
       )
     }
-    
+
     val rows = boxNumberSummaryListRow.getOrElse(Seq.empty) ++
       itemNumberSummaryListRow.getOrElse(Seq.empty) ++
       originalAmountSummaryListRow.getOrElse(Seq.empty)

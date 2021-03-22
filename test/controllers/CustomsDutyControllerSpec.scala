@@ -21,7 +21,8 @@ import controllers.Assets.Redirect
 import controllers.actions.FakeDataRetrievalAction
 import forms.CustomsDutyFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{UnderpaymentAmount, UnderpaymentType, UserAnswers}
+import models.underpayments.UnderpaymentAmount
+import models.{UnderpaymentType, UserAnswers}
 import pages.{CustomsDutyPage, UnderpaymentTypePage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}

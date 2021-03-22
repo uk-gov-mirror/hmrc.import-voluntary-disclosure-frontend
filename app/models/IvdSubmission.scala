@@ -17,6 +17,7 @@
 package models
 
 import config.FixedConfig
+import models.underpayments.UnderpaymentAmount
 import pages._
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
 

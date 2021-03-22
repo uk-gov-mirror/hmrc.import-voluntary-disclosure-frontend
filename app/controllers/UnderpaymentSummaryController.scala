@@ -17,8 +17,9 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.underpayments.UnderpaymentAmount
+
 import javax.inject.{Inject, Singleton}
-import models.UnderpaymentAmount
 import pages._
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc._

@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package models
+package pages.underpayments
 
-import play.api.libs.json.Json
+import models.underpayments.UnderpaymentAmount
+import pages.QuestionPage
+import play.api.libs.json.JsPath
 
-case class SubmissionResponse(id: String)
+case object UnderpaymentDetailsPage extends QuestionPage[UnderpaymentAmount] {
 
-object SubmissionResponse {
-  implicit val format = Json.format[SubmissionResponse]
+  def path: JsPath = JsPath \ toString
+
+  override def toString: String = "underpayment-details-temp"
+
 }

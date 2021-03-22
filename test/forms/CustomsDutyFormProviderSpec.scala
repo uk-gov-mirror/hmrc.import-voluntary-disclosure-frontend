@@ -18,7 +18,7 @@ package forms
 
 import base.SpecBase
 import mocks.config.MockAppConfig
-import models.UnderpaymentAmount
+import models.underpayments.UnderpaymentAmount
 import play.api.data.{Form, FormError}
 
 class CustomsDutyFormProviderSpec extends SpecBase {

@@ -17,6 +17,7 @@
 package models
 
 import base.ModelSpecBase
+import models.underpayments.UnderpaymentAmount
 import pages._
 import play.api.libs.json._
 
