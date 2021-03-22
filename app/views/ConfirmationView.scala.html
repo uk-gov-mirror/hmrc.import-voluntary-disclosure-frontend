@@ -16,10 +16,11 @@
 
 @this(layout: templates.Layout,
         h2: components.h2,
-        p: components.p
+        p: components.p,
+        appConfig: AppConfig
 )
 
-@(reference: String = "")(implicit request: Request[_], messages: Messages, appConfig: AppConfig)
+@(reference: String = "")(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = messages("confirmation.pageTitle"), showBackLink = false) {
 

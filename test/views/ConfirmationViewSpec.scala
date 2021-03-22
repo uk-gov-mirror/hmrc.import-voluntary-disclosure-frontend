@@ -31,7 +31,7 @@ class ConfirmationViewSpec extends ViewBaseSpec {
   "Rendering the Confirmation page" when {
 
     "no errors exist" should {
-      lazy val view: Html = injectedView(entryNumber)(fakeRequest, messages, appConfig)
+      lazy val view: Html = injectedView(entryNumber)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title of '${ConfirmationMessages.pageTitle}'" in {
@@ -44,7 +44,7 @@ class ConfirmationViewSpec extends ViewBaseSpec {
     }
 
     "it" should {
-      lazy val view: Html = injectedView()(fakeRequest, messages, appConfig)
+      lazy val view: Html = injectedView()(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
       s"have the correct page heading of '${ConfirmationMessages.heading}'" in {
         elementText("h1") mustBe ConfirmationMessages.heading

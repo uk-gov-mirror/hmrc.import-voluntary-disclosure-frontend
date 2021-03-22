@@ -38,8 +38,7 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
                                            ivdSubmissionConnector: IvdSubmissionConnector,
                                            view: CheckYourAnswersView,
                                            confirmationView: ConfirmationView,
-                                           implicit val ec: ExecutionContext,
-                                           implicit val appConfig: AppConfig)
+                                           implicit val ec: ExecutionContext)
   extends FrontendController(mcc) with I18nSupport with CYASummaryListHelper {
 
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
