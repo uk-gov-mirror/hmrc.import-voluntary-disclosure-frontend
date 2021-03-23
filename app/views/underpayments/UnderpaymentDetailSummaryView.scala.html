@@ -13,32 +13,42 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 *@
+
 @this(layout: templates.Layout,
         govukSummaryList: GovukSummaryList,
         h1: components.h1,
         formHelper: FormWithCSRF,
         button: components.button
 )
-
 @(underpaymentType: String, underpaymentSummary: SummaryList)(implicit request: Request[_], messages: Messages)
 
-@layout(
-    pageTitle = messages("underpaymentDetailsSummary.pageTitle") + " " +
-            messages(s"underpaymentDetails.$underpaymentType.pageTitle") + " " +
-            messages("underpaymentDetails.dutyMessageEnding"),
-    customBackLinkUrl = Some(controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType))
-) {
+@titleMessage = @{
+    underpaymentType match {
+        case "B00" => messages(s"underpaymentDetails.$underpaymentType.pageTitle.lowercase")
+        case "E00" => messages(s"underpaymentDetails.$underpaymentType.pageTitle.lowercase")
+        case _ => messages(s"underpaymentDetails.$underpaymentType.pageTitle")
+    }
+}
 
-    @h1(messages("underpaymentDetailsSummary.pageHeader") + " " +
-            messages(s"underpaymentDetails.$underpaymentType.pageHeader") + " " +
-            messages("underpaymentDetails.dutyMessageEnding"))
+@headerMessage = @{
+    underpaymentType match {
+        case "B00" => messages(s"underpaymentDetails.$underpaymentType.pageHeader.lowercase")
+        case "E00" => messages(s"underpaymentDetails.$underpaymentType.pageHeader.lowercase")
+        case _ => messages(s"underpaymentDetails.$underpaymentType.pageHeader")
+    }
+}
+
+@layout(
+    pageTitle = messages("underpaymentDetailsSummary.pageTitle") + " " + titleMessage + " " + messages("underpaymentDetails.dutyMessageEnding"),
+    customBackLinkUrl = Some(controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType))) {
+
+    @h1(messages("underpaymentDetailsSummary.pageHeader") + " " + headerMessage + " " + messages("underpaymentDetails.dutyMessageEnding"))
 
     @govukSummaryList(underpaymentSummary)
 
     @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit(underpaymentType)) {
         @button("common.button.continue")
     }
-
 }
 
 @{
