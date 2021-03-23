@@ -21,16 +21,18 @@
         button: components.button
 )
 
-@(backLink: Call)(implicit request: Request[_], messages: Messages)
+@(underpaymentType: String, underpaymentSummary: SummaryList)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages(""),
-    customBackLinkUrl = Some(backLink)
+    customBackLinkUrl = Some(controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType))
 ) {
 
     @h1(messages(""))
 
-    @formHelper(action = controllers.routes.ConfirmReasonDetailController.onSubmit()) {
+    @govukSummaryList(underpaymentSummary)
+
+    @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit(underpaymentType)) {
         @button("common.button.continue")
     }
 

@@ -182,6 +182,11 @@ underpaymentDetails.error.amendedNonEmpty = Enter the amount that should have be
 underpaymentDetails.error.amendedNonNumber = Amount that should have been paid must be a number like 7235 or 67.39
 underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
 underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
+underpaymentDetailsSummary.pageTitle = Confirm the {0} underpayment details
+underpaymentDetailsSummary.pageHeader = Confirm the {0} underpayment details
+underpaymentDetailsSummary.originalAmount = Amount that was paid to HMRC
+underpaymentDetailsSummary.amendedAmount = Amount that should have been paid
+underpaymentDetailsSummary.dueToHmrc = {0} owed to HMRC
 
 # Customs Duty page
 customsDuty.pageTitle = Customs Duty underpayment details

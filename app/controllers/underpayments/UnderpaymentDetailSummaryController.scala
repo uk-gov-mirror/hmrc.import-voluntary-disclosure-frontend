@@ -17,15 +17,15 @@
 package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.requests.DataRequest
 import models.underpayments.UnderpaymentAmount
-import pages.underpayments.UnderpaymentTypePage
+import pages.underpayments.UnderpaymentDetailsPage
 import play.api.i18n.{I18nSupport, Messages}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
+import views.ViewUtils.displayMoney
 import views.html.underpayments.UnderpaymentDetailSummaryView
 
 import javax.inject.Inject
@@ -39,61 +39,60 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
                                                     view: UnderpaymentDetailSummaryView)
   extends FrontendController(mcc) with I18nSupport {
 
-  def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    Future.successful(Ok(view(getBackLink(request))))
-
+  def onLoad(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val underpaymentDetail = request.userAnswers.get(UnderpaymentDetailsPage).getOrElse(UnderpaymentAmount(0, 0))
+    Future.successful(Ok(view(underpaymentType, summaryList(underpaymentType, underpaymentDetail))))
   }
 
-  def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     ???
 
   }
 
-  private[underpayments] def getBackLink(request: DataRequest[AnyContent]): Call = {
-    val underpaymentType = request.userAnswers.get(UnderpaymentTypePage).getOrElse("")
-    controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType)
-  }
-
-  private[controllers] def summaryList(underpaymentReason: Option[Seq[UnderpaymentAmount]]
-                                      )(implicit messages: Messages): Option[SummaryList] = {
-    val changeAction: Call = controllers.routes.UnderpaymentReasonSummaryController.onLoad()
-    underpaymentReason.map { reasons =>
-      val sortedReasons = reasons.sortBy(item => item.boxNumber)
-      SummaryList(
-        rows = for (underpayment <- sortedReasons) yield
-          SummaryListRow(
-            key = Key(
-              content = Text("Box " + underpayment.boxNumber)
-            ),
-            value = Value(
-              content = if (underpayment.itemNumber == 0) {
-                HtmlContent("Entry level")
-              } else {
-                HtmlContent("Item " + underpayment.itemNumber)
-              }
-            ),
-            actions = Some(
-              Actions(
-                items = Seq(
-                  ActionItem(
-                    changeAction.url,
-                    Text(messages("common.change")),
-                    Some("key")
-                  ),
-                  ActionItem(
-                    changeAction.url,
-                    Text(messages("common.remove")),
-                    Some("key")
-                  )
-                ),
-                classes = "govuk-!-width-one-third"
+  private[controllers] def summaryList(underpaymentType: String, underpaymentAmount: UnderpaymentAmount)(implicit messages: Messages): SummaryList = {
+    SummaryList(
+      classes = "govuk-!-margin-bottom-9",
+      rows = Seq(
+        SummaryListRow(
+          key = Key(
+            content = Text(messages("underpaymentDetailsSummary.originalAmount")),
+            classes = "govuk-!-width-two-thirds govuk-!-padding-bottom-0"
+          ),
+          value = Value(
+            content = HtmlContent(displayMoney(underpaymentAmount.original)),
+            classes = "govuk-!-padding-bottom-0"
+          ),
+          actions = Some(Actions(
+            items = Seq(
+              ActionItem(
+                controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType).url,
+                Text(messages("underpaymentSummary.change"))
               )
-            )
+            ),
+            classes = "govuk-!-padding-bottom-0")
+          ),
+          classes = "govuk-summary-list__row--no-border"
+        ),
+        SummaryListRow(
+          key = Key(
+            content = Text(messages("underpaymentDetailsSummary.amendedAmount")),
+            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
+          ),
+          value = Value(
+            content = HtmlContent(displayMoney(underpaymentAmount.amended)),
+            classes = "govuk-!-padding-top-0"
           )
+        ),
+        SummaryListRow(
+          key = Key(
+            content = Text(messages("underpaymentDetailsSummary.dueToHmrc")),
+            classes = "govuk-!-width-two-thirds"
+          ),
+          value = Value(content = HtmlContent(displayMoney(underpaymentAmount.amended - underpaymentAmount.original)))
+        )
       )
-    }
+    )
   }
 
 }
