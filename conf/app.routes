@@ -193,5 +193,5 @@ POST        /disclosure/customs-duty-agricultural-products-underpayment-details 
 GET         /disclosure/compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
 POST        /disclosure/compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
 
-GET         /disclosure/confirm-import-vat-underpayment-details                        controllers.underpayments.ConfirmUnderpaymentDetailController.onLoad()
-POST        /disclosure/confirm-import-vat-underpayment-details                        controllers.underpayments.ConfirmUnderpaymentDetailController.onSubmit()
+GET         /disclosure/confirm-import-vat-underpayment-details                        controllers.underpayments.UnderpaymentDetailSummaryController.onLoad()
+POST        /disclosure/confirm-import-vat-underpayment-details                        controllers.underpayments.UnderpaymentDetailSummaryController.onSubmit()
