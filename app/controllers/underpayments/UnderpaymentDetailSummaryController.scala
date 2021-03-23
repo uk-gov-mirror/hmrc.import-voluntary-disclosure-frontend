@@ -86,10 +86,13 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
         ),
         SummaryListRow(
           key = Key(
-            content = Text(messages("underpaymentDetailsSummary.dueToHmrc")),
+            content = Text(
+              messages(s"underpaymentDetails.$underpaymentType.pageHeader") + " " +
+               messages("underpaymentDetailsSummary.dueToHmrc")),
             classes = "govuk-!-width-two-thirds"
           ),
-          value = Value(content = HtmlContent(displayMoney(underpaymentAmount.amended - underpaymentAmount.original)))
+          value = Value(content = HtmlContent(displayMoney(underpaymentAmount.amended - underpaymentAmount.original))),
+          classes = "govuk-summary-list__row--no-border"
         )
       )
     )
