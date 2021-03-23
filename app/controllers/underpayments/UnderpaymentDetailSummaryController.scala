@@ -88,7 +88,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
           key = Key(
             content = Text(
               messages(s"underpaymentDetails.$underpaymentType.pageHeader") + " " +
-               messages("underpaymentDetailsSummary.dueToHmrc")),
+                messages("underpaymentDetailsSummary.dueToHmrc")),
             classes = "govuk-!-width-two-thirds"
           ),
           value = Value(content = HtmlContent(displayMoney(underpaymentAmount.amended - underpaymentAmount.original))),

@@ -17,7 +17,7 @@
 package pages.underpayments
 
 import models.{UnderpaymentDetail, UserAnswers}
-import pages.{QuestionPage, UnderpaymentReasonItemNumberPage}
+import pages.QuestionPage
 import play.api.libs.json.JsPath
 
 import scala.util.Try
