@@ -16,7 +16,6 @@
 
 package support
 
-import com.github.tomakehurst.wiremock.client.WireMock.{equalToJson, postRequestedFor, urlMatching, verify}
 import org.scalatest._
 import org.scalatestplus.play.guice.GuiceOneServerPerSuite
 import play.api.http.HeaderNames

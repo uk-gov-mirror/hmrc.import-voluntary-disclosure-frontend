@@ -35,7 +35,7 @@ class InitialiseAddressLookupHttpParserSpec extends SpecBase {
       "return a InitialiseAddressLookupModel" in {
         val validResponse = HttpResponse(
           Status.ACCEPTED,
-          None,
+          "",
           Map("Location" -> Seq("redirectUrl"))
         )
         InitialiseAddressLookupReads.read("", "", validResponse) mustBe
@@ -46,8 +46,7 @@ class InitialiseAddressLookupHttpParserSpec extends SpecBase {
     "the http response status is INTERNAL_SERVER_ERROR when no redirect uri is returned" should {
 
       "return a InitialiseAddressLookupModel" in {
-        InitialiseAddressLookupReads.read("", "",
-          HttpResponse(Status.ACCEPTED, None, Map.empty[String, Seq[String]])) mustBe Left(errorModel)
+        InitialiseAddressLookupReads.read("", "", HttpResponse(Status.ACCEPTED, "")) mustBe Left(errorModel)
       }
     }
 

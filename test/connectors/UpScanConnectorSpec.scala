@@ -26,14 +26,14 @@ class UpScanConnectorSpec extends SpecBase with MockHttp {
 
   object TestConnector extends UpScanConnector(mockHttp, MockAppConfig)
 
-  val exampleModel = UpScanInitiateRequest(
+  val exampleModel: UpScanInitiateRequest = UpScanInitiateRequest(
     MockAppConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload,
     MockAppConfig.upScanSuccessRedirectForUser,
     MockAppConfig.upScanErrorRedirectForUser,
     MockAppConfig.upScanMinFileSize,
     MockAppConfig.upScanMaxFileSize
   )
-  val response =  UpScanInitiateResponse(
+  val response: UpScanInitiateResponse =  UpScanInitiateResponse(
     Reference("11370e18-6e24-453e-b45a-76d3e32ea33d"),
     UploadFormTemplate(
       "https://bucketName.s3.eu-west-2.amazonaws.com",
@@ -42,7 +42,7 @@ class UpScanConnectorSpec extends SpecBase with MockHttp {
   )
 
   "return right when parser returns right" in {
-    setupMockHttpPost(TestConnector.urlForPostInitiate, exampleModel)(
+    setupMockHttpPostWithBody(TestConnector.urlForPostInitiate, exampleModel)(
       Right(response)
     )
     val actualResult = TestConnector.postToInitiate(exampleModel)(hc, ec)
@@ -50,7 +50,7 @@ class UpScanConnectorSpec extends SpecBase with MockHttp {
     await(actualResult) mustBe Right(response)
   }
   "return Left when parser returns Left" in {
-    setupMockHttpPost(TestConnector.urlForPostInitiate, exampleModel)(
+    setupMockHttpPostWithBody(TestConnector.urlForPostInitiate, exampleModel)(
       Left(BadRequest)
     )
     val actualResult = TestConnector.postToInitiate(exampleModel)(hc, ec)
