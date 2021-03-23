@@ -17,8 +17,9 @@
 package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.UnderpaymentDetail
 import models.underpayments.UnderpaymentAmount
-import pages.underpayments.UnderpaymentDetailsPage
+import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -29,6 +30,7 @@ import views.ViewUtils.displayMoney
 import views.html.underpayments.UnderpaymentDetailSummaryView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
@@ -36,7 +38,8 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
                                                     requireData: DataRequiredAction,
                                                     sessionRepository: SessionRepository,
                                                     mcc: MessagesControllerComponents,
-                                                    view: UnderpaymentDetailSummaryView)
+                                                    view: UnderpaymentDetailSummaryView,
+                                                   )
   extends FrontendController(mcc) with I18nSupport {
 
   def onLoad(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -45,9 +48,21 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   }
 
   def onSubmit(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-
-    ???
-
+    val currentUnderpaymentDetail = request.userAnswers.get(UnderpaymentDetailsPage).getOrElse(UnderpaymentAmount(0, 0))
+    val newUnderpaymentDetail = Seq(
+      UnderpaymentDetail(
+        underpaymentType,
+        currentUnderpaymentDetail.original,
+        currentUnderpaymentDetail.amended
+      )
+    )
+    val currentUnderpaymentTypes = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
+    for {
+      updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
+      _ <- sessionRepository.set(updatedAnswers)
+    } yield {
+      Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
+    }
   }
 
   private[controllers] def summaryList(underpaymentType: String, underpaymentAmount: UnderpaymentAmount)(implicit messages: Messages): SummaryList = {
