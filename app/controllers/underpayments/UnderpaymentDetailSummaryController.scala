@@ -38,7 +38,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
                                                     requireData: DataRequiredAction,
                                                     sessionRepository: SessionRepository,
                                                     mcc: MessagesControllerComponents,
-                                                    view: UnderpaymentDetailSummaryView,
+                                                    view: UnderpaymentDetailSummaryView
                                                    )
   extends FrontendController(mcc) with I18nSupport {
 
