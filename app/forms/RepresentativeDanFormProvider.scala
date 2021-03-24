@@ -14,24 +14,25 @@
  * limitations under the License.
  */
 
-package views.helpers
+package forms
 
 import config.AppConfig
-import javax.inject.{Inject, Singleton}
+import forms.mappings.Mappings
+import javax.inject.Inject
+import models.{EntryDetails, RepresentativeDan}
+import play.api.data.Form
+import play.api.data.Forms.mapping
 import play.api.i18n.Messages
-import uk.gov.hmrc.govukfrontend.views.viewmodels.footer.FooterItem
 
-@Singleton
-class FooterLinks @Inject()(appConfig: AppConfig) {
-  def links()(implicit messages: Messages): Seq[FooterItem] = appConfig.footerLinkItems.flatMap { item =>
-    val keyPrefix = s"footer.$item"
-    val textKey = s"$keyPrefix.text"
-    val urlKey = s"$keyPrefix.url"
+class RepresentativeDanFormProvider @Inject()(implicit appConfig: AppConfig) extends Mappings {
 
-    if (messages.isDefinedAt(textKey) && messages.isDefinedAt(urlKey)) {
-      Some(FooterItem(text = Some(messages(textKey)), href = Some(messages(urlKey))))
-    } else {
-      None
-    }
+  def apply()(implicit messages: Messages): Form[RepresentativeDan] = {
+
+    Form( mapping(
+      "accountNumber" -> text("repDan.error.input.required")
+        .verifying(regexp("[0-9]{7}","repDan.error.input.format")),
+      "value" -> text("repDan.error.radio.required")
+    )(RepresentativeDan.apply)(RepresentativeDan.unapply)
+    )
   }
 }

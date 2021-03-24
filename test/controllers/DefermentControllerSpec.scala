@@ -153,7 +153,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.SplitPaymentController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.RepresentativeDanController.onLoad().url)
       }
 
       "return the correct location header when user is representative and other duties and no import VAT" in new Test {
@@ -163,7 +163,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.SplitPaymentController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.RepresentativeDanController.onLoad().url)
       }
 
       "return an internal server error when user is representative only has no underpayment type" in new Test {

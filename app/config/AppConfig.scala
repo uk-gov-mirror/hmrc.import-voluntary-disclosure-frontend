@@ -26,8 +26,8 @@ import javax.inject.{Inject, Singleton}
 
 @Singleton
 class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesConfig) extends AppConfig {
-  private val contactHost = servicesConfig.baseUrl("contact-frontend")
-  private val feedbackHost = servicesConfig.baseUrl("feedback-frontend")
+  private val contactHost = servicesConfig.getString("contact-frontend.host")
+  private val feedbackHost = servicesConfig.getString("feedback-frontend.host")
   lazy val surveyUrl = feedbackHost + servicesConfig.getString("feedback-frontend.url")
 
   private def requestUri(implicit request: RequestHeader): String = SafeRedirectUrl(host + request.uri).encodedUrl
