@@ -76,7 +76,7 @@ class UnderpaymentDetailsControllerSpec extends ControllerSpecBase {
         )
         status(result) mustBe Status.SEE_OTHER
         redirectLocation(result) mustBe
-          Some(controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType).url)
+          Some(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad(underpaymentType).url)
       }
 
       "update the UserAnswers in session" in new Test {
