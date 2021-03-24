@@ -159,6 +159,9 @@ GET         /disclosure/underpayment-introduction                               
 GET         /disclosure/split-deferment-payment                                        controllers.SplitPaymentController.onLoad
 POST        /disclosure/split-deferment-payment                                        controllers.SplitPaymentController.onSubmit
 
+GET         /disclosure/deferment-account-details-all                                  controllers.RepresentativeDanController.onLoad
+POST        /disclosure/deferment-account-details-all                                  controllers.RepresentativeDanController.onSubmit
+
 # Underpayments
 GET         /disclosure/select-duty-type-underpaid                                     controllers.underpayments.UnderpaymentTypeController.onLoad
 POST        /disclosure/select-duty-type-underpaid                                     controllers.underpayments.UnderpaymentTypeController.onSubmit
@@ -192,5 +195,4 @@ POST        /disclosure/customs-duty-agricultural-products-underpayment-details 
 
 GET         /disclosure/compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
 POST        /disclosure/compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
-
 

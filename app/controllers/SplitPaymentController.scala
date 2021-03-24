@@ -67,7 +67,7 @@ class SplitPaymentController @Inject()(identify: IdentifierAction,
           if (value) {
             Redirect(controllers.routes.SplitPaymentController.onLoad())
           } else {
-            Redirect(controllers.routes.SplitPaymentController.onLoad())
+            Redirect(controllers.routes.RepresentativeDanController.onLoad())
           }
         }
       }

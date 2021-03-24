@@ -524,6 +524,15 @@ splitPayment.yes = Yes, I want to use two deferment accounts
 splitPayment.no = No, I want to use one deferment account
 splitPayment.error.required = Select yes if you want to split payment between two deferment accounts
 
-
-
-
+# Representative Dan One page
+repDan.pageTitle = Deferment account details
+repDan.heading = Deferment account details
+repDan.accountNumberLabel = Deferment account number
+repDan.radioLabel = Whose deferment account is this?
+repDan.radio1 = My deferment account
+repDan.radio2 = The importer’s account and I have authority to use it
+repDan.radio2.hint = You will be asked to upload proof of authority
+repDan.radio3 = The importer’s account and I have standing authority to use it
+repDan.error.input.required = Enter the deferment account number
+repDan.error.input.format = Enter the deferment account number in the correct format, like 1234567
+repDan.error.radio.required = Select whose deferment account this is

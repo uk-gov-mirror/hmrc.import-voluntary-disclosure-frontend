@@ -71,7 +71,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           if (value) {
-            redirectToSplitPayment(request.userAnswers)
+            redirectToDefermentView(request.userAnswers)
           } else {
             Redirect(controllers.routes.CheckYourAnswersController.onLoad())
           }
@@ -80,12 +80,11 @@ class DefermentController @Inject()(identify: IdentifierAction,
     )
   }
 
-  private[controllers] def redirectToSplitPayment(userAnswers: UserAnswers): Result = {
+  private[controllers] def redirectToDefermentView(userAnswers: UserAnswers): Result = {
     if (flowService.isRepFlow(userAnswers)) {
       flowService.dutyType(userAnswers) match {
-        case underpaymentType if underpaymentType == "vat" => Redirect(controllers.routes.SplitPaymentController.onLoad()) //TODO - routing to be updated as part of CIVDT-264
-        case underpaymentType if underpaymentType == "duty" => Redirect(controllers.routes.SplitPaymentController.onLoad()) //TODO - routing to be updated as part of CIVDT-264
         case underpaymentType if underpaymentType == "both" => Redirect(controllers.routes.SplitPaymentController.onLoad())
+        case underpaymentType if Seq("vat", "duty").contains(underpaymentType) => Redirect(controllers.routes.RepresentativeDanController.onLoad())
         case _ => InternalServerError("Couldn't find Underpayment types")
       }
     } else {
