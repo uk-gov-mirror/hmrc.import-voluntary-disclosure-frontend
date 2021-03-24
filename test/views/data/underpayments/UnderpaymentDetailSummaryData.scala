@@ -22,7 +22,7 @@ import views.ViewUtils.displayMoney
 
 object UnderpaymentDetailSummaryData {
 
-  val underpaymentDetailSummaryList: SummaryList =
+  def underpaymentDetailSummaryList(underpaymentType: String, bodyMessage: String): SummaryList =
     SummaryList(
       classes = "govuk-!-margin-bottom-9",
       rows = Seq(
@@ -38,7 +38,7 @@ object UnderpaymentDetailSummaryData {
           actions = Some(Actions(
             items = Seq(
               ActionItem(
-                controllers.underpayments.routes.UnderpaymentDetailsController.onLoad("B00").url,
+                controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType).url,
                 Text("Change")
               )
             ),
@@ -58,7 +58,7 @@ object UnderpaymentDetailSummaryData {
         ),
         SummaryListRow(
           key = Key(
-            content = Text("Import VAT owed to HMRC"),
+            content = Text(bodyMessage),
             classes = "govuk-!-width-two-thirds"
           ),
           value = Value(content = HtmlContent(displayMoney(1))),

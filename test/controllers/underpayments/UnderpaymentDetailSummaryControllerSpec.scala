@@ -64,7 +64,11 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase {
     }
 
     "produce correct summary list" in new Test {
-      controller.summaryList("B00", UnderpaymentAmount(0, 1)) mustBe UnderpaymentDetailSummaryData.underpaymentDetailSummaryList
+      controller.summaryList("B00", UnderpaymentAmount(0, 1)) mustBe
+        UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
+          "B00",
+          "Import VAT owed to HMRC"
+        )
     }
   }
 
@@ -89,6 +93,7 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase {
         verifyCalls()
       }
     }
+
   }
 
 }
