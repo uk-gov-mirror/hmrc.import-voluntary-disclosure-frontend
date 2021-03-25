@@ -48,20 +48,24 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   }
 
   def onSubmit(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val currentUnderpaymentDetail = request.userAnswers.get(UnderpaymentDetailsPage).getOrElse(UnderpaymentAmount(0, 0))
-    val newUnderpaymentDetail = Seq(
-      UnderpaymentDetail(
-        underpaymentType,
-        currentUnderpaymentDetail.original,
-        currentUnderpaymentDetail.amended
+    val currentUnderpaymentDetail: Option[UnderpaymentAmount] = request.userAnswers.get(UnderpaymentDetailsPage)
+    if (currentUnderpaymentDetail.nonEmpty) {
+      val newUnderpaymentDetail = Seq(
+        UnderpaymentDetail(
+          underpaymentType,
+          currentUnderpaymentDetail.get.original,
+          currentUnderpaymentDetail.get.amended
+        )
       )
-    )
-    val currentUnderpaymentTypes = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
-    for {
-      updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
-      _ <- sessionRepository.set(updatedAnswers)
-    } yield {
-      Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
+      val currentUnderpaymentTypes = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
+      for {
+        updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
+        _ <- sessionRepository.set(updatedAnswers)
+      } yield {
+        Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
+      }
+    } else {
+      Future.successful(InternalServerError("Couldn't find underpayment details"))
     }
   }
 
