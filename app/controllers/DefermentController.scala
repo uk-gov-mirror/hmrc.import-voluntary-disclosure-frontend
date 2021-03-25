@@ -92,12 +92,14 @@ class DefermentController @Inject()(identify: IdentifierAction,
     }
   }
 
+  // TODO - needs to change once the feature swtich is taken out
   private[controllers] def getHeaderMessage(userAnswers: UserAnswers): String = {
     flowService.dutyType(userAnswers) match {
         case "vat" => "deferment.headingOnlyVAT"
         case "duty" => "deferment.headingDutyOnly"
         case "both" => "deferment.headingVATandDuty"
-      }
+        case _ => "deferment.headingDutyOnly"
+       }
     }
 
 }
