@@ -21,7 +21,7 @@ import models.UnderpaymentDetail
 import models.underpayments.UnderpaymentAmount
 import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.i18n.{I18nSupport, Messages}
-import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
@@ -44,29 +44,35 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
 
   def onLoad(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val underpaymentDetail = request.userAnswers.get(UnderpaymentDetailsPage).getOrElse(UnderpaymentAmount(0, 0))
-    Future.successful(Ok(view(underpaymentType, summaryList(underpaymentType, underpaymentDetail))))
+    Future.successful(Ok(view(
+      underpaymentType,
+      summaryList(underpaymentType, underpaymentDetail),
+      backLink(underpaymentType)
+    )))
   }
 
   def onSubmit(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val currentUnderpaymentDetail: Option[UnderpaymentAmount] = request.userAnswers.get(UnderpaymentDetailsPage)
-    if (currentUnderpaymentDetail.isDefined) {
-      val newUnderpaymentDetail = Seq(
+    request.userAnswers.get(UnderpaymentDetailsPage) match {
+      case Some(value) => val newUnderpaymentDetail = Seq(
         UnderpaymentDetail(
           underpaymentType,
-          currentUnderpaymentDetail.get.original,
-          currentUnderpaymentDetail.get.amended
+          value.original,
+          value.amended
         )
       )
-      val currentUnderpaymentTypes = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
-      for {
-        updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
-        _ <- sessionRepository.set(updatedAnswers)
-      } yield {
-        Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
-      }
-    } else {
-      Future.successful(InternalServerError("Couldn't find underpayment details"))
+        val currentUnderpaymentTypes = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
+          _ <- sessionRepository.set(updatedAnswers)
+        } yield {
+          Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
+        }
+      case None => Future.successful(InternalServerError("Couldn't find underpayment details"))
     }
+  }
+
+  private def backLink(underpaymentType: String): Call = {
+    controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType)
   }
 
   private[controllers] def summaryList(underpaymentType: String, underpaymentAmount: UnderpaymentAmount)(implicit messages: Messages): SummaryList = {

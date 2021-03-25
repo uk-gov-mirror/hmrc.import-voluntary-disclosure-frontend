@@ -20,7 +20,7 @@
         formHelper: FormWithCSRF,
         button: components.button
 )
-@(underpaymentType: String, underpaymentSummary: SummaryList)(implicit request: Request[_], messages: Messages)
+@(underpaymentType: String, underpaymentSummary: SummaryList, backLink: Call)(implicit request: Request[_], messages: Messages)
 
 @getMessage(isTitle: Boolean = true) = @{
     val key = if(isTitle) "pageTitle" else "pageHeader"
@@ -30,11 +30,12 @@
     } else {
         messages(s"underpaymentDetails.$underpaymentType.$key")
     }
-    messages(s"underpaymentDetailsSummary.$key") + emptySpace + middleMessage + emptySpace + messages("underpaymentDetails.dutyMessageEnding")
+    messages(s"underpaymentDetailsSummary.$key") + emptySpace + middleMessage + messages("underpaymentDetails.dutyMessageEnding")
 }
 
 @layout(
-    pageTitle = getMessage(), customBackLinkUrl = Some(controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType))) {
+    pageTitle = getMessage(),
+    customBackLinkUrl = Some(backLink)) {
 
     @h1(getMessage(false))
 
@@ -44,6 +45,7 @@
         @button("common.button.continue")
     }
 }
+
 @{
     //$COVERAGE-OFF$
 }

@@ -155,7 +155,7 @@ underpaymentTypeTemp.D10.radio = Compensatory Duty (D10)
 # Underpayment Details
 underpaymentDetails.originalAmount = Amount that was paid to HMRC
 underpaymentDetails.amendedAmount = Amount that should have been paid
-underpaymentDetails.dutyMessageEnding = underpayment details
+underpaymentDetails.dutyMessageEnding = ' underpayment details'
 underpaymentDetails.B00.pageTitle = Import VAT
 underpaymentDetails.B00.pageHeader = Import VAT
 underpaymentDetails.B00.pageTitle.lowercase = import VAT
@@ -189,7 +189,7 @@ underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid 
 underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
 
 # Underpayment Details Summary
-underpaymentDetailsSummary.pageTitle = Confirm the
+underpaymentDetailsSummary.B00.pageTitle = Confirm the
 underpaymentDetailsSummary.pageHeader = Confirm the
 underpaymentDetailsSummary.originalAmount = Amount that was paid to HMRC
 underpaymentDetailsSummary.amendedAmount = Amount that should have been paid
