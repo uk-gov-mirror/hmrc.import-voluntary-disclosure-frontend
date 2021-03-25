@@ -49,7 +49,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
 
   def onSubmit(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val currentUnderpaymentDetail: Option[UnderpaymentAmount] = request.userAnswers.get(UnderpaymentDetailsPage)
-    if (currentUnderpaymentDetail.nonEmpty) {
+    if (currentUnderpaymentDetail.isDefined) {
       val newUnderpaymentDetail = Seq(
         UnderpaymentDetail(
           underpaymentType,

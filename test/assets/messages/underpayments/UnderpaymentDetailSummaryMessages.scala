@@ -22,7 +22,6 @@ object UnderpaymentDetailSummaryMessages extends BaseMessages {
 
   val originalAmount = "Amount that was paid to HMRC"
   val amendedAmount = "Amount that should have been paid"
-
   val B00pageTitle = "import VAT"
   val B00pageHeader = "import VAT"
   val B00pageHeaderUpperCase = "Import VAT"
@@ -45,61 +44,60 @@ object UnderpaymentDetailSummaryMessages extends BaseMessages {
   val A10pageHeader = "Customs Duty on Agricultural Products"
   val D10pageTitle = "Compensatory Duty"
   val D10pageHeader = "Compensatory Duty"
-  val beginningMessage = "Confirm the"
-  val endingMessage = "underpayment details"
-  val dueToHMRC = "owed to HMRC"
-  val emptySpace = " "
+  val beginningMessage = "Confirm the "
+  val endingMessage = " underpayment details"
+  val dueToHMRC = " owed to HMRC"
 
   val underpaymentTypeContent: Map[String, ExpectedContent] = Map(
     "B00" -> ExpectedContent(
-      beginningMessage + emptySpace + B00pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + B00pageHeader + emptySpace + endingMessage,
-      Some(B00pageHeaderUpperCase + emptySpace + dueToHMRC)
+      beginningMessage + B00pageTitle + endingMessage,
+      beginningMessage + B00pageHeader + endingMessage,
+      Some(B00pageHeaderUpperCase + dueToHMRC)
     ),
     "A00" -> ExpectedContent(
-      beginningMessage + emptySpace + A00pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A00pageHeader + emptySpace + endingMessage,
-      Some(A00pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A00pageTitle + endingMessage,
+      beginningMessage + A00pageHeader + endingMessage,
+      Some(A00pageTitle + dueToHMRC)
     ),
     "E00" -> ExpectedContent(
-      beginningMessage + emptySpace + E00pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + E00pageHeader + emptySpace + endingMessage,
-      Some(E00pageHeaderUpperCase + emptySpace + dueToHMRC)
+      beginningMessage + E00pageTitle + endingMessage,
+      beginningMessage + E00pageHeader + endingMessage,
+      Some(E00pageHeaderUpperCase + dueToHMRC)
     ),
     "A20" -> ExpectedContent(
-      beginningMessage + emptySpace + A20pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A20pageHeader + emptySpace + endingMessage,
-      Some(A20pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A20pageTitle + endingMessage,
+      beginningMessage + A20pageHeader + endingMessage,
+      Some(A20pageTitle + dueToHMRC)
     ),
     "A30" -> ExpectedContent(
-      beginningMessage + emptySpace + A30pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A30pageHeader + emptySpace + endingMessage,
-      Some(A30pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A30pageTitle + endingMessage,
+      beginningMessage + A30pageHeader + endingMessage,
+      Some(A30pageTitle + dueToHMRC)
     ),
     "A35" -> ExpectedContent(
-      beginningMessage + emptySpace + A35pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A35pageHeader + emptySpace + endingMessage,
-      Some(A35pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A35pageTitle + endingMessage,
+      beginningMessage + A35pageHeader + endingMessage,
+      Some(A35pageTitle + dueToHMRC)
     ),
     "A40" -> ExpectedContent(
-      beginningMessage + emptySpace + A40pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A40pageHeader + emptySpace + endingMessage,
-      Some(A40pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A40pageTitle + endingMessage,
+      beginningMessage + A40pageHeader + endingMessage,
+      Some(A40pageTitle + dueToHMRC)
     ),
     "A45" -> ExpectedContent(
-      beginningMessage + emptySpace + A45pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A45pageHeader + emptySpace + endingMessage,
-      Some(A45pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A45pageTitle + endingMessage,
+      beginningMessage + A45pageHeader + endingMessage,
+      Some(A45pageTitle + dueToHMRC)
     ),
     "A10" -> ExpectedContent(
-      beginningMessage + emptySpace + A10pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + A10pageHeader + emptySpace + endingMessage,
-      Some(A10pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + A10pageTitle + endingMessage,
+      beginningMessage + A10pageHeader + endingMessage,
+      Some(A10pageTitle + dueToHMRC)
     ),
     "D10" -> ExpectedContent(
-      beginningMessage + emptySpace + D10pageTitle + emptySpace + endingMessage,
-      beginningMessage + emptySpace + D10pageHeader + emptySpace + endingMessage,
-      Some(D10pageTitle + emptySpace + dueToHMRC)
+      beginningMessage + D10pageTitle + endingMessage,
+      beginningMessage + D10pageHeader + endingMessage,
+      Some(D10pageTitle + dueToHMRC)
     )
   )
 

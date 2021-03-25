@@ -80,6 +80,7 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase {
         override val userAnswers: Option[UserAnswers] = Some(
           UserAnswers("credId")
             .set(UnderpaymentTypePage, "B00").success.value
+            .set(UnderpaymentDetailsPage, UnderpaymentAmount(0, 1)).success.value
         )
         lazy val result: Future[Result] = controller.onSubmit("B00")(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
@@ -91,6 +92,18 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase {
           fakeRequest.withFormUrlEncodedBody("original" -> "40", "amended" -> "50"))
         )
         verifyCalls()
+      }
+
+    }
+
+    "payload contains invalid data" should {
+      "return Internal Server Error" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("credId")
+            .set(UnderpaymentTypePage, "B00").success.value
+        )
+        lazy val result: Future[Result] = controller.onSubmit("B00")(fakeRequest)
+        status(result) mustBe Status.INTERNAL_SERVER_ERROR
       }
     }
 
