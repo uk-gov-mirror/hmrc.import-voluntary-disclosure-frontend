@@ -536,3 +536,18 @@ repDan.radio3 = The importer’s account and I have standing authority to use it
 repDan.error.input.required = Enter the deferment account number
 repDan.error.input.format = Enter the deferment account number in the correct format, like 1234567
 repDan.error.radio.required = Select whose deferment account this is
+
+# Upload Authority page
+uploadAuthority.pageTitle = Upload proof of authority to use this deferment account
+uploadAuthority.pageHeader = Upload proof of authority to use this deferment account
+uploadAuthority.p1 = You must provide proof that you have one-off authority to use this deferment account {0} to pay for the {1} owed.
+uploadAuthority.vat = import VAT
+uploadAuthority.duty = duty
+uploadAuthority.both = import VAT and duty
+uploadAuthority.p2 = The proof needs to be dated and signed by the owner of the deferment account. The date must be after the date of the original import declaration.
+uploadAuthority.fileSizeTypeHeading = File size and type
+uploadAuthority.fileSizeTypeText = The file must be 6MB or smaller and either be a PDF (.pdf) or a text (.txt) file.
+uploadAuthority.uploadFile = Upload file
+uploadAuthoritySuccess.pageTitle = The file has been uploaded successfully
+uploadAuthoritySuccess.pageHeader = The file has been uploaded successfully
+uploadAuthoritySuccess.text = You have uploaded {0}

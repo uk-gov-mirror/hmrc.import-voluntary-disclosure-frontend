@@ -69,6 +69,9 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
   lazy val upScanInitiateBaseUrl: String = servicesConfig.baseUrl("upscan-initiate")
   lazy val upScanAcceptedFileTypes: String = allowedUploadFileTypes.map(x => "." + x).mkString(",").toLowerCase
 
+  lazy val upScanAuthoritySuccessRedirectForUser: String = host + servicesConfig.getString("upscan.authoritySuccessRedirectForUser")
+  lazy val upScanAuthorityErrorRedirectForUser: String = host + servicesConfig.getString("upscan.authorityErrorRedirectForUser")
+
   lazy val fileRepositoryTtl: Int = servicesConfig.getInt("upscan.fileRepositoryTtl")
 
   lazy val importVoluntaryDisclosureSubmission: String = servicesConfig.baseUrl("import-voluntary-disclosure-submission")
@@ -108,6 +111,8 @@ trait AppConfig extends FixedConfig {
   val upScanPollingDelayMilliSeconds: Int
   val upScanInitiateBaseUrl: String
   val upScanAcceptedFileTypes: String
+  val upScanAuthoritySuccessRedirectForUser: String
+  val upScanAuthorityErrorRedirectForUser: String
 
   val fileRepositoryTtl: Int
   val importVoluntaryDisclosureSubmission: String
