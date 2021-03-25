@@ -19,6 +19,7 @@ package models
 import config.FixedConfig
 import models.underpayments.UnderpaymentAmount
 import pages._
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
 
 case class IvdSubmission(userType: UserType,
@@ -144,6 +145,7 @@ object IvdSubmission extends FixedConfig {
       customsDuty <- CustomsDutyPage.path.readNullable[UnderpaymentAmount]
       importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
       exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
+      underpaymentDetailsNew <- UnderpaymentDetailSummaryPage.path.readNullable[Seq[UnderpaymentDetail]]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
       paymentByDeferment <- DefermentPage.path.read[Boolean]
       defermentType <- DefermentTypePage.path.readNullable[String]
@@ -180,7 +182,7 @@ object IvdSubmission extends FixedConfig {
         importerEori = importerEori,
         importerName = importerName,
         importerAddress = importerAddress,
-        underpaymentDetails = underpaymentDetails,
+        underpaymentDetails = if (underpaymentDetails.nonEmpty) underpaymentDetails else underpaymentDetailsNew.getOrElse(Seq.empty),
         supportingDocuments = supportingDocuments,
         paymentByDeferment = paymentByDeferment,
         defermentType = defermentType,

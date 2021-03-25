@@ -1,198 +1,227 @@
 # microservice specific routes
 
-->          /govuk-frontend                                                            govuk.Routes
-->          /hmrc-frontend                                                             hmrcfrontend.Routes
-GET         /assets/*file                                                              controllers.Assets.versioned(path = "/public", file: Asset)
+->          /govuk-frontend                                                                    govuk.Routes
+->          /hmrc-frontend                                                                     hmrcfrontend.Routes
+GET         /assets/*file                                                                      controllers.Assets.versioned(path = "/public", file: Asset)
 
-GET         /                                                                          controllers.IndexController.onPageLoad
-GET         /address-initialise                                                        controllers.AddressLookupController.initialiseJourney
-GET         /address-callback                                                          controllers.AddressLookupController.callback(id: String)
-GET         /importer-address-callback                                                 controllers.AddressLookupController.importerCallback(id: String)
+GET         /                                                                                  controllers.IndexController.onPageLoad
+GET         /address-initialise                                                                controllers.AddressLookupController.initialiseJourney
+GET         /address-callback                                                                  controllers.AddressLookupController.callback(id: String)
+GET         /importer-address-callback                                                         controllers.AddressLookupController.importerCallback(id: String)
 
-GET         /importer-address-initialise                                               controllers.AddressLookupController.initialiseImporterJourney
+GET         /importer-address-initialise                                                       controllers.AddressLookupController.initialiseImporterJourney
 
-GET         /who-is-disclosing                                                         controllers.UserTypeController.onLoad
-POST        /who-is-disclosing                                                         controllers.UserTypeController.onSubmit
+GET         /who-is-disclosing                                                                 controllers.UserTypeController.onLoad
+POST        /who-is-disclosing                                                                 controllers.UserTypeController.onSubmit
 
-GET         /one-or-more-entries                                                       controllers.NumberOfEntriesController.onLoad
-POST        /one-or-more-entries                                                       controllers.NumberOfEntriesController.onSubmit
+GET         /one-or-more-entries                                                               controllers.NumberOfEntriesController.onLoad
+POST        /one-or-more-entries                                                               controllers.NumberOfEntriesController.onSubmit
 
-GET         /unauthorised                                                              controllers.errors.UnauthorisedController.onPageLoad
+GET         /unauthorised                                                                      controllers.errors.UnauthorisedController.onPageLoad
 
-GET         /disclosure/entry-details                                                  controllers.EntryDetailsController.onLoad
-POST        /disclosure/entry-details                                                  controllers.EntryDetailsController.onSubmit
+GET         /disclosure/entry-details                                                          controllers.EntryDetailsController.onLoad
+POST        /disclosure/entry-details                                                          controllers.EntryDetailsController.onSubmit
 
-GET         /disclosure/when-entry-acceptance-date                                     controllers.AcceptanceDateController.onLoad
-POST        /disclosure/when-entry-acceptance-date                                     controllers.AcceptanceDateController.onSubmit
+GET         /disclosure/when-entry-acceptance-date                                             controllers.AcceptanceDateController.onLoad
+POST        /disclosure/when-entry-acceptance-date                                             controllers.AcceptanceDateController.onSubmit
 
-GET         /disclosure/what-duty-type-underpaid                                       controllers.UnderpaymentTypeController.onLoad
-POST        /disclosure/what-duty-type-underpaid                                       controllers.UnderpaymentTypeController.onSubmit
+GET         /disclosure/what-duty-type-underpaid                                               controllers.UnderpaymentTypeController.onLoad
+POST        /disclosure/what-duty-type-underpaid                                               controllers.UnderpaymentTypeController.onSubmit
 
-GET         /disclosure/supporting-documentation-format                                controllers.SupportingDocController.onLoad
+GET         /disclosure/supporting-documentation-format                                        controllers.SupportingDocController.onLoad
 
-GET         /disclosure/customs-duty-details                                           controllers.CustomsDutyController.onLoad
-POST        /disclosure/customs-duty-details                                           controllers.CustomsDutyController.onSubmit
+GET         /disclosure/customs-duty-details                                                   controllers.CustomsDutyController.onLoad
+POST        /disclosure/customs-duty-details                                                   controllers.CustomsDutyController.onSubmit
 
-GET         /disclosure/import-vat-details                                             controllers.ImportVATController.onLoad
-POST        /disclosure/import-vat-details                                             controllers.ImportVATController.onSubmit
+GET         /disclosure/import-vat-details                                                     controllers.ImportVATController.onLoad
+POST        /disclosure/import-vat-details                                                     controllers.ImportVATController.onSubmit
 
-GET         /disclosure/excise-duty-details                                            controllers.ExciseDutyController.onLoad
-POST        /disclosure/excise-duty-details                                            controllers.ExciseDutyController.onSubmit
+GET         /disclosure/excise-duty-details                                                    controllers.ExciseDutyController.onLoad
+POST        /disclosure/excise-duty-details                                                    controllers.ExciseDutyController.onSubmit
 
-GET         /disclosure/enter-cpc                                                      controllers.EnterCustomsProcedureCodeController.onLoad
-POST        /disclosure/enter-cpc                                                      controllers.EnterCustomsProcedureCodeController.onSubmit
+GET         /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onLoad
+POST        /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onSubmit
 
-GET         /disclosure/underpayment-amount-summary                                    controllers.UnderpaymentSummaryController.onLoad
+GET         /disclosure/underpayment-amount-summary                                            controllers.UnderpaymentSummaryController.onLoad
 
-GET         /disclosure/upload-file                                                    controllers.UploadFileController.onLoad
-GET         /disclosure/upload-file/upscan-response                                    controllers.UploadFileController.upscanResponseHandler(key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
-GET         /disclosure/upload-file/polling                                            controllers.UploadFileController.uploadProgress(key: String)
+GET         /disclosure/upload-file                                                            controllers.UploadFileController.onLoad
+GET         /disclosure/upload-file/upscan-response                                            controllers.UploadFileController.upscanResponseHandler(key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
+GET         /disclosure/upload-file/polling                                                    controllers.UploadFileController.uploadProgress(key: String)
 
-GET         /disclosure/your-contact-details                                           controllers.DeclarantContactDetailsController.onLoad
-POST        /disclosure/your-contact-details                                           controllers.DeclarantContactDetailsController.onSubmit
+GET         /disclosure/your-contact-details                                                   controllers.DeclarantContactDetailsController.onLoad
+POST        /disclosure/your-contact-details                                                   controllers.DeclarantContactDetailsController.onSubmit
 
-GET         /disclosure/how-will-you-pay                                               controllers.DefermentController.onLoad
-POST        /disclosure/how-will-you-pay                                               controllers.DefermentController.onSubmit
+GET         /disclosure/how-will-you-pay                                                       controllers.DefermentController.onLoad
+POST        /disclosure/how-will-you-pay                                                       controllers.DefermentController.onSubmit
 
-GET         /disclosure/upload-another-file                                            controllers.UploadAnotherFileController.onLoad
-POST        /disclosure/upload-another-file                                            controllers.UploadAnotherFileController.onSubmit
+GET         /disclosure/upload-another-file                                                    controllers.UploadAnotherFileController.onLoad
+POST        /disclosure/upload-another-file                                                    controllers.UploadAnotherFileController.onSubmit
 
-GET         /disclosure/remove-file/:index                                             controllers.RemoveUploadedFileController.onLoad(index: models.Index)
-POST        /disclosure/remove-file/:index                                             controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
+GET         /disclosure/remove-file/:index                                                     controllers.RemoveUploadedFileController.onLoad(index: models.Index)
+POST        /disclosure/remove-file/:index                                                     controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
 
-GET         /disclosure/address-correct                                                controllers.TraderAddressCorrectController.onLoad
-POST        /disclosure/address-correct                                                controllers.TraderAddressCorrectController.onSubmit
+GET         /disclosure/address-correct                                                        controllers.TraderAddressCorrectController.onLoad
+POST        /disclosure/address-correct                                                        controllers.TraderAddressCorrectController.onSubmit
 
-GET         /disclosure/reason-introduction                                            controllers.BoxGuidanceController.onLoad
+GET         /disclosure/reason-introduction                                                    controllers.BoxGuidanceController.onLoad
 
-GET         /disclosure/box-number                                                     controllers.BoxNumberController.onLoad
-POST        /disclosure/box-number                                                     controllers.BoxNumberController.onSubmit
+GET         /disclosure/box-number                                                             controllers.BoxNumberController.onLoad
+POST        /disclosure/box-number                                                             controllers.BoxNumberController.onSubmit
 
-GET         /disclosure/item-number                                                    controllers.ItemNumberController.onLoad
-POST        /disclosure/item-number                                                    controllers.ItemNumberController.onSubmit
+GET         /disclosure/item-number                                                            controllers.ItemNumberController.onLoad
+POST        /disclosure/item-number                                                            controllers.ItemNumberController.onSubmit
 
-GET         /disclosure/box-22-currency-total-invoice-amendment                        controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 22)
-POST        /disclosure/box-22-currency-total-invoice-amendment                        controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 22)
+GET         /disclosure/box-22-currency-total-invoice-amendment                                controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 22)
+POST        /disclosure/box-22-currency-total-invoice-amendment                                controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 22)
 
-GET         /disclosure/box-33-commodity-code-amendment                                controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 33)
-POST        /disclosure/box-33-commodity-code-amendment                                controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 33)
+GET         /disclosure/box-33-commodity-code-amendment                                        controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 33)
+POST        /disclosure/box-33-commodity-code-amendment                                        controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 33)
 
-GET         /disclosure/box-34-origin-country-code-amendment                           controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 34)
-POST        /disclosure/box-34-origin-country-code-amendment                           controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 34)
+GET         /disclosure/box-34-origin-country-code-amendment                                   controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 34)
+POST        /disclosure/box-34-origin-country-code-amendment                                   controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 34)
 
-GET         /disclosure/box-35-gross-mass-amendment                                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 35)
-POST        /disclosure/box-35-gross-mass-amendment                                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 35)
+GET         /disclosure/box-35-gross-mass-amendment                                            controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 35)
+POST        /disclosure/box-35-gross-mass-amendment                                            controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 35)
 
-GET         /disclosure/box-36-preference-amendment                                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 36)
-POST        /disclosure/box-36-preference-amendment                                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 36)
+GET         /disclosure/box-36-preference-amendment                                            controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 36)
+POST        /disclosure/box-36-preference-amendment                                            controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 36)
 
-GET         /disclosure/box-37-customs-procedure-code-amendment                        controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 37)
-POST        /disclosure/box-37-customs-procedure-code-amendment                        controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 37)
+GET         /disclosure/box-37-customs-procedure-code-amendment                                controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 37)
+POST        /disclosure/box-37-customs-procedure-code-amendment                                controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 37)
 
-GET         /disclosure/box-38-net-mass-amendment                                      controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 38)
-POST        /disclosure/box-38-net-mass-amendment                                      controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 38)
+GET         /disclosure/box-38-net-mass-amendment                                              controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 38)
+POST        /disclosure/box-38-net-mass-amendment                                              controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 38)
 
-GET         /disclosure/box-39-quota-amendment                                         controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 39)
-POST        /disclosure/box-39-quota-amendment                                         controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 39)
+GET         /disclosure/box-39-quota-amendment                                                 controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 39)
+POST        /disclosure/box-39-quota-amendment                                                 controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 39)
 
-GET         /disclosure/box-41-supplementary-units-amendment                           controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 41)
-POST        /disclosure/box-41-supplementary-units-amendment                           controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 41)
+GET         /disclosure/box-41-supplementary-units-amendment                                   controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 41)
+POST        /disclosure/box-41-supplementary-units-amendment                                   controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 41)
 
-GET         /disclosure/box-42-item-price-amendment                                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 42)
-POST        /disclosure/box-42-item-price-amendment                                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 42)
+GET         /disclosure/box-42-item-price-amendment                                            controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 42)
+POST        /disclosure/box-42-item-price-amendment                                            controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 42)
 
-GET         /disclosure/box-43-valuation-method-amendment                              controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 43)
-POST        /disclosure/box-43-valuation-method-amendment                              controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 43)
+GET         /disclosure/box-43-valuation-method-amendment                                      controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 43)
+POST        /disclosure/box-43-valuation-method-amendment                                      controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 43)
 
-GET         /disclosure/box-45-adjustment-amendment                                    controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 45)
-POST        /disclosure/box-45-adjustment-amendment                                    controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 45)
+GET         /disclosure/box-45-adjustment-amendment                                            controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 45)
+POST        /disclosure/box-45-adjustment-amendment                                            controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 45)
 
-GET         /disclosure/box-46-statistical-value-amendment                             controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 46)
-POST        /disclosure/box-46-statistical-value-amendment                             controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 46)
+GET         /disclosure/box-46-statistical-value-amendment                                     controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 46)
+POST        /disclosure/box-46-statistical-value-amendment                                     controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 46)
 
-GET         /disclosure/box-62-air-transport-costs-amendment                           controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 62)
-POST        /disclosure/box-62-air-transport-costs-amendment                           controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 62)
+GET         /disclosure/box-62-air-transport-costs-amendment                                   controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 62)
+POST        /disclosure/box-62-air-transport-costs-amendment                                   controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 62)
 
-GET         /disclosure/box-63-awb-freight-costs-amendment                             controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 63)
-POST        /disclosure/box-63-awb-freight-costs-amendment                             controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 63)
+GET         /disclosure/box-63-awb-freight-costs-amendment                                     controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 63)
+POST        /disclosure/box-63-awb-freight-costs-amendment                                     controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 63)
 
-GET         /disclosure/box-66-insurance-amendment                                     controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 66)
-POST        /disclosure/box-66-insurance-amendment                                     controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 66)
+GET         /disclosure/box-66-insurance-amendment                                             controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 66)
+POST        /disclosure/box-66-insurance-amendment                                             controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 66)
 
-GET         /disclosure/box-67-other-charges-deductions-amendment                      controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 67)
-POST        /disclosure/box-67-other-charges-deductions-amendment                      controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 67)
+GET         /disclosure/box-67-other-charges-deductions-amendment                              controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 67)
+POST        /disclosure/box-67-other-charges-deductions-amendment                              controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 67)
 
-GET         /disclosure/box-68-adjustment-vat-value-amendment                          controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 68)
-POST        /disclosure/box-68-adjustment-vat-value-amendment                          controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 68)
+GET         /disclosure/box-68-adjustment-vat-value-amendment                                  controllers.UnderpaymentReasonAmendmentController.onLoad(boxNumber: Int = 68)
+POST        /disclosure/box-68-adjustment-vat-value-amendment                                  controllers.UnderpaymentReasonAmendmentController.onSubmit(boxNumber: Int = 68)
 
-GET         /disclosure/confirm-reason-details                                         controllers.ConfirmReasonDetailController.onLoad
-POST        /disclosure/confirm-reason-details                                         controllers.ConfirmReasonDetailController.onSubmit
+GET         /disclosure/confirm-reason-details                                                 controllers.ConfirmReasonDetailController.onLoad
+POST        /disclosure/confirm-reason-details                                                 controllers.ConfirmReasonDetailController.onSubmit
 
-GET         /disclosure/underpayment-reason-summary                                    controllers.UnderpaymentReasonSummaryController.onLoad
-POST        /disclosure/underpayment-reason-summary                                    controllers.UnderpaymentReasonSummaryController.onSubmit
+GET         /disclosure/underpayment-reason-summary                                            controllers.UnderpaymentReasonSummaryController.onLoad
+POST        /disclosure/underpayment-reason-summary                                            controllers.UnderpaymentReasonSummaryController.onSubmit
 
-GET         /disclosure/check-your-answers                                             controllers.CheckYourAnswersController.onLoad
-GET         /disclosure/confirmation                                                   controllers.CheckYourAnswersController.onSubmit
+GET         /disclosure/check-your-answers                                                     controllers.CheckYourAnswersController.onLoad
+GET         /disclosure/confirmation                                                           controllers.CheckYourAnswersController.onSubmit
 
-GET         /disclosure/provide-information-option                                     controllers.HasFurtherInformationController.onLoad
-POST        /disclosure/provide-information-option                                     controllers.HasFurtherInformationController.onSubmit
+GET         /disclosure/provide-information-option                                             controllers.HasFurtherInformationController.onLoad
+POST        /disclosure/provide-information-option                                             controllers.HasFurtherInformationController.onSubmit
 
-GET         /disclosure/more-information                                               controllers.MoreInformationController.onLoad
-POST        /disclosure/more-information                                               controllers.MoreInformationController.onSubmit
+GET         /disclosure/more-information                                                       controllers.MoreInformationController.onLoad
+POST        /disclosure/more-information                                                       controllers.MoreInformationController.onSubmit
 
-GET         /disclosure/importer-name                                                  controllers.ImporterNameController.onLoad
-POST        /disclosure/importer-name                                                  controllers.ImporterNameController.onSubmit
+GET         /disclosure/importer-name                                                          controllers.ImporterNameController.onLoad
+POST        /disclosure/importer-name                                                          controllers.ImporterNameController.onSubmit
 
-GET         /disclosure/importer-eori-number-exists                                    controllers.ImporterEORIExistsController.onLoad
-POST        /disclosure/importer-eori-number-exists                                    controllers.ImporterEORIExistsController.onSubmit
+GET         /disclosure/importer-eori-number-exists                                            controllers.ImporterEORIExistsController.onLoad
+POST        /disclosure/importer-eori-number-exists                                            controllers.ImporterEORIExistsController.onSubmit
 
-GET         /disclosure/importer-eori-number                                           controllers.ImporterEORINumberController.onLoad
-POST        /disclosure/importer-eori-number                                           controllers.ImporterEORINumberController.onSubmit
+GET         /disclosure/importer-eori-number                                                   controllers.ImporterEORINumberController.onLoad
+POST        /disclosure/importer-eori-number                                                   controllers.ImporterEORINumberController.onSubmit
 
-GET         /confirm-eori                                                              controllers.ConfirmEORIDetailsController.onLoad
+GET         /confirm-eori                                                                      controllers.ConfirmEORIDetailsController.onLoad
 
-GET         /disclosure/importer-deferment-account-number                              controllers.ImporterDanController.onLoad
-POST        /disclosure/importer-deferment-account-number                              controllers.ImporterDanController.onSubmit
+GET         /disclosure/importer-deferment-account-number                                      controllers.ImporterDanController.onLoad
+POST        /disclosure/importer-deferment-account-number                                      controllers.ImporterDanController.onSubmit
 
-GET         /disclosure/underpayment-introduction                                      controllers.underpayments.UnderpaymentStartController.onLoad
+GET         /disclosure/underpayment-introduction                                              controllers.underpayments.UnderpaymentStartController.onLoad
 
-GET         /disclosure/split-deferment-payment                                        controllers.SplitPaymentController.onLoad
-POST        /disclosure/split-deferment-payment                                        controllers.SplitPaymentController.onSubmit
+GET         /disclosure/split-deferment-payment                                                controllers.SplitPaymentController.onLoad
+POST        /disclosure/split-deferment-payment                                                controllers.SplitPaymentController.onSubmit
 
-GET         /disclosure/deferment-account-details-all                                  controllers.RepresentativeDanController.onLoad
-POST        /disclosure/deferment-account-details-all                                  controllers.RepresentativeDanController.onSubmit
+GET         /disclosure/deferment-account-details-all                                          controllers.RepresentativeDanController.onLoad
+POST        /disclosure/deferment-account-details-all                                          controllers.RepresentativeDanController.onSubmit
 
 # Underpayments
-GET         /disclosure/select-duty-type-underpaid                                     controllers.underpayments.UnderpaymentTypeController.onLoad
-POST        /disclosure/select-duty-type-underpaid                                     controllers.underpayments.UnderpaymentTypeController.onSubmit
+GET         /disclosure/select-duty-type-underpaid                                             controllers.underpayments.UnderpaymentTypeController.onLoad
+POST        /disclosure/select-duty-type-underpaid                                             controllers.underpayments.UnderpaymentTypeController.onSubmit
 
-GET         /disclosure/import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "B00")
-POST        /disclosure/import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "B00")
+GET         /disclosure/import-vat-underpayment-details                                        controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "B00")
+POST        /disclosure/import-vat-underpayment-details                                        controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "B00")
 
-GET         /disclosure/customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A00")
-POST        /disclosure/customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A00")
+GET         /disclosure/customs-duty-underpayment-details                                      controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A00")
+POST        /disclosure/customs-duty-underpayment-details                                      controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A00")
 
-GET         /disclosure/excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "E00")
-POST        /disclosure/excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "E00")
+GET         /disclosure/excise-duty-underpayment-details                                       controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "E00")
+POST        /disclosure/excise-duty-underpayment-details                                       controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "E00")
 
-GET         /disclosure/additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A20")
-POST        /disclosure/additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A20")
+GET         /disclosure/additional-duty-underpayment-details                                   controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A20")
+POST        /disclosure/additional-duty-underpayment-details                                   controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A20")
 
-GET         /disclosure/definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A30")
-POST        /disclosure/definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A30")
+GET         /disclosure/definitive-add-underpayment-details                                    controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A30")
+POST        /disclosure/definitive-add-underpayment-details                                    controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A30")
 
-GET         /disclosure/provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A35")
-POST        /disclosure/provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A35")
+GET         /disclosure/provisional-add-underpayment-details                                   controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A35")
+POST        /disclosure/provisional-add-underpayment-details                                   controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A35")
 
-GET         /disclosure/definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A40")
-POST        /disclosure/definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A40")
+GET         /disclosure/definitive-countervailing-duty-underpayment-details                    controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A40")
+POST        /disclosure/definitive-countervailing-duty-underpayment-details                    controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A40")
 
-GET         /disclosure/provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A45")
-POST        /disclosure/provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A45")
+GET         /disclosure/provisional-countervailing-duty-underpayment-details                   controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A45")
+POST        /disclosure/provisional-countervailing-duty-underpayment-details                   controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A45")
 
-GET         /disclosure/customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A10")
-POST        /disclosure/customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A10")
+GET         /disclosure/customs-duty-agricultural-products-underpayment-details                controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "A10")
+POST        /disclosure/customs-duty-agricultural-products-underpayment-details                controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "A10")
 
-GET         /disclosure/compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
-POST        /disclosure/compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
+GET         /disclosure/compensatory-duty-underpayment-details                                 controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
+POST        /disclosure/compensatory-duty-underpayment-details                                 controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
 
+GET         /disclosure/confirm-import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "B00")
+POST        /disclosure/confirm-import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "B00")
+
+GET         /disclosure/confirm-customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A00")
+POST        /disclosure/confirm-customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A00")
+
+GET         /disclosure/confirm-excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "E00")
+POST        /disclosure/confirm-excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "E00")
+
+GET         /disclosure/confirm-additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A20")
+POST        /disclosure/confirm-additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A20")
+
+GET         /disclosure/confirm-definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A30")
+POST        /disclosure/confirm-definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A30")
+
+GET         /disclosure/confirm-provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A35")
+POST        /disclosure/confirm-provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A35")
+
+GET         /disclosure/confirm-definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A40")
+POST        /disclosure/confirm-definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A40")
+
+GET         /disclosure/confirm-provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A45")
+POST        /disclosure/confirm-provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A45")
+
+GET         /disclosure/confirm-customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A10")
+POST        /disclosure/confirm-customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A10")
+
+GET         /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "D10")
+POST        /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "D10")

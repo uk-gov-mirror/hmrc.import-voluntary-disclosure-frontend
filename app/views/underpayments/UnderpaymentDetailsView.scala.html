@@ -25,13 +25,13 @@
 @(form: Form[_], underpaymentType: String, backLink: Call)(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages(s"underpaymentDetails.$underpaymentType.pageTitle"),
+    pageTitle = messages(s"underpaymentDetails.$underpaymentType.pageTitle") + " " + messages("underpaymentDetails.dutyMessageEnding"),
     form = Some(form),
     customBackLinkUrl = Some(backLink)) {
 
     @errorSummary(form.errors)
 
-    @h1(messages(s"underpaymentDetails.$underpaymentType.pageHeader"))
+    @h1(messages(s"underpaymentDetails.$underpaymentType.pageHeader") + " " + messages("underpaymentDetails.dutyMessageEnding"))
 
     @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailsController.onSubmit(underpaymentType)) {
         @currencyInput(form, "original", messages("underpaymentDetails.originalAmount"), 10, false, classes = "govuk-input--width-20")
