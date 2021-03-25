@@ -42,7 +42,8 @@ class UnderpaymentDetailSummaryViewSpec extends ViewBaseSpec with BaseMessages {
         UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
           underpaymentType,
           UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
-        )
+        ),
+        backLink
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -72,7 +73,8 @@ class UnderpaymentDetailSummaryViewSpec extends ViewBaseSpec with BaseMessages {
           UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
             underpaymentType,
             UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
-          )
+          ),
+          backLink
         )(fakeRequest, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -101,7 +103,8 @@ class UnderpaymentDetailSummaryViewSpec extends ViewBaseSpec with BaseMessages {
       UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
         underpaymentType,
         UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
-      )
+      ),
+      backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

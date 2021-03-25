@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.DefermentFormProvider
-import javax.inject.{Inject, Singleton}
 import models.{UnderpaymentType, UserAnswers}
 import pages.DefermentPage
 import play.api.i18n.I18nSupport
@@ -29,6 +28,7 @@ import services.FlowService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DefermentView
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -95,11 +95,10 @@ class DefermentController @Inject()(identify: IdentifierAction,
   // TODO - needs to change once the feature swtich is taken out
   private[controllers] def getHeaderMessage(userAnswers: UserAnswers): String = {
     flowService.dutyType(userAnswers) match {
-        case "vat" => "deferment.headingOnlyVAT"
-        case "duty" => "deferment.headingDutyOnly"
-        case "both" => "deferment.headingVATandDuty"
-        case _ => "deferment.headingDutyOnly"
-       }
+      case "vat" => "deferment.headingOnlyVAT"
+      case "duty" => "deferment.headingDutyOnly"
+      case "both" => "deferment.headingVATandDuty"
     }
+  }
 
 }
