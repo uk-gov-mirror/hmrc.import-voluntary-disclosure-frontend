@@ -100,7 +100,7 @@ object UnderpaymentDetailSummaryMessages extends BaseMessages {
       beginningMessage + emptySpace + D10pageTitle + emptySpace + endingMessage,
       beginningMessage + emptySpace + D10pageHeader + emptySpace + endingMessage,
       Some(D10pageTitle + emptySpace + dueToHMRC)
-    ),
+    )
   )
 
 }
