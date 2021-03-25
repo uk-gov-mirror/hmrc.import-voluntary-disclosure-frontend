@@ -26,14 +26,14 @@ import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import views.data.underpayments.UnderpaymentDetailSummaryData
-import views.html.underpayments.UnderpaymentDetailSummaryView
+import views.html.underpayments.UnderpaymentDetailConfirmView
 
 import scala.concurrent.Future
 
-class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase {
+class UnderpaymentDetailConfirmControllerSpec extends ControllerSpecBase {
 
   trait Test extends MockSessionRepository {
-    private lazy val underpaymentDetailSummaryView: UnderpaymentDetailSummaryView = app.injector.instanceOf[UnderpaymentDetailSummaryView]
+    private lazy val underpaymentDetailConfirmView: UnderpaymentDetailConfirmView = app.injector.instanceOf[UnderpaymentDetailConfirmView]
 
     val userAnswers: Option[UserAnswers] = Some(
       UserAnswers("credId")
@@ -45,8 +45,8 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase {
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new UnderpaymentDetailSummaryController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, messagesControllerComponents, underpaymentDetailSummaryView)
+    lazy val controller = new UnderpaymentDetailConfirmController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+      mockSessionRepository, messagesControllerComponents, underpaymentDetailConfirmView)
   }
 
   "GET onLoad " should {

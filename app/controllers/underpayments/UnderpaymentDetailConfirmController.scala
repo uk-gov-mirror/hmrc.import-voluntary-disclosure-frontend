@@ -27,18 +27,18 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.ViewUtils.displayMoney
-import views.html.underpayments.UnderpaymentDetailSummaryView
+import views.html.underpayments.UnderpaymentDetailConfirmView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
+class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
                                                     getData: DataRetrievalAction,
                                                     requireData: DataRequiredAction,
                                                     sessionRepository: SessionRepository,
                                                     mcc: MessagesControllerComponents,
-                                                    view: UnderpaymentDetailSummaryView
+                                                    view: UnderpaymentDetailConfirmView
                                                    )
   extends FrontendController(mcc) with I18nSupport {
 
@@ -81,7 +81,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
       rows = Seq(
         SummaryListRow(
           key = Key(
-            content = Text(messages("underpaymentDetailsSummary.originalAmount")),
+            content = Text(messages("underpaymentDetailsConfirm.originalAmount")),
             classes = "govuk-!-width-two-thirds govuk-!-padding-bottom-0"
           ),
           value = Value(
@@ -101,7 +101,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
         ),
         SummaryListRow(
           key = Key(
-            content = Text(messages("underpaymentDetailsSummary.amendedAmount")),
+            content = Text(messages("underpaymentDetailsConfirm.amendedAmount")),
             classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
           ),
           value = Value(
@@ -112,8 +112,8 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
         SummaryListRow(
           key = Key(
             content = Text(
-              messages(s"underpaymentDetails.$underpaymentType.pageHeader") + " " +
-                messages("underpaymentDetailsSummary.dueToHmrc")),
+              messages(s"underpaymentDetailsConfirm.$underpaymentType.dueToHmrc")
+            ),
             classes = "govuk-!-width-two-thirds"
           ),
           value = Value(content = HtmlContent(displayMoney(underpaymentAmount.amended - underpaymentAmount.original))),

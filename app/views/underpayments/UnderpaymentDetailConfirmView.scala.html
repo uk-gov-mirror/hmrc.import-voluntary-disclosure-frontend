@@ -22,26 +22,15 @@
 )
 @(underpaymentType: String, underpaymentSummary: SummaryList, backLink: Call)(implicit request: Request[_], messages: Messages)
 
-@getMessage(isTitle: Boolean = true) = @{
-    val key = if(isTitle) "pageTitle" else "pageHeader"
-    val emptySpace = " "
-    val middleMessage = if(underpaymentType == "B00" | underpaymentType == "E00") {
-        messages(s"underpaymentDetails.$underpaymentType.$key.lowercase")
-    } else {
-        messages(s"underpaymentDetails.$underpaymentType.$key")
-    }
-    messages(s"underpaymentDetailsSummary.$key") + emptySpace + middleMessage + messages("underpaymentDetails.dutyMessageEnding")
-}
-
 @layout(
-    pageTitle = getMessage(),
+    pageTitle = messages(s"underpaymentDetailsConfirm.$underpaymentType.pageTitle"),
     customBackLinkUrl = Some(backLink)) {
 
-    @h1(getMessage(false))
+    @h1(messages(s"underpaymentDetailsConfirm.$underpaymentType.pageHeader"))
 
     @govukSummaryList(underpaymentSummary)
 
-    @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit(underpaymentType)) {
+    @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailConfirmController.onSubmit(underpaymentType)) {
         @button("common.button.continue")
     }
 }

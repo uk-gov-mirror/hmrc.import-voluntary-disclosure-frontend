@@ -24,11 +24,11 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Call
 import play.twirl.api.Html
 import views.data.underpayments.UnderpaymentDetailSummaryData
-import views.html.underpayments.UnderpaymentDetailSummaryView
+import views.html.underpayments.UnderpaymentDetailConfirmView
 
-class UnderpaymentDetailSummaryViewSpec extends ViewBaseSpec with BaseMessages {
+class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
 
-  private lazy val injectedView: UnderpaymentDetailSummaryView = app.injector.instanceOf[UnderpaymentDetailSummaryView]
+  private lazy val injectedView: UnderpaymentDetailConfirmView = app.injector.instanceOf[UnderpaymentDetailConfirmView]
 
   val underpaymentType = "B00"
 
