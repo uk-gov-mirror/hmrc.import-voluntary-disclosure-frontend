@@ -20,11 +20,11 @@ import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import models.{FileUploadInfo, UploadAuthority}
 import models.upscan._
-import pages.UploadAuthorityPage
+import pages.{SplitPaymentPage, UploadAuthorityPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.{FileUploadRepository, SessionRepository}
-import services.UpScanService
+import services.{FlowService, UpScanService}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{UploadAuthorityProgressView, UploadAuthoritySuccessView, UploadAuthorityView}
 
@@ -41,31 +41,40 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
                                           fileUploadRepository: FileUploadRepository,
                                           sessionRepository: SessionRepository,
                                           upScanService: UpScanService,
+                                          flowService: FlowService,
                                           view: UploadAuthorityView,
                                           progressView: UploadAuthorityProgressView,
                                           successView: UploadAuthoritySuccessView,
                                           implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  private def backLink(currentDutyType: String, dan: String, selectedDutyTypes: String, splitPayment: Boolean): Call = {
+    selectedDutyTypes match {
+      case "both" if splitPayment && currentDutyType=="duty" => controllers.routes.UploadAuthorityController.onLoad(currentDutyType, dan) // RepDanDuty
+      case "both" if splitPayment && currentDutyType=="vat" => controllers.routes.UploadAuthorityController.onLoad(currentDutyType, dan) // RepDanVat
+      case _ => controllers.routes.RepresentativeDanController.onLoad()
+    }
+  }
 
-    // TODO: For rep flow, need the previous view to pass in the dan and the type of underpayment
-    val dan = request.session.get("dan").getOrElse("Deferment Account not found")
-    val dutyTypeKey = request.session.get("dutyType") match {
-      case Some(dutyType) if dutyType == "vat" => "uploadAuthority.vat"
-      case Some(dutyType) if dutyType == "duty" => "uploadAuthority.duty"
-      case Some(dutyType) if dutyType == "both" => "uploadAuthority.both"
+  def onLoad(dutyType: String, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val splitPayment = request.userAnswers.get(SplitPaymentPage).getOrElse(false)
+    val dutyTypeKey = dutyType match {
+      case "vat" => "uploadAuthority.vat"
+      case "duty" => "uploadAuthority.duty"
+      case "both" => "uploadAuthority.both"
       case _ => "Underpayment Type not found"
     }
 
-    upScanService.initiateNewJourney(isAuthorityJourney = true).map { response =>
-      Ok(view(response, controllers.routes.UploadAuthorityController.onLoad, dan, dutyTypeKey))
+    upScanService.initiateAuthorityJourney(dutyType, dan).map { response =>
+      Ok(view(response, backLink(dutyType, dan, flowService.dutyType(request.userAnswers), splitPayment), dan, dutyTypeKey))
         .removingFromSession("AuthorityUpscanReference")
         .addingToSession("AuthorityUpscanReference" -> response.reference.value)
     }
   }
 
-  def upscanResponseHandler(key: Option[String] = None,
+  def upscanResponseHandler(dutyType: String,
+                            dan: String,
+                            key: Option[String] = None,
                             errorCode: Option[String] = None,
                             errorMessage: Option[String] = None,
                             errorResource: Option[String] = None,
@@ -75,7 +84,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
     if (errorCode.isDefined) {
       // TODO: Redirect to synchronous error page
       Future.successful(
-        Redirect(controllers.routes.UploadAuthorityController.onLoad)
+        Redirect(controllers.routes.UploadAuthorityController.onLoad(dutyType, dan))
           .flashing(
             "key" -> key.getOrElse(""),
             "errorCode" -> errorCode.getOrElse(""),
@@ -88,14 +97,14 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
       key match {
         case Some(key) => fileUploadRepository.updateRecord(FileUpload(key, Some(request.credId))).map { _ =>
           Thread.sleep(appConfig.upScanPollingDelayMilliSeconds)
-          Redirect(controllers.routes.UploadAuthorityController.uploadProgress(key))
+          Redirect(controllers.routes.UploadAuthorityController.uploadProgress(dutyType, dan, key))
         }
         case _ => throw new RuntimeException("No key returned for successful upload")
       }
     }
   }
 
-  def uploadProgress(key: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def uploadProgress(dutyType: String, dan: String, key: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     fileUploadRepository.getRecord(key).flatMap {
       case Some(doc) => doc.fileStatus match {
         case Some(status) if (status == FileStatusEnum.READY) => {
@@ -116,22 +125,34 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UploadAuthorityPage, updatedList)(UploadAuthorityPage.queryWrites))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
-            Redirect(controllers.routes.UploadAuthorityController.onSuccess())
-              .removingFromSession("dan", "dutyType")
+            Redirect(controllers.routes.UploadAuthorityController.onSuccess(dutyType, dan))
               .addingToSession("AuthorityFilename" -> newAuthority.file.fileName)
           }
         }
-        case Some(status) => Future.successful(Redirect(controllers.routes.UploadAuthorityController.onLoad())) // TODO: Failure
-        case None => Future.successful(Ok(progressView(key, controllers.routes.UploadAuthorityController.onLoad)))
+        case Some(status) => Future.successful(Redirect(controllers.routes.UploadAuthorityController.onLoad(dutyType, dan))) // TODO: Failure
+        case None => Future.successful(Ok(
+          progressView(key = key,
+            backLink = controllers.routes.UploadAuthorityController.onLoad(dutyType, dan),
+            action = controllers.routes.UploadAuthorityController.uploadProgress(dutyType, dan, key).url)
+        ))
       }
       case None => Future.successful(InternalServerError)
     }
   }
 
-  def onSuccess(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSuccess(dutyType: String, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val splitPayment = request.userAnswers.get(SplitPaymentPage).getOrElse(false)
+
+    val action = flowService.dutyType(request.userAnswers) match {
+      case "both" if splitPayment && dutyType=="duty" => controllers.routes.UploadAuthorityController.onLoad(dutyType, dan).url
+      case _ => controllers.routes.CheckYourAnswersController.onLoad().url
+    }
+
     Future.successful(
-      Ok(successView(request.session.get("AuthorityFilename").getOrElse("No filename")))
-        .removingFromSession("AuthorityFilename")
+      Ok(successView(
+        fileName = request.session.get("AuthorityFilename").getOrElse("No filename"),
+        action = action)
+      ).removingFromSession("AuthorityFilename")
     )
   }
 

@@ -67,11 +67,7 @@ class RepresentativeDanController @Inject()(identify: IdentifierAction,
           dan.danType match {
             case "A" | "C" => Redirect(controllers.routes.CheckYourAnswersController.onLoad())
             case _ =>
-                Redirect(controllers.routes.UploadAuthorityController.onLoad())
-                  .addingToSession(
-                    "dan" -> dan.accountNumber,
-                    "dutyType" -> flowService.dutyType(request.userAnswers)
-                  )
+                Redirect(controllers.routes.UploadAuthorityController.onLoad(flowService.dutyType(request.userAnswers), dan.accountNumber))
           }
         }
       }

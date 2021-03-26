@@ -20,11 +20,11 @@
         linkButton: components.linkButton
 )
 
-@(fileName: String)(implicit request: Request[_], messages: Messages)
+@(fileName: String, action: String)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("uploadAuthoritySuccess.pageTitle"),
-    customBackLinkUrl = None
+    showBackLink = false
 ) {
 
     @h1(messages("uploadAuthoritySuccess.pageHeader"))
@@ -33,7 +33,7 @@
         @messages("uploadAuthoritySuccess.text", fileName)
     }
 
-    @linkButton(url = controllers.routes.UploadAuthorityController.onLoad().url, messages(("common.continue")))
+    @linkButton(url = action, messages(("common.continue")))
 
 }
 

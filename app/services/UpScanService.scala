@@ -35,17 +35,23 @@ class UpScanService @Inject()(upScanConnector: UpScanConnector,
     appConfig.upScanMaxFileSize
   )
 
-  lazy val buildAuthorityInitiateRequest: UpScanInitiateRequest = UpScanInitiateRequest(
+  private def buildAuthorityInitiateRequest(dutyType: String, dan: String): UpScanInitiateRequest = UpScanInitiateRequest(
     appConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload,
-    appConfig.upScanAuthoritySuccessRedirectForUser,
-    appConfig.upScanAuthorityErrorRedirectForUser,
+    appConfig.upScanAuthoritySuccessRedirectForUser ++ s"/$dutyType/$dan/upscan-response",
+    appConfig.upScanAuthorityErrorRedirectForUser ++ s"/$dutyType/$dan/upscan-response",
     appConfig.upScanMinFileSize,
     appConfig.upScanMaxFileSize
   )
 
-  def initiateNewJourney(isAuthorityJourney: Boolean = false)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UpScanInitiateResponse] = {
-    val initiateRequest = if (isAuthorityJourney) buildAuthorityInitiateRequest else buildInitiateRequest
-    upScanConnector.postToInitiate(initiateRequest).map {
+  def initiateNewJourney()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UpScanInitiateResponse] = {
+    upScanConnector.postToInitiate(buildInitiateRequest).map {
+      case Right(upScanInitiateResponse) => upScanInitiateResponse
+      case Left(error) => throw new InternalServerException(error.message)
+    }
+  }
+
+  def initiateAuthorityJourney(dutyType: String, dan: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UpScanInitiateResponse] = {
+    upScanConnector.postToInitiate(buildAuthorityInitiateRequest(dutyType, dan)).map {
       case Right(upScanInitiateResponse) => upScanInitiateResponse
       case Left(error) => throw new InternalServerException(error.message)
     }
