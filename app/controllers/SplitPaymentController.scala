@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.SplitPaymentFormProvider
 import javax.inject.{Inject, Singleton}
-import pages.SplitPaymentPage
+import pages.{AdditionalDefermentNumberPage, DefermentAccountPage, DefermentTypePage, SplitPaymentPage}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
@@ -60,19 +60,35 @@ class SplitPaymentController @Inject()(identify: IdentifierAction,
         )
       ),
       value => {
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(SplitPaymentPage, value))
-          _ <- sessionRepository.set(updatedAnswers)
-        } yield {
-          if (value) {
-            Redirect(controllers.routes.SplitPaymentController.onLoad())
-          } else {
-            Redirect(controllers.routes.RepresentativeDanController.onLoad())
-          }
+        request.userAnswers.get(SplitPaymentPage) match {
+          case Some(oldValue) if oldValue != value =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(SplitPaymentPage, value))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(DefermentTypePage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(DefermentAccountPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(AdditionalDefermentNumberPage))
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield {
+              redirectTo(value)
+            }
+          case _ =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(SplitPaymentPage, value))
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield {
+              redirectTo(value)
+            }
         }
       }
     )
   }
 
+  def redirectTo(value: Boolean): Result = {
+    if (value) {
+      Redirect(controllers.routes.RepresentativeDanDutyController.onLoad())
+    } else {
+      Redirect(controllers.routes.RepresentativeDanController.onLoad())
+    }
+  }
 
 }

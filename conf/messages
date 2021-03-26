@@ -559,7 +559,7 @@ splitPayment.yes = Yes, I want to use two deferment accounts
 splitPayment.no = No, I want to use one deferment account
 splitPayment.error.required = Select yes if you want to split payment between two deferment accounts
 
-# Representative Dan One page
+# Representative Dan page
 repDan.pageTitle = Deferment account details
 repDan.heading = Deferment account details
 repDan.accountNumberLabel = Deferment account number
@@ -571,3 +571,8 @@ repDan.radio3 = The importer’s account and I have standing authority to use it
 repDan.error.input.required = Enter the deferment account number
 repDan.error.input.format = Enter the deferment account number in the correct format, like 1234567
 repDan.error.radio.required = Select whose deferment account this is
+
+# Representative Dan Duty page
+repDuty.pageTitle = Deferment account details for the duty owed
+repDuty.heading = Deferment account details for the duty owed
+

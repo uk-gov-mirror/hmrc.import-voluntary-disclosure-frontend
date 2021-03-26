@@ -162,6 +162,9 @@ POST        /disclosure/split-deferment-payment                                 
 GET         /disclosure/deferment-account-details-all                                          controllers.RepresentativeDanController.onLoad
 POST        /disclosure/deferment-account-details-all                                          controllers.RepresentativeDanController.onSubmit
 
+GET         /disclosure/deferment-account-details-duties                               controllers.RepresentativeDanDutyController.onLoad
+POST        /disclosure/deferment-account-details-duties                               controllers.RepresentativeDanDutyController.onSubmit
+
 # Underpayments
 GET         /disclosure/select-duty-type-underpaid                                             controllers.underpayments.UnderpaymentTypeController.onLoad
 POST        /disclosure/select-duty-type-underpaid                                             controllers.underpayments.UnderpaymentTypeController.onSubmit
