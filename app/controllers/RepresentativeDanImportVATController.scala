@@ -20,32 +20,32 @@ import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.RepresentativeDanFormProvider
 import models.RepresentativeDan
-import pages.{DefermentAccountPage, DefermentTypePage}
+import pages.{AdditionalDefermentNumberPage, AdditionalDefermentTypePage, DefermentAccountPage, DefermentTypePage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.RepresentativeDanDutyView
+import views.html.{RepresentativeDanDutyView, RepresentativeDanImportVATView}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class RepresentativeDanDutyController @Inject()(identify: IdentifierAction,
-                                                getData: DataRetrievalAction,
-                                                requireData: DataRequiredAction,
-                                                sessionRepository: SessionRepository,
-                                                mcc: MessagesControllerComponents,
-                                                view: RepresentativeDanDutyView,
-                                                formProvider: RepresentativeDanFormProvider
+class RepresentativeDanImportVATController @Inject()(identify: IdentifierAction,
+                                                     getData: DataRetrievalAction,
+                                                     requireData: DataRequiredAction,
+                                                     sessionRepository: SessionRepository,
+                                                     mcc: MessagesControllerComponents,
+                                                     view: RepresentativeDanImportVATView,
+                                                     formProvider: RepresentativeDanFormProvider
                                                )
   extends FrontendController(mcc) with I18nSupport {
 
-  private[controllers] lazy val backLink: Call = controllers.routes.SplitPaymentController.onLoad()
+  private[controllers] lazy val backLink: Call = controllers.routes.RepresentativeDanDutyController.onLoad()
 
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val form = (for {
-      danType <- request.userAnswers.get(DefermentTypePage)
-      accountNumber <- request.userAnswers.get(DefermentAccountPage)
+      danType <- request.userAnswers.get(AdditionalDefermentTypePage)
+      accountNumber <- request.userAnswers.get(AdditionalDefermentNumberPage)
     } yield {
       formProvider().fill(RepresentativeDan(accountNumber, danType))
     }).getOrElse(formProvider())
@@ -60,13 +60,13 @@ class RepresentativeDanDutyController @Inject()(identify: IdentifierAction,
       ))),
       dan => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(DefermentTypePage, dan.danType))
-          updatedAnswers <- Future.fromTry(updatedAnswers.set(DefermentAccountPage, dan.accountNumber))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(AdditionalDefermentTypePage, dan.danType))
+          updatedAnswers <- Future.fromTry(updatedAnswers.set(AdditionalDefermentNumberPage, dan.accountNumber))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           dan.danType match {
-            case "A" | "C" => Redirect(controllers.routes.RepresentativeDanImportVATController.onLoad())
-            case _ => Redirect(controllers.routes.RepresentativeDanDutyController.onLoad())
+            case "A" | "C" => Redirect(controllers.routes.CheckYourAnswersController.onLoad())
+            case _ => Redirect(controllers.routes.RepresentativeDanImportVATController.onLoad())
           }
         }
       }
