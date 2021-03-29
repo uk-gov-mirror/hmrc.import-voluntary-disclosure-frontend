@@ -1,0 +1,74 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@import views.ViewUtils.hint
+
+@this(layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        h1: components.h1,
+        errorSummary: components.errorSummary,
+        button: components.button,
+        inputText: components.inputText,
+        inputRadio: components.inputRadio
+)
+
+@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+
+    @layout(
+        pageTitle = messages("repDuty.pageTitle"),
+        form = Some(form),
+        customBackLinkUrl = Some(backLink)) {
+
+        @errorSummary(form.errors)
+
+        @h1(messages("repDuty.heading"))
+
+        @formHelper(action = controllers.routes.RepresentativeDanDutyController.onSubmit()) {
+            @inputText(form, "accountNumber", "accountNumber", messages("repDan.accountNumberLabel"), false, classes = Some("govuk-fieldset__legend govuk-input--width-10"))
+            @inputRadio(
+                form = form,
+                legend = messages("repDan.radioLabel"),
+                items = Seq(
+                            RadioItem(
+                                value = Some("A"),
+                                content = Text(messages("repDan.radio1")),
+                                hint = None,
+                                checked = form("value").value.contains("A")
+                            ),
+                            RadioItem(
+                                value = Some("B"),
+                                content = Text(messages("repDan.radio2")),
+                                hint = Some(hint("repDan.radio2.hint")),
+                                checked = form("value").value.contains("B")
+                            ),
+                            RadioItem(
+                                value = Some("C"),
+                                content = Text(messages("repDan.radio3")),
+                                hint = None,
+                                checked = form("value").value.contains("C")
+                            )
+                        ),
+                legendAsHeading = false,
+                classes = "govuk-fieldset__legend"
+            )
+            @button("common.button.continue")
+
+        }
+    }
+
+    @{
+        //$COVERAGE-OFF$
+    }

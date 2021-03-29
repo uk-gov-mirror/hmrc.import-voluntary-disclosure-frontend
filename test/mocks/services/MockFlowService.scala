@@ -35,5 +35,10 @@ trait MockFlowService extends SpecBase with MockFactory {
         .expects(*)
         .returns(response)
     }
+    def dutyType(response: String) = {
+      (mockFlowService.dutyType(_))
+        .expects(*)
+        .returns(response)
+    }
   }
 }

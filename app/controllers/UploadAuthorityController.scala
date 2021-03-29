@@ -48,9 +48,9 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
                                           implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  private def backLink(currentDutyType: String, dan: String, selectedDutyTypes: String, splitPayment: Boolean): Call = {
+  private[controllers] def backLink(currentDutyType: String, dan: String, selectedDutyTypes: String, splitPayment: Boolean): Call = {
     selectedDutyTypes match {
-      case "both" if splitPayment && currentDutyType=="duty" => controllers.routes.UploadAuthorityController.onLoad(currentDutyType, dan) // RepDanDuty
+      case "both" if splitPayment && currentDutyType=="duty" => controllers.routes.RepresentativeDanDutyController.onLoad()
       case "both" if splitPayment && currentDutyType=="vat" => controllers.routes.UploadAuthorityController.onLoad(currentDutyType, dan) // RepDanVat
       case _ => controllers.routes.RepresentativeDanController.onLoad()
     }
@@ -109,8 +109,8 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
       case Some(doc) => doc.fileStatus match {
         case Some(status) if (status == FileStatusEnum.READY) => {
            val newAuthority: UploadAuthority = UploadAuthority(
-            dan = request.session.get("dan").getOrElse("Deferment Account not found"),
-            dutyType = request.session.get("dutyType").getOrElse("Underpayment Type not found"),
+            dan,
+            dutyType,
             file = FileUploadInfo(
               fileName = doc.fileName.get,
               downloadUrl = doc.downloadUrl.get,

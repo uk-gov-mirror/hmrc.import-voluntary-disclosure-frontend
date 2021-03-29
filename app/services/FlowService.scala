@@ -16,13 +16,15 @@
 
 package services
 
+import config.AppConfig
 import models.{UnderpaymentType, UserAnswers, UserType}
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
 
-import javax.inject.Singleton
+import javax.inject.{Inject, Singleton}
 
 @Singleton
-class FlowService {
+class FlowService @Inject()(implicit val appConfig: AppConfig) {
 
   def isRepFlow(userAnswers: UserAnswers): Boolean =
     userAnswers.get(UserTypePage) match {
@@ -36,12 +38,32 @@ class FlowService {
       case _ => false
     }
 
+  // TODO - old way for duty needs to be taken out when feature switch is taken out
   def dutyType(userAnswers: UserAnswers): String = {
-    userAnswers.get(UnderpaymentTypePage) match {
-      case Some(UnderpaymentType(false, true, false)) => "vat"
-      case Some(UnderpaymentType(_, false, _)) => "duty"
-      case Some(_) => "both"
-      case _ => "none"
+    if (appConfig.useOldUnderpaymentType) {
+      userAnswers.get(UnderpaymentTypePage) match {
+        case Some(UnderpaymentType(false, true, false)) => "vat"
+        case Some(UnderpaymentType(_, false, _)) => "duty"
+        case Some(_) => "both"
+        case _ => "none"
+      }
+    } else {
+      userAnswers.get(UnderpaymentDetailSummaryPage) match {
+        case Some(value) =>
+          val vatOnly = value.count(underpayment => underpayment.duty == "B00") == 1 && value.length == 1
+          val dutyOnly = value.count(underpayment => underpayment.duty != "B00") == 1 && value.length == 1
+          val dutyAndVAT = value.count(underpayment => underpayment.duty == "B00") == 1 && value.length > 1
+          if (vatOnly) {
+            "vat"
+          } else if (dutyOnly) {
+            "duty"
+          } else if (dutyAndVAT) {
+            "both"
+          } else {
+            "none"
+          }
+        case _ => "none"
+      }
     }
   }
 

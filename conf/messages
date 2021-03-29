@@ -155,26 +155,27 @@ underpaymentTypeTemp.D10.radio = Compensatory Duty (D10)
 # Underpayment Details
 underpaymentDetails.originalAmount = Amount that was paid to HMRC
 underpaymentDetails.amendedAmount = Amount that should have been paid
-underpaymentDetails.B00.pageTitle = Import VAT underpayment details
-underpaymentDetails.B00.pageHeader = Import VAT underpayment details
-underpaymentDetails.A00.pageTitle = Customs Duty underpayment details
-underpaymentDetails.A00.pageHeader = Customs Duty underpayment details
-underpaymentDetails.E00.pageTitle = Excise duty underpayment details
-underpaymentDetails.E00.pageHeader = Excise duty underpayment details
-underpaymentDetails.A20.pageTitle = Additional Duty underpayment details
-underpaymentDetails.A20.pageHeader = Additional Duty underpayment details
-underpaymentDetails.A30.pageTitle = Definitive Anti-Dumping Duty underpayment details
-underpaymentDetails.A30.pageHeader = Definitive Anti-Dumping Duty underpayment details
-underpaymentDetails.A35.pageTitle = Provisional Anti-Dumping Duty underpayment details
-underpaymentDetails.A35.pageHeader = Provisional Anti-Dumping Duty underpayment details
-underpaymentDetails.A40.pageTitle = Definitive Countervailing Duty underpayment details
-underpaymentDetails.A40.pageHeader = Definitive Countervailing Duty underpayment details
-underpaymentDetails.A45.pageTitle = Provisional Countervailing Duty underpayment details
-underpaymentDetails.A45.pageHeader = Provisional Countervailing Duty underpayment details
-underpaymentDetails.A10.pageTitle = Customs Duty on Agricultural Products underpayment details
-underpaymentDetails.A10.pageHeader = Customs Duty on Agricultural Products underpayment details
-underpaymentDetails.D10.pageTitle = Compensatory Duty underpayment details
-underpaymentDetails.D10.pageHeader = Compensatory Duty underpayment details
+underpaymentDetails.dutyMessageEnding = ' underpayment details'
+underpaymentDetails.B00.pageTitle = Import VAT
+underpaymentDetails.B00.pageHeader = Import VAT
+underpaymentDetails.A00.pageTitle = Customs Duty
+underpaymentDetails.A00.pageHeader = Customs Duty
+underpaymentDetails.E00.pageTitle = Excise duty
+underpaymentDetails.E00.pageHeader = Excise duty
+underpaymentDetails.A20.pageTitle = Additional Duty
+underpaymentDetails.A20.pageHeader = Additional Duty
+underpaymentDetails.A30.pageTitle = Definitive Anti-Dumping Duty
+underpaymentDetails.A30.pageHeader = Definitive Anti-Dumping Duty
+underpaymentDetails.A35.pageTitle = Provisional Anti-Dumping Duty
+underpaymentDetails.A35.pageHeader = Provisional Anti-Dumping Duty
+underpaymentDetails.A40.pageTitle = Definitive Countervailing Duty
+underpaymentDetails.A40.pageHeader = Definitive Countervailing Duty
+underpaymentDetails.A45.pageTitle = Provisional Countervailing Duty
+underpaymentDetails.A45.pageHeader = Provisional Countervailing Duty
+underpaymentDetails.A10.pageTitle = Customs Duty on Agricultural Products
+underpaymentDetails.A10.pageHeader = Customs Duty on Agricultural Products
+underpaymentDetails.D10.pageTitle = Compensatory Duty
+underpaymentDetails.D10.pageHeader = Compensatory Duty
 underpaymentDetails.error.originalNonEmpty = Enter the amount that was paid to HMRC, in pounds
 underpaymentDetails.error.originalNonNumber = Amount that was paid to HMRC must be a number like 7235 or 67.39
 underpaymentDetails.error.originalOutOfRange = Amount that was paid to HMRC must be between £0 and £9,999,999,999.99
@@ -182,6 +183,40 @@ underpaymentDetails.error.amendedNonEmpty = Enter the amount that should have be
 underpaymentDetails.error.amendedNonNumber = Amount that should have been paid must be a number like 7235 or 67.39
 underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
 underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
+
+# Underpayment Details Summary
+underpaymentDetailsConfirm.B00.pageTitle = Confirm the import VAT underpayment details
+underpaymentDetailsConfirm.B00.pageHeader = Confirm the import VAT underpayment details
+underpaymentDetailsConfirm.A00.pageTitle = Confirm the Customs Duty underpayment details
+underpaymentDetailsConfirm.A00.pageHeader = Confirm the Customs Duty underpayment details
+underpaymentDetailsConfirm.E00.pageTitle = Confirm the excise duty underpayment details
+underpaymentDetailsConfirm.E00.pageHeader = Confirm the excise duty underpayment details
+underpaymentDetailsConfirm.A20.pageTitle = Confirm the Additional Duty underpayment details
+underpaymentDetailsConfirm.A20.pageHeader = Confirm the Additional Duty underpayment details
+underpaymentDetailsConfirm.A30.pageTitle = Confirm the Definitive Anti-Dumping Duty underpayment details
+underpaymentDetailsConfirm.A30.pageHeader = Confirm the Definitive Anti-Dumping Duty underpayment details
+underpaymentDetailsConfirm.A35.pageTitle = Confirm the Provisional Anti-Dumping Duty underpayment details
+underpaymentDetailsConfirm.A35.pageHeader = Confirm the Provisional Anti-Dumping Duty underpayment details
+underpaymentDetailsConfirm.A40.pageTitle = Confirm the Definitive Countervailing Duty underpayment details
+underpaymentDetailsConfirm.A40.pageHeader = Confirm the Definitive Countervailing Duty underpayment details
+underpaymentDetailsConfirm.A45.pageTitle = Confirm the Provisional Countervailing Duty underpayment details
+underpaymentDetailsConfirm.A45.pageHeader = Confirm the Provisional Countervailing Duty underpayment details
+underpaymentDetailsConfirm.A10.pageTitle = Confirm the Customs Duty on Agricultural Products underpayment details
+underpaymentDetailsConfirm.A10.pageHeader = Confirm the Customs Duty on Agricultural Products underpayment details
+underpaymentDetailsConfirm.D10.pageTitle = Confirm the Compensatory Duty underpayment details
+underpaymentDetailsConfirm.D10.pageHeader = Confirm the Compensatory Duty underpayment details
+underpaymentDetailsConfirm.originalAmount = Amount that was paid to HMRC
+underpaymentDetailsConfirm.amendedAmount = Amount that should have been paid
+underpaymentDetailsConfirm.B00.dueToHmrc = Import VAT owed to HMRC
+underpaymentDetailsConfirm.A00.dueToHmrc = Customs Duty owed to HMRC
+underpaymentDetailsConfirm.E00.dueToHmrc = Excise duty owed to HMRC
+underpaymentDetailsConfirm.A20.dueToHmrc = Additional Duty owed to HMRC
+underpaymentDetailsConfirm.A30.dueToHmrc = Definitive Anti-Dumping Duty owed to HMRC
+underpaymentDetailsConfirm.A35.dueToHmrc = Provisional Anti-Dumping Duty owed to HMRC
+underpaymentDetailsConfirm.A40.dueToHmrc = Definitive Countervailing Duty owed to HMRC
+underpaymentDetailsConfirm.A45.dueToHmrc = Provisional Countervailing Duty owed to HMRC
+underpaymentDetailsConfirm.A10.dueToHmrc = Customs Duty on Agricultural Products owed to HMRC
+underpaymentDetailsConfirm.D10.dueToHmrc = Compensatory Duty owed to HMRC
 
 # Customs Duty page
 customsDuty.pageTitle = Customs Duty underpayment details
@@ -524,7 +559,7 @@ splitPayment.yes = Yes, I want to use two deferment accounts
 splitPayment.no = No, I want to use one deferment account
 splitPayment.error.required = Select yes if you want to split payment between two deferment accounts
 
-# Representative Dan One page
+# Representative Dan page
 repDan.pageTitle = Deferment account details
 repDan.heading = Deferment account details
 repDan.accountNumberLabel = Deferment account number
@@ -536,6 +571,10 @@ repDan.radio3 = The importer’s account and I have standing authority to use it
 repDan.error.input.required = Enter the deferment account number
 repDan.error.input.format = Enter the deferment account number in the correct format, like 1234567
 repDan.error.radio.required = Select whose deferment account this is
+
+# Representative Dan Duty page
+repDuty.pageTitle = Deferment account details for the duty owed
+repDuty.heading = Deferment account details for the duty owed
 
 # Upload Authority page
 uploadAuthority.pageTitle = Upload proof of authority to use this deferment account

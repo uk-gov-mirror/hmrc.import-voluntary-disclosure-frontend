@@ -34,6 +34,18 @@ import scala.concurrent.Future
 
 class SplitPaymentControllerSpec extends ControllerSpecBase {
 
+  val splitPaymentValue: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+    .set(
+      SplitPaymentPage,
+      true
+    ).success.value
+  )
+
+  private def fakeRequestGenerator(value: String): FakeRequest[AnyContentAsFormUrlEncoded] =
+    fakeRequest.withFormUrlEncodedBody(
+      "value" -> value
+    )
+
   trait Test extends MockSessionRepository {
     private lazy val splitPaymentView: SplitPaymentView = app.injector.instanceOf[SplitPaymentView]
 
@@ -87,7 +99,16 @@ class SplitPaymentControllerSpec extends ControllerSpecBase {
       "return the correct location header" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
-        redirectLocation(result) mustBe Some(controllers.routes.SplitPaymentController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.RepresentativeDanDutyController.onLoad().url)
+      }
+
+      "return a SEE OTHER split payment response when correct data is sent" in new Test {
+        override val userAnswers: Option[UserAnswers] = splitPaymentValue
+        lazy val result: Future[Result] = controller.onSubmit(
+          fakeRequestGenerator("false")
+        )
+        status(result) mustBe Status.SEE_OTHER
+        redirectLocation(result) mustBe Some(controllers.routes.RepresentativeDanController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
