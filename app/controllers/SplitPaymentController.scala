@@ -18,8 +18,9 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.SplitPaymentFormProvider
+
 import javax.inject.{Inject, Singleton}
-import pages.{AdditionalDefermentNumberPage, DefermentAccountPage, DefermentTypePage, SplitPaymentPage}
+import pages.{AdditionalDefermentNumberPage, DefermentAccountPage, DefermentTypePage, SplitPaymentPage, UploadAuthorityPage}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
@@ -67,6 +68,7 @@ class SplitPaymentController @Inject()(identify: IdentifierAction,
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(DefermentTypePage))
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(DefermentAccountPage))
               updatedAnswers <- Future.fromTry(updatedAnswers.remove(AdditionalDefermentNumberPage))
+              updatedAnswers <- Future.fromTry(updatedAnswers.remove(UploadAuthorityPage))
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
               redirectTo(value)

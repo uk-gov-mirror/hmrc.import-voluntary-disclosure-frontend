@@ -43,7 +43,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     paymentByDeferment = true,
     defermentType = None,
     defermentAccountNumber = Some("1234567"),
-    additionalDefermentNumber = None,
+    additionalDefermentAccountNumber = None,
     underpaymentDetails = Seq(
       UnderpaymentDetail("customsDuty", BigDecimal(123.0), BigDecimal(233.33)),
       UnderpaymentDetail("importVat", BigDecimal(111.11), BigDecimal(1234.0)),
@@ -81,6 +81,7 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(DefermentAccountPage, "1234567")
     answers <- answers.set(MoreInformationPage, "some text")
     answers <- answers.set(UnderpaymentReasonsPage, submission.amendedItems)
+    answers <- answers.set(SplitPaymentPage, false)
   } yield answers).getOrElse(new UserAnswers("some-cred-id"))
 
   val userAnswersJson: JsValue = userAnswers.data
@@ -221,7 +222,9 @@ class IvdSubmissionSpec extends ModelSpecBase {
         importerName = Some("Importer Inc."),
         importerAddress = Some(address),
         defermentType = Some("B"),
-        additionalDefermentNumber = Some("C1234567")
+        additionalDefermentAccountNumber = Some("1234567"),
+        additionalDefermentType = Some("C"),
+        splitDeferment = true
       )
 
       implicit lazy val result: JsValue = Json.toJson(repSubmission)

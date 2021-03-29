@@ -247,10 +247,10 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
     "return link to Rep Vat Dan" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, true).success.value)
       val result = controller.backLink("vat", dan, "both", true)
-      result mustBe controllers.routes.UploadAuthorityController.onLoad("vat", dan)
+      result mustBe controllers.routes.RepresentativeDanImportVATController.onLoad()
     }
     "return link to Rep Dan" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, true).success.value)
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, false).success.value)
       val result = controller.backLink("both", dan, "both", true)
       result mustBe controllers.routes.RepresentativeDanController.onLoad()
     }

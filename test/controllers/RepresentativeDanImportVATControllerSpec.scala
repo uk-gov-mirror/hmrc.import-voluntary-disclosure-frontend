@@ -21,15 +21,15 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.RepresentativeDanFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.{DefermentAccountPage, DefermentTypePage}
+import pages.{AdditionalDefermentNumberPage, AdditionalDefermentTypePage, DefermentAccountPage, DefermentTypePage}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import views.html.RepresentativeDanDutyView
+import views.html.RepresentativeDanImportVATView
 
 import scala.concurrent.Future
 
-class RepresentativeDanDutyControllerSpec extends ControllerSpecBase {
+class RepresentativeDanImportVATControllerSpec extends ControllerSpecBase {
 
   def buildForm(accountNumber: Option[String] = Some("1234567"),
                 danType: Option[String] = Some("A")): Seq[(String, String)] =
@@ -39,7 +39,7 @@ class RepresentativeDanDutyControllerSpec extends ControllerSpecBase {
       )
 
   trait Test extends MockSessionRepository {
-    private lazy val representativeDanDutyView: RepresentativeDanDutyView = app.injector.instanceOf[RepresentativeDanDutyView]
+    private lazy val representativeDanView: RepresentativeDanImportVATView = app.injector.instanceOf[RepresentativeDanImportVATView]
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
@@ -49,11 +49,11 @@ class RepresentativeDanDutyControllerSpec extends ControllerSpecBase {
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new RepresentativeDanDutyController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, messagesControllerComponents, representativeDanDutyView, form)
+    lazy val controller = new RepresentativeDanImportVATController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+      mockSessionRepository, messagesControllerComponents, representativeDanView, form)
   }
 
-  "GET Representative Dan Duty page" should {
+  "GET Representative Dan Import VAT page" should {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
@@ -63,8 +63,8 @@ class RepresentativeDanDutyControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] =
         Some(
           UserAnswers("some-cred-id")
-            .set(DefermentTypePage, "A").success.value
-            .set(DefermentAccountPage, "1234567").success.value
+            .set(AdditionalDefermentTypePage, "A").success.value
+            .set(AdditionalDefermentNumberPage, "1234567").success.value
         )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
@@ -72,37 +72,35 @@ class RepresentativeDanDutyControllerSpec extends ControllerSpecBase {
     }
 
     "the backLink functionality is called" should {
-      "redirect to the split payments page" in new Test {
-        override val userAnswers: Option[UserAnswers] = Some(
-          UserAnswers("some-cred-id")
-        )
-        controller.backLink mustBe controllers.routes.SplitPaymentController.onLoad()
+      "redirect to the representative duty page" in new Test {
+        controller.backLink mustBe controllers.routes.RepresentativeDanDutyController.onLoad()
       }
+
     }
   }
 
-  "POST Representative Duty Dan" when {
+  "POST Representative Dan Import VAT page" when {
     "payload contains valid data" should {
 
       "return a SEE OTHER response and redirect to correct location when dan type is A" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody(buildForm(accountNumber = Some("1234567"), danType = Some("A")): _*)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.RepresentativeDanImportVATController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.CheckYourAnswersController.onLoad().url)
       }
 
       "return a SEE OTHER response and redirect to correct location when dan type is B" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody(buildForm(accountNumber = Some("1234567"), danType = Some("B")): _*)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.UploadAuthorityController.onLoad("duty", "1234567").url)
+        redirectLocation(result) mustBe Some(controllers.routes.UploadAuthorityController.onLoad("vat", "1234567").url)
       }
 
       "return a SEE OTHER response and redirect to correct location when dan type is C" in new Test {
         private val request = fakeRequest.withFormUrlEncodedBody(buildForm(accountNumber = Some("1234567"), danType = Some("C")): _*)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.RepresentativeDanImportVATController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.CheckYourAnswersController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {

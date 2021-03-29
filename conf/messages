@@ -576,6 +576,10 @@ repDan.error.radio.required = Select whose deferment account this is
 repDuty.pageTitle = Deferment account details for the duty owed
 repDuty.heading = Deferment account details for the duty owed
 
+# Representative Dan Import page
+repImportVat.pageTitle = Deferment account details for the import VAT owed
+repImportVat.heading = Deferment account details for the import VAT owed
+
 # Upload Authority page
 uploadAuthority.pageTitle = Upload proof of authority to use this deferment account
 uploadAuthority.pageHeader = Upload proof of authority to use this deferment account

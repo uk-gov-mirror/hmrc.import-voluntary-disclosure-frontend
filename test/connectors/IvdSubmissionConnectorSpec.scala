@@ -57,7 +57,7 @@ class IvdSubmissionConnectorSpec extends SpecBase with MockHttp with ReusableVal
       paymentByDeferment = false,
       defermentType = None,
       defermentAccountNumber = None,
-      additionalDefermentNumber = None
+      additionalDefermentAccountNumber = None
     )
 
     val submissionResponse = SubmissionResponse("1234")

@@ -51,7 +51,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
   private[controllers] def backLink(currentDutyType: String, dan: String, selectedDutyTypes: String, splitPayment: Boolean): Call = {
     selectedDutyTypes match {
       case "both" if splitPayment && currentDutyType=="duty" => controllers.routes.RepresentativeDanDutyController.onLoad()
-      case "both" if splitPayment && currentDutyType=="vat" => controllers.routes.UploadAuthorityController.onLoad(currentDutyType, dan) // RepDanVat
+      case "both" if splitPayment && currentDutyType=="vat" => controllers.routes.RepresentativeDanImportVATController.onLoad()
       case _ => controllers.routes.RepresentativeDanController.onLoad()
     }
   }
@@ -120,9 +120,9 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
             )
           )
 
-          val updatedList = request.userAnswers.get(UploadAuthorityPage).getOrElse(Seq.empty) ++ Seq(newAuthority)
+          val newList = request.userAnswers.get(UploadAuthorityPage).getOrElse(Seq.empty).filterNot(_.dutyType==dutyType) ++ Seq(newAuthority)
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UploadAuthorityPage, updatedList)(UploadAuthorityPage.queryWrites))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UploadAuthorityPage, newList)(UploadAuthorityPage.queryWrites))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
             Redirect(controllers.routes.UploadAuthorityController.onSuccess(dutyType, dan))
@@ -144,7 +144,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
     val splitPayment = request.userAnswers.get(SplitPaymentPage).getOrElse(false)
 
     val action = flowService.dutyType(request.userAnswers) match {
-      case "both" if splitPayment && dutyType=="duty" => controllers.routes.UploadAuthorityController.onLoad(dutyType, dan).url
+      case "both" if splitPayment && dutyType=="duty" => controllers.routes.RepresentativeDanImportVATController.onLoad().url
       case _ => controllers.routes.CheckYourAnswersController.onLoad().url
     }
 

@@ -38,11 +38,14 @@ case class IvdSubmission(userType: UserType,
                          paymentByDeferment: Boolean,
                          defermentType: Option[String] = None,
                          defermentAccountNumber: Option[String] = None,
-                         additionalDefermentNumber: Option[String] = None,
+                         additionalDefermentAccountNumber: Option[String] = None,
+                         additionalDefermentType: Option[String] = None,
                          amendedItems: Seq[UnderpaymentReason] = Seq.empty,
                          underpaymentDetails: Seq[UnderpaymentDetail] = Seq.empty,
                          documentsSupplied: Seq[String] = Seq.empty,
-                         supportingDocuments: Seq[FileUploadInfo] = Seq.empty)
+                         supportingDocuments: Seq[FileUploadInfo] = Seq.empty,
+                         splitDeferment: Boolean = false
+                        )
 
 object IvdSubmission extends FixedConfig {
   implicit val writes: Writes[IvdSubmission] = (data: IvdSubmission) => {
@@ -89,19 +92,19 @@ object IvdSubmission extends FixedConfig {
     }
 
     val defermentDetails = if (data.paymentByDeferment) {
-      (data.defermentType, data.defermentAccountNumber, data.additionalDefermentNumber) match {
-        case (Some(dt), Some(dan), Some(add)) if data.userType == UserType.Representative => // TODO: Needs guard to check user has selected split
+      (data.defermentType, data.defermentAccountNumber, data.additionalDefermentAccountNumber, data.additionalDefermentType) match {
+        case (Some(dt), Some(dan), Some(addDan), Some(addDT)) if data.userType == UserType.Representative && data.splitDeferment =>
           Json.obj(
             "defermentType" -> dt,
             "defermentAccountNumber" -> s"$dt$dan",
-            "additionalDefermentAccountNumber" -> add // TODO: This needs to include the additionalDefermentType on the front
+            "additionalDefermentAccountNumber" -> s"$addDT$addDan"
           )
-        case (Some(dt), Some(dan), _) if data.userType == UserType.Representative =>
+        case (Some(dt), Some(dan), _, _) if data.userType == UserType.Representative =>
           Json.obj(
             "defermentType" -> dt,
             "defermentAccountNumber" -> s"$dt$dan"
           )
-        case (_, Some(dan), _) if data.userType == UserType.Importer =>
+        case (_, Some(dan), _, _) if data.userType == UserType.Importer =>
           Json.obj(
             "defermentType" -> "D",
             "defermentAccountNumber" -> s"D$dan"
@@ -151,8 +154,10 @@ object IvdSubmission extends FixedConfig {
       defermentType <- DefermentTypePage.path.readNullable[String]
       defermentAccountNumber <- DefermentAccountPage.path.readNullable[String]
       additionalDefermentNumber <- AdditionalDefermentNumberPage.path.readNullable[String]
+      additionalDefermentType <- AdditionalDefermentTypePage.path.readNullable[String]
       additionalInfo <- MoreInformationPage.path.readNullable[String]
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
+      splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
     } yield {
 
       val underpaymentDetails = Seq(
@@ -187,9 +192,11 @@ object IvdSubmission extends FixedConfig {
         paymentByDeferment = paymentByDeferment,
         defermentType = defermentType,
         defermentAccountNumber = defermentAccountNumber,
-        additionalDefermentNumber = additionalDefermentNumber,
+        additionalDefermentAccountNumber = additionalDefermentNumber,
+        additionalDefermentType = additionalDefermentType,
         additionalInfo = additionalInfo.getOrElse("Not Applicable"),
-        amendedItems = amendedItems
+        amendedItems = amendedItems,
+        splitDeferment = splitDeferment.getOrElse(false)
       )
     }
 }
