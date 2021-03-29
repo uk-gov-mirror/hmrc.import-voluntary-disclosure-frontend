@@ -35,7 +35,7 @@ class UploadAuthorityViewSpec extends ViewBaseSpec {
     UpScanInitiateResponse(Reference("Upscan Ref"), UploadFormTemplate("url", Map.empty))
   private val backLink: Call = Call("GET", "url")
 
-  "Rendering the UploadFile page" when {
+  "Rendering the UploadAuthorityFile page" when {
     lazy val view: Html = injectedView(initiateResponse, backLink, dan, dutyTypeKey)(fakeRequest, MockAppConfig, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -50,10 +50,32 @@ class UploadAuthorityViewSpec extends ViewBaseSpec {
     s"have the correct file upload control file types" in {
       element(".govuk-file-upload").attr("accept") mustBe MockAppConfig.upScanAcceptedFileTypes
     }
-    
+
+    s"have the correct text for duty only" in {
+      val dutyType = "duty"
+      lazy val view: Html = injectedView(initiateResponse, backLink, dan, dutyType)(fakeRequest, MockAppConfig, messages)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      elementText("#main-content p:nth-of-type(1)") mustBe UploadAuthorityMessages.para1(dan, dutyType)
+    }
+
+    s"have the correct text for vat only" in {
+      val dutyType = "vat"
+      lazy val view: Html = injectedView(initiateResponse, backLink, dan, dutyType)(fakeRequest, MockAppConfig, messages)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      elementText("#main-content p:nth-of-type(1)") mustBe UploadAuthorityMessages.para1(dan, dutyType)
+    }
+
+    s"have the correct text for both duty and vat" in {
+      val dutyType = "both"
+      lazy val view: Html = injectedView(initiateResponse, backLink, dan, dutyType)(fakeRequest, MockAppConfig, messages)
+      lazy implicit val document: Document = Jsoup.parse(view.body)
+
+      elementText("#main-content p:nth-of-type(1)") mustBe UploadAuthorityMessages.para1(dan, dutyType)
+    }
+
   }
-
-
 
   it should {
     lazy val view: Html = injectedView(initiateResponse, backLink, dan, dutyTypeKey)(fakeRequest, MockAppConfig, messages)
@@ -87,15 +109,6 @@ class UploadAuthorityViewSpec extends ViewBaseSpec {
       elementText(".govuk-button") mustBe UploadAuthorityMessages.button
     }
 
-  }
-
-  Seq("duty", "vat", "both").map { dutyType =>
-    lazy val view: Html = injectedView(initiateResponse, backLink, dan, dutyType)(fakeRequest, MockAppConfig, messages)
-    lazy implicit val document: Document = Jsoup.parse(view.body)
-
-    s"have the correct text of '${UploadAuthorityMessages.para1(dan, dutyType)}'" in {
-      elementText("#main-content p:nth-of-type(1)") mustBe UploadAuthorityMessages.para1(dan, dutyType)
-    }
   }
 
 }
