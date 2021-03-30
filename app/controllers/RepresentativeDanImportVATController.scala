@@ -20,12 +20,13 @@ import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.RepresentativeDanFormProvider
 import models.RepresentativeDan
-import pages.{AdditionalDefermentNumberPage, AdditionalDefermentTypePage, DefermentAccountPage, DefermentTypePage}
+import models.SelectedDutyTypes.Vat
+import pages.{AdditionalDefermentNumberPage, AdditionalDefermentTypePage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.{RepresentativeDanDutyView, RepresentativeDanImportVATView}
+import views.html.RepresentativeDanImportVATView
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -66,7 +67,7 @@ class RepresentativeDanImportVATController @Inject()(identify: IdentifierAction,
         } yield {
           dan.danType match {
             case "A" | "C" => Redirect(controllers.routes.CheckYourAnswersController.onLoad())
-            case _ => Redirect(controllers.routes.UploadAuthorityController.onLoad("vat", dan.accountNumber))
+            case _ => Redirect(controllers.routes.UploadAuthorityController.onLoad(Vat, dan.accountNumber))
           }
         }
       }

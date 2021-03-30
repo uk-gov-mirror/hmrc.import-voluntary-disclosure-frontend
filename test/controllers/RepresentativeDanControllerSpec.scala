@@ -20,10 +20,11 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.RepresentativeDanFormProvider
 import mocks.repositories.MockSessionRepository
+import models.SelectedDutyTypes.Neither
 import models.UserAnswers
 import pages.{DefermentAccountPage, DefermentPage, DefermentTypePage, SplitPaymentPage}
 import play.api.http.Status
-import play.api.mvc.{Call, Result}
+import play.api.mvc.Result
 import play.api.test.Helpers._
 import services.FlowService
 import views.html.RepresentativeDanView
@@ -104,7 +105,7 @@ class RepresentativeDanControllerSpec extends ControllerSpecBase {
         private val request = fakeRequest.withFormUrlEncodedBody(buildForm(accountNumber = Some("1234567"), danType = Some("B")): _*)
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.UploadAuthorityController.onLoad("none", "1234567").url)
+        redirectLocation(result) mustBe Some(controllers.routes.UploadAuthorityController.onLoad(Neither, "1234567").url)
       }
 
       "return a SEE OTHER response and redirect to correct location when dan type is C" in new Test {

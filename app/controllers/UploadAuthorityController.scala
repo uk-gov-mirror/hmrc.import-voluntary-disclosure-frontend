@@ -18,6 +18,7 @@ package controllers
 
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import models.SelectedDutyTypes._
 import models.{FileUploadInfo, UploadAuthority}
 import models.upscan._
 import pages.{SplitPaymentPage, UploadAuthorityPage}
@@ -48,20 +49,20 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
                                           implicit val appConfig: AppConfig)
   extends FrontendController(mcc) with I18nSupport {
 
-  private[controllers] def backLink(currentDutyType: String, dan: String, selectedDutyTypes: String, splitPayment: Boolean): Call = {
+  private[controllers] def backLink(currentDutyType: SelectedDutyType, dan: String, selectedDutyTypes: SelectedDutyType, splitPayment: Boolean): Call = {
     selectedDutyTypes match {
-      case "both" if splitPayment && currentDutyType=="duty" => controllers.routes.RepresentativeDanDutyController.onLoad()
-      case "both" if splitPayment && currentDutyType=="vat" => controllers.routes.RepresentativeDanImportVATController.onLoad()
+      case Both if splitPayment && currentDutyType == Duty => controllers.routes.RepresentativeDanDutyController.onLoad()
+      case Both if splitPayment && currentDutyType == Vat => controllers.routes.RepresentativeDanImportVATController.onLoad()
       case _ => controllers.routes.RepresentativeDanController.onLoad()
     }
   }
 
-  def onLoad(dutyType: String, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onLoad(dutyType: SelectedDutyType, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val splitPayment = request.userAnswers.get(SplitPaymentPage).getOrElse(false)
     val dutyTypeKey = dutyType match {
-      case "vat" => "uploadAuthority.vat"
-      case "duty" => "uploadAuthority.duty"
-      case "both" => "uploadAuthority.both"
+      case Vat => "uploadAuthority.vat"
+      case Duty => "uploadAuthority.duty"
+      case Both => "uploadAuthority.both"
       case _ => "Underpayment Type not found"
     }
 
@@ -72,7 +73,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
     }
   }
 
-  def upscanResponseHandler(dutyType: String,
+  def upscanResponseHandler(dutyType: SelectedDutyType,
                             dan: String,
                             key: Option[String] = None,
                             errorCode: Option[String] = None,
@@ -104,11 +105,11 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
     }
   }
 
-  def uploadProgress(dutyType: String, dan: String, key: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def uploadProgress(dutyType: SelectedDutyType, dan: String, key: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     fileUploadRepository.getRecord(key).flatMap {
       case Some(doc) => doc.fileStatus match {
         case Some(status) if (status == FileStatusEnum.READY) => {
-           val newAuthority: UploadAuthority = UploadAuthority(
+          val newAuthority: UploadAuthority = UploadAuthority(
             dan,
             dutyType,
             file = FileUploadInfo(
@@ -120,7 +121,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
             )
           )
 
-          val newList = request.userAnswers.get(UploadAuthorityPage).getOrElse(Seq.empty).filterNot(_.dutyType==dutyType) ++ Seq(newAuthority)
+          val newList = request.userAnswers.get(UploadAuthorityPage).getOrElse(Seq.empty).filterNot(_.dutyType == dutyType) ++ Seq(newAuthority)
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UploadAuthorityPage, newList)(UploadAuthorityPage.queryWrites))
             _ <- sessionRepository.set(updatedAnswers)
@@ -140,11 +141,11 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
     }
   }
 
-  def onSuccess(dutyType: String, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSuccess(dutyType: SelectedDutyType, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val splitPayment = request.userAnswers.get(SplitPaymentPage).getOrElse(false)
 
     val action = flowService.dutyType(request.userAnswers) match {
-      case "both" if splitPayment && dutyType=="duty" => controllers.routes.RepresentativeDanImportVATController.onLoad().url
+      case Both if splitPayment && dutyType == Duty => controllers.routes.RepresentativeDanImportVATController.onLoad().url
       case _ => controllers.routes.CheckYourAnswersController.onLoad().url
     }
 

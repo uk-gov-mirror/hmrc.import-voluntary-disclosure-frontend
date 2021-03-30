@@ -21,6 +21,7 @@ import controllers.actions.FakeDataRetrievalAction
 import mocks.config.MockAppConfig
 import mocks.repositories.{MockFileUploadRepository, MockSessionRepository}
 import mocks.services.{MockFlowService, MockUpScanService}
+import models.SelectedDutyTypes._
 import models.UserAnswers
 import models.upscan.{FileUpload, Reference, UpScanInitiateResponse, UploadFormTemplate}
 import pages.SplitPaymentPage
@@ -28,7 +29,7 @@ import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import views.html.{UploadAuthorityProgressView, UploadAuthoritySuccessView, UploadAuthorityView, UploadFileView, UploadProgressView}
+import views.html.{UploadAuthorityProgressView, UploadAuthoritySuccessView, UploadAuthorityView}
 
 import scala.concurrent.Future
 
@@ -67,7 +68,7 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
     val dan: String = "1234567"
-    val dutyType: String = "both"
+    val dutyType: SelectedDutyType = Both
 
     def setupMocks():Unit = {
       MockedFileUploadRepository.updateRecord(Future.successful(true))
@@ -96,25 +97,25 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
 
   "GET onLoad" should {
     "return OK when called for combine duty and vat" in new Test {
-      val result: Future[Result] = controller.onLoad("both", dan)(fakeRequest)
+      val result: Future[Result] = controller.onLoad(Both, dan)(fakeRequest)
 
       status(result) mustBe Status.OK
     }
 
     "return OK when called for duty" in new Test {
-      val result: Future[Result] = controller.onLoad("duty", dan)(fakeRequest)
+      val result: Future[Result] = controller.onLoad(Duty, dan)(fakeRequest)
 
       status(result) mustBe Status.OK
     }
 
     "return OK when called for vat" in new Test {
-      val result: Future[Result] = controller.onLoad("vat", dan)(fakeRequest)
+      val result: Future[Result] = controller.onLoad(Vat, dan)(fakeRequest)
 
       status(result) mustBe Status.OK
     }
 
     "return HTML" in new Test {
-      val result: Future[Result] = controller.onLoad("none", dan)(fakeRequest)
+      val result: Future[Result] = controller.onLoad(Neither, dan)(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
@@ -231,7 +232,7 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
     }
     "return HTML with Continue action to Representative VAT Dan" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, true).success.value)
-      val result: Future[Result] = controller.onSuccess("duty", dan)(fakeRequest)
+      val result: Future[Result] = controller.onSuccess(Duty, dan)(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
@@ -241,17 +242,17 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
   "backLink" should {
     "return link to Rep Duty Dan" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, true).success.value)
-      val result = controller.backLink("duty", dan, "both", true)
+      val result = controller.backLink(Duty, dan, Both, true)
       result mustBe controllers.routes.RepresentativeDanDutyController.onLoad()
     }
     "return link to Rep Vat Dan" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, true).success.value)
-      val result = controller.backLink("vat", dan, "both", true)
+      val result = controller.backLink(Vat, dan, Both, true)
       result mustBe controllers.routes.RepresentativeDanImportVATController.onLoad()
     }
     "return link to Rep Dan" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(SplitPaymentPage, false).success.value)
-      val result = controller.backLink("both", dan, "both", true)
+      val result = controller.backLink(Both, dan, Both, true)
       result mustBe controllers.routes.RepresentativeDanController.onLoad()
     }
   }

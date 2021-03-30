@@ -16,10 +16,11 @@
 
 package models
 
+import models.SelectedDutyTypes.SelectedDutyType
 import play.api.libs.json.{Json, Reads, Writes}
 
 case class UploadAuthority(dan: String,
-                           dutyType: String,
+                           dutyType: SelectedDutyType,
                            file: FileUploadInfo
                          )
 

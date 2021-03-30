@@ -20,6 +20,7 @@ import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.RepresentativeDanFormProvider
 import models.RepresentativeDan
+import models.SelectedDutyTypes.Duty
 import pages.{DefermentAccountPage, DefermentTypePage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -66,7 +67,7 @@ class RepresentativeDanDutyController @Inject()(identify: IdentifierAction,
         } yield {
           dan.danType match {
             case "A" | "C" => Redirect(controllers.routes.RepresentativeDanImportVATController.onLoad())
-            case _ => Redirect(controllers.routes.UploadAuthorityController.onLoad("duty", dan.accountNumber))
+            case _ => Redirect(controllers.routes.UploadAuthorityController.onLoad(Duty, dan.accountNumber))
           }
         }
       }

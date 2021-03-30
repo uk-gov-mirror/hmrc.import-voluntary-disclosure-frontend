@@ -17,6 +17,7 @@
 package services
 
 import config.AppConfig
+import models.SelectedDutyTypes._
 import models.{UnderpaymentType, UserAnswers, UserType}
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
@@ -39,31 +40,26 @@ class FlowService @Inject()(implicit val appConfig: AppConfig) {
     }
 
   // TODO - old way for duty needs to be taken out when feature switch is taken out
-  def dutyType(userAnswers: UserAnswers): String = {
+  def dutyType(userAnswers: UserAnswers): SelectedDutyType = {
     if (appConfig.useOldUnderpaymentType) {
       userAnswers.get(UnderpaymentTypePage) match {
-        case Some(UnderpaymentType(false, true, false)) => "vat"
-        case Some(UnderpaymentType(_, false, _)) => "duty"
-        case Some(_) => "both"
-        case _ => "none"
+        case Some(UnderpaymentType(false, true, false)) => Vat
+        case Some(UnderpaymentType(_, false, _)) => Duty
+        case Some(_) => Both
+        case _ => Neither
       }
     } else {
-      userAnswers.get(UnderpaymentDetailSummaryPage) match {
-        case Some(value) =>
-          val vatOnly = value.count(underpayment => underpayment.duty == "B00") == 1 && value.length == 1
-          val dutyOnly = value.count(underpayment => underpayment.duty != "B00") == 1 && value.length == 1
-          val dutyAndVAT = value.count(underpayment => underpayment.duty == "B00") == 1 && value.length > 1
-          if (vatOnly) {
-            "vat"
-          } else if (dutyOnly) {
-            "duty"
-          } else if (dutyAndVAT) {
-            "both"
-          } else {
-            "none"
-          }
-        case _ => "none"
-      }
+      val vatUnderpaymentType: String = "B00"
+      userAnswers.get(UnderpaymentDetailSummaryPage).map { value =>
+        val vatExists = value.exists(_.duty == vatUnderpaymentType)
+        val dutyExists = value.exists(_.duty != vatUnderpaymentType)
+        (vatExists, dutyExists) match {
+          case (true, true) => Both
+          case (true, _) => Vat
+          case (_, true) => Duty
+          case _ => Neither
+        }
+      }.getOrElse(Neither)
     }
   }
 

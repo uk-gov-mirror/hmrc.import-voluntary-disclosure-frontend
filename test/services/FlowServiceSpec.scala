@@ -20,6 +20,7 @@ import base.SpecBase
 import config.AppConfig
 import models.UserType.{Importer, Representative}
 import models.{UnderpaymentDetail, UnderpaymentType, UserAnswers, UserType}
+import models.SelectedDutyTypes._
 import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
 import mocks.config.MockAppConfig
 import pages.underpayments.UnderpaymentDetailSummaryPage
@@ -64,26 +65,26 @@ class FlowServiceSpec extends SpecBase {
 
   "dutyType call" when {
     "using the oldUnderpayment feature" should {
-      "return vat if only vat is present" in new Test {
+      "return Vat if only Vat is present" in new Test {
         override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
           .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = false, importVAT = true, exciseDuty = false)).success.value
-        service.dutyType(setupUserAnswersForDutyType) mustBe "vat"
+        service.dutyType(setupUserAnswersForDutyType) mustBe Vat
       }
 
-      "return duty if only duty is present" in new Test {
+      "return Duty if only Duty is present" in new Test {
         override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
           .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = true)).success.value
-        service.dutyType(setupUserAnswersForDutyType) mustBe "duty"
+        service.dutyType(setupUserAnswersForDutyType) mustBe Duty
       }
 
-      "return both if both are present" in new Test {
+      "return Both if Both are present" in new Test {
         override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
           .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true)).success.value
-        service.dutyType(setupUserAnswersForDutyType) mustBe "both"
+        service.dutyType(setupUserAnswersForDutyType) mustBe Both
       }
 
-      "return none if none present" in new Test {
-        service.dutyType(setupUserAnswersForDutyType) mustBe "none"
+      "return Neither if Neither present" in new Test {
+        service.dutyType(setupUserAnswersForDutyType) mustBe Neither
       }
     }
   }

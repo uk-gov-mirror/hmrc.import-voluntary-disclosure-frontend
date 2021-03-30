@@ -232,7 +232,7 @@ POST        /disclosure/confirm-customs-duty-agricultural-products-underpayment-
 GET         /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "D10")
 POST        /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "D10")
 
-GET         /disclosure/upload-deferment-authority/:dutyType/:dan                              controllers.UploadAuthorityController.onLoad(dutyType: String, dan: String)
-GET         /disclosure/upload-deferment-authority/:dutyType/:dan/upscan-response              controllers.UploadAuthorityController.upscanResponseHandler(dutyType: String, dan: String, key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
-GET         /disclosure/upload-deferment-authority/:dutyType/:dan/polling                      controllers.UploadAuthorityController.uploadProgress(dutyType: String, dan: String, key: String)
-GET         /disclosure/upload-deferment-authority/:dutyType/:dan/success                      controllers.UploadAuthorityController.onSuccess(dutyType: String, dan: String)
+GET         /disclosure/upload-deferment-authority/:dutyType/:dan                              controllers.UploadAuthorityController.onLoad(dutyType: SelectedDutyType, dan: String)
+GET         /disclosure/upload-deferment-authority/:dutyType/:dan/upscan-response              controllers.UploadAuthorityController.upscanResponseHandler(dutyType: SelectedDutyType, dan: String, key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
+GET         /disclosure/upload-deferment-authority/:dutyType/:dan/polling                      controllers.UploadAuthorityController.uploadProgress(dutyType: SelectedDutyType, dan: String, key: String)
+GET         /disclosure/upload-deferment-authority/:dutyType/:dan/success                      controllers.UploadAuthorityController.onSuccess(dutyType: SelectedDutyType, dan: String)
