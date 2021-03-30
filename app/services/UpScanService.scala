@@ -37,8 +37,8 @@ class UpScanService @Inject()(upScanConnector: UpScanConnector,
 
   private[services] def buildAuthorityInitiateRequest(dutyType: String, dan: String): UpScanInitiateRequest = UpScanInitiateRequest(
     appConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload,
-    appConfig.upScanAuthoritySuccessRedirectForUser ++ s"/$dutyType/$dan/upscan-response",
-    appConfig.upScanAuthorityErrorRedirectForUser ++ s"/$dutyType/$dan/upscan-response",
+    appConfig.upScanAuthoritySuccessRedirectForUser + s"/$dutyType/$dan/upscan-response",
+    appConfig.upScanAuthorityErrorRedirectForUser + s"/$dutyType/$dan/upscan-response",
     appConfig.upScanMinFileSize,
     appConfig.upScanMaxFileSize
   )

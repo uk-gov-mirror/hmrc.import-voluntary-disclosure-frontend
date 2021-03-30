@@ -17,6 +17,7 @@
 package models
 
 import base.ModelSpecBase
+import models.SelectedDutyTypes._
 import models.underpayments.UnderpaymentAmount
 import pages._
 import play.api.libs.json._
@@ -348,6 +349,84 @@ class IvdSubmissionSpec extends ModelSpecBase {
 
       "generate the correct JSON without additionalDefermentNumber details" in {
         (result \ "additionalDefermentNumber").toOption shouldBe None
+      }
+
+    }
+
+    "split deferment option required" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address),
+        paymentByDeferment = true,
+        splitDeferment = true,
+        defermentAccountNumber = Some("1234567"),
+        defermentType = Some("B"),
+        additionalDefermentAccountNumber = Some("7654321"),
+        additionalDefermentType = Some("B"),
+        authorityDocuments = Seq(
+          UploadAuthority("1234567", Duty,
+            FileUploadInfo(
+              fileName = "TestDocument.pdf",
+              downloadUrl = "http://some/location",
+              uploadTimestamp = currentTimestamp,
+              checksum = "the file checksum",
+              fileMimeType = "application/pdf"
+            )),
+          UploadAuthority("7654321", Vat,
+            FileUploadInfo(
+              fileName = "TestDocument.pdf",
+              downloadUrl = "http://some/location",
+              uploadTimestamp = currentTimestamp,
+              checksum = "the file checksum",
+              fileMimeType = "application/pdf"
+            ))
+        )
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON with defermentType details" in {
+        data("defermentType") shouldBe JsString("B")
+      }
+
+      "generate the correct JSON with defermentAccountNumber details" in {
+        data("defermentAccountNumber") shouldBe JsString("B1234567")
+      }
+
+      "generate the correct JSON with additional defermentAccountNumber details" in {
+        data("additionalDefermentAccountNumber") shouldBe JsString("B7654321")
+      }
+
+      "generate the correct JSON with authority document type details" in {
+        data("supportingDocumentTypes") shouldBe Json.arr(JsString(DocumentTypes.DefermentAuthorisation))
+      }
+
+      "generate the correct JSON with additional supporting documents for authority" in {
+        data("supportingDocuments") shouldBe Json.arr(
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          ),
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          ),
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          )
+        )
       }
 
     }

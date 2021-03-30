@@ -23,10 +23,5 @@ object UploadAuthorityPage extends QuestionPage[Seq[UploadAuthority]] {
 
   override def path: JsPath = JsPath \ "uploaded-authority-files"
 
-  def queryWrites: Writes[Seq[UploadAuthority]] =
-    new Writes[Seq[UploadAuthority]] {
-      override def writes(authorities: Seq[UploadAuthority]): JsValue = JsArray(authorities.map { authority =>
-        Json.toJson(authority)
-      })
-    }
+  def queryWrites: Writes[Seq[UploadAuthority]] = (authorities: Seq[UploadAuthority]) => Json.toJson(authorities)
 }

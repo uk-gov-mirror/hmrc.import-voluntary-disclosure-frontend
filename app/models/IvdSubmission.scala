@@ -17,6 +17,7 @@
 package models
 
 import config.FixedConfig
+import models.DocumentTypes._
 import models.underpayments.UnderpaymentAmount
 import pages._
 import pages.underpayments.UnderpaymentDetailSummaryPage
@@ -42,9 +43,10 @@ case class IvdSubmission(userType: UserType,
                          additionalDefermentType: Option[String] = None,
                          amendedItems: Seq[UnderpaymentReason] = Seq.empty,
                          underpaymentDetails: Seq[UnderpaymentDetail] = Seq.empty,
-                         documentsSupplied: Seq[String] = Seq.empty,
+                         documentsSupplied: Seq[DocumentType] = Seq.empty,
                          supportingDocuments: Seq[FileUploadInfo] = Seq.empty,
-                         splitDeferment: Boolean = false
+                         splitDeferment: Boolean = false,
+                         authorityDocuments: Seq[UploadAuthority] = Seq.empty
                         )
 
 object IvdSubmission extends FixedConfig {
@@ -115,6 +117,13 @@ object IvdSubmission extends FixedConfig {
       Json.obj()
     }
 
+    val supportingDocuments = data.authorityDocuments.map(_.file) ++ data.supportingDocuments
+    val supportingDocumentTypes = if (data.authorityDocuments.isEmpty) {
+      data.documentsSupplied
+    } else {
+      data.documentsSupplied ++ Seq(DefermentAuthorisation)
+    }
+
     val payload = Json.obj(
       "userType" -> data.userType,
       "isBulkEntry" -> isBulkEntry,
@@ -124,9 +133,9 @@ object IvdSubmission extends FixedConfig {
       "customsProcessingCode" -> data.originalCpc,
       "declarantContactDetails" -> data.declarantContactDetails,
       "underpaymentDetails" -> data.underpaymentDetails,
-      "supportingDocumentTypes" -> data.documentsSupplied,
+      "supportingDocumentTypes" -> supportingDocumentTypes,
       "amendedItems" -> data.amendedItems,
-      "supportingDocuments" -> data.supportingDocuments
+      "supportingDocuments" -> supportingDocuments
     )
 
     payload ++ defermentDetails ++ importerDetails ++ representativeDetails
@@ -158,6 +167,7 @@ object IvdSubmission extends FixedConfig {
       additionalInfo <- MoreInformationPage.path.readNullable[String]
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
+      authorityDocuments <- UploadAuthorityPage.path.readNullable[Seq[UploadAuthority]]
     } yield {
 
       val underpaymentDetails = Seq(
@@ -196,7 +206,8 @@ object IvdSubmission extends FixedConfig {
         additionalDefermentType = additionalDefermentType,
         additionalInfo = additionalInfo.getOrElse("Not Applicable"),
         amendedItems = amendedItems,
-        splitDeferment = splitDeferment.getOrElse(false)
+        splitDeferment = splitDeferment.getOrElse(false),
+        authorityDocuments = authorityDocuments.getOrElse(Seq.empty)
       )
     }
 }
