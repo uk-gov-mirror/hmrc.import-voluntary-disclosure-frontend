@@ -18,6 +18,7 @@ package models
 
 import config.FixedConfig
 import models.DocumentTypes._
+import models.SelectedDutyTypes._
 import models.underpayments.UnderpaymentAmount
 import pages._
 import pages.underpayments.UnderpaymentDetailSummaryPage
@@ -117,11 +118,31 @@ object IvdSubmission extends FixedConfig {
       Json.obj()
     }
 
-    val supportingDocuments = data.authorityDocuments.map(_.file) ++ data.supportingDocuments
-    val supportingDocumentTypes = if (data.authorityDocuments.isEmpty) {
-      data.documentsSupplied
+    val supportingDocuments = if (data.paymentByDeferment) {
+      (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
+        case (true, Some(dt), Some(addDt)) if dt == "B" && addDt == "B" =>
+          data.authorityDocuments.filter(x => Seq(Duty,Vat).contains(x.dutyType)).map(_.file) ++ data.supportingDocuments
+        case (true, Some(dt), _) if dt == "B" =>
+          data.authorityDocuments.filter(_.dutyType==Duty).map(_.file) ++ data.supportingDocuments
+        case (true, _, Some(addDt)) if addDt == "B" =>
+          data.authorityDocuments.filter(_.dutyType==Vat).map(_.file) ++ data.supportingDocuments
+        case (false, Some(dt), _) if dt == "B" =>
+          data.authorityDocuments.map(_.file) ++ data.supportingDocuments
+        case _ => data.supportingDocuments
+      }
     } else {
-      data.documentsSupplied ++ Seq(DefermentAuthorisation)
+      data.supportingDocuments
+    }
+
+    val supportingDocumentTypes = if (data.paymentByDeferment) {
+      (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
+        case (true, Some(dt), Some(addDt)) if dt != "B" && addDt != "B" => data.documentsSupplied
+        case (true, _, _) => data.documentsSupplied ++ Seq(DefermentAuthorisation)
+        case (false, Some(dt), _) if dt == "B" => data.documentsSupplied ++ Seq(DefermentAuthorisation)
+        case _ => data.documentsSupplied
+      }
+    } else {
+      data.documentsSupplied
     }
 
     val payload = Json.obj(
