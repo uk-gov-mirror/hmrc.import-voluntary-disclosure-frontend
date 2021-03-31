@@ -579,3 +579,8 @@ repDuty.heading = Deferment account details for the duty owed
 # Representative Dan Import page
 repImportVat.pageTitle = Deferment account details for the import VAT owed
 repImportVat.heading = Deferment account details for the import VAT owed
+
+# Change Underpayment Reason Page
+changeUnderpaymentReason.heading = Change box {0} reason for underpayment
+changeUnderpaymentReason.removeLink = Remove this reason for underpayment
+changeUnderpaymentReason.backToReasons = Back to reasons list

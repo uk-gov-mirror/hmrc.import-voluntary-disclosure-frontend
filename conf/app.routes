@@ -131,6 +131,8 @@ POST        /disclosure/confirm-reason-details                                  
 GET         /disclosure/underpayment-reason-summary                                            controllers.UnderpaymentReasonSummaryController.onLoad
 POST        /disclosure/underpayment-reason-summary                                            controllers.UnderpaymentReasonSummaryController.onSubmit
 
+GET         /disclosure/change/change-reason-details                                           controllers.ChangeUnderpaymentReasonController.onLoad(boxNumber: String)
+
 GET         /disclosure/check-your-answers                                                     controllers.CheckYourAnswersController.onLoad
 GET         /disclosure/confirmation                                                           controllers.CheckYourAnswersController.onSubmit
 
