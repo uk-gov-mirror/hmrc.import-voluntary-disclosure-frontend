@@ -19,6 +19,7 @@ package controllers.underpayments
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.underpayments.UnderpaymentDetailSummaryFormProvider
 import models.UnderpaymentDetail
+import pages.UnderpaymentReasonsPage
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -41,19 +42,40 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
     Future.successful(
       Ok(
         view(
           formProvider.apply(),
-          summaryList(request.userAnswers.get(UnderpaymentDetailSummaryPage)),
-          amountOwedSummaryList(request.userAnswers.get(UnderpaymentDetailSummaryPage))
+          summaryList(underpaymentDetails),
+          amountOwedSummaryList(underpaymentDetails),
+          underpaymentDetails.length
         )
       )
     )
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    ???
+    val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
+    formProvider().bindFromRequest().fold(
+      formWithErrors => Future.successful(
+        BadRequest(
+          view(
+            formWithErrors,
+            summaryList(underpaymentDetails),
+            amountOwedSummaryList(underpaymentDetails),
+            underpaymentDetails.length
+          )
+        )
+      ),
+      value => {
+        if (value) {
+          Future.successful(Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad()))
+        } else {
+          Future.successful(Redirect(controllers.routes.BoxGuidanceController.onLoad()))
+        }
+      }
+    )
   }
 
   private[controllers] def summaryList(underpaymentDetail: Option[Seq[UnderpaymentDetail]]

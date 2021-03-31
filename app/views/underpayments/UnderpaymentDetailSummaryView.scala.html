@@ -18,6 +18,7 @@
         formHelper: FormWithCSRF,
         h1: components.h1,
         h2: components.h2,
+        p: components.p,
         errorSummary: components.errorSummary,
         button: components.button,
         yesNoRadio: components.yesNoRadio,
@@ -27,7 +28,9 @@
 @(
         form: Form[_],
         underpaymentDetailsSummaryList: Option[SummaryList],
-        amountOwedSummaryList : Option[SummaryList])(implicit request: Request[_], messages: Messages)
+        amountOwedSummaryList: Option[SummaryList],
+        underpaymentDetailsLength: Int
+)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("underpaymentDetailsSummary.pageTitle"),
@@ -47,14 +50,18 @@
     }
 
     @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit()) {
-        @yesNoRadio(
-            form,
-            headingKey = "underpaymentDetailsSummary.radioMessage",
-            inline = true,
-            isPageHeading = false,
-            classes = "govuk-fieldset__legend govuk-fieldset__legend--m",
-            hint = Some(messages("underpaymentDetailsSummary.radioMessage.hint"))
-        )
+        @if(underpaymentDetailsLength == 10) {
+            @yesNoRadio(
+                form,
+                headingKey = "underpaymentDetailsSummary.radioMessage",
+                inline = true,
+                isPageHeading = false,
+                classes = "govuk-fieldset__legend govuk-fieldset__legend--m",
+                hint = Some(messages("underpaymentDetailsSummary.radioMessage.hint"))
+            )
+        } else {
+            @p(Html(messages("underpaymentDetailsSummary.fullList")))
+        }
         @button("common.button.continue")
     }
 

@@ -191,6 +191,7 @@ underpaymentDetailsSummary.pageHeaderSmall = Amount owed for each type of duty o
 underpaymentDetailsSummary.owedToHMRC = Total owed to HMRC
 underpaymentDetailsSummary.radioMessage = Add another underpayment?
 underpaymentDetailsSummary.radioMessage.hint = You must tell us about all the types of duty or tax that were underpaid on the original import declaration.
+underpaymentDetailsSummary.fullList = You cannot add any more underpayment details as you have selected all the possible types of tax or duty that can apply to an import declaration.
 underpaymentDetailsSummary.error.required = Select yes if you want to add another type of tax or duty underpayment
 underpaymentDetailsSummary.B00 = Import VAT
 underpaymentDetailsSummary.A00 = Customs Duty
