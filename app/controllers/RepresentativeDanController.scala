@@ -24,6 +24,7 @@ import pages.{DefermentAccountPage, DefermentTypePage, SplitPaymentPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
+import services.FlowService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.RepresentativeDanView
 
@@ -35,6 +36,7 @@ class RepresentativeDanController @Inject()(identify: IdentifierAction,
                                             requireData: DataRequiredAction,
                                             sessionRepository: SessionRepository,
                                             mcc: MessagesControllerComponents,
+                                            flowService: FlowService,
                                             view: RepresentativeDanView,
                                             formProvider: RepresentativeDanFormProvider
                                            )
@@ -64,7 +66,8 @@ class RepresentativeDanController @Inject()(identify: IdentifierAction,
         } yield {
           dan.danType match {
             case "A" | "C" => Redirect(controllers.routes.CheckYourAnswersController.onLoad())
-            case _ => Redirect(controllers.routes.RepresentativeDanController.onLoad())
+            case _ =>
+                Redirect(controllers.routes.UploadAuthorityController.onLoad(flowService.dutyType(request.userAnswers), dan.accountNumber))
           }
         }
       }

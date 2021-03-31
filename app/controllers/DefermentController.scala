@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.DefermentFormProvider
+import models.SelectedDutyTypes._
 import models.{UnderpaymentType, UserAnswers}
 import pages.DefermentPage
 import play.api.i18n.I18nSupport
@@ -83,8 +84,8 @@ class DefermentController @Inject()(identify: IdentifierAction,
   private[controllers] def redirectToDefermentView(userAnswers: UserAnswers): Result = {
     if (flowService.isRepFlow(userAnswers)) {
       flowService.dutyType(userAnswers) match {
-        case underpaymentType if underpaymentType == "both" => Redirect(controllers.routes.SplitPaymentController.onLoad())
-        case underpaymentType if Seq("vat", "duty").contains(underpaymentType) => Redirect(controllers.routes.RepresentativeDanController.onLoad())
+        case underpaymentType if underpaymentType == Both => Redirect(controllers.routes.SplitPaymentController.onLoad())
+        case underpaymentType if Seq(Vat, Duty).contains(underpaymentType) => Redirect(controllers.routes.RepresentativeDanController.onLoad())
         case _ => InternalServerError("Couldn't find Underpayment types")
       }
     } else {
@@ -95,9 +96,9 @@ class DefermentController @Inject()(identify: IdentifierAction,
   // TODO - needs to change once the feature swtich is taken out
   private[controllers] def getHeaderMessage(userAnswers: UserAnswers): String = {
     flowService.dutyType(userAnswers) match {
-      case "vat" => "deferment.headingOnlyVAT"
-      case "duty" => "deferment.headingDutyOnly"
-      case "both" => "deferment.headingVATandDuty"
+      case Vat => "deferment.headingOnlyVAT"
+      case Duty => "deferment.headingDutyOnly"
+      case _ => "deferment.headingVATandDuty"
     }
   }
 

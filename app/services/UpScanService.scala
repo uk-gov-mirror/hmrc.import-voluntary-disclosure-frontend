@@ -35,8 +35,23 @@ class UpScanService @Inject()(upScanConnector: UpScanConnector,
     appConfig.upScanMaxFileSize
   )
 
+  private[services] def buildAuthorityInitiateRequest(dutyType: String, dan: String): UpScanInitiateRequest = UpScanInitiateRequest(
+    appConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload,
+    appConfig.upScanAuthoritySuccessRedirectForUser + s"/$dutyType/$dan/upscan-response",
+    appConfig.upScanAuthorityErrorRedirectForUser + s"/$dutyType/$dan/upscan-response",
+    appConfig.upScanMinFileSize,
+    appConfig.upScanMaxFileSize
+  )
+
   def initiateNewJourney()(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UpScanInitiateResponse] = {
     upScanConnector.postToInitiate(buildInitiateRequest).map {
+      case Right(upScanInitiateResponse) => upScanInitiateResponse
+      case Left(error) => throw new InternalServerException(error.message)
+    }
+  }
+
+  def initiateAuthorityJourney(dutyType: String, dan: String)(implicit ec: ExecutionContext, hc: HeaderCarrier): Future[UpScanInitiateResponse] = {
+    upScanConnector.postToInitiate(buildAuthorityInitiateRequest(dutyType, dan)).map {
       case Right(upScanInitiateResponse) => upScanInitiateResponse
       case Left(error) => throw new InternalServerException(error.message)
     }
