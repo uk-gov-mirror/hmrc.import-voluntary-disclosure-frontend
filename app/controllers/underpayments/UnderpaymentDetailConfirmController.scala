@@ -65,7 +65,7 @@ class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
+          Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad())
         }
       case None => Future.successful(InternalServerError("Couldn't find underpayment details"))
     }

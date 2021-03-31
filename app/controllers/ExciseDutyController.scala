@@ -56,7 +56,7 @@ class ExciseDutyController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(ExciseDutyPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.UnderpaymentSummaryController.onLoad())
+          Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad())
         }
       }
     )

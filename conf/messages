@@ -185,6 +185,25 @@ underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid 
 underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
 
 # Underpayment Details Summary
+underpaymentDetailsSummary.pageTitle = Underpayment summary
+underpaymentDetailsSummary.pageHeader = Underpayment summary
+underpaymentDetailsSummary.pageHeaderSmall = Amount owed for each type of duty or tax
+underpaymentDetailsSummary.owedToHMRC = Total owed to HMRC
+underpaymentDetailsSummary.radioMessage = Add another underpayment?
+underpaymentDetailsSummary.radioMessage.hint = You must tell us about all the types of duty or tax that were underpaid on the original import declaration.
+underpaymentDetailsSummary.error.required = Select yes if you want to add another type of tax or duty underpayment
+underpaymentDetailsSummary.B00 = Import VAT
+underpaymentDetailsSummary.A00 = Customs Duty
+underpaymentDetailsSummary.E00 = Excise duty
+underpaymentDetailsSummary.A20 = Additional Duty
+underpaymentDetailsSummary.A30 = Definitive Anti-Dumping Duty
+underpaymentDetailsSummary.A35 = Provisional Anti-Dumping Duty
+underpaymentDetailsSummary.A40 = Definitive Countervailing Duty
+underpaymentDetailsSummary.A45 = Provisional Countervailing Duty
+underpaymentDetailsSummary.A10 = Customs Duty on Agricultural Products
+underpaymentDetailsSummary.D10 = Compensatory Duty
+
+# Underpayment Details Summary
 underpaymentDetailsConfirm.B00.pageTitle = Confirm the import VAT underpayment details
 underpaymentDetailsConfirm.B00.pageHeader = Confirm the import VAT underpayment details
 underpaymentDetailsConfirm.A00.pageTitle = Confirm the Customs Duty underpayment details
