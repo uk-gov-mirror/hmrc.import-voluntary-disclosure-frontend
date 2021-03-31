@@ -138,7 +138,7 @@ object IvdSubmission extends FixedConfig {
       (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
         case (true, Some(dt), Some(addDt)) if dt != "B" && addDt != "B" => data.documentsSupplied
         case (true, _, _) => data.documentsSupplied ++ Seq(DefermentAuthorisation)
-        case (false, Some(dt), _) if dt == "B" => data.documentsSupplied ++ Seq(DefermentAuthorisation)
+        case (false, Some("B"), _) => data.documentsSupplied ++ Seq(DefermentAuthorisation)
         case _ => data.documentsSupplied
       }
     } else {
