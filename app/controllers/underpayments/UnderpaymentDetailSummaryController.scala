@@ -19,7 +19,6 @@ package controllers.underpayments
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.underpayments.UnderpaymentDetailSummaryFormProvider
 import models.UnderpaymentDetail
-import pages.UnderpaymentReasonsPage
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -43,16 +42,23 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
-    Future.successful(
-      Ok(
-        view(
-          formProvider.apply(),
-          summaryList(underpaymentDetails),
-          amountOwedSummaryList(underpaymentDetails),
-          underpaymentDetails.length
+    if (underpaymentDetails.isEmpty) {
+      Future.successful(
+        Redirect(controllers.underpayments.routes.UnderpaymentStartController.onLoad())
+      )
+    } else {
+      val length = underpaymentDetails.getOrElse(Seq.empty).length
+      Future.successful(
+        Ok(
+          view(
+            formProvider.apply(),
+            summaryList(underpaymentDetails),
+            amountOwedSummaryList(underpaymentDetails),
+            length
+          )
         )
       )
-    )
+    }
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -81,31 +87,35 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   private[controllers] def summaryList(underpaymentDetail: Option[Seq[UnderpaymentDetail]]
                                       )(implicit messages: Messages): Option[SummaryList] = {
     val changeAction: Call = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
-    underpaymentDetail.map { underpayment =>
-      SummaryList(
-        rows = for (underpayment <- underpayment) yield
-          SummaryListRow(
-            key = Key(
-              content = Text(messages(s"underpaymentDetailsSummary.${underpayment.duty}")),
-              classes = "govuk-summary-list__key govuk-!-width-two-thirds"
-            ),
-            value = Value(
-              content = HtmlContent(displayMoney(underpayment.amended - underpayment.original)),
-              classes = "govuk-summary-list__value"
-            ),
-            actions = Some(
-              Actions(
-                items = Seq(
-                  ActionItem(
-                    changeAction.url,
-                    Text(messages("common.change")),
-                    Some("key")
+    if (underpaymentDetail.isDefined) {
+      Some(
+        SummaryList(
+          rows = for (underpayment <- underpaymentDetail.get.reverse) yield
+            SummaryListRow(
+              key = Key(
+                content = Text(messages(s"underpaymentDetailsSummary.${underpayment.duty}")),
+                classes = "govuk-summary-list__key govuk-!-width-two-thirds"
+              ),
+              value = Value(
+                content = HtmlContent(displayMoney(underpayment.amended - underpayment.original)),
+                classes = "govuk-summary-list__value"
+              ),
+              actions = Some(
+                Actions(
+                  items = Seq(
+                    ActionItem(
+                      changeAction.url,
+                      Text(messages("common.change")),
+                      Some("key")
+                    )
                   )
                 )
               )
             )
-          )
+        )
       )
+    } else {
+      None
     }
   }
 

@@ -45,12 +45,14 @@
         @govukSummaryList(underpaymentDetailsSummaryList.get)
     }
 
-    @if(underpaymentDetailsSummaryList.isDefined) {
+    @if(amountOwedSummaryList.isDefined) {
         @govukSummaryList(amountOwedSummaryList.get)
     }
 
     @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit()) {
         @if(underpaymentDetailsLength == 10) {
+            @p(Html(messages("underpaymentDetailsSummary.fullList")))
+        } else {
             @yesNoRadio(
                 form,
                 headingKey = "underpaymentDetailsSummary.radioMessage",
@@ -59,8 +61,6 @@
                 classes = "govuk-fieldset__legend govuk-fieldset__legend--m",
                 hint = Some(messages("underpaymentDetailsSummary.radioMessage.hint"))
             )
-        } else {
-            @p(Html(messages("underpaymentDetailsSummary.fullList")))
         }
         @button("common.button.continue")
     }

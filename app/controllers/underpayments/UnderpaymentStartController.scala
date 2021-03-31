@@ -18,6 +18,7 @@ package controllers.underpayments
 
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -38,7 +39,12 @@ class UnderpaymentStartController @Inject()(identify: IdentifierAction,
   private lazy val backLink: Call = controllers.routes.EnterCustomsProcedureCodeController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(backLink, appConfig.useOldUnderpaymentType)))
+
+    if(request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty).nonEmpty){
+      Future.successful(Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()))
+    } else {
+      Future.successful(Ok(view(backLink, appConfig.useOldUnderpaymentType)))
+    }
   }
 
 }
