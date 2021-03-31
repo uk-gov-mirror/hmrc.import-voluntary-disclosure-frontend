@@ -71,7 +71,7 @@ class UnderpaymentReasonSummaryController @Inject()(identify: IdentifierAction,
 
   private[controllers] def summaryList(underpaymentReason: Option[Seq[UnderpaymentReason]]
                                       )(implicit messages: Messages): Option[SummaryList] = {
-    def changeAction(boxNumber: String): Call = controllers.routes.ChangeUnderpaymentReasonController.onLoad(boxNumber)
+    def changeAction(boxNumber: Int, itemNumber: Int): Call = controllers.routes.ChangeUnderpaymentReasonController.change(boxNumber, itemNumber)
     underpaymentReason.map { reasons =>
       val sortedReasons = reasons.sortBy(item => item.boxNumber)
       SummaryList(
@@ -91,7 +91,7 @@ class UnderpaymentReasonSummaryController @Inject()(identify: IdentifierAction,
               Actions(
                 items = Seq(
                   ActionItem(
-                    changeAction(underpayment.boxNumber.toString).url,
+                    changeAction(underpayment.boxNumber, underpayment.itemNumber).url,
                     Text(messages("common.change")),
                     Some("key")
                   )
