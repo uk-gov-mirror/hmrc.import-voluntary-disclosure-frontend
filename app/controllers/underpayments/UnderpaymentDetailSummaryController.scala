@@ -86,10 +86,12 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
         rows = for (underpayment <- underpayment) yield
           SummaryListRow(
             key = Key(
-              content = Text(messages(s"underpaymentDetailsSummary.${underpayment.duty}"))
+              content = Text(messages(s"underpaymentDetailsSummary.${underpayment.duty}")),
+              classes = "govuk-summary-list__key govuk-!-width-two-thirds"
             ),
             value = Value(
-              content = HtmlContent(displayMoney(underpayment.amended - underpayment.original))
+              content = HtmlContent(displayMoney(underpayment.amended - underpayment.original)),
+              classes = "govuk-summary-list__value"
             ),
             actions = Some(
               Actions(
@@ -99,8 +101,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
                     Text(messages("common.change")),
                     Some("key")
                   )
-                ),
-                classes = "govuk-!-width-one-third"
+                )
               )
             )
           )
