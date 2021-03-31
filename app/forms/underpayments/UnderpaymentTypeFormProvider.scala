@@ -25,7 +25,7 @@ class UnderpaymentTypeFormProvider extends Mappings {
   def apply()(implicit messages: Messages): Form[String] =
     Form(
       "value" -> text(
-        errorKey = "underpaymentTypeTemp.error.required"
+        errorKey = "underpaymentType.error.required"
       )
     )
 

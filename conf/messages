@@ -108,17 +108,6 @@ acceptanceDate.pageTitle = Was the entry acceptance date before 1 January 2021?
 acceptanceDate.heading = Was the entry acceptance date before 1 January 2021?
 acceptanceDate.error.required = Select yes if the entry acceptance date was before 1 January 2021
 
-#Underpayment Summary
-underpaymentSummary.pageTitle = Underpayment amount summary
-underpaymentSummary.heading = Underpayment amount summary
-underpaymentSummary.customsDuty.title = Customs Duty
-underpaymentSummary.importVat.title = Import VAT
-underpaymentSummary.exciseDuty.title = Excise Duty
-underpaymentSummary.change = Change
-underpaymentSummary.originalAmount = Original amount
-underpaymentSummary.amendedAmount = Amended amount
-underpaymentSummary.dueToHmrc = {0} due to HMRC
-
 # Supporting Documentation
 SupportDoc.pageTitle = Supporting documentation
 SupportDoc.heading = Supporting documentation
@@ -129,28 +118,19 @@ SupportDoc.fileSize = Each file must be {0}MB or less, and in one of the followi
 error.summary.title = There is a problem
 
 # Underpayment Type
-underpaymentType.pageTitle = What have you underpaid?
-underpaymentType.pageHeader = What have you underpaid?
-underpaymentType.pageWarning = Select all that apply.
-underpaymentType.error.required = Select if you have underpaid Customs Duty, Import VAT or Excise Duty
-underpaymentType.customsDuty = Customs Duty
-underpaymentType.importVAT = Import VAT
-underpaymentType.exciseDuty = Excise Duty
-
-# Underpayment Type Temp
-underpaymentTypeTemp.pageTitle = Which type of tax or duty was underpaid?
-underpaymentTypeTemp.pageHeader = Which type of tax or duty was underpaid?
-underpaymentTypeTemp.error.required = Select the type of tax or duty that was underpaid
-underpaymentTypeTemp.B00.radio = Import VAT (B00)
-underpaymentTypeTemp.A00.radio = Customs Duty (A00)
-underpaymentTypeTemp.E00.radio = Excise Duty
-underpaymentTypeTemp.A20.radio = Additional Duty (A20)
-underpaymentTypeTemp.A30.radio = Definitive Anti-Dumping Duty (A30)
-underpaymentTypeTemp.A35.radio = Provisional Anti-Dumping Duty (A35)
-underpaymentTypeTemp.A40.radio = Definitive Countervailing Duty (A40)
-underpaymentTypeTemp.A45.radio = Provisional Countervailing Duty (A45)
-underpaymentTypeTemp.A10.radio = Customs Duty on Agricultural products (A10)
-underpaymentTypeTemp.D10.radio = Compensatory Duty (D10)
+underpaymentType.pageTitle = Which type of tax or duty was underpaid?
+underpaymentType.pageHeader = Which type of tax or duty was underpaid?
+underpaymentType.error.required = Select the type of tax or duty that was underpaid
+underpaymentType.B00.radio = Import VAT (B00)
+underpaymentType.A00.radio = Customs Duty (A00)
+underpaymentType.E00.radio = Excise Duty
+underpaymentType.A20.radio = Additional Duty (A20)
+underpaymentType.A30.radio = Definitive Anti-Dumping Duty (A30)
+underpaymentType.A35.radio = Provisional Anti-Dumping Duty (A35)
+underpaymentType.A40.radio = Definitive Countervailing Duty (A40)
+underpaymentType.A45.radio = Provisional Countervailing Duty (A45)
+underpaymentType.A10.radio = Customs Duty on Agricultural products (A10)
+underpaymentType.D10.radio = Compensatory Duty (D10)
 
 # Underpayment Details
 underpaymentDetails.originalAmount = Amount that was paid to HMRC
@@ -204,7 +184,7 @@ underpaymentDetailsSummary.A45 = Provisional Countervailing Duty
 underpaymentDetailsSummary.A10 = Customs Duty on Agricultural Products
 underpaymentDetailsSummary.D10 = Compensatory Duty
 
-# Underpayment Details Summary
+# Underpayment Details Confirm
 underpaymentDetailsConfirm.B00.pageTitle = Confirm the import VAT underpayment details
 underpaymentDetailsConfirm.B00.pageHeader = Confirm the import VAT underpayment details
 underpaymentDetailsConfirm.A00.pageTitle = Confirm the Customs Duty underpayment details
@@ -237,40 +217,6 @@ underpaymentDetailsConfirm.A40.dueToHmrc = Definitive Countervailing Duty owed t
 underpaymentDetailsConfirm.A45.dueToHmrc = Provisional Countervailing Duty owed to HMRC
 underpaymentDetailsConfirm.A10.dueToHmrc = Customs Duty on Agricultural Products owed to HMRC
 underpaymentDetailsConfirm.D10.dueToHmrc = Compensatory Duty owed to HMRC
-
-# Customs Duty page
-customsDuty.pageTitle = Customs Duty underpayment details
-customsDuty.pageHeader = Customs Duty underpayment details
-customsDuty.originalAmount = Original amount, in pounds
-customsDuty.amendedAmount = Amended amount, in pounds
-customsDuty.error.originalNonEmpty = Enter the original amount, in pounds
-customsDuty.error.originalNonNumber = Original amount must be a number like 7235 or 67.39
-customsDuty.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
-customsDuty.error.amendedNonEmpty = Enter the amended amount, in pounds
-customsDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
-
-# Import VAT page
-importVAT.pageTitle = Import VAT underpayment details
-importVAT.pageHeader = Import VAT underpayment details
-importVAT.originalAmount = Original amount, in pounds
-importVAT.amendedAmount = Amended amount, in pounds
-importVAT.error.originalNonEmpty = Enter the original amount, in pounds
-importVAT.error.originalNonNumber = Original amount must be a number like 7235 or 67.39
-importVAT.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
-importVAT.error.amendedNonEmpty = Enter the amended amount, in pounds
-importVAT.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
-
-
-# Excise Duty page
-exciseDuty.pageTitle = Excise Duty underpayment details
-exciseDuty.pageHeader = Excise Duty underpayment details
-exciseDuty.originalAmount = Original amount, in pounds
-exciseDuty.amendedAmount = Amended amount, in pounds
-exciseDuty.error.originalNonEmpty = Enter the original amount, in pounds
-exciseDuty.error.originalNonNumber = Original amount must be a number like 7235 or 67.39
-exciseDuty.error.originalUpperLimit = Original amount cannot be more than £9,999,999,999.99
-exciseDuty.error.amendedNonEmpty = Enter the amended amount, in pounds
-exciseDuty.error.amendedNonNumber = Amended amount must be a number like 7235 or 67.39
 
 # Enter Customs Procedure Code page
 enterCustomsProcedureCode.pageTitle = What is the customs procedure code?

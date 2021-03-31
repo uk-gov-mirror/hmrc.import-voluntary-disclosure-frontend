@@ -87,7 +87,7 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
     values.map(keyValue =>
       RadioItem(
         value = Some(keyValue),
-        content = Text(messages(s"underpaymentTypeTemp.$keyValue.radio")),
+        content = Text(messages(s"underpaymentType.$keyValue.radio")),
         checked = form("value").value.contains(keyValue)
       )
     )

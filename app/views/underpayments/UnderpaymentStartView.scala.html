@@ -21,7 +21,7 @@
         linkButton: components.linkButton
 )
 
-@(backLink: Call, useOldUnderpaymentType: Boolean)(implicit request: Request[_], messages: Messages)
+@(backLink: Call)(implicit request: Request[_], messages: Messages)
 
     @layout(pageTitle = messages("underpaymentStart.pageTitle"),
         customBackLinkUrl = Some(backLink)) {
@@ -42,14 +42,9 @@
             Html(messages("underpaymentStart.bullet3"))
         ))
 
-        @if(useOldUnderpaymentType) {
-            @linkButton(url = controllers.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
-        } else {
-            @linkButton(url = controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
-        }
+        @linkButton(url = controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url, messages("common.button.continue"))
 
     }
-
 
     @{
         //$COVERAGE-OFF$

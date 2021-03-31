@@ -17,7 +17,7 @@
 package models
 
 import config.FixedConfig
-import models.underpayments.UnderpaymentAmount
+import models.underpayments.UnderpaymentDetail
 import pages._
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
@@ -145,9 +145,6 @@ object IvdSubmission extends FixedConfig {
       importerEori <- ImporterEORINumberPage.path.readNullable[String]
       importerName <- ImporterNamePage.path.readNullable[String]
       importerAddress <- ImporterAddressPage.path.readNullable[ContactAddress]
-      customsDuty <- CustomsDutyPage.path.readNullable[UnderpaymentAmount]
-      importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
-      exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
       underpaymentDetailsNew <- UnderpaymentDetailSummaryPage.path.readNullable[Seq[UnderpaymentDetail]]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
       paymentByDeferment <- DefermentPage.path.read[Boolean]
@@ -159,14 +156,6 @@ object IvdSubmission extends FixedConfig {
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
     } yield {
-
-      val underpaymentDetails = Seq(
-        "customsDuty" -> customsDuty,
-        "importVat" -> importVat,
-        "exciseDuty" -> exciseDuty
-      ).collect {
-        case (key, Some(details)) => UnderpaymentDetail(key, details.original, details.amended)
-      }
 
       val traderContactDetails = ContactDetails(
         knownDetails.name,
@@ -187,7 +176,7 @@ object IvdSubmission extends FixedConfig {
         importerEori = importerEori,
         importerName = importerName,
         importerAddress = importerAddress,
-        underpaymentDetails = if (underpaymentDetails.nonEmpty) underpaymentDetails else underpaymentDetailsNew.getOrElse(Seq.empty),
+        underpaymentDetails = underpaymentDetailsNew.getOrElse(Seq.empty),
         supportingDocuments = supportingDocuments,
         paymentByDeferment = paymentByDeferment,
         defermentType = defermentType,

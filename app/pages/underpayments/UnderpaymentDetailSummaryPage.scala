@@ -16,7 +16,8 @@
 
 package pages.underpayments
 
-import models.{UnderpaymentDetail, UserAnswers}
+import models.UserAnswers
+import models.underpayments.UnderpaymentDetail
 import pages.QuestionPage
 import play.api.libs.json.JsPath
 

@@ -16,7 +16,6 @@
 
 package controllers.underpayments
 
-import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.i18n.I18nSupport
@@ -32,18 +31,17 @@ class UnderpaymentStartController @Inject()(identify: IdentifierAction,
                                             getData: DataRetrievalAction,
                                             mcc: MessagesControllerComponents,
                                             requireData: DataRequiredAction,
-                                            view: UnderpaymentStartView,
-                                            appConfig: AppConfig)
+                                            view: UnderpaymentStartView)
   extends FrontendController(mcc) with I18nSupport {
 
   private lazy val backLink: Call = controllers.routes.EnterCustomsProcedureCodeController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
-    if(request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty).nonEmpty){
+    if (request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty).nonEmpty) {
       Future.successful(Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()))
     } else {
-      Future.successful(Ok(view(backLink, appConfig.useOldUnderpaymentType)))
+      Future.successful(Ok(view(backLink)))
     }
   }
 

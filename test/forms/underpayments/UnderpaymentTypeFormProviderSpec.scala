@@ -36,7 +36,7 @@ class UnderpaymentTypeFormProviderSpec extends SpecBase {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message mustBe "underpaymentTypeTemp.error.required"
+        form.errors.head.message mustBe "underpaymentType.error.required"
       }
     }
   }

@@ -17,8 +17,7 @@
 package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.UnderpaymentDetail
-import models.underpayments.UnderpaymentAmount
+import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
 import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
