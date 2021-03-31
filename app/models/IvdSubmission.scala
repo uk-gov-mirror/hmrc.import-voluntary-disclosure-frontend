@@ -120,13 +120,13 @@ object IvdSubmission extends FixedConfig {
 
     val supportingDocuments = if (data.paymentByDeferment) {
       (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
-        case (true, Some(dt), Some(addDt)) if dt == "B" && addDt == "B" =>
+        case (true, Some("B"), Some("B")) =>
           data.authorityDocuments.filter(x => Seq(Duty,Vat).contains(x.dutyType)).map(_.file) ++ data.supportingDocuments
-        case (true, Some(dt), _) if dt == "B" =>
+        case (true, Some("B"), _) =>
           data.authorityDocuments.filter(_.dutyType==Duty).map(_.file) ++ data.supportingDocuments
-        case (true, _, Some(addDt)) if addDt == "B" =>
+        case (true, _, Some("B")) =>
           data.authorityDocuments.filter(_.dutyType==Vat).map(_.file) ++ data.supportingDocuments
-        case (false, Some(dt), _) if dt == "B" =>
+        case (false, Some("B"), _) =>
           data.authorityDocuments.map(_.file) ++ data.supportingDocuments
         case _ => data.supportingDocuments
       }
