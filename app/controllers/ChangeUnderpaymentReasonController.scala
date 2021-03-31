@@ -20,7 +20,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import forms.UnderpaymentReasonSummaryFormProvider
 import javax.inject.Inject
 import models.UnderpaymentReason
-import pages.{UnderpaymentReasonItemNumberPage, UnderpaymentReasonsPage}
+import pages.UnderpaymentReasonsPage
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import uk.gov.hmrc.govukfrontend.views.Aliases.SummaryList
@@ -54,7 +54,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
       underpaymentReason.map { itemNumber =>
         val sortedReasons = itemNumber.find(item => item.boxNumber == boxNumber.toInt)
         val itemNumberValue = sortedReasons.map(value => value.itemNumber).head.toString
-        if(sortedReasons.map(a => a.itemNumber).head != 0) {
+        if (sortedReasons.map(a => a.itemNumber).head != 0) {
           Seq(
             SummaryListRow(
               key = Key(
