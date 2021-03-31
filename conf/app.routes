@@ -231,3 +231,6 @@ POST        /disclosure/confirm-customs-duty-agricultural-products-underpayment-
 
 GET         /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "D10")
 POST        /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "D10")
+
+GET         /disclosure/underpayment-amount-summary                                            controllers.underpayments.UnderpaymentDetailSummaryController.onLoad
+POST        /disclosure/underpayment-amount-summary                                            controllers.underpayments.UnderpaymentDetailSummaryController.onSubmit
