@@ -19,7 +19,6 @@ package views
 import base.ViewBaseSpec
 import forms.DefermentFormProvider
 import messages.{BaseMessages, DefermentMessages}
-import models.UnderpaymentType
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
@@ -40,8 +39,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(
         form,
         controllers.routes.DeclarantContactDetailsController.onLoad(),
-        "deferment.headingOnlyVAT",
-        UnderpaymentType.options(form)
+        "deferment.headingOnlyVAT"
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -63,8 +61,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(
         form,
         controllers.routes.DeclarantContactDetailsController.onLoad(),
-        "deferment.headingDutyOnly",
-        UnderpaymentType.options(form)
+        "deferment.headingDutyOnly"
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -86,8 +83,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(
         form,
         controllers.routes.DeclarantContactDetailsController.onLoad(),
-        "deferment.headingVATandDuty",
-        UnderpaymentType.options(form)
+        "deferment.headingVATandDuty"
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -109,8 +105,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(
         form,
         controllers.routes.DeclarantContactDetailsController.onLoad(),
-        "deferment.headingDutyOnly",
-        UnderpaymentType.options(form)
+        "deferment.headingDutyOnly"
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -132,8 +127,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(
         form,
         controllers.routes.DeclarantContactDetailsController.onLoad(),
-        "deferment.headingOnlyVAT",
-        UnderpaymentType.options(form)
+        "deferment.headingOnlyVAT"
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -155,8 +149,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val view: Html = injectedView(
         form,
         controllers.routes.DeclarantContactDetailsController.onLoad(),
-        "deferment.headingVATandDuty",
-        UnderpaymentType.options(form)
+        "deferment.headingVATandDuty"
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -181,8 +174,7 @@ class DefermentViewSpec extends ViewBaseSpec with BaseMessages {
     lazy val view: Html = injectedView(
       form,
       Call("GET", controllers.routes.DeclarantContactDetailsController.onLoad().url),
-      "deferment.headingDutyOnly",
-      UnderpaymentType.options(form)
+      "deferment.headingDutyOnly"
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

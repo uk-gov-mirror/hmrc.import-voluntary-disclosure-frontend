@@ -32,7 +32,6 @@
 
 package controllers
 
-import java.time.{LocalDate, LocalDateTime}
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.connectors.MockIvdSubmissionConnector
@@ -42,9 +41,9 @@ import pages._
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
-import views.data.UnderpaymentSummaryData.{cdUnderpayment, edUnderpayment, ivUnderpayment}
 import views.html.{CheckYourAnswersView, ConfirmationView}
 
+import java.time.{LocalDate, LocalDateTime}
 import scala.concurrent.Future
 
 
@@ -55,6 +54,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
     private def setupConnectorMock(response: Either[ErrorModel, SubmissionResponse]) = {
       setupMockPostSubmission(response)
     }
+
     private lazy val checkYourAnswersView: CheckYourAnswersView = app.injector.instanceOf[CheckYourAnswersView]
     private lazy val confirmationView: ConfirmationView = app.injector.instanceOf[ConfirmationView]
 
@@ -65,26 +65,23 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
         "Importers Inc.",
         ContactAddress("street", None, "city", Some("postcode"), "country code"))
       ).success.value
-      .set(NumberOfEntriesPage,NumberOfEntries.OneEntry).success.value
-      .set(EntryDetailsPage, EntryDetails("123","123456Q",LocalDate.of(2020, 12, 1))).success.value
-      .set(AcceptanceDatePage,true).success.value
-      .set(CustomsDutyPage, cdUnderpayment).success.value
-      .set(ImportVATPage, ivUnderpayment).success.value
-      .set(ExciseDutyPage, edUnderpayment).success.value
-      .set(FileUploadPage,Seq(FileUploadInfo(
+      .set(NumberOfEntriesPage, NumberOfEntries.OneEntry).success.value
+      .set(EntryDetailsPage, EntryDetails("123", "123456Q", LocalDate.of(2020, 12, 1))).success.value
+      .set(AcceptanceDatePage, true).success.value
+      .set(FileUploadPage, Seq(FileUploadInfo(
         "test.pdf",
         "https://bucketName.s3.eu-west-2.amazonaws.com?1235676",
         LocalDateTime.now,
         "396f101dd52e8b2ace0dcf5ed09b1d1f030e608938510ce46e7a5c7a4e775100",
         "application/pdf"))).success.value
-      .set(DeclarantContactDetailsPage,ContactDetails(
+      .set(DeclarantContactDetailsPage, ContactDetails(
         "f",
         "fefewfew@gmail.com",
         "07485939292")).success.value
-      .set(TraderAddressPage,ContactAddress(
+      .set(TraderAddressPage, ContactAddress(
         "street", None, "city", Some("postcode"), "country code")).success.value
-      .set(EnterCustomsProcedureCodePage,"3333333").success.value
-      .set(DefermentPage,true).success.value
+      .set(EnterCustomsProcedureCodePage, "3333333").success.value
+      .set(DefermentPage, true).success.value
       .set(MoreInformationPage, "some text").success.value
       .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(1, 0, "GBP100", "GBP200"))).success.value
     )
@@ -123,7 +120,7 @@ class CheckYourAnswersControllerSpec extends ControllerSpecBase {
     }
 
     "return Internal Server error is submission fails" in new Test {
-      override lazy val connectorMock = Left(ErrorModel(Status.INTERNAL_SERVER_ERROR,"Not Working"))
+      override lazy val connectorMock = Left(ErrorModel(Status.INTERNAL_SERVER_ERROR, "Not Working"))
       val result: Future[Result] = controller.onSubmit()(fakeRequest)
       status(result) mustBe Status.INTERNAL_SERVER_ERROR
     }
