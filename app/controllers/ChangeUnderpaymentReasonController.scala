@@ -73,14 +73,14 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
         Seq(
           SummaryListRow(
             key = Key(
-              content = Text(messages("confirmReason.itemNumber"))
+              content = Text(messages("changeUnderpaymentReason.itemNumber"))
             ),
             value = Value(
               content = HtmlContent(underpaymentReason.itemNumber.toString)
             ),
             actions = Some(Actions(
               items = Seq(
-                ActionItem(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url, Text(messages("confirmReason.change")))
+                ActionItem(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url, Text(messages("changeUnderpaymentReason.change")))
               )
             ))
           )
@@ -93,7 +93,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
     val originalAmountSummaryListRow: Seq[SummaryListRow] = Seq(
       SummaryListRow(
         key = Key(
-          content = Text(messages("confirmReason.original")),
+          content = Text(messages("changeUnderpaymentReason.original")),
           classes = "govuk-!-padding-bottom-0"
         ),
         value = Value(
@@ -102,7 +102,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
         ),
         actions = Some(Actions(
           items = Seq(
-            ActionItem(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url, Text(messages("confirmReason.change")))
+            ActionItem(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url, Text(messages("changeUnderpaymentReason.change")))
           ),
           classes = "govuk-!-padding-bottom-0")
         ),
@@ -110,7 +110,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
       ),
       SummaryListRow(
         key = Key(
-          content = Text(messages("confirmReason.amended")),
+          content = Text(messages("changeUnderpaymentReason.amended")),
           classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
         ),
         value = Value(

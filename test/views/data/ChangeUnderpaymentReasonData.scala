@@ -31,6 +31,11 @@ object ChangeUnderpaymentReasonData {
     changed = UnderpaymentReason(35, 1, "50", "60")
   )
 
+  val singleEntryLevelReason: ChangeUnderpaymentReason = ChangeUnderpaymentReason(
+    original = UnderpaymentReason(22, 0, "50", "60"),
+    changed = UnderpaymentReason(22, 0, "50", "60")
+  )
+
 
   val summaryList: SummaryList =
     SummaryList(
@@ -53,6 +58,44 @@ object ChangeUnderpaymentReasonData {
             )
           )
         ),
+        SummaryListRow(
+          key = Key(
+            content = Text("Original value"),
+            classes = "govuk-!-padding-bottom-0"
+          ),
+          value = Value(
+            HtmlContent("50"),
+            classes = "govuk-!-padding-bottom-0"
+          ),
+          actions = Some(
+            Actions(
+              items = Seq(
+                ActionItem(
+                  changeAction.url,
+                  Text("Change")
+                )
+              ),
+              classes = "govuk-!-padding-bottom-0"
+            )
+          ),
+          classes = "govuk-summary-list__row--no-border"
+        ),
+        SummaryListRow(
+          key = Key(
+            content = Text("Amended value"),
+            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
+          ),
+          value = Value(
+            HtmlContent("60"),
+            classes = "govuk-!-padding-top-0"
+          )
+        )
+      )
+  )
+
+  val entryLevelSummaryList: SummaryList =
+    SummaryList(
+      Seq(
         SummaryListRow(
           key = Key(
             content = Text("Original value"),
