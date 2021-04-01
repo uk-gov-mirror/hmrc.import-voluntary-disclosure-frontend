@@ -25,7 +25,7 @@ import models.underpayments.UnderpaymentDetail
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.mvc.Result
 import play.api.test.Helpers
-import play.api.test.Helpers.{contentType, defaultAwaitTimeout, status}
+import play.api.test.Helpers.{contentType, defaultAwaitTimeout, redirectLocation, status}
 import play.mvc.Http.Status
 import utils.ReusableValues
 import views.html.underpayments.UnderpaymentDetailSummaryView
@@ -51,7 +51,9 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase with Re
 
   "GET onLoad" should {
     "return OK" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("A00", 0.0, 1.0))).success.value)
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("credId").set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("A00", 0.0, 1.0))).success.value
+      )
       val result: Future[Result] = controller.onLoad()(fakeRequest)
       status(result) mustBe Status.OK
     }
@@ -72,6 +74,45 @@ class UnderpaymentDetailSummaryControllerSpec extends ControllerSpecBase with Re
       contentType(result) mustBe Some("text/html")
       Helpers.charset(result) mustBe Some("utf-8")
     }
+  }
+
+  "POST onSubmit" when {
+
+    "payload contains valid data" should {
+
+      "return a SEE OTHER Underpayment Type page when true is selected" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("credId").set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("A00", 0.0, 1.0))).success.value
+        )
+        lazy val result: Future[Result] = controller.onSubmit()(
+          fakeRequest.withFormUrlEncodedBody("value" -> "true")
+        )
+        status(result) mustBe Status.SEE_OTHER
+        redirectLocation(result) mustBe
+          Some(controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url)
+      }
+
+      "return a SEE OTHER Box Guidance page when false is selected" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("credId").set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("A00", 0.0, 1.0))).success.value
+        )
+        lazy val result: Future[Result] = controller.onSubmit()(
+          fakeRequest.withFormUrlEncodedBody("value" -> "false")
+        )
+        status(result) mustBe Status.SEE_OTHER
+        redirectLocation(result) mustBe
+          Some(controllers.routes.BoxGuidanceController.onLoad().url)
+      }
+
+    }
+
+    "payload contains invalid data" should {
+      "return BAD REQUEST when no value is sent" in new Test {
+        val result: Future[Result] = controller.onSubmit()(fakeRequest.withFormUrlEncodedBody("" -> ""))
+        status(result) mustBe Status.BAD_REQUEST
+      }
+    }
+
   }
 
 }
