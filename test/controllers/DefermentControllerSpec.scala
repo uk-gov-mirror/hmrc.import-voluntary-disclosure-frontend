@@ -62,6 +62,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
           .set(DefermentPage, true).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
       )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
@@ -71,6 +72,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
           .set(DefermentPage, true).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
       )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
@@ -85,6 +87,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
           .set(DefermentPage, true).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
       )
       messages(controller.getHeaderMessage(userAnswers.get)) mustBe DefermentMessages.headingOnlyVAT
     }
@@ -93,6 +96,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
           .set(DefermentPage, true).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("A00", 0.0, 1.0))).success.value
       )
       messages(controller.getHeaderMessage(userAnswers.get)) mustBe DefermentMessages.headingDutyOnly
     }
@@ -101,6 +105,11 @@ class DefermentControllerSpec extends ControllerSpecBase {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
           .set(DefermentPage, true).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(
+            UnderpaymentDetail("B00", 0.0, 1.0),
+            UnderpaymentDetail("A00", 0.0, 1.0)
+          )
+          ).success.value
       )
       messages(controller.getHeaderMessage(userAnswers.get)) mustBe DefermentMessages.headingVATandDuty
     }
@@ -136,6 +145,10 @@ class DefermentControllerSpec extends ControllerSpecBase {
       "return the correct location header when user is representative and has import VAT and excise duty" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
           .set(UserTypePage, UserType.Representative).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(
+            UnderpaymentDetail("B00", 0.0, 1.0),
+            UnderpaymentDetail("A00", 0.0, 1.0))
+          ).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
@@ -145,6 +158,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
       "return the correct location header when user is representative only has import VAT" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
           .set(UserTypePage, UserType.Representative).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
@@ -154,6 +168,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
       "return the correct location header when user is representative and other duties and no import VAT" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
           .set(UserTypePage, UserType.Representative).success.value
+          .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
