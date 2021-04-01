@@ -16,10 +16,10 @@
 
 package utils
 
+import messages.BoxNumberMessages
 import messages.underpayments.UnderpaymentTypeMessages
 import models.{ContactAddress, EoriDetails}
 import play.api.http.Status
-import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
@@ -74,16 +74,37 @@ trait ReusableValues {
   )
 
   val underpaymentTypeRadioButtons = Seq(
-      createRadioButton("B00", UnderpaymentTypeMessages.importVAT),
-      createRadioButton("A00", UnderpaymentTypeMessages.customsDuty),
-      createRadioButton("E00", UnderpaymentTypeMessages.exciseDuty),
-      createRadioButton("A20", UnderpaymentTypeMessages.additionalDuty),
-      createRadioButton("A30", UnderpaymentTypeMessages.definitiveAntiDumpingDuty),
-      createRadioButton("A35", UnderpaymentTypeMessages.provisionalAntiDumpingDuty),
-      createRadioButton("A40", UnderpaymentTypeMessages.definitiveCountervailingDuty),
-      createRadioButton("A45", UnderpaymentTypeMessages.provisionalCountervailingDuty),
-      createRadioButton("A10", UnderpaymentTypeMessages.agriculturalDuty),
-      createRadioButton("D10", UnderpaymentTypeMessages.compensatoryDuty)
+    createRadioButton("B00", UnderpaymentTypeMessages.importVAT),
+    createRadioButton("A00", UnderpaymentTypeMessages.customsDuty),
+    createRadioButton("E00", UnderpaymentTypeMessages.exciseDuty),
+    createRadioButton("A20", UnderpaymentTypeMessages.additionalDuty),
+    createRadioButton("A30", UnderpaymentTypeMessages.definitiveAntiDumpingDuty),
+    createRadioButton("A35", UnderpaymentTypeMessages.provisionalAntiDumpingDuty),
+    createRadioButton("A40", UnderpaymentTypeMessages.definitiveCountervailingDuty),
+    createRadioButton("A45", UnderpaymentTypeMessages.provisionalCountervailingDuty),
+    createRadioButton("A10", UnderpaymentTypeMessages.agriculturalDuty),
+    createRadioButton("D10", UnderpaymentTypeMessages.compensatoryDuty)
+  )
+
+  val boxNumberRadioButtons = Seq(
+    createRadioButton("22", BoxNumberMessages.radioButton22),
+    createRadioButton("33", BoxNumberMessages.radioButton33),
+    createRadioButton("34", BoxNumberMessages.radioButton34),
+    createRadioButton("35", BoxNumberMessages.radioButton35),
+    createRadioButton("36", BoxNumberMessages.radioButton36),
+    createRadioButton("37", BoxNumberMessages.radioButton37),
+    createRadioButton("38", BoxNumberMessages.radioButton38),
+    createRadioButton("39", BoxNumberMessages.radioButton39),
+    createRadioButton("41", BoxNumberMessages.radioButton41),
+    createRadioButton("42", BoxNumberMessages.radioButton42),
+    createRadioButton("43", BoxNumberMessages.radioButton43),
+    createRadioButton("45", BoxNumberMessages.radioButton45),
+    createRadioButton("46", BoxNumberMessages.radioButton46),
+    createRadioButton("62", BoxNumberMessages.radioButton62),
+    createRadioButton("63", BoxNumberMessages.radioButton63),
+    createRadioButton("66", BoxNumberMessages.radioButton66),
+    createRadioButton("67", BoxNumberMessages.radioButton67),
+    createRadioButton("68", BoxNumberMessages.radioButton68)
   )
 
   private def createRadioButton(value: String, message: String): RadioItem = {
