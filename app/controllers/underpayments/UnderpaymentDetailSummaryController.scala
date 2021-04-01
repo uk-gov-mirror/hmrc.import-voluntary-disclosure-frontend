@@ -43,7 +43,6 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   // TODO - take out feature switch from front end and config bases
   // TODO - write tests for the new flow
   // TODO - write ATs and PTs for the new flow, delete for the old flow
-  // TODO - update submission service names for the duty types
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
