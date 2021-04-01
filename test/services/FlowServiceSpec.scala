@@ -18,8 +18,11 @@ package services
 
 import base.SpecBase
 import mocks.config.MockAppConfig
+import models.SelectedDutyTypes.{Both, Duty, Neither, Vat}
 import models.UserType.{Importer, Representative}
+import models.underpayments.UnderpaymentDetail
 import models.{UserAnswers, UserType}
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import pages.{ImporterEORIExistsPage, UserTypePage}
 
 
@@ -61,30 +64,33 @@ class FlowServiceSpec extends SpecBase {
     }
   }
 
-  //  "dutyType call" when {
-  //    "using the oldUnderpayment feature" should {
-  //      "return Vat if only Vat is present" in new Test {
-  //        override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
-  //          .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = false, importVAT = true, exciseDuty = false)).success.value
-  //        service.dutyType(setupUserAnswersForDutyType) mustBe Vat
-  //      }
-  //
-  //      "return Duty if only Duty is present" in new Test {
-  //        override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
-  //          .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = true)).success.value
-  //        service.dutyType(setupUserAnswersForDutyType) mustBe Duty
-  //      }
-  //
-  //      "return Both if Both are present" in new Test {
-  //        override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
-  //          .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true)).success.value
-  //        service.dutyType(setupUserAnswersForDutyType) mustBe Both
-  //      }
-  //
-  //      "return Neither if Neither present" in new Test {
-  //        service.dutyType(setupUserAnswersForDutyType) mustBe Neither
-  //      }
-  //    }
-  //  }
+    "dutyType call" when {
+      "using the oldUnderpayment feature" should {
+        "return Vat if only Vat is present" in new Test {
+          override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+            .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
+          service.dutyType(setupUserAnswersForDutyType) mustBe Vat
+        }
+
+        "return Duty if only Duty is present" in new Test {
+          override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+            .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("A00", 0.0, 1.0))).success.value
+          service.dutyType(setupUserAnswersForDutyType) mustBe Duty
+        }
+
+        "return Both if Both are present" in new Test {
+          override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+            .set(UnderpaymentDetailSummaryPage, Seq(
+              UnderpaymentDetail("A20", 0.0, 1.0),
+              UnderpaymentDetail("B00", 0.0, 1.0)
+            )).success.value
+          service.dutyType(setupUserAnswersForDutyType) mustBe Both
+        }
+
+        "return Neither if Neither present" in new Test {
+          service.dutyType(setupUserAnswersForDutyType) mustBe Neither
+        }
+      }
+    }
 
 }

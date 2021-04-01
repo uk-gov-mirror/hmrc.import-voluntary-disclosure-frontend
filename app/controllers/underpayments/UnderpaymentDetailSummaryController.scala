@@ -44,9 +44,6 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   // TODO - write tests for the new flow
   // TODO - write ATs and PTs for the new flow, delete for the old flow
   // TODO - update submission service names for the duty types
-  // TODO - some messages around CYA that will probs go
-  // TODO - FlowServiceSpec needs tests for the underpayment check
-
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
