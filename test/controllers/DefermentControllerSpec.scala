@@ -21,7 +21,9 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.DefermentFormProvider
 import messages.DefermentMessages
 import mocks.repositories.MockSessionRepository
+import models.underpayments.UnderpaymentDetail
 import models.{UserAnswers, UserType}
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import pages.{DefermentPage, UserTypePage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
@@ -38,7 +40,9 @@ class DefermentControllerSpec extends ControllerSpecBase {
   trait Test extends MockSessionRepository {
     private lazy val defermentView: DefermentView = app.injector.instanceOf[DefermentView]
 
-    val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
+    val userAnswers: Option[UserAnswers] = Some(
+      UserAnswers("credId")
+    )
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
 
     val formProvider: DefermentFormProvider = injector.instanceOf[DefermentFormProvider]
@@ -180,6 +184,7 @@ class DefermentControllerSpec extends ControllerSpecBase {
         override val userAnswers: Option[UserAnswers] = Some(
           UserAnswers("some-cred-id")
             .set(DefermentPage, true).success.value
+            .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail("B00", 0.0, 1.0))).success.value
         )
         val result: Future[Result] = controller.onSubmit(fakeRequest)
         status(result) mustBe Status.BAD_REQUEST

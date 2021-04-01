@@ -41,12 +41,9 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   // TODO - take out feature switch from front end and config bases
-  // TODO - need to route to the new flow now
-  // TODO - delete the old flow and tests for it
   // TODO - write tests for the new flow
   // TODO - write ATs and PTs for the new flow, delete for the old flow
   // TODO - update submission service names for the duty types
-  // TODO - update CYA
   // TODO - some messages around CYA that will probs go
   // TODO - FlowServiceSpec needs tests for the underpayment check
 
