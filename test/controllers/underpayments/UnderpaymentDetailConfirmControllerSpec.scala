@@ -84,7 +84,7 @@ class UnderpaymentDetailConfirmControllerSpec extends ControllerSpecBase {
         )
         lazy val result: Future[Result] = controller.onSubmit("B00")(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
