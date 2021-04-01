@@ -408,11 +408,6 @@ cya.pageTitle = Check your answers before sending your disclosure
 cya.heading = Check your answers before sending your disclosure
 cya.sendDisclosure = Now send your disclosure
 cya.disclosureConfirmation = By sending this disclosure you are confirming that, to the best of your knowledge, the details you are providing are correct.
-
-cya.underpaymentDetails = Underpayment details
-cya.customsDuty = Customs Duty
-cya.importVat = Import VAT
-cya.exciseDuty = Excise Duty
 cya.change = Change
 cya.amendmentDetails= Amendment details
 cya.customsProcedureCode = Customs procedure code
