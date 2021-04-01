@@ -31,6 +31,9 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec {
   private lazy val injectedView: RemoveUnderpaymentReasonView = app.injector.instanceOf[RemoveUnderpaymentReasonView]
   val backLink = Call("GET", "backLink/url")
 
+  val boxNumber = 35
+  val itemNumber = 1
+
   val formProvider: RemoveUnderpaymentReasonFormProvider = injector.instanceOf[RemoveUnderpaymentReasonFormProvider]
 
   "Rendering the Remove Underpayment Reason page" when {
@@ -39,12 +42,18 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec {
       val form: Form[Boolean] = formProvider.apply()
       lazy val view: Html = injectedView(
         form,
-        backLink
+        backLink,
+        boxNumber,
+        itemNumber
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
         document.title mustBe RemoveUnderpaymentReasonMessages.title
+      }
+
+      s"have the correct paragraph" in {
+        document.select("#main-content > div > div > p").text() mustBe RemoveUnderpaymentReasonMessages.box35Paragraph(itemNumber)
       }
 
       "not render an error summary" in {
@@ -60,7 +69,9 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
       lazy val view: Html = injectedView(
         form,
-        backLink
+        backLink,
+        boxNumber,
+        itemNumber
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -84,7 +95,9 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec {
     val form: Form[Boolean] = formProvider.apply()
     lazy val view: Html = injectedView(
       form,
-      backLink
+      backLink,
+      boxNumber,
+      itemNumber
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

@@ -19,6 +19,7 @@ package controllers
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.RemoveUnderpaymentReasonFormProvider
 import javax.inject.{Inject, Singleton}
+import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
@@ -43,17 +44,28 @@ class RemoveUnderpaymentReasonController @Inject()(identify: IdentifierAction,
 
   lazy val backLink: Call = controllers.routes.ChangeUnderpaymentReasonController.onLoad()
 
+  private def getChangeReason(userAnswers: UserAnswers): UnderpaymentReason = {
+    userAnswers.get(ChangeUnderpaymentReasonPage) match {
+      case Some(reason) => reason.original
+      case _ => throw new RuntimeException("No change reason found for remove")
+    }
+  }
+
   def onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(formProvider(), backLink)))
+    val changeReason = getChangeReason(request.userAnswers)
+    Future.successful(Ok(view(formProvider(), backLink, changeReason.boxNumber, changeReason.itemNumber)))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    val changeReason = getChangeReason(request.userAnswers)
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(
         BadRequest(
           view(
             formWithErrors,
-            backLink)
+            backLink,
+            changeReason.boxNumber,
+            changeReason.itemNumber)
         )
       ),
       value => {

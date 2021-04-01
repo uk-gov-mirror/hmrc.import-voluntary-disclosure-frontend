@@ -19,10 +19,12 @@
     formHelper: FormWithCSRF,
     errorSummary: components.errorSummary,
     inputRadio: components.inputRadio,
-    button: components.button
+    button: components.button,
+    h1: components.h1,
+    p: components.p
 )
 
-@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, boxNumber: Int, itemNumber: Int)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages("removeUnderpaymentReason.pageTitle"),
@@ -32,10 +34,15 @@
 
    @errorSummary(form.errors)
 
+   @h1(messages("removeUnderpaymentReason.heading"))
+
+   @p{ @messages(s"box${boxNumber}.pageHeader", itemNumber) }
+
    @formHelper(action = controllers.routes.RemoveUnderpaymentReasonController.onSubmit()) {
        @inputRadio(
            form = form,
-           legend = messages("removeUnderpaymentReason.heading"),
+           legend = "",
+           classes = "govuk-fieldset__legend",
            items = Seq(
                     RadioItem(
                         value = Some("true"),
@@ -48,7 +55,7 @@
                         checked = form("value").value.contains("false")
                     )
             ),
-           legendAsHeading = true,
+           legendAsHeading = false,
            inline = true
        )
 

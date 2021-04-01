@@ -22,5 +22,7 @@ object RemoveUnderpaymentReasonMessages extends BaseMessages {
   val radioYes: String = "Yes"
   val radioNo: String = "No"
   val requiredError: String = "Select yes to remove this reason for underpayment"
+  def box35Paragraph(itemNumber: Int): String = s"Box 35 gross mass amendment for item $itemNumber"
+
 
 }

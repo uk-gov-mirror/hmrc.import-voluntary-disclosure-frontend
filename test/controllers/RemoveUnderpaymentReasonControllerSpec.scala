@@ -59,6 +59,9 @@ class RemoveUnderpaymentReasonControllerSpec extends ControllerSpecBase {
 
   "GET onLoad" should {
     "return OK" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+        .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(underpaymentReason(boxNumber = 22), underpaymentReason(boxNumber = 22))).success.value
+      )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
@@ -78,6 +81,9 @@ class RemoveUnderpaymentReasonControllerSpec extends ControllerSpecBase {
     "payload contains valid data" should {
 
       "return a SEE OTHER response when false" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(underpaymentReason(boxNumber = 22), underpaymentReason(boxNumber = 22))).success.value
+        )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
@@ -112,6 +118,9 @@ class RemoveUnderpaymentReasonControllerSpec extends ControllerSpecBase {
       }
 
       "return an Internal Server Error" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(underpaymentReason(boxNumber = 22), underpaymentReason(boxNumber = 22))).success.value
+        )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.INTERNAL_SERVER_ERROR
@@ -133,6 +142,13 @@ class RemoveUnderpaymentReasonControllerSpec extends ControllerSpecBase {
 
     "payload contains invalid data" should {
       "return a BAD REQUEST" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId")
+          .set(UnderpaymentReasonsPage, Seq(
+            underpaymentReason(boxNumber = 35, itemNumber = 1))).success.value
+          .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
+            original = underpaymentReason(boxNumber = 35, itemNumber = 1),
+            changed = underpaymentReason(boxNumber = 35, itemNumber = 1))).success.value
+        )
         val result: Future[Result] = controller.onSubmit(fakeRequest)
         status(result) mustBe Status.BAD_REQUEST
       }
