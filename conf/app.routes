@@ -134,6 +134,9 @@ POST        /disclosure/underpayment-reason-summary                             
 GET         /disclosure/change/change-reason-details                                           controllers.ChangeUnderpaymentReasonController.onLoad
 GET         /disclosure/change/change-reason-details/:boxNumber/:itemNumber                    controllers.ChangeUnderpaymentReasonController.change(boxNumber: Int, itemNumber: Int)
 
+GET         /disclosure/remove-reason-confirm                                                  controllers.RemoveUnderpaymentReasonController.onLoad
+POST        /disclosure/remove-reason-confirm                                                  controllers.RemoveUnderpaymentReasonController.onSubmit
+
 GET         /disclosure/check-your-answers                                                     controllers.CheckYourAnswersController.onLoad
 GET         /disclosure/confirmation                                                           controllers.CheckYourAnswersController.onSubmit
 
