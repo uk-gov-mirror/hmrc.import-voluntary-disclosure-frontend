@@ -39,7 +39,6 @@ class FlowService @Inject()(implicit val appConfig: AppConfig) {
       case _ => false
     }
 
-  // TODO - old way for duty needs to be taken out when feature switch is taken out
   def dutyType(userAnswers: UserAnswers): SelectedDutyType = {
     val vatUnderpaymentType: String = "B00"
     userAnswers.get(UnderpaymentDetailSummaryPage).map { value =>
