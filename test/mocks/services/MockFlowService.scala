@@ -17,6 +17,8 @@
 package mocks.services
 
 import base.SpecBase
+import models.SelectedDutyTypes.SelectedDutyType
+import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import services.FlowService
 
@@ -25,13 +27,18 @@ trait MockFlowService extends SpecBase with MockFactory {
   val mockFlowService: FlowService = mock[FlowService]
 
   object MockedFlowService {
-    def isRepFlow(response: Boolean) = {
+    def isRepFlow(response: Boolean): CallHandler[Boolean] = {
       (mockFlowService.isRepFlow(_))
         .expects(*)
         .returns(response)
     }
-    def doesImporterEORIExist(response: Boolean) = {
+    def doesImporterEORIExist(response: Boolean): CallHandler[Boolean] = {
       (mockFlowService.doesImporterEORIExist(_))
+        .expects(*)
+        .returns(response)
+    }
+    def dutyType(response: SelectedDutyType): CallHandler[SelectedDutyType] = {
+      (mockFlowService.dutyType(_))
         .expects(*)
         .returns(response)
     }

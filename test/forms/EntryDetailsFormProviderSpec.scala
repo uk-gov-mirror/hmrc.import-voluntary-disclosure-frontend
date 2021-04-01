@@ -144,11 +144,12 @@ class EntryDetailsFormProviderSpec extends SpecBase {
         form.errors.head.message mustBe "entryDetails.entryDate.error.year.length"
       }
       "result in a form with Date in Past error" in {
+        val tomorrow: LocalDate = LocalDate.now().plusDays(1)
         val form = new EntryDetailsFormProvider()(MockAppConfig).apply().bind(
           buildFormData(
-            day = Some(s"${LocalDate.now().getDayOfMonth + 1}"),
-            month = Some(s"${LocalDate.now().getMonthValue}"),
-            year = Some(s"${LocalDate.now().getYear}")
+            day = Some(s"${tomorrow.getDayOfMonth}"),
+            month = Some(s"${tomorrow.getMonthValue}"),
+            year = Some(s"${tomorrow.getYear}")
           ))
 
         form.errors.size mustBe 1

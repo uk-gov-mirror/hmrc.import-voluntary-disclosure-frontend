@@ -29,16 +29,14 @@ import views.html.EntryDetailsView
 import java.time.LocalDate
 
 class EntryDetailsViewSpec extends ViewBaseSpec with BaseMessages {
-
-  val currDay: Int = LocalDate.now().getDayOfMonth
-  val currMonth: Int = LocalDate.now().getMonthValue
-  val currYear: Int = LocalDate.now().getYear
+  val today: LocalDate = LocalDate.now()
+  val tomorrow: LocalDate = LocalDate.now().plusDays(1)
 
   def formDataSetup(epu: Option[String] = Some("123"),
                     entryNumber: Option[String] = Some("123456Q"),
-                    day: Option[String] = Some(s"$currDay"),
-                    month: Option[String] = Some(s"$currMonth"),
-                    year: Option[String] = Some(s"$currYear")): Map[String, String] =
+                    day: Option[String] = Some(s"${today.getDayOfMonth}"),
+                    month: Option[String] = Some(s"${today.getMonthValue}"),
+                    year: Option[String] = Some(s"${today.getYear}")): Map[String, String] =
     (
       epu.map(_ => "epu" -> epu.get) ++
         entryNumber.map(_ => "entryNumber" -> entryNumber.get) ++
@@ -65,7 +63,11 @@ class EntryDetailsViewSpec extends ViewBaseSpec with BaseMessages {
     val formatEpu = formDataSetup(epu = Some("12"))
     val formatEntryNumber = formDataSetup(entryNumber = Some("12"))
     val realEntryDateError = formDataSetup(day = Some("34"))
-    val pastEntryDateError = formDataSetup(day = Some(s"${currDay + 1}"))
+    val pastEntryDateError = formDataSetup(
+      day = Some(s"${tomorrow.getDayOfMonth}"),
+      month = Some(s"${tomorrow.getMonthValue}"),
+      year = Some(s"${tomorrow.getYear}")
+    )
     val twoDigitEntryDateYearError = formDataSetup(year = Some("20"))
 
     // represents error scenario description, data and expected error message
