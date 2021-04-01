@@ -31,10 +31,10 @@
 
     @govukSummaryList(summaryList)
 
-    <p><a href="#" id="remove-link" class="govuk-link">@messages("changeUnderpaymentReason.removeLink")</a></p>
+    <p><a href=@controllers.routes.RemoveUnderpaymentReasonController.onLoad().url id="remove-link" class="govuk-link">@messages("changeUnderpaymentReason.removeLink")</a></p>
 
     @linkButton(
-        url = controllers.routes.ChangeUnderpaymentReasonController.onLoad().url,
+        url = controllers.routes.UnderpaymentReasonSummaryController.onLoad().url,
         value = messages("changeUnderpaymentReason.backToReasons")
     )
 }

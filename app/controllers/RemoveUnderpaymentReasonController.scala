@@ -72,9 +72,9 @@ class RemoveUnderpaymentReasonController @Inject()(identify: IdentifierAction,
                 _ <- sessionRepository.set(updatedAnswers)
               } yield {
                 if (newReasons.isEmpty) {
-                  Future.successful(Redirect(controllers.routes.BoxGuidanceController.onLoad()))
+                  Redirect(controllers.routes.BoxGuidanceController.onLoad())
                 } else {
-                  Future.successful(Redirect(controllers.routes.UnderpaymentReasonSummaryController.onLoad()))
+                  Redirect(controllers.routes.UnderpaymentReasonSummaryController.onLoad())
                 }
               }
             case _ => Future.successful(InternalServerError("Invalid sequence of reasons"))

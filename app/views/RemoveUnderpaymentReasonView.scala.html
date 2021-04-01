@@ -35,20 +35,21 @@
    @formHelper(action = controllers.routes.RemoveUnderpaymentReasonController.onSubmit()) {
        @inputRadio(
            form = form,
-           legend = messages("splitPayment.heading"),
+           legend = messages("removeUnderpaymentReason.heading"),
            items = Seq(
                     RadioItem(
                         value = Some("true"),
-                        content = Text(messages("removeUnderpaymentReason.yes")),
+                        content = Text(messages("site.yes")),
                         checked = form("value").value.contains("true")
                     ),
                     RadioItem(
                         value = Some("false"),
-                        content = Text(messages("removeUnderpaymentReason.no")),
+                        content = Text(messages("site.no")),
                         checked = form("value").value.contains("false")
                     )
             ),
-           legendAsHeading = true
+           legendAsHeading = true,
+           inline = true
        )
 
    @button("common.button.continue")
