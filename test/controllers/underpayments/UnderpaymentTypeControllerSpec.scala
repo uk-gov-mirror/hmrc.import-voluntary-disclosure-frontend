@@ -21,15 +21,16 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.underpayments.UnderpaymentTypeFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import pages.underpayments.UnderpaymentTypePage
+import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentTypePage}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import utils.ReusableValues
 import views.html.underpayments.UnderpaymentTypeView
 
 import scala.concurrent.Future
 
-class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
+class UnderpaymentTypeControllerSpec extends ControllerSpecBase with ReusableValues {
 
   trait Test extends MockSessionRepository {
     private lazy val underpaymentTypeView: UnderpaymentTypeView = app.injector.instanceOf[UnderpaymentTypeView]
@@ -50,6 +51,14 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad()(fakeRequest)
       status(result) mustBe Status.OK
+    }
+
+    "return SEE_OTHER" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("credId").set(UnderpaymentDetailSummaryPage, allUnderpaymentDetailsSelected()).success.value
+      )
+      val result: Future[Result] = controller.onLoad()(fakeRequest)
+      status(result) mustBe Status.SEE_OTHER
     }
 
     "return HTML" in new Test {
