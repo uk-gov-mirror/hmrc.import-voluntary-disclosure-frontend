@@ -17,9 +17,9 @@
 package utils
 
 import messages.underpayments.UnderpaymentTypeMessages
+import models.underpayments.UnderpaymentDetail
 import models.{ContactAddress, EoriDetails}
 import play.api.http.Status
-import play.api.i18n.Messages
 import play.api.libs.json.{JsObject, Json}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
@@ -74,16 +74,16 @@ trait ReusableValues {
   )
 
   val underpaymentTypeRadioButtons = Seq(
-      createRadioButton("B00", UnderpaymentTypeMessages.importVAT),
-      createRadioButton("A00", UnderpaymentTypeMessages.customsDuty),
-      createRadioButton("E00", UnderpaymentTypeMessages.exciseDuty),
-      createRadioButton("A20", UnderpaymentTypeMessages.additionalDuty),
-      createRadioButton("A30", UnderpaymentTypeMessages.definitiveAntiDumpingDuty),
-      createRadioButton("A35", UnderpaymentTypeMessages.provisionalAntiDumpingDuty),
-      createRadioButton("A40", UnderpaymentTypeMessages.definitiveCountervailingDuty),
-      createRadioButton("A45", UnderpaymentTypeMessages.provisionalCountervailingDuty),
-      createRadioButton("A10", UnderpaymentTypeMessages.agriculturalDuty),
-      createRadioButton("D10", UnderpaymentTypeMessages.compensatoryDuty)
+    createRadioButton("B00", UnderpaymentTypeMessages.importVAT),
+    createRadioButton("A00", UnderpaymentTypeMessages.customsDuty),
+    createRadioButton("E00", UnderpaymentTypeMessages.exciseDuty),
+    createRadioButton("A20", UnderpaymentTypeMessages.additionalDuty),
+    createRadioButton("A30", UnderpaymentTypeMessages.definitiveAntiDumpingDuty),
+    createRadioButton("A35", UnderpaymentTypeMessages.provisionalAntiDumpingDuty),
+    createRadioButton("A40", UnderpaymentTypeMessages.definitiveCountervailingDuty),
+    createRadioButton("A45", UnderpaymentTypeMessages.provisionalCountervailingDuty),
+    createRadioButton("A10", UnderpaymentTypeMessages.agriculturalDuty),
+    createRadioButton("D10", UnderpaymentTypeMessages.compensatoryDuty)
   )
 
   private def createRadioButton(value: String, message: String): RadioItem = {
@@ -91,6 +91,12 @@ trait ReusableValues {
       value = Some(value),
       content = Text(message),
       checked = false
+    )
+  }
+
+  def allUnderpaymentDetailsSelected(): Seq[UnderpaymentDetail] = {
+    Seq("B00", "A00", "E00", "A20", "A30", "A35", "A40", "A45", "A10", "D10").map(underpayment =>
+      UnderpaymentDetail(underpayment, 0.0, 1.0)
     )
   }
 

@@ -40,7 +40,6 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
                                                    )
   extends FrontendController(mcc) with I18nSupport {
 
-  // TODO - take out feature switch from front end and config bases
   // TODO - write tests for the new flow
   // TODO - write ATs and PTs for the new flow, delete for the old flow
 
