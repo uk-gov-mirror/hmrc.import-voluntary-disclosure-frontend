@@ -142,15 +142,15 @@ class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
     }
 
     "have the remove link with the correct URL" in {
-      elementAttributes("#remove-link") must contain("href" -> "#")
+      elementAttributes("#remove-link") must contain("href" -> controllers.routes.RemoveUnderpaymentReasonController.onLoad().url)
     }
 
-    "have the remove link with the correct messahe" in {
+    "have the remove link with the correct message" in {
       elementText("#remove-link") mustBe ChangeUnderpaymentReasonMessages.removeLink
     }
 
     "have the correct Continue button link" in {
-      elementAttributes(".govuk-button") must contain("href" -> controllers.routes.ChangeUnderpaymentReasonController.onLoad().url)
+      elementAttributes(".govuk-button") must contain("href" -> controllers.routes.UnderpaymentReasonSummaryController.onLoad().url)
     }
 
     "have the correct Continue button message" in {

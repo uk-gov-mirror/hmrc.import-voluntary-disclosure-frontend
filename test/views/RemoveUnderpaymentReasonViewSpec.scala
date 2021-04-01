@@ -17,18 +17,19 @@
 package views
 
 import base.ViewBaseSpec
-import forms.{RemoveUnderpaymentReasonFormProvider, SplitPaymentFormProvider}
-import messages.{BaseMessages, RemoveUnderpaymentReasonMessages, SplitPaymentMessages}
+import forms.RemoveUnderpaymentReasonFormProvider
+import messages.RemoveUnderpaymentReasonMessages
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.Form
 import play.api.mvc.Call
 import play.twirl.api.Html
-import views.html.{RemoveUnderpaymentReasonView, SplitPaymentView}
+import views.html.RemoveUnderpaymentReasonView
 
-class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec with BaseMessages {
+class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec {
 
   private lazy val injectedView: RemoveUnderpaymentReasonView = app.injector.instanceOf[RemoveUnderpaymentReasonView]
+  val backLink = Call("GET", "backLink/url")
 
   val formProvider: RemoveUnderpaymentReasonFormProvider = injector.instanceOf[RemoveUnderpaymentReasonFormProvider]
 
@@ -38,7 +39,7 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec with BaseMessages {
       val form: Form[Boolean] = formProvider.apply()
       lazy val view: Html = injectedView(
         form,
-        controllers.routes.ChangeUnderpaymentReasonController.onLoad()
+        backLink
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -59,7 +60,7 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec with BaseMessages {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
       lazy val view: Html = injectedView(
         form,
-        controllers.routes.ChangeUnderpaymentReasonController.onLoad()
+        backLink
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -83,7 +84,7 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec with BaseMessages {
     val form: Form[Boolean] = formProvider.apply()
     lazy val view: Html = injectedView(
       form,
-      Call("GET", controllers.routes.ChangeUnderpaymentReasonController.onLoad().url)
+      backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -96,11 +97,11 @@ class RemoveUnderpaymentReasonViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.ChangeUnderpaymentReasonController.onLoad().url)
+      elementAttributes("#back-link") must contain("href" -> backLink.url)
     }
 
     s"have the correct Continue button" in {
-      elementText(".govuk-button") mustBe continue
+      elementText(".govuk-button") mustBe RemoveUnderpaymentReasonMessages.continue
     }
 
   }

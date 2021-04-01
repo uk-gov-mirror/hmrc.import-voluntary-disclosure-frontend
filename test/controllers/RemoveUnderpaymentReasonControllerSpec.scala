@@ -84,12 +84,6 @@ class RemoveUnderpaymentReasonControllerSpec extends ControllerSpecBase {
         redirectLocation(result) mustBe Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url)
       }
 
-      "return a SEE OTHER response when true" in new Test {
-        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "true")
-        lazy val result: Future[Result] = controller.onSubmit(request)
-        status(result) mustBe Status.SEE_OTHER
-      }
-
       "redirect to Reason Underpayment Summary page" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId")
           .set(UnderpaymentReasonsPage, Seq(
@@ -124,6 +118,13 @@ class RemoveUnderpaymentReasonControllerSpec extends ControllerSpecBase {
       }
 
       "update the UserAnswers in session" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId")
+          .set(UnderpaymentReasonsPage, Seq(
+            underpaymentReason(boxNumber = 35, itemNumber = 1))).success.value
+          .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
+            original = underpaymentReason(boxNumber = 35, itemNumber = 1),
+            changed = underpaymentReason(boxNumber = 35, itemNumber = 1))).success.value
+        )
         private val request = fakeRequest.withFormUrlEncodedBody("value" -> "true")
         await(controller.onSubmit(request))
         verifyCalls()
