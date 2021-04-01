@@ -80,7 +80,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
             ),
             actions = Some(Actions(
               items = Seq(
-                ActionItem(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url, Text(messages("changeUnderpaymentReason.change")))
+                ActionItem(controllers.routes.ChangeItemNumberController.onLoad().url, Text(messages("changeUnderpaymentReason.change")))
               )
             ))
           )

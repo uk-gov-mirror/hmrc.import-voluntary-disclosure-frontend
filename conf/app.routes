@@ -137,6 +137,9 @@ GET         /disclosure/change/change-reason-details/:boxNumber/:itemNumber     
 GET         /disclosure/remove-reason-confirm                                                  controllers.RemoveUnderpaymentReasonController.onLoad
 POST        /disclosure/remove-reason-confirm                                                  controllers.RemoveUnderpaymentReasonController.onSubmit
 
+GET         /disclosure/change/item-number                                                     controllers.ChangeItemNumberController.onLoad
+POST        /disclosure/change/item-number                                                     controllers.ChangeItemNumberController.onSubmit
+
 GET         /disclosure/check-your-answers                                                     controllers.CheckYourAnswersController.onLoad
 GET         /disclosure/confirmation                                                           controllers.CheckYourAnswersController.onSubmit
 

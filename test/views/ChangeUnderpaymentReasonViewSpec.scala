@@ -81,7 +81,7 @@ class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
           ChangeUnderpaymentReasonMessages.change.trim
 
         document.select(".govuk-summary-list__actions > a").eachAttr("href").get(0) mustBe
-          controllers.routes.ChangeUnderpaymentReasonController.onLoad().url
+          controllers.routes.ChangeItemNumberController.onLoad().url
 
         document.select(".govuk-summary-list__actions > a").eachAttr("href").get(1) mustBe
           controllers.routes.ChangeUnderpaymentReasonController.onLoad().url
