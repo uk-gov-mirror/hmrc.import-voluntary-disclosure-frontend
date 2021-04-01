@@ -18,6 +18,7 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.DefermentFormProvider
+import models.SelectedDutyTypes._
 import models.UserAnswers
 import pages.DefermentPage
 import play.api.i18n.I18nSupport

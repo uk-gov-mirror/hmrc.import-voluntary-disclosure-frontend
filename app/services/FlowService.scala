@@ -17,6 +17,7 @@
 package services
 
 import config.AppConfig
+import models.SelectedDutyTypes.{Both, Duty, Neither, SelectedDutyType, Vat}
 import models.{UserAnswers, UserType}
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import pages.{ImporterEORIExistsPage, UserTypePage}

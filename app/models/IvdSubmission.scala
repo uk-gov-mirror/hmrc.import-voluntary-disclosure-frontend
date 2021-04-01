@@ -17,8 +17,9 @@
 package models
 
 import config.FixedConfig
-import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
-import org.w3c.dom.DocumentType
+import models.DocumentTypes.{DefermentAuthorisation, DocumentType}
+import models.SelectedDutyTypes._
+import models.underpayments.UnderpaymentDetail
 import pages._
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
