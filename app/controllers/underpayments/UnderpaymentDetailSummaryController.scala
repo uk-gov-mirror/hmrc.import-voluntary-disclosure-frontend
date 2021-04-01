@@ -50,7 +50,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
         Redirect(controllers.underpayments.routes.UnderpaymentStartController.onLoad())
       )
     } else {
-      val length = underpaymentDetails.getOrElse(Seq.empty).length
+      val length = underpaymentDetails.get.length
       Future.successful(
         Ok(
           view(
