@@ -12,6 +12,7 @@ lazy val microservice = Project(appName, file("."))
     scalaVersion := "2.12.12",
     libraryDependencies ++= AppDependencies.compile ++ AppDependencies.test,
     PlayKeys.playDefaultPort := 7950,
+    routesImport += "models.SelectedDutyTypes.SelectedDutyType",
     TwirlKeys.templateImports ++= Seq(
       "config.AppConfig",
       "uk.gov.hmrc.govukfrontend.views.html.components._",

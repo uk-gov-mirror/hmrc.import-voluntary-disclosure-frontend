@@ -38,23 +38,19 @@ class FlowService @Inject()(implicit val appConfig: AppConfig) {
       case _ => false
     }
 
-  def dutyType(userAnswers: UserAnswers): String = {
-    userAnswers.get(UnderpaymentDetailSummaryPage) match {
-      case Some(value) =>
-        val vatOnly = value.count(underpayment => underpayment.duty == "B00") == 1 && value.length == 1
-        val dutyOnly = value.count(underpayment => underpayment.duty != "B00") == 1 && value.length == 1
-        val dutyAndVAT = value.count(underpayment => underpayment.duty == "B00") == 1 && value.length > 1
-        if (vatOnly) {
-          "vat"
-        } else if (dutyOnly) {
-          "duty"
-        } else if (dutyAndVAT) {
-          "both"
-        } else {
-          "none"
-        }
-      case _ => "none"
-    }
+  // TODO - old way for duty needs to be taken out when feature switch is taken out
+  def dutyType(userAnswers: UserAnswers): SelectedDutyType = {
+    val vatUnderpaymentType: String = "B00"
+    userAnswers.get(UnderpaymentDetailSummaryPage).map { value =>
+      val vatExists = value.exists(_.duty == vatUnderpaymentType)
+      val dutyExists = value.exists(_.duty != vatUnderpaymentType)
+      (vatExists, dutyExists) match {
+        case (true, true) => Both
+        case (true, _) => Vat
+        case (_, true) => Duty
+        case _ => Neither
+      }
+    }.getOrElse(Neither)
   }
 
 }

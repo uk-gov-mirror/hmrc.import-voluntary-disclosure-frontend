@@ -17,7 +17,8 @@
 package models
 
 import config.FixedConfig
-import models.underpayments.UnderpaymentDetail
+import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
+import org.w3c.dom.DocumentType
 import pages._
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
@@ -42,9 +43,10 @@ case class IvdSubmission(userType: UserType,
                          additionalDefermentType: Option[String] = None,
                          amendedItems: Seq[UnderpaymentReason] = Seq.empty,
                          underpaymentDetails: Seq[UnderpaymentDetail] = Seq.empty,
-                         documentsSupplied: Seq[String] = Seq.empty,
+                         documentsSupplied: Seq[DocumentType] = Seq.empty,
                          supportingDocuments: Seq[FileUploadInfo] = Seq.empty,
-                         splitDeferment: Boolean = false
+                         splitDeferment: Boolean = false,
+                         authorityDocuments: Seq[UploadAuthority] = Seq.empty
                         )
 
 object IvdSubmission extends FixedConfig {
@@ -115,6 +117,33 @@ object IvdSubmission extends FixedConfig {
       Json.obj()
     }
 
+    val supportingDocuments = if (data.paymentByDeferment) {
+      (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
+        case (true, Some("B"), Some("B")) =>
+          data.authorityDocuments.filter(x => Seq(Duty, Vat).contains(x.dutyType)).map(_.file) ++ data.supportingDocuments
+        case (true, Some("B"), _) =>
+          data.authorityDocuments.filter(_.dutyType == Duty).map(_.file) ++ data.supportingDocuments
+        case (true, _, Some("B")) =>
+          data.authorityDocuments.filter(_.dutyType == Vat).map(_.file) ++ data.supportingDocuments
+        case (false, Some("B"), _) =>
+          data.authorityDocuments.map(_.file) ++ data.supportingDocuments
+        case _ => data.supportingDocuments
+      }
+    } else {
+      data.supportingDocuments
+    }
+
+    val supportingDocumentTypes = if (data.paymentByDeferment) {
+      (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
+        case (true, Some(dt), Some(addDt)) if dt != "B" && addDt != "B" => data.documentsSupplied
+        case (true, _, _) => data.documentsSupplied ++ Seq(DefermentAuthorisation)
+        case (false, Some("B"), _) => data.documentsSupplied ++ Seq(DefermentAuthorisation)
+        case _ => data.documentsSupplied
+      }
+    } else {
+      data.documentsSupplied
+    }
+
     val payload = Json.obj(
       "userType" -> data.userType,
       "isBulkEntry" -> isBulkEntry,
@@ -124,9 +153,9 @@ object IvdSubmission extends FixedConfig {
       "customsProcessingCode" -> data.originalCpc,
       "declarantContactDetails" -> data.declarantContactDetails,
       "underpaymentDetails" -> data.underpaymentDetails,
-      "supportingDocumentTypes" -> data.documentsSupplied,
+      "supportingDocumentTypes" -> supportingDocumentTypes,
       "amendedItems" -> data.amendedItems,
-      "supportingDocuments" -> data.supportingDocuments
+      "supportingDocuments" -> supportingDocuments
     )
 
     payload ++ defermentDetails ++ importerDetails ++ representativeDetails
@@ -155,6 +184,7 @@ object IvdSubmission extends FixedConfig {
       additionalInfo <- MoreInformationPage.path.readNullable[String]
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
+      authorityDocuments <- UploadAuthorityPage.path.readNullable[Seq[UploadAuthority]]
     } yield {
 
       val traderContactDetails = ContactDetails(
@@ -185,7 +215,8 @@ object IvdSubmission extends FixedConfig {
         additionalDefermentType = additionalDefermentType,
         additionalInfo = additionalInfo.getOrElse("Not Applicable"),
         amendedItems = amendedItems,
-        splitDeferment = splitDeferment.getOrElse(false)
+        splitDeferment = splitDeferment.getOrElse(false),
+        authorityDocuments = authorityDocuments.getOrElse(Seq.empty)
       )
     }
 }

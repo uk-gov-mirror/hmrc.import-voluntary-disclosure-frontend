@@ -17,6 +17,7 @@
 package services
 
 import base.SpecBase
+import mocks.config.MockAppConfig
 import models.UserType.{Importer, Representative}
 import models.{UserAnswers, UserType}
 import pages.{ImporterEORIExistsPage, UserTypePage}
@@ -25,8 +26,9 @@ import pages.{ImporterEORIExistsPage, UserTypePage}
 class FlowServiceSpec extends SpecBase {
 
   trait Test {
+    val mockAppConfig = MockAppConfig
     lazy val userType: UserType = Importer
-    lazy val service = new FlowService
+    lazy val service = new FlowService()(mockAppConfig)
 
     def setupUserAnswersForRepFlow = UserAnswers("some-cred-id").set(UserTypePage, userType).success.value
 
@@ -59,28 +61,30 @@ class FlowServiceSpec extends SpecBase {
     }
   }
 
-//  "dutyType call" should {
-//    "return vat if only vat is present" in new Test {
-//      override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
-//        .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = false, importVAT = true, exciseDuty = false)).success.value
-//      service.dutyType(setupUserAnswersForDutyType) mustBe "vat"
-//    }
-//
-//    "return duty if only duty is present" in new Test {
-//      override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
-//        .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = true)).success.value
-//      service.dutyType(setupUserAnswersForDutyType) mustBe "duty"
-//    }
-//
-//    "return both if both are present" in new Test {
-//      override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
-//        .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true)).success.value
-//      service.dutyType(setupUserAnswersForDutyType) mustBe "both"
-//    }
-//
-//    "return none if none present" in new Test {
-//      service.dutyType(setupUserAnswersForDutyType) mustBe "none"
-//    }
-//  }
+  //  "dutyType call" when {
+  //    "using the oldUnderpayment feature" should {
+  //      "return Vat if only Vat is present" in new Test {
+  //        override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+  //          .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = false, importVAT = true, exciseDuty = false)).success.value
+  //        service.dutyType(setupUserAnswersForDutyType) mustBe Vat
+  //      }
+  //
+  //      "return Duty if only Duty is present" in new Test {
+  //        override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+  //          .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = true)).success.value
+  //        service.dutyType(setupUserAnswersForDutyType) mustBe Duty
+  //      }
+  //
+  //      "return Both if Both are present" in new Test {
+  //        override val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
+  //          .set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true)).success.value
+  //        service.dutyType(setupUserAnswersForDutyType) mustBe Both
+  //      }
+  //
+  //      "return Neither if Neither present" in new Test {
+  //        service.dutyType(setupUserAnswersForDutyType) mustBe Neither
+  //      }
+  //    }
+  //  }
 
 }

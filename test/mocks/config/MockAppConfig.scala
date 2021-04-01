@@ -52,6 +52,8 @@ object MockAppConfig extends AppConfig {
   override val upScanInitiateBaseUrl: String = "TBC"
   override val upScanAcceptedFileTypes: String = "TBC"
   override val fileRepositoryTtl: Int = 86400
+  override val upScanAuthoritySuccessRedirectForUser: String = "TBC"
+  override val upScanAuthorityErrorRedirectForUser: String = "TBC"
 
   override val importVoluntaryDisclosureSubmission: String = "TBC"
 }

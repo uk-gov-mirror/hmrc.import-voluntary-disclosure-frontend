@@ -17,6 +17,7 @@
 package models
 
 import base.ModelSpecBase
+import models.SelectedDutyTypes._
 import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
 import pages._
 import play.api.libs.json._
@@ -319,6 +320,245 @@ class IvdSubmissionSpec extends ModelSpecBase {
 
       "generate the correct JSON without additionalDefermentNumber details" in {
         (result \ "additionalDefermentNumber").toOption shouldBe None
+      }
+
+    }
+
+    "deferment without split option required" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address),
+        paymentByDeferment = true,
+        splitDeferment = false,
+        defermentAccountNumber = Some("1234567"),
+        defermentType = Some("A")
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON with defermentType details" in {
+        data("defermentType") shouldBe JsString("A")
+      }
+
+      "generate the correct JSON with defermentAccountNumber details" in {
+        data("defermentAccountNumber") shouldBe JsString("A1234567")
+      }
+
+      "generate the correct JSON without additionalDefermentNumber details" in {
+        (result \ "additionalDefermentNumber").toOption shouldBe None
+      }
+
+      "generate the correct JSON without authority document type details" in {
+        data("supportingDocumentTypes") shouldBe Json.arr()
+      }
+
+      "generate the correct JSON without additional supporting documents for authority" in {
+        data("supportingDocuments").as[Seq[FileUploadInfo]].size shouldBe submission.supportingDocuments.size
+      }
+    }
+
+    "split deferment option with both proof of authority required" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address),
+        paymentByDeferment = true,
+        splitDeferment = true,
+        defermentAccountNumber = Some("1234567"),
+        defermentType = Some("B"),
+        additionalDefermentAccountNumber = Some("7654321"),
+        additionalDefermentType = Some("B"),
+        authorityDocuments = Seq(
+          UploadAuthority("1234567", Duty,
+            FileUploadInfo(
+              fileName = "TestDocument.pdf",
+              downloadUrl = "http://some/location",
+              uploadTimestamp = currentTimestamp,
+              checksum = "the file checksum",
+              fileMimeType = "application/pdf"
+            )),
+          UploadAuthority("7654321", Vat,
+            FileUploadInfo(
+              fileName = "TestDocument.pdf",
+              downloadUrl = "http://some/location",
+              uploadTimestamp = currentTimestamp,
+              checksum = "the file checksum",
+              fileMimeType = "application/pdf"
+            ))
+        )
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON with defermentType details" in {
+        data("defermentType") shouldBe JsString("B")
+      }
+
+      "generate the correct JSON with defermentAccountNumber details" in {
+        data("defermentAccountNumber") shouldBe JsString("B1234567")
+      }
+
+      "generate the correct JSON with additional defermentAccountNumber details" in {
+        data("additionalDefermentAccountNumber") shouldBe JsString("B7654321")
+      }
+
+      "generate the correct JSON with authority document type details" in {
+        data("supportingDocumentTypes") shouldBe Json.arr(JsString(DocumentTypes.DefermentAuthorisation))
+      }
+
+      "generate the correct JSON with additional supporting documents for authority" in {
+        data("supportingDocuments") shouldBe Json.arr(
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          ),
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          ),
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          )
+        )
+      }
+
+    }
+
+    "split deferment option with duty proof of authority required" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address),
+        paymentByDeferment = true,
+        splitDeferment = true,
+        defermentAccountNumber = Some("1234567"),
+        defermentType = Some("B"),
+        additionalDefermentAccountNumber = Some("7654321"),
+        additionalDefermentType = Some("C"),
+        authorityDocuments = Seq(
+          UploadAuthority("1234567", Duty,
+            FileUploadInfo(
+              fileName = "TestDocument.pdf",
+              downloadUrl = "http://some/location",
+              uploadTimestamp = currentTimestamp,
+              checksum = "the file checksum",
+              fileMimeType = "application/pdf"
+            ))
+        )
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON with defermentType details" in {
+        data("defermentType") shouldBe JsString("B")
+      }
+
+      "generate the correct JSON with defermentAccountNumber details" in {
+        data("defermentAccountNumber") shouldBe JsString("B1234567")
+      }
+
+      "generate the correct JSON with additional defermentAccountNumber details" in {
+        data("additionalDefermentAccountNumber") shouldBe JsString("C7654321")
+      }
+
+      "generate the correct JSON with authority document type details" in {
+        data("supportingDocumentTypes") shouldBe Json.arr(JsString(DocumentTypes.DefermentAuthorisation))
+      }
+
+      "generate the correct JSON with additional supporting documents for authority" in {
+        data("supportingDocuments") shouldBe Json.arr(
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          ),
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          )
+        )
+      }
+
+    }
+
+    "split deferment option with Vat proof of authority required" should {
+      val repSubmission = submission.copy(
+        userType = UserType.Representative,
+        knownDetails = EoriDetails("GB1234567890", "Representative Inc.", address),
+        importerName = Some("Importer Inc."),
+        importerAddress = Some(address),
+        paymentByDeferment = true,
+        splitDeferment = true,
+        defermentAccountNumber = Some("1234567"),
+        defermentType = Some("A"),
+        additionalDefermentAccountNumber = Some("7654321"),
+        additionalDefermentType = Some("B"),
+        authorityDocuments = Seq(
+          UploadAuthority("7654321", Vat,
+            FileUploadInfo(
+              fileName = "TestDocument.pdf",
+              downloadUrl = "http://some/location",
+              uploadTimestamp = currentTimestamp,
+              checksum = "the file checksum",
+              fileMimeType = "application/pdf"
+            ))
+        )
+      )
+
+      implicit lazy val result: JsValue = Json.toJson(repSubmission)
+
+      "generate the correct JSON with defermentType details" in {
+        data("defermentType") shouldBe JsString("A")
+      }
+
+      "generate the correct JSON with defermentAccountNumber details" in {
+        data("defermentAccountNumber") shouldBe JsString("A1234567")
+      }
+
+      "generate the correct JSON with additional defermentAccountNumber details" in {
+        data("additionalDefermentAccountNumber") shouldBe JsString("B7654321")
+      }
+
+      "generate the correct JSON with authority document type details" in {
+        data("supportingDocumentTypes") shouldBe Json.arr(JsString(DocumentTypes.DefermentAuthorisation))
+      }
+
+      "generate the correct JSON with additional supporting documents for authority" in {
+        data("supportingDocuments") shouldBe Json.arr(
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          ),
+          Json.obj(
+            "fileName" -> "TestDocument.pdf",
+            "downloadUrl" -> "http://some/location",
+            "uploadTimestamp" -> currentTimestamp,
+            "checksum" -> "the file checksum",
+            "fileMimeType" -> "application/pdf"
+          )
+        )
       }
 
     }
