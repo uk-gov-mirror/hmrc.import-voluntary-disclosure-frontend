@@ -37,6 +37,8 @@
     form = None,
     customBackLinkUrl = None) {
 
+    @errorSummary(form.errors)
+
     @h1(messages("underpaymentDetailsSummary.pageHeader"))
 
     @h2(messages("underpaymentDetailsSummary.pageHeaderSmall"))
@@ -52,6 +54,7 @@
     @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit()) {
         @if(underpaymentDetailsLength == 10) {
             @p(Html(messages("underpaymentDetailsSummary.fullList")))
+            <input type="hidden" name="value" value="false"/>
         } else {
             @yesNoRadio(
                 form,

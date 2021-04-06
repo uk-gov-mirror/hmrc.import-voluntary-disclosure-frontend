@@ -18,7 +18,7 @@ package messages.underpayments
 
 import messages.{BaseMessages, ExpectedContent}
 
-object UnderpaymentDetailSummaryMessages extends BaseMessages {
+object UnderpaymentDetailConfirmMessages extends BaseMessages {
 
   val originalAmount = "Amount that was paid to HMRC"
   val amendedAmount = "Amount that should have been paid"

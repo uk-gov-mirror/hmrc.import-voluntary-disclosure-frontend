@@ -40,10 +40,9 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
                                                    )
   extends FrontendController(mcc) with I18nSupport {
 
-  // TODO - write tests for the new flow
-  // TODO - write ATs and PTs for the new flow, delete for the old flow
-
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    println("SCOOBY")
+    println(request.credId)
     val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
     if (underpaymentDetails.isEmpty) {
       Future.successful(

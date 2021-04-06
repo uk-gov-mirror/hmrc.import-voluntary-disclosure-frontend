@@ -20,7 +20,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryList, SummaryListRow, Value}
 import views.ViewUtils.displayMoney
 
-object UnderpaymentDetailSummaryData {
+object UnderpaymentDetailConfirmData {
 
   def underpaymentDetailSummaryList(underpaymentType: String, bodyMessage: String): SummaryList =
     SummaryList(
