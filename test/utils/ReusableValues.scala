@@ -16,7 +16,6 @@
 
 package utils
 
-import messages.BoxNumberMessages
 import messages.underpayments.UnderpaymentTypeMessages
 import models.{ContactAddress, EoriDetails}
 import play.api.http.Status
@@ -87,7 +86,7 @@ trait ReusableValues {
   )
 
 
-   def createRadioButton(value: String, message: String): RadioItem = {
+  def createRadioButton(value: String, message: String): RadioItem = {
     RadioItem(
       value = Some(value),
       content = Text(message),
