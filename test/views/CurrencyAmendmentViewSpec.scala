@@ -23,10 +23,15 @@ import models.UnderpaymentReasonValue
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.data.{Form, FormError}
+import play.api.mvc.Call
 import play.twirl.api.Html
 import views.html.CurrencyAmendmentView
 
 class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
+
+  private val formAction = Call("POST", "formActionUrl")
+
+  private val backLink = Some(Call("GET", "backLinkUrl"))
 
   private lazy val injectedView: CurrencyAmendmentView = app.injector.instanceOf[CurrencyAmendmentView]
 
@@ -50,7 +55,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist" should {
       val form: Form[UnderpaymentReasonValue] = formProvider.apply(boxNumber)
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+        form, formAction, boxNumber, itemNumber, backLink
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -70,7 +75,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     "an error exists (no value has been specified for original amount)" should {
       lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(emptyString, validValue)
       lazy val view: Html = injectedView(
-        form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+        form, formAction, boxNumber, itemNumber, backLink
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -91,7 +96,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
   "an error exists (no value has been specified for amended amount)" should {
     lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(validValue, emptyString)
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+      form, formAction, boxNumber, itemNumber, backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -113,7 +118,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
       .discardingErrors
       .withError(FormError("amended", AmendReasonValuesMessages.amendedDifferent))
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+      form, formAction, boxNumber, itemNumber, backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -133,7 +138,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
   "an error exists (value has been entered in an none numeric format for both original and amended)" should {
     lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(invalidValue1, invalidValue1)
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+      form, formAction, boxNumber, itemNumber, backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -157,7 +162,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
   "an error exists (value has been entered with too many decimal points for both original and amended)" should {
     lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(invalidValue2, invalidValue2)
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+      form, formAction, boxNumber, itemNumber, backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -181,7 +186,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
   "an error exists (value has been entered out of range for both original and amended)" should {
     lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(invalidValue3, invalidValue3)
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+      form, formAction, boxNumber, itemNumber, backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -211,7 +216,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
       s"rendered for box ${boxNumber}" should {
         val form: Form[UnderpaymentReasonValue] = formProvider.apply(boxNumber)
         lazy val view: Html = injectedView(
-          form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+          form, formAction, boxNumber, itemNumber, backLink
         )(fakeRequest, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -231,7 +236,7 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
 
     lazy val form: Form[UnderpaymentReasonValue] = underpaymentReasonFormWithValues(validValue, emptyString)
     lazy val view: Html = injectedView(
-      form, boxNumber, itemNumber, controllers.routes.BoxNumberController.onLoad()
+      form, formAction, boxNumber, itemNumber, backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -256,7 +261,11 @@ class CurrencyAmendmentViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.BoxNumberController.onLoad().url)
+      elementAttributes("#back-link") must contain("href" -> backLink.get.url)
+    }
+
+    "have the correct formAction" in {
+      elementAttributes("form") must contain("action" -> formAction.url)
     }
 
   }

@@ -23,7 +23,7 @@
         inputWeight: components.inputWeight
 )
 
-@(form: Form[_], boxNumber: Int, itemNumber: Int, backLink: Call, inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
+@(form: Form[_], formAction: Call, boxNumber: Int, itemNumber: Int, backLink: Option[Call], inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
 @bodyMessage=@{
     if (messages.isDefinedAt(s"box${boxNumber}.pageBody")) {
         Some(messages(s"box${boxNumber}.pageBody"))
@@ -35,7 +35,7 @@
     @layout(
         pageTitle = messages(s"box${boxNumber}.pageTitle", itemNumber),
         form = Some(form),
-        customBackLinkUrl = Some(backLink)) {
+        customBackLinkUrl = backLink) {
 
         @errorSummary(form.errors)
 
@@ -43,7 +43,7 @@
 
         @bodyMessage.map{msg => @p{ @msg } }
 
-        @formHelper(action = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)) {
+        @formHelper(action = formAction) {
             @inputWeight(form, "original", "original", messages("amendmentValue.originalAmount"), false,
                 classes = inputClass)
             @inputWeight(form, "amended", "amended", messages("amendmentValue.amendedAmount"), false,

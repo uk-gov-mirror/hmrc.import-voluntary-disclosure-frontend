@@ -20,8 +20,8 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.UnderpaymentReasonAmendmentFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{UnderpaymentReasonValue, UserAnswers}
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
+import models.{ChangeUnderpaymentReason, UnderpaymentReason, UnderpaymentReasonValue, UserAnswers}
+import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}
 import play.api.test.FakeRequest
@@ -30,7 +30,7 @@ import views.html.{CurrencyAmendmentView, TextAmendmentView, WeightAmendmentView
 
 import scala.concurrent.Future
 
-class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
+class ChangeUnderpaymentReasonDetailsControllerSpec extends ControllerSpecBase {
 
   private final lazy val fifty: String = "GBP50"
   private final lazy val sixtyFive: String = "GBP65.01"
@@ -42,7 +42,11 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
     )
 
   trait Test extends MockSessionRepository {
-    lazy val controller = new UnderpaymentReasonAmendmentController(
+    def underpayment(boxNumber: Int, itemNumber: Int = 0, original: String = "60", amended: String = "70"): UnderpaymentReason = {
+      UnderpaymentReason(boxNumber, itemNumber, original, amended)
+    }
+
+    lazy val controller = new ChangeUnderpaymentReasonDetailsController(
       authenticatedAction,
       dataRetrievalAction,
       dataRequiredAction,
@@ -59,8 +63,9 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
     val userAnswers: Option[UserAnswers] = Some(
       UserAnswers("some-cred-id")
-        .set(UnderpaymentReasonItemNumberPage, 5).success.value
-        .set(UnderpaymentReasonAmendmentPage, UnderpaymentReasonValue("5", "15")).success.value
+        .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
+          underpayment(boxNumber = 35, itemNumber = 1),
+          underpayment(boxNumber = 35, itemNumber = 1))).success.value
     )
     val formProvider: UnderpaymentReasonAmendmentFormProvider = injector.instanceOf[UnderpaymentReasonAmendmentFormProvider]
     MockedSessionRepository.set(Future.successful(true))
@@ -74,7 +79,6 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
     }
 
     "return HTML for valid box number" in new Test {
-      override val userAnswers: Option[UserAnswers] = Option(UserAnswers("some-cred-id"))
       val result: Future[Result] = controller.onLoad(22)(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -85,16 +89,16 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
       assert(result.getMessage.contains("Invalid Box Number"))
     }
 
-    "should redirect the back button to Box Number Controller" in new Test {
-      controller.backLink(22) mustBe Some(controllers.routes.BoxNumberController.onLoad())
+    "redirect the back button to Change underpayment reasons" in new Test {
+      controller.backLink(22) mustBe Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
     }
 
-    "should redirect the back button to Item Number Controller" in new Test {
-      controller.backLink(33) mustBe Some(controllers.routes.ItemNumberController.onLoad())
+    "redirect the back button to previous page in browsers history" in new Test {
+      controller.backLink(33) mustBe None
     }
 
-    "should redirect the back button to Box Number Controller when the box number is not in the list" in new Test {
-      controller.backLink(0) mustBe Some(controllers.routes.BoxNumberController.onLoad())
+    "redirect the back button to previous page in browser history when the box number is not in the list" in new Test {
+      controller.backLink(0) mustBe Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
     }
 
   }
@@ -105,7 +109,7 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
       "return a SEE OTHER response when correct data is sent" in new Test {
         lazy val result: Future[Result] = controller.onSubmit(22)(fakeRequestGenerator(fifty, sixtyFive))
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.routes.ConfirmReasonDetailController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {
@@ -149,26 +153,26 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
   "routeToView for Text Amendment" when {
     def checkRoute(boxNumber: Int, itemNumber: Int, back: Option[Call], expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
       s"render the view using the textAmendmentView for box ${boxNumber}" in new Test {
-        val formAction = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)
+        val formAction = controllers.routes.ChangeUnderpaymentReasonDetailsController.onSubmit(boxNumber)
         val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
         result mustBe textAmendmentView(form.apply(boxNumber), formAction, boxNumber, itemNumber, back, inputClass = expectedInputClass)(fakeRequest, messages)
       }
     }
 
-    "called with entry level box 22" should {checkRoute(22, 0, Some(controllers.routes.BoxNumberController.onLoad()))}
-    "called with entry level box 62" should {checkRoute(62, 0, Some(controllers.routes.BoxNumberController.onLoad()))}
-    "called with entry level box 63" should {checkRoute(63, 0, Some(controllers.routes.BoxNumberController.onLoad()))}
-    "called with entry level box 66" should {checkRoute(66, 0, Some(controllers.routes.BoxNumberController.onLoad()))}
-    "called with entry level box 67" should {checkRoute(67, 0, Some(controllers.routes.BoxNumberController.onLoad()))}
-    "called with entry level box 68" should {checkRoute(68, 0, Some(controllers.routes.BoxNumberController.onLoad()))}
-
-    "called with item level box 33" should {checkRoute(33, 1, Some(controllers.routes.ItemNumberController.onLoad()), Some("govuk-input--width-20"))}
-    "called with item level box 34" should {checkRoute(34, 1, Some(controllers.routes.ItemNumberController.onLoad()), Some("govuk-input--width-3"))}
-    "called with item level box 36" should {checkRoute(36, 1, Some(controllers.routes.ItemNumberController.onLoad()), Some("govuk-input--width-3"))}
-    "called with item level box 37" should {checkRoute(37, 1, Some(controllers.routes.ItemNumberController.onLoad()))}
-    "called with item level box 39" should {checkRoute(39, 1, Some(controllers.routes.ItemNumberController.onLoad()))}
-    "called with item level box 41" should {checkRoute(41, 1, Some(controllers.routes.ItemNumberController.onLoad()))}
-    "called with item level box 45" should {checkRoute(45, 1, Some(controllers.routes.ItemNumberController.onLoad()), Some("govuk-input--width-4"))}
+    "called with entry level box 22" should {checkRoute(22, 0, Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad()))}
+    "called with entry level box 62" should {checkRoute(62, 0, Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad()))}
+    "called with entry level box 63" should {checkRoute(63, 0, Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad()))}
+    "called with entry level box 66" should {checkRoute(66, 0, Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad()))}
+    "called with entry level box 67" should {checkRoute(67, 0, Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad()))}
+    "called with entry level box 68" should {checkRoute(68, 0, Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad()))}
+//
+    "called with item level box 33" should {checkRoute(33, 1, None, Some("govuk-input--width-20"))}
+    "called with item level box 34" should {checkRoute(34, 1, None, Some("govuk-input--width-3"))}
+    "called with item level box 36" should {checkRoute(36, 1, None, Some("govuk-input--width-3"))}
+    "called with item level box 37" should {checkRoute(37, 1, None)}
+    "called with item level box 39" should {checkRoute(39, 1, None)}
+    "called with item level box 41" should {checkRoute(41, 1, None)}
+    "called with item level box 45" should {checkRoute(45, 1, None, Some("govuk-input--width-4"))}
 
     "called with an invalid box number" should {
         s"route for box 0" in new Test {
@@ -183,14 +187,14 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
   "routeToView for Weight Amendment" when {
     def checkRoute(boxNumber: Int, itemNumber: Int, back: Option[Call], expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
       s"render the view using the weightAmendmentView for box ${boxNumber}" in new Test {
-        val formAction = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)
+        val formAction = controllers.routes.ChangeUnderpaymentReasonDetailsController.onSubmit(boxNumber)
         val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
         result mustBe weightAmendmentView(form.apply(boxNumber), formAction, boxNumber, itemNumber, back, inputClass = expectedInputClass)(fakeRequest, messages)
       }
     }
 
-    "called with item level box 35" should {checkRoute(35, 1, Some(controllers.routes.ItemNumberController.onLoad()))}
-    "called with item level box 38" should {checkRoute(38, 1, Some(controllers.routes.ItemNumberController.onLoad()))}
+    "called with item level box 35" should {checkRoute(35, 1, None)}
+    "called with item level box 38" should {checkRoute(38, 1, None)}
 
     "called with an invalid box number" should {
       s"route for box 0" in new Test {
@@ -205,13 +209,13 @@ class UnderpaymentReasonAmendmentControllerSpec extends ControllerSpecBase {
   "routeToView for Currency Amendment" when {
     def checkRoute(boxNumber: Int, itemNumber: Int, back: Option[Call], expectedInputClass: Option[String] = Some("govuk-input--width-10")) = {
       s"render the view using the currencyAmendmentView for box ${boxNumber}" in new Test {
-        val formAction = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)
+        val formAction = controllers.routes.ChangeUnderpaymentReasonDetailsController.onSubmit(boxNumber)
         val result = controller.routeToView(boxNumber, itemNumber, form.apply(boxNumber))(fakeRequest)
         result mustBe currencyAmendmentView(form.apply(boxNumber), formAction, boxNumber, itemNumber, back, inputClass = expectedInputClass)(fakeRequest, messages)
       }
     }
 
-    "called with item level box 46" should {checkRoute(46, 1, Some(controllers.routes.ItemNumberController.onLoad()))}
+    "called with item level box 46" should {checkRoute(46, 1, None)}
 
     "called with an invalid box number" should {
       s"route for box 0" in new Test {

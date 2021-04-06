@@ -18,52 +18,55 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
+import javax.inject.{Inject, Singleton}
+import models.{UnderpaymentReason, UnderpaymentReasonValue}
+import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
 import play.api.data.{Form, FormError}
 import play.api.i18n.I18nSupport
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents, Request}
+import play.api.mvc._
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{CurrencyAmendmentView, TextAmendmentView, WeightAmendmentView}
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction,
-                                                      getData: DataRetrievalAction,
-                                                      requireData: DataRequiredAction,
-                                                      sessionRepository: SessionRepository,
-                                                      mcc: MessagesControllerComponents,
-                                                      formProvider: UnderpaymentReasonAmendmentFormProvider,
-                                                      textAmendmentView: TextAmendmentView,
-                                                      weightAmendmentView: WeightAmendmentView,
-                                                      currencyAmendmentView: CurrencyAmendmentView
+class ChangeUnderpaymentReasonDetailsController @Inject()(identify: IdentifierAction,
+                                                          getData: DataRetrievalAction,
+                                                          requireData: DataRequiredAction,
+                                                          sessionRepository: SessionRepository,
+                                                          mcc: MessagesControllerComponents,
+                                                          formProvider: UnderpaymentReasonAmendmentFormProvider,
+                                                          textAmendmentView: TextAmendmentView,
+                                                          weightAmendmentView: WeightAmendmentView,
+                                                          currencyAmendmentView: CurrencyAmendmentView
                                    )
   extends FrontendController(mcc) with I18nSupport {
 
   private[controllers] def backLink(boxNumber: Int): Option[Call] = {
     boxNumber match {
-      case 33|34|35|36|37|38|39|41|42|43|45|46 => Some(controllers.routes.ItemNumberController.onLoad())
-      case _ => Some(controllers.routes.BoxNumberController.onLoad())
+      case 33|34|35|36|37|38|39|41|42|43|45|46 => None
+      case _ => Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
     }
   }
 
-  private def formAction(boxNumber: Int): Call = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)
+  private def formAction(boxNumber: Int): Call = controllers.routes.ChangeUnderpaymentReasonDetailsController.onSubmit(boxNumber)
 
   def onLoad(boxNumber: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
-
-    val form = request.userAnswers.get(UnderpaymentReasonAmendmentPage).fold(formProvider(boxNumber)) {
-      formProvider(boxNumber).fill
+    val itemNumber = request.userAnswers.get(ChangeUnderpaymentReasonPage).fold(0) { reason =>
+      reason.changed.itemNumber
     }
-
+    val form = request.userAnswers.get(ChangeUnderpaymentReasonPage).fold(formProvider(boxNumber)) { reason =>
+      formProvider(boxNumber).fill(UnderpaymentReasonValue(reason.changed.original, reason.changed.amended))
+    }
     Future.successful(Ok(routeToView(boxNumber, itemNumber, form)))
   }
 
   def onSubmit(boxNumber: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val itemNumber = request.userAnswers.get(UnderpaymentReasonItemNumberPage).getOrElse(0)
+    val itemNumber = request.userAnswers.get(ChangeUnderpaymentReasonPage).fold(0) { reason =>
+      reason.changed.itemNumber
+    }
     formProvider(boxNumber).bindFromRequest().fold(
       formWithErrors => {
         val newErrors = formWithErrors.errors.map { error =>
@@ -72,11 +75,25 @@ class UnderpaymentReasonAmendmentController @Inject()(identify: IdentifierAction
         Future.successful(BadRequest(routeToView(boxNumber, itemNumber, formWithErrors.copy(errors = newErrors))))
       },
       value => {
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonAmendmentPage, value))
-          _ <- sessionRepository.set(updatedAnswers)
+        val newReasonOpt = for {
+          changedReason <- request.userAnswers.get(ChangeUnderpaymentReasonPage)
         } yield {
-          Redirect(controllers.routes.ConfirmReasonDetailController.onLoad())
+          changedReason.copy(changed = UnderpaymentReason(
+            changedReason.changed.boxNumber,
+            changedReason.changed.itemNumber,
+            value.original,
+            value.amended
+          ))
+        }
+        newReasonOpt match {
+          case Some(newReason) =>
+            for {
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, newReason))
+              _ <- sessionRepository.set(updatedAnswers)
+            } yield {
+              Redirect(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
+            }
+          case _ => Future.successful(InternalServerError("Changed reason details not found"))
         }
       }
     )

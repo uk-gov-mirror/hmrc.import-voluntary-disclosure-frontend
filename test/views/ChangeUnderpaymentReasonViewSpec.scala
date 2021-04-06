@@ -34,7 +34,7 @@ class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
   "Rendering the ChangeUnderpaymentReasonView page" when {
     "showing underpayment with item number" should {
 
-      lazy val view: Html = injectedView(backLink, summaryList, singleItemReason.original.boxNumber )(fakeRequest, messages)
+      lazy val view: Html = injectedView(backLink, summaryList(22), singleItemReason.original.boxNumber )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -84,13 +84,13 @@ class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
           controllers.routes.ChangeItemNumberController.onLoad().url
 
         document.select(".govuk-summary-list__actions > a").eachAttr("href").get(1) mustBe
-          controllers.routes.ChangeUnderpaymentReasonController.onLoad().url
+          controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(22).url
       }
     }
 
     "showing underpayment without item number" should {
 
-      lazy val view: Html = injectedView(backLink, entryLevelSummaryList, singleEntryLevelReason.original.boxNumber )(fakeRequest, messages)
+      lazy val view: Html = injectedView(backLink, entryLevelSummaryList(35), singleEntryLevelReason.original.boxNumber )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -126,7 +126,7 @@ class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
           ChangeUnderpaymentReasonMessages.change.trim
 
         document.select(".govuk-summary-list__actions > a").eachAttr("href").get(0) mustBe
-          controllers.routes.ChangeUnderpaymentReasonController.onLoad().url
+          controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(35).url
       }
     }
 
@@ -134,7 +134,7 @@ class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
 
   it should {
 
-    lazy val view: Html = injectedView(backLink, summaryList, singleItemReason.original.boxNumber)(fakeRequest, messages)
+    lazy val view: Html = injectedView(backLink, summaryList(22), singleItemReason.original.boxNumber)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "render a back link with the correct URL" in {

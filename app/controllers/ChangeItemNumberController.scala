@@ -71,7 +71,7 @@ class ChangeItemNumberController @Inject()(identify: IdentifierAction,
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, newReason))
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
-              Redirect(controllers.routes.ChangeItemNumberController.onLoad())
+              Redirect(controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(newReason.original.boxNumber))
             }
           case _ => Future.successful(InternalServerError("Changed item number not found"))
         }
