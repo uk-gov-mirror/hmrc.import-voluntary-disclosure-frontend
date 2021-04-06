@@ -91,7 +91,7 @@ class ChangeUnderpaymentReasonDetailsController @Inject()(identify: IdentifierAc
               updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, newReason))
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
-              Redirect(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
+              Redirect(controllers.routes.ConfirmChangeReasonDetailController.onLoad())
             }
           case _ => Future.successful(InternalServerError("Changed reason details not found"))
         }

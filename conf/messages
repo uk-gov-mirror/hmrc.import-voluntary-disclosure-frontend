@@ -593,3 +593,7 @@ changeUnderpaymentReason.amended = Amended value
 removeUnderpaymentReason.pageTitle = Are you sure you want to remove this reason for underpayment?
 removeUnderpaymentReason.heading = Are you sure you want to remove this reason for underpayment?
 removeUnderpaymentReason.error.required = Select yes to remove this reason for underpayment
+
+# Confirm Change Reason Details
+confirmChangeReason.pageTitle = Confirm the changes to box {0} reason for underpayment
+confirmChangeReason.heading = Confirm the changes to box {0} reason for underpayment
