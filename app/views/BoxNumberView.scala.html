@@ -22,7 +22,7 @@
         inputRadio: components.inputRadio
 )
 
-@(form: Form[_], backLink: Call, radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, boxNumbers: Seq[RadioItem])(implicit request: Request[_], messages: Messages)
 
     @layout(
         pageTitle = messages("boxNumber.pageTitle"),

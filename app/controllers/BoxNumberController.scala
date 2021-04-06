@@ -91,12 +91,12 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
     }
   }
 
-  private def createRadioButton(form: Form[_], values: Seq[String])(implicit messages: Messages): Seq[RadioItem] = {
-    values.map(keyValue =>
+  private def createRadioButton(form: Form[_], boxNumbers: Seq[String])(implicit messages: Messages): Seq[RadioItem] = {
+    boxNumbers.map(boxNumber =>
       RadioItem(
-        value = Some(keyValue),
-        content = Text(messages(s"boxNumber.$keyValue.radio")),
-        checked = form("value").value.contains(keyValue)
+        value = Some(boxNumber),
+        content = Text(messages(s"boxNumber.$boxNumber.radio")),
+        checked = form("value").value.contains(boxNumber)
       )
     )
   }
