@@ -339,10 +339,29 @@ boxGuidance.bullet2 = the item number (if applicable)
 boxGuidance.bullet3 = the original value and the amended value
 boxGuidance.p3 = You will be able to provide more than one reason for the underpayment.
 
-# Box Number
-boxNumber.pageTitle = What is the box number?
-boxNumber.heading = What is the box number?
-boxNumber.error.required = Enter a box number
+# Box Number page
+boxNumber.pageTitle = What was the reason for the underpayment?
+boxNumber.heading = What was the reason for the underpayment?
+boxNumber.error.required = Select which value caused the underpayment
+boxNumber.22.radio = Box 22 Invoice currency and total amount invoiced
+boxNumber.33.radio = Box 33 Commodity code
+boxNumber.34.radio = Box 34 Country of origin code
+boxNumber.35.radio = Box 35 Gross mass
+boxNumber.36.radio = Box 36 Preference
+boxNumber.37.radio = Box 37 Procedure (customs procedure code)
+boxNumber.38.radio = Box 38 Net mass
+boxNumber.39.radio = Box 39 Quota
+boxNumber.41.radio = Box 41 Supplementary units
+boxNumber.42.radio = Box 42 Item price
+boxNumber.43.radio = Box 43 Valuation method code
+boxNumber.45.radio = Box 45 Adjustment
+boxNumber.46.radio = Box 46 Statistical value
+boxNumber.62.radio = Box 62 Air transport costs
+boxNumber.63.radio = Box 63 AWB or freight charges
+boxNumber.66.radio = Box 66 Insurance
+boxNumber.67.radio = Box 67 Other charges of deductions
+boxNumber.68.radio = Box 68 Adjustment for VAT value
+
 
 # Amend Reason Values
 amendmentValue.originalAmount = Original value

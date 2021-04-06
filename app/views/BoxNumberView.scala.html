@@ -14,37 +14,39 @@
  * limitations under the License.
  *@
 
-@this(layout: templates.Layout,
+@this(
+        layout: templates.Layout,
         formHelper: FormWithCSRF,
-        h1: components.h1,
         errorSummary: components.errorSummary,
         button: components.button,
-        inputNumber: components.inputNumber
+        inputRadio: components.inputRadio
 )
 
-@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, boxNumbers: Seq[RadioItem])(implicit request: Request[_], messages: Messages)
 
-@layout(
-    pageTitle = messages("boxNumber.pageTitle"),
-    form = Some(form),
-    customBackLinkUrl = Some(backLink)) {
+    @layout(
+        pageTitle = messages("boxNumber.pageTitle"),
+        form = Some(form),
+        customBackLinkUrl = Some(backLink)
+    ) {
 
-    @errorSummary(form.errors)
+        @errorSummary(form.errors)
 
-    @formHelper(action = controllers.routes.BoxNumberController.onSubmit()) {
-        @inputNumber(
-            form = form,
-            id = "value",
-            name = "value",
-            label = messages("boxNumber.heading"),
-            classes = Some("govuk-fieldset__legend govuk-input--width-5"),
-            isPageHeading = true
-        )
-        @button("common.button.continue")
+        @formHelper(action = controllers.routes.BoxNumberController.onSubmit()) {
+
+            @inputRadio(
+                form = form,
+                legend = messages("boxNumber.heading"),
+                items = boxNumbers,
+                legendAsHeading = true
+            )
+
+            @button("common.button.continue")
+
+        }
+
     }
 
-}
-
-@{
-    //$COVERAGE-OFF$
-}
+    @{
+        //$COVERAGE-OFF$
+    }
