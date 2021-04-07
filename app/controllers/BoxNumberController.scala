@@ -24,6 +24,7 @@ import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
+import services.FlowService
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -39,6 +40,7 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
                                     sessionRepository: SessionRepository,
                                     mcc: MessagesControllerComponents,
                                     formProvider: BoxNumberFormProvider,
+                                    flowService: FlowService,
                                     view: BoxNumberView
                                    )
   extends FrontendController(mcc) with I18nSupport {
@@ -52,15 +54,19 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
     val form = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).fold(formProvider()) {
       formProvider().fill
     }
-    Future.successful(Ok(view(form, backLink, createRadioButton(form, boxNumbers))))
+
+    val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => flowService.underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
+    Future.successful(Ok(view(form, backLink, createRadioButton(form, filteredBoxNumbers))))
+
 
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(
-        BadRequest(view(formWithErrors, backLink, createRadioButton(formWithErrors, boxNumbers)))
-      ),
+      formWithErrors => {
+        val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => flowService.underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
+        Future.successful(BadRequest(view(formWithErrors, backLink, createRadioButton(formWithErrors, filteredBoxNumbers))))
+      },
       value => {
         request.userAnswers.get(UnderpaymentReasonBoxNumberPage) match {
           case Some(oldValue) if oldValue != value =>

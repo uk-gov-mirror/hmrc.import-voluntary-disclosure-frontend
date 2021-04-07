@@ -19,6 +19,7 @@ package controllers
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.BoxNumberFormProvider
+import mocks.config.MockAppConfig
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
 import pages.UnderpaymentReasonBoxNumberPage
@@ -26,6 +27,7 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
+import services.FlowService
 import views.html.BoxNumberView
 
 import scala.concurrent.Future
@@ -44,6 +46,11 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
       "value" -> value
     )
 
+  val mockAppConfig = MockAppConfig
+
+  lazy val service = new FlowService()(mockAppConfig)
+
+
   trait Test extends MockSessionRepository {
     lazy val controller = new BoxNumberController(
       authenticatedAction,
@@ -52,6 +59,7 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
       mockSessionRepository,
       messagesControllerComponents,
       form,
+      service,
       boxNumberView
     )
     private lazy val boxNumberView = app.injector.instanceOf[BoxNumberView]
@@ -107,6 +115,7 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
         await(controller.onSubmit(fakeRequestGenerator("22")))
         verifyCalls()
       }
+
 
     }
 

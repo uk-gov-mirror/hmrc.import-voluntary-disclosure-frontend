@@ -17,13 +17,11 @@
 package services
 
 import base.SpecBase
-import config.AppConfig
-import models.UserType.{Importer, Representative}
-import models.{UnderpaymentDetail, UnderpaymentType, UserAnswers, UserType}
-import models.SelectedDutyTypes._
-import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
 import mocks.config.MockAppConfig
-import pages.underpayments.UnderpaymentDetailSummaryPage
+import models.SelectedDutyTypes._
+import models.UserType.{Importer, Representative}
+import models.{UnderpaymentReason, UnderpaymentType, UserAnswers, UserType}
+import pages.{ImporterEORIExistsPage, UnderpaymentReasonsPage, UnderpaymentTypePage, UserTypePage}
 
 
 class FlowServiceSpec extends SpecBase {
@@ -34,8 +32,10 @@ class FlowServiceSpec extends SpecBase {
     lazy val service = new FlowService()(mockAppConfig)
 
     def setupUserAnswersForRepFlow = UserAnswers("some-cred-id").set(UserTypePage, userType).success.value
+
     def setupUserAnswersForEoriExists(exists: Boolean) = UserAnswers("some-cred-id").set(ImporterEORIExistsPage, exists).success.value
 
+    val setupUserAnswersForUnderpaymentReasons = UserAnswers("some-cred-id").set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(22, 0, "", ""))).success.value
     val setupUserAnswersForDutyType: UserAnswers = UserAnswers("some-cred-id")
 
   }
@@ -87,6 +87,18 @@ class FlowServiceSpec extends SpecBase {
         service.dutyType(setupUserAnswersForDutyType) mustBe Neither
       }
     }
+  }
+
+  "underpaymentReasonSelected call" should {
+    "return true if a box Number exists " in new Test {
+      service.underpaymentReasonSelected(setupUserAnswersForUnderpaymentReasons, 22) mustBe true
+    }
+
+    "return false if userAnswers is empty " in new Test {
+      override val setupUserAnswersForUnderpaymentReasons: UserAnswers = UserAnswers("some-cred-id")
+      service.underpaymentReasonSelected(setupUserAnswersForUnderpaymentReasons, 22) mustBe false
+    }
+
   }
 
 }
