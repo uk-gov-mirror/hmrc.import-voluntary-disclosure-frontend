@@ -110,9 +110,6 @@ class UnderpaymentDetailSummaryViewSpec extends ViewBaseSpec with BaseMessages {
         elementText("#main-content > div > div > form > p") mustBe UnderpaymentDetailSummaryMessages.fullList
       }
 
-//      s"have a hidden value of False" in {
-//      }
-
     }
 
   }
