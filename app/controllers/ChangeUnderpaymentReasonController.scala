@@ -17,7 +17,6 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.UnderpaymentReasonSummaryFormProvider
 import javax.inject.Inject
 import models.{ChangeUnderpaymentReason, UnderpaymentReason}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
@@ -39,7 +38,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
                                                    sessionRepository: SessionRepository,
                                                    mcc: MessagesControllerComponents,
                                                    view: ChangeUnderpaymentReasonView
-                                                   )
+                                                  )
   extends FrontendController(mcc) with I18nSupport {
 
   private lazy val backLink: Call = controllers.routes.UnderpaymentReasonSummaryController.onLoad()

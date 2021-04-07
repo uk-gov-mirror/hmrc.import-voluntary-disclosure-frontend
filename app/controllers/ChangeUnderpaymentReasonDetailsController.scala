@@ -20,7 +20,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import forms.UnderpaymentReasonAmendmentFormProvider
 import javax.inject.{Inject, Singleton}
 import models.{UnderpaymentReason, UnderpaymentReasonValue}
-import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
+import pages.ChangeUnderpaymentReasonPage
 import play.api.data.{Form, FormError}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -41,12 +41,12 @@ class ChangeUnderpaymentReasonDetailsController @Inject()(identify: IdentifierAc
                                                           textAmendmentView: TextAmendmentView,
                                                           weightAmendmentView: WeightAmendmentView,
                                                           currencyAmendmentView: CurrencyAmendmentView
-                                   )
+                                                         )
   extends FrontendController(mcc) with I18nSupport {
 
   private[controllers] def backLink(boxNumber: Int): Option[Call] = {
     boxNumber match {
-      case 33|34|35|36|37|38|39|41|42|43|45|46 => None
+      case 33 | 34 | 35 | 36 | 37 | 38 | 39 | 41 | 42 | 43 | 45 | 46 => None
       case _ => Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
     }
   }
@@ -70,7 +70,11 @@ class ChangeUnderpaymentReasonDetailsController @Inject()(identify: IdentifierAc
     formProvider(boxNumber).bindFromRequest().fold(
       formWithErrors => {
         val newErrors = formWithErrors.errors.map { error =>
-          if (error.key.isEmpty) {FormError("amended", error.message)} else {error}
+          if (error.key.isEmpty) {
+            FormError("amended", error.message)
+          } else {
+            error
+          }
         }
         Future.successful(BadRequest(routeToView(boxNumber, itemNumber, formWithErrors.copy(errors = newErrors))))
       },
