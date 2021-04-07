@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package messages
+package pages
 
-object ChangeUnderpaymentReasonMessages extends BaseMessages {
+import models.UploadAuthority
+import play.api.libs.json._
 
-  def title(box: Int): String = s"Change box ${box} of the reason for underpayment"
-  val h1: String = "Underpayment amount summary"
-  val itemNumber = "Item number"
-  val change = "Change"
-  val originalValue = "Original value"
-  val amendedValue = "Amended value"
-  val removeLink = "Remove this reason for underpayment"
-  val backToReasons = "Back to reasons list"
+object UploadAuthorityPage extends QuestionPage[Seq[UploadAuthority]] {
+
+  override def path: JsPath = JsPath \ "uploaded-authority-files"
+
+  def queryWrites: Writes[Seq[UploadAuthority]] = (authorities: Seq[UploadAuthority]) => Json.toJson(authorities)
 }

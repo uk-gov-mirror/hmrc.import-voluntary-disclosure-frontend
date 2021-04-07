@@ -339,10 +339,29 @@ boxGuidance.bullet2 = the item number (if applicable)
 boxGuidance.bullet3 = the original value and the amended value
 boxGuidance.p3 = You will be able to provide more than one reason for the underpayment.
 
-# Box Number
-boxNumber.pageTitle = What is the box number?
-boxNumber.heading = What is the box number?
-boxNumber.error.required = Enter a box number
+# Box Number page
+boxNumber.pageTitle = What was the reason for the underpayment?
+boxNumber.heading = What was the reason for the underpayment?
+boxNumber.error.required = Select which value caused the underpayment
+boxNumber.22.radio = Box 22 Invoice currency and total amount invoiced
+boxNumber.33.radio = Box 33 Commodity code
+boxNumber.34.radio = Box 34 Country of origin code
+boxNumber.35.radio = Box 35 Gross mass
+boxNumber.36.radio = Box 36 Preference
+boxNumber.37.radio = Box 37 Procedure (customs procedure code)
+boxNumber.38.radio = Box 38 Net mass
+boxNumber.39.radio = Box 39 Quota
+boxNumber.41.radio = Box 41 Supplementary units
+boxNumber.42.radio = Box 42 Item price
+boxNumber.43.radio = Box 43 Valuation method code
+boxNumber.45.radio = Box 45 Adjustment
+boxNumber.46.radio = Box 46 Statistical value
+boxNumber.62.radio = Box 62 Air transport costs
+boxNumber.63.radio = Box 63 AWB or freight charges
+boxNumber.66.radio = Box 66 Insurance
+boxNumber.67.radio = Box 67 Other charges of deductions
+boxNumber.68.radio = Box 68 Adjustment for VAT value
+
 
 # Amend Reason Values
 amendmentValue.originalAmount = Original value
@@ -581,7 +600,7 @@ repImportVat.pageTitle = Deferment account details for the import VAT owed
 repImportVat.heading = Deferment account details for the import VAT owed
 
 # Change Underpayment Reason Page
-changeUnderpaymentReason.heading = Change box {0} reason for underpayment
+changeUnderpaymentReason.heading = Change box {0} of the reason for underpayment
 changeUnderpaymentReason.removeLink = Remove this reason for underpayment
 changeUnderpaymentReason.backToReasons = Back to reasons list
 changeUnderpaymentReason.itemNumber = Item number
@@ -597,3 +616,18 @@ removeUnderpaymentReason.error.required = Select yes to remove this reason for u
 # Confirm Change Reason Details
 confirmChangeReason.pageTitle = Confirm the changes to box {0} reason for underpayment
 confirmChangeReason.heading = Confirm the changes to box {0} reason for underpayment
+
+# Upload Authority page
+uploadAuthority.pageTitle = Upload proof of authority to use this deferment account
+uploadAuthority.pageHeader = Upload proof of authority to use this deferment account
+uploadAuthority.p1 = You must provide proof that you have one-off authority to use this deferment account {0} to pay for the {1} owed.
+uploadAuthority.vat = import VAT
+uploadAuthority.duty = duty
+uploadAuthority.both = import VAT and duty
+uploadAuthority.p2 = The proof needs to be dated and signed by the owner of the deferment account. The date must be after the date of the original import declaration.
+uploadAuthority.fileSizeTypeHeading = File size and type
+uploadAuthority.fileSizeTypeText = The file must be 6MB or smaller and either be a PDF (.pdf) or a text (.txt) file.
+uploadAuthority.uploadFile = Upload file
+uploadAuthoritySuccess.pageTitle = The file has been uploaded successfully
+uploadAuthoritySuccess.pageHeader = The file has been uploaded successfully
+uploadAuthoritySuccess.text = You have uploaded {0}

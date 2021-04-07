@@ -20,24 +20,20 @@
         linkButton: components.linkButton
 )
 
-@(key: String, backLink: Call)(implicit request: Request[_], messages: Messages)
+@(fileName: String, action: String)(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("uploadProgress.pageTitle"),
-    customBackLinkUrl = Some(backLink)
+    pageTitle = messages("uploadAuthoritySuccess.pageTitle"),
+    showBackLink = false
 ) {
 
-    @h1(messages("uploadProgress.pageHeader"))
+    @h1(messages("uploadAuthoritySuccess.pageHeader"))
 
     @p {
-        @messages("uploadProgress.message")
+        @messages("uploadAuthoritySuccess.text", fileName)
     }
 
-    @p {
-        @messages("uploadProgress.request")
-    }
-
-    @linkButton(url = controllers.routes.UploadFileController.uploadProgress(key).url, messages(("uploadProgress.refresh")))
+    @linkButton(url = action, messages(("common.continue")))
 
 }
 

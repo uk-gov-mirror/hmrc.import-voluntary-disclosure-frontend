@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package messages
+package models
 
-object ChangeUnderpaymentReasonMessages extends BaseMessages {
+import models.SelectedDutyTypes.SelectedDutyType
+import play.api.libs.json.{Json, Reads, Writes}
 
-  def title(box: Int): String = s"Change box ${box} of the reason for underpayment"
-  val h1: String = "Underpayment amount summary"
-  val itemNumber = "Item number"
-  val change = "Change"
-  val originalValue = "Original value"
-  val amendedValue = "Amended value"
-  val removeLink = "Remove this reason for underpayment"
-  val backToReasons = "Back to reasons list"
+case class UploadAuthority(dan: String,
+                           dutyType: SelectedDutyType,
+                           file: FileUploadInfo
+                         )
+
+object UploadAuthority {
+  implicit val reads: Reads[UploadAuthority] = Json.reads[UploadAuthority]
+  implicit val writes: Writes[UploadAuthority] = Json.writes[UploadAuthority]
 }
+

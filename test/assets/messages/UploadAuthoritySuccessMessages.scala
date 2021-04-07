@@ -16,14 +16,11 @@
 
 package messages
 
-object ChangeUnderpaymentReasonMessages extends BaseMessages {
+object UploadAuthoritySuccessMessages extends BaseMessages {
 
-  def title(box: Int): String = s"Change box ${box} of the reason for underpayment"
-  val h1: String = "Underpayment amount summary"
-  val itemNumber = "Item number"
-  val change = "Change"
-  val originalValue = "Original value"
-  val amendedValue = "Amended value"
-  val removeLink = "Remove this reason for underpayment"
-  val backToReasons = "Back to reasons list"
+  val filename: String = "TestDocument.pdf"
+
+  val title: String = "The file has been uploaded successfully"
+  val h1: String = "The file has been uploaded successfully"
+  val bodyText: String = s"You have uploaded $filename"
 }
