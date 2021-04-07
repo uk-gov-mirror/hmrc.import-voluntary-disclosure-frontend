@@ -28,16 +28,6 @@ object UnderpaymentDetailSummaryMessages extends BaseMessages {
   val radioMessageHint = "You must tell us about all the types of duty or tax that were underpaid on the original import declaration."
   val fullList = "You cannot add any more underpayment details as you have selected all the possible types of tax or duty that can apply to an import declaration."
   val errorRequired = "Select yes if you want to add another type of tax or duty underpayment"
-  val B00 = "Import VAT"
-  val A00 = "Customs Duty"
-  val E00 = "Excise duty"
-  val A20 = "Additional Duty"
-  val A30 = "Definitive Anti-Dumping Duty"
-  val A35 = "Provisional Anti-Dumping Duty"
-  val A40 = "Definitive Countervailing Duty"
-  val A45 = "Provisional Countervailing Duty"
-  val A10 = "Customs Duty on Agricultural Products"
-  val D10 = "Compensatory Duty"
 
 }
 

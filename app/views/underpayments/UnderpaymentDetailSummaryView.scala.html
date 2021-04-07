@@ -34,7 +34,7 @@
 
 @layout(
     pageTitle = messages("underpaymentDetailsSummary.pageTitle"),
-    form = None,
+    form = Some(form),
     customBackLinkUrl = None) {
 
     @errorSummary(form.errors)
