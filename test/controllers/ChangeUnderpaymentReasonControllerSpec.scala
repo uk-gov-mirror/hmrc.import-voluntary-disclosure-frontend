@@ -18,16 +18,14 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.UnderpaymentReasonSummaryFormProvider
 import mocks.repositories.MockSessionRepository
 import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.http.Status
-import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
-import play.api.test.FakeRequest
-import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.data.{ChangeUnderpaymentReasonData, UnderpaymentReasonSummaryData}
-import views.html.{ChangeUnderpaymentReasonView, UnderpaymentReasonSummaryView}
+import play.api.mvc.Result
+import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
+import views.data.ChangeUnderpaymentReasonData
+import views.html.ChangeUnderpaymentReasonView
 
 import scala.concurrent.Future
 

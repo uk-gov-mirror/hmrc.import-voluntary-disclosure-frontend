@@ -20,8 +20,8 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.UnderpaymentReasonAmendmentFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{ChangeUnderpaymentReason, UnderpaymentReason, UnderpaymentReasonValue, UserAnswers}
-import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonAmendmentPage, UnderpaymentReasonItemNumberPage}
+import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
+import pages.ChangeUnderpaymentReasonPage
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Call, Result}
 import play.api.test.FakeRequest

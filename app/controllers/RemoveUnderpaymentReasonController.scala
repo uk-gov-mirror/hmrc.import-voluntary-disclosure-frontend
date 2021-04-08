@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.RemoveUnderpaymentReasonFormProvider
 import javax.inject.{Inject, Singleton}
-import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
+import models.{UnderpaymentReason, UserAnswers}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat

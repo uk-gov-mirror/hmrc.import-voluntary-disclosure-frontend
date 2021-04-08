@@ -17,7 +17,7 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import javax.inject.Inject
+import javax.inject.{Inject, Singleton}
 import models.{ChangeUnderpaymentReason, UnderpaymentReason}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.i18n.{I18nSupport, Messages}
@@ -32,6 +32,7 @@ import views.html.ChangeUnderpaymentReasonView
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+@Singleton
 class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
                                                    getData: DataRetrievalAction,
                                                    requireData: DataRequiredAction,

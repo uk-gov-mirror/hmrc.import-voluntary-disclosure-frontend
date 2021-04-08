@@ -23,7 +23,7 @@ import org.jsoup.nodes.Document
 import play.api.mvc.Call
 import play.twirl.api.Html
 import views.data.ChangeUnderpaymentReasonData._
-import views.html.{ChangeUnderpaymentReasonView, UnderpaymentSummaryView}
+import views.html.ChangeUnderpaymentReasonView
 
 class ChangeUnderpaymentReasonViewSpec extends ViewBaseSpec {
 

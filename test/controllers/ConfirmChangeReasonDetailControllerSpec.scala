@@ -19,14 +19,14 @@ package controllers
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.repositories.MockSessionRepository
-import models.{ChangeUnderpaymentReason, UnderpaymentReason, UnderpaymentReasonValue, UserAnswers}
+import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
 import pages._
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.SummaryList
-import views.data.{ConfirmChangeReasonData, ConfirmReasonData}
-import views.html.{ConfirmChangeReasonDetailView, ConfirmReasonDetailView}
+import views.data.ConfirmChangeReasonData
+import views.html.ConfirmChangeReasonDetailView
 
 import scala.concurrent.Future
 
