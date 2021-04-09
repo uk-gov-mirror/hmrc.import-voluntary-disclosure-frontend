@@ -27,8 +27,8 @@
 
 @(
         form: Form[_],
-        underpaymentDetailsSummaryList: Option[SummaryList],
-        amountOwedSummaryList: Option[SummaryList],
+        underpaymentDetailsSummaryList: SummaryList,
+        amountOwedSummaryList: SummaryList,
         underpaymentDetailsLength: Int
 )(implicit request: Request[_], messages: Messages)
 
@@ -43,13 +43,9 @@
 
     @h2(messages("underpaymentDetailsSummary.pageHeaderSmall"))
 
-    @if(underpaymentDetailsSummaryList.isDefined) {
-        @govukSummaryList(underpaymentDetailsSummaryList.get)
-    }
+    @govukSummaryList(underpaymentDetailsSummaryList)
 
-    @if(amountOwedSummaryList.isDefined) {
-        @govukSummaryList(amountOwedSummaryList.get)
-    }
+    @govukSummaryList(amountOwedSummaryList)
 
     @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onSubmit()) {
         @if(underpaymentDetailsLength == 10) {

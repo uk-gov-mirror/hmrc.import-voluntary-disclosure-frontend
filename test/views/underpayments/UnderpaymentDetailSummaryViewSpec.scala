@@ -34,9 +34,9 @@ class UnderpaymentDetailSummaryViewSpec extends ViewBaseSpec with BaseMessages {
 
   val formProvider: UnderpaymentDetailSummaryFormProvider = injector.instanceOf[UnderpaymentDetailSummaryFormProvider]
 
-  val summaryList: Option[SummaryList] = UnderpaymentDetailSummaryData.summaryList
+  val summaryList: SummaryList = UnderpaymentDetailSummaryData.summaryList
 
-  val amountOwedSummaryList: Option[SummaryList] = UnderpaymentDetailSummaryData.amountOwedSummaryList
+  val amountOwedSummaryList: SummaryList = UnderpaymentDetailSummaryData.amountOwedSummaryList
 
 
   "Rendering the Underpayment Summary page" when {

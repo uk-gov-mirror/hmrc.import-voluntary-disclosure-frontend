@@ -41,108 +41,70 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
-    if (underpaymentDetails.isEmpty) {
-      Future.successful(
-        Redirect(controllers.underpayments.routes.UnderpaymentStartController.onLoad())
+
+    val fallbackResponse = Redirect(controllers.underpayments.routes.UnderpaymentStartController.onLoad())
+
+    val result = request.userAnswers.get(UnderpaymentDetailSummaryPage).map {
+      case Nil => fallbackResponse
+      case underpayments => Ok(
+        view(formProvider(), summaryList(underpayments), amountOwedSummaryList(underpayments), underpayments.length)
       )
-    } else {
-      val length = underpaymentDetails.get.length
-      Future.successful(
-        Ok(
-          view(
-            formProvider.apply(),
-            summaryList(underpaymentDetails),
-            amountOwedSummaryList(underpaymentDetails),
-            length
-          )
-        )
-      )
-    }
+    }.getOrElse(fallbackResponse)
+
+    Future.successful(result)
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val underpaymentDetails = request.userAnswers.get(UnderpaymentDetailSummaryPage)
-    formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(
-        BadRequest(
-          view(
-            formWithErrors,
-            summaryList(underpaymentDetails),
-            amountOwedSummaryList(underpaymentDetails),
-            underpaymentDetails.length
-          )
-        )
-      ),
+    val result = formProvider().bindFromRequest().fold(
+      formWithErrors => {
+        val underpayments = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
+        BadRequest(view(formWithErrors, summaryList(underpayments), amountOwedSummaryList(underpayments), underpayments.length))
+      },
       value => {
         if (value) {
-          Future.successful(Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad()))
+          Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
         } else {
-          Future.successful(Redirect(controllers.routes.BoxGuidanceController.onLoad()))
+          Redirect(controllers.routes.BoxGuidanceController.onLoad())
         }
       }
     )
+
+    Future.successful(result)
   }
 
-  private[controllers] def summaryList(underpaymentDetail: Option[Seq[UnderpaymentDetail]]
-                                      )(implicit messages: Messages): Option[SummaryList] = {
+  private[controllers] def summaryList(underpaymentDetail: Seq[UnderpaymentDetail])
+                                      (implicit messages: Messages): SummaryList = {
     val changeAction: Call = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
-    if (underpaymentDetail.isDefined) {
-      Some(
-        SummaryList(
-          rows = for (underpayment <- underpaymentDetail.get.reverse) yield
-            SummaryListRow(
-              key = Key(
-                content = Text(messages(s"underpaymentDetailsSummary.${underpayment.duty}")),
-                classes = "govuk-summary-list__key govuk-!-width-two-thirds"
-              ),
-              value = Value(
-                content = HtmlContent(displayMoney(underpayment.amended - underpayment.original)),
-                classes = "govuk-summary-list__value"
-              ),
-              actions = Some(
-                Actions(
-                  items = Seq(
-                    ActionItem(
-                      changeAction.url,
-                      Text(messages("common.change")),
-                      Some("key")
-                    )
-                  )
-                )
-              )
-            )
-        )
-      )
-    } else {
-      None
-    }
-  }
-
-  def amountOwedSummaryList(underpaymentDetail: Option[Seq[UnderpaymentDetail]])(implicit messages: Messages): Option[SummaryList] = {
-    Some(
-      SummaryList(
-        rows = Seq(SummaryListRow(
+    SummaryList(
+      rows = for (underpayment <- underpaymentDetail.reverse) yield
+        SummaryListRow(
           key = Key(
-            content = Text(
-              messages(s"underpaymentDetailsSummary.owedToHMRC")
-            ),
-            classes = "govuk-!-width-two-thirds"
+            content = Text(messages(s"underpaymentDetailsSummary.${underpayment.duty}")),
+            classes = "govuk-summary-list__key govuk-!-width-two-thirds"
           ),
           value = Value(
-            content = HtmlContent(
-              displayMoney(
-                underpaymentDetail.map(
-                  items =>
-                    items.map(
-                      item => item.amended - item.original
-                    ).foldLeft(BigDecimal(0))((left, right) => left + right)
-                ).getOrElse(0.0)
-              )
-            )
+            content = HtmlContent(displayMoney(underpayment.amended - underpayment.original)),
+            classes = "govuk-summary-list__value"
           ),
-          classes = "govuk-summary-list__row--no-border"
+          actions = Some(
+            Actions(items = Seq(ActionItem(changeAction.url, Text(messages("common.change")), Some("key"))))
+          )
         )
+    )
+  }
+
+  def amountOwedSummaryList(underpaymentDetail: Seq[UnderpaymentDetail])(implicit messages: Messages): SummaryList = {
+    val amountOwed = underpaymentDetail.map(underpayment => underpayment.amended - underpayment.original).sum
+
+    SummaryList(
+      rows = Seq(
+        SummaryListRow(
+          key = Key(
+            content = Text(messages(s"underpaymentDetailsSummary.owedToHMRC")),
+            classes = "govuk-!-width-two-thirds"
+          ),
+          value = Value(content = HtmlContent(displayMoney(amountOwed))),
+          classes = "govuk-summary-list__row--no-border"
         )
       )
     )

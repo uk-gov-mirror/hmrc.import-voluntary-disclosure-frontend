@@ -28,26 +28,24 @@ object UnderpaymentDetailSummaryData {
   private lazy val changeAction: Call = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
 
 
-  val summaryList: Option[SummaryList] = Some(
-    SummaryList(
-      Seq(
-        SummaryListRow(
-          key = Key(
-            content = Text("import vat"),
-            classes = "govuk-summary-list__key govuk-!-width-two-thirds"
-          ),
-          value = Value(
-            content = HtmlContent(displayMoney(amountInPence = 100)),
-            classes = "govuk-summary-list__value"
-          ),
-          actions = Some(
-            Actions(
-              items = Seq(
-                ActionItem(
-                  changeAction.url,
-                  Text("common.change"),
-                  Some("key")
-                )
+  val summaryList: SummaryList = SummaryList(
+    Seq(
+      SummaryListRow(
+        key = Key(
+          content = Text("import vat"),
+          classes = "govuk-summary-list__key govuk-!-width-two-thirds"
+        ),
+        value = Value(
+          content = HtmlContent(displayMoney(amountInPence = 100)),
+          classes = "govuk-summary-list__value"
+        ),
+        actions = Some(
+          Actions(
+            items = Seq(
+              ActionItem(
+                changeAction.url,
+                Text("common.change"),
+                Some("key")
               )
             )
           )
@@ -56,20 +54,18 @@ object UnderpaymentDetailSummaryData {
     )
   )
 
-  val amountOwedSummaryList: Option[SummaryList] = Some(
-    SummaryList(
-      Seq(
-        SummaryListRow(
-          key = Key(
-            content = Text(UnderpaymentDetailSummaryMessages.owedToHMRC),
-            classes = "govuk-summary-list__key govuk-!-width-two-thirds"
-          ),
-          value = Value(
-            content = HtmlContent(displayMoney(amountInPence = 100)),
-            classes = "govuk-summary-list__value"
-          ),
-          classes = "govuk-summary-list__row--no-border"
-        )
+  val amountOwedSummaryList: SummaryList = SummaryList(
+    Seq(
+      SummaryListRow(
+        key = Key(
+          content = Text(UnderpaymentDetailSummaryMessages.owedToHMRC),
+          classes = "govuk-summary-list__key govuk-!-width-two-thirds"
+        ),
+        value = Value(
+          content = HtmlContent(displayMoney(amountInPence = 100)),
+          classes = "govuk-summary-list__value"
+        ),
+        classes = "govuk-summary-list__row--no-border"
       )
     )
   )
