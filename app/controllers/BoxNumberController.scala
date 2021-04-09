@@ -18,13 +18,14 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.BoxNumberFormProvider
+import models.UserAnswers
+
 import javax.inject.{Inject, Singleton}
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
+import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage, UnderpaymentReasonsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
 import repositories.SessionRepository
-import services.FlowService
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.Text
 import uk.gov.hmrc.govukfrontend.views.viewmodels.radios.RadioItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -40,7 +41,6 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
                                     sessionRepository: SessionRepository,
                                     mcc: MessagesControllerComponents,
                                     formProvider: BoxNumberFormProvider,
-                                    flowService: FlowService,
                                     view: BoxNumberView
                                    )
   extends FrontendController(mcc) with I18nSupport {
@@ -55,16 +55,14 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
       formProvider().fill
     }
 
-    val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => flowService.underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
+    val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
     Future.successful(Ok(view(form, backLink, createRadioButton(form, filteredBoxNumbers))))
-
-
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
       formWithErrors => {
-        val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => flowService.underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
+        val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
         Future.successful(BadRequest(view(formWithErrors, backLink, createRadioButton(formWithErrors, filteredBoxNumbers))))
       },
       value => {
@@ -107,4 +105,8 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
     )
   }
 
+  private[controllers] def underpaymentReasonSelected(userAnswers: UserAnswers, boxNumber: Int): Boolean = {
+    userAnswers.get(UnderpaymentReasonsPage).getOrElse(Seq.empty)
+      .exists(reason => reason.boxNumber == boxNumber && reason.itemNumber == 0)
+  }
 }

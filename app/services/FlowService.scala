@@ -20,7 +20,8 @@ import config.AppConfig
 import models.SelectedDutyTypes._
 import models.{UnderpaymentType, UserAnswers, UserType}
 import pages.underpayments.UnderpaymentDetailSummaryPage
-import pages.{ImporterEORIExistsPage, UnderpaymentReasonsPage, UnderpaymentTypePage, UserTypePage}
+import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
+
 import javax.inject.{Inject, Singleton}
 
 @Singleton
@@ -59,13 +60,6 @@ class FlowService @Inject()(implicit val appConfig: AppConfig) {
           case _ => Neither
         }
       }.getOrElse(Neither)
-    }
-  }
-
-  def underpaymentReasonSelected(userAnswers: UserAnswers, boxNumber: Int, itemNumber: Int = 0): Boolean = {
-    userAnswers.get(UnderpaymentReasonsPage) match {
-      case Some(reasons) => reasons.exists(reason => reason.boxNumber == boxNumber && reason.itemNumber == itemNumber)
-      case _ => false
     }
   }
 
