@@ -53,15 +53,9 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
       val form = request.userAnswers.get(UnderpaymentTypePage).fold(formProvider()) {
         formProvider().fill
       }
-      Future.successful(
-        Ok(
-          underpaymentTypeView(
-            form,
-            backLink,
-            createRadioButton(form, underpaymentTypes.filter(item => !existingUnderpaymentDetails.contains(item)))
-          )
-        )
-      )
+      val availableUnderPaymentTypes = underpaymentTypes.filter(item => !existingUnderpaymentDetails.contains(item))
+      val availableUnderPaymentTypesOptions = createRadioButton(form, availableUnderPaymentTypes)
+      Future.successful(Ok(underpaymentTypeView(form, backLink, availableUnderPaymentTypesOptions)))
     }
   }
 

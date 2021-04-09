@@ -48,7 +48,6 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
     val yourDetailsDocuments: CYASummaryList = buildYourDetailsSummaryList(request.userAnswers).get
     val paymentInformation: CYASummaryList = buildPaymentInformationSummaryList(request.userAnswers).get
 
-    // TODO - needs to change once the feature swtich is taken out
     Future.successful(Ok(view(
       Seq(
         disclosureDetails,

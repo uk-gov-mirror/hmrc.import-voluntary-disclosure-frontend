@@ -175,7 +175,7 @@ object IvdSubmission extends FixedConfig {
       importerEori <- ImporterEORINumberPage.path.readNullable[String]
       importerName <- ImporterNamePage.path.readNullable[String]
       importerAddress <- ImporterAddressPage.path.readNullable[ContactAddress]
-      underpaymentDetailsNew <- UnderpaymentDetailSummaryPage.path.readNullable[Seq[UnderpaymentDetail]]
+      underpaymentDetails <- UnderpaymentDetailSummaryPage.path.readNullable[Seq[UnderpaymentDetail]]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
       paymentByDeferment <- DefermentPage.path.read[Boolean]
       defermentType <- DefermentTypePage.path.readNullable[String]
@@ -207,7 +207,7 @@ object IvdSubmission extends FixedConfig {
         importerEori = importerEori,
         importerName = importerName,
         importerAddress = importerAddress,
-        underpaymentDetails = underpaymentDetailsNew.getOrElse(Seq.empty),
+        underpaymentDetails = underpaymentDetails.getOrElse(Seq.empty),
         supportingDocuments = supportingDocuments,
         paymentByDeferment = paymentByDeferment,
         defermentType = defermentType,
