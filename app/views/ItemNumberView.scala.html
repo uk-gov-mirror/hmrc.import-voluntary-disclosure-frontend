@@ -21,7 +21,7 @@
       inputNumber: components.inputNumber
 )
 
-@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], formAction: Call, backLink: Call)(implicit request: Request[_], messages: Messages)
 
    @layout(
     pageTitle = messages("itemNo.pageTitle"),
@@ -30,7 +30,7 @@
 
     @errorSummary(form.errors)
 
-    @formHelper(action = controllers.routes.ItemNumberController.onSubmit()) {
+    @formHelper(action = formAction) {
       @inputNumber(form = form, id = "itemNumber", name = "itemNumber", label = messages("itemNo.pageHeader"), isPageHeading = true, classes = Some("govuk-fieldset__legend govuk-input--width-5"))
       @button("common.button.continue")
 

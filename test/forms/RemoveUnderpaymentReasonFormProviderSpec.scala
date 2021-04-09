@@ -18,14 +18,14 @@ package forms
 
 import base.SpecBase
 
-class SplitPaymentFormProviderSpec extends SpecBase {
+class RemoveUnderpaymentReasonFormProviderSpec extends SpecBase {
 
   "Binding a form with invalid data" when {
 
     "with no value selected" should {
 
       val missingOption: Map[String, String] = Map.empty
-      val form = new SplitPaymentFormProvider()().bind(missingOption)
+      val form = new RemoveUnderpaymentReasonFormProvider()().bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors mustBe true
@@ -36,7 +36,7 @@ class SplitPaymentFormProviderSpec extends SpecBase {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message mustBe "splitPayment.error.required"
+        form.errors.head.message mustBe "removeUnderpaymentReason.error.required"
       }
     }
   }
@@ -44,7 +44,7 @@ class SplitPaymentFormProviderSpec extends SpecBase {
   "Binding a form with valid data" should {
 
     val data = Map("value" -> "true")
-    val form = new SplitPaymentFormProvider()().bind(data)
+    val form = new RemoveUnderpaymentReasonFormProvider()().bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors mustBe false

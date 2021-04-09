@@ -560,6 +560,24 @@ repDuty.heading = Deferment account details for the duty owed
 repImportVat.pageTitle = Deferment account details for the import VAT owed
 repImportVat.heading = Deferment account details for the import VAT owed
 
+# Change Underpayment Reason Page
+changeUnderpaymentReason.heading = Change box {0} of the reason for underpayment
+changeUnderpaymentReason.removeLink = Remove this reason for underpayment
+changeUnderpaymentReason.backToReasons = Back to reasons list
+changeUnderpaymentReason.itemNumber = Item number
+changeUnderpaymentReason.change = Change
+changeUnderpaymentReason.original = Original value
+changeUnderpaymentReason.amended = Amended value
+
+# Remove Underpayment Reason Page
+removeUnderpaymentReason.pageTitle = Are you sure you want to remove this reason for underpayment?
+removeUnderpaymentReason.heading = Are you sure you want to remove this reason for underpayment?
+removeUnderpaymentReason.error.required = Select yes to remove this reason for underpayment
+
+# Confirm Change Reason Details
+confirmChangeReason.pageTitle = Confirm the changes to box {0} reason for underpayment
+confirmChangeReason.heading = Confirm the changes to box {0} reason for underpayment
+
 # Upload Authority page
 uploadAuthority.pageTitle = Upload proof of authority to use this deferment account
 uploadAuthority.pageHeader = Upload proof of authority to use this deferment account

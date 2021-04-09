@@ -22,18 +22,18 @@
         currencyInput: components.currencyInput
 )
 
-@(form: Form[_], boxNumber: Int, itemNumber: Int, backLink: Call, inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
+@(form: Form[_], formAction: Call, boxNumber: Int, itemNumber: Int, backLink: Option[Call], inputClass: Option[String] = Some("govuk-input--width-10"))(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages(s"box${boxNumber}.pageTitle", itemNumber),
     form = Some(form),
-    customBackLinkUrl = Some(backLink)) {
+    customBackLinkUrl = backLink) {
 
     @errorSummary(form.errors)
 
     @h1(messages(s"box${boxNumber}.pageHeader", itemNumber))
 
-    @formHelper(action = controllers.routes.UnderpaymentReasonAmendmentController.onSubmit(boxNumber)) {
+    @formHelper(action = formAction) {
         @currencyInput(form, "original", messages("amendmentValue.originalAmount"), 10, false,
             classes = inputClass)
         @currencyInput(form, "amended", messages("amendmentValue.amendedAmount"), 10, false,

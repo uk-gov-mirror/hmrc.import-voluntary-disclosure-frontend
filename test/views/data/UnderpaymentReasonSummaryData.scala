@@ -24,7 +24,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 
 object UnderpaymentReasonSummaryData {
 
-  private lazy val changeAction: Call = controllers.routes.UnderpaymentReasonSummaryController.onLoad()
+  private def changeAction(boxNumber: Int, itemNumber: Int): Call = controllers.routes.ChangeUnderpaymentReasonController.change(boxNumber, itemNumber)
 
   val singleItemReason: Option[Seq[UnderpaymentReason]] = Some(
     Seq(
@@ -53,13 +53,8 @@ object UnderpaymentReasonSummaryData {
             Actions(
               items = Seq(
                 ActionItem(
-                  changeAction.url,
+                  changeAction(boxNumber = 22, itemNumber = 0).url,
                   Text("Change"),
-                  Some("key")
-                ),
-                ActionItem(
-                  changeAction.url,
-                  Text("Remove"),
                   Some("key")
                 )
               ),
@@ -85,13 +80,8 @@ object UnderpaymentReasonSummaryData {
             Actions(
               items = Seq(
                 ActionItem(
-                  changeAction.url,
+                  changeAction(boxNumber = 22,itemNumber = 0).url,
                   Text("Change"),
-                  Some("key")
-                ),
-                ActionItem(
-                  changeAction.url,
-                  Text("Remove"),
                   Some("key")
                 )
               ),
@@ -110,13 +100,8 @@ object UnderpaymentReasonSummaryData {
             Actions(
               items = Seq(
                 ActionItem(
-                  changeAction.url,
+                  changeAction(boxNumber = 33, itemNumber = 1).url,
                   Text("Change"),
-                  Some("key")
-                ),
-                ActionItem(
-                  changeAction.url,
-                  Text("Remove"),
                   Some("key")
                 )
               ),
