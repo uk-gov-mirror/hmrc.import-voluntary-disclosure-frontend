@@ -18,16 +18,15 @@ package controllers
 
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
-import forms.{DefermentFormProvider, SplitPaymentFormProvider}
-import messages.DefermentMessages
+import forms.SplitPaymentFormProvider
 import mocks.repositories.MockSessionRepository
-import models.{UnderpaymentType, UserAnswers, UserType}
-import pages.{DefermentPage, SplitPaymentPage, UnderpaymentTypePage, UserTypePage}
+import models.{UserAnswers, UserType}
+import pages.{DefermentPage, SplitPaymentPage, UserTypePage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.{DefermentView, SplitPaymentView}
+import views.html.SplitPaymentView
 
 import scala.concurrent.Future
 
@@ -70,7 +69,6 @@ class SplitPaymentControllerSpec extends ControllerSpecBase {
     "return HTML" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
         .set(UserTypePage, UserType.Representative).success.value
-        .set(UnderpaymentTypePage, UnderpaymentType(true, true, false)).success.value
         .set(DefermentPage, true).success.value
         .set(SplitPaymentPage, true).success.value
       )

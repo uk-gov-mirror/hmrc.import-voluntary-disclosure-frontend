@@ -14,6 +14,8 @@
  * limitations under the License.
  *@
 
+@import views.ViewUtils.hint
+
 @this(
     layout: templates.Layout,
     formHelper: FormWithCSRF,
@@ -22,7 +24,7 @@
     button: components.button
 )
 
-@(form: Form[_], backLink: Call, headerAndTitleMessage: String, radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, headerAndTitleMessage: String)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages(headerAndTitleMessage),
@@ -36,7 +38,20 @@
        @inputRadio(
            form = form,
            legend = messages(headerAndTitleMessage),
-           items = radioItems,
+           items = Seq(
+               RadioItem(
+                   value = Some("true"),
+                   content = Text(messages("deferment.payingByDeferment")),
+                   hint = None,
+                   checked = form("value").value.contains("true")
+               ),
+               RadioItem(
+                   value = Some("false"),
+                   content = Text(messages("deferment.payingByOther")),
+                   hint = Some(hint("deferment.hint")),
+                   checked = form("value").value.contains("false")
+               )
+           ),
            legendAsHeading = true
        )
 

@@ -25,7 +25,7 @@
 @(form: Form[_], backLink: Call, radioItems: Seq[RadioItem])(implicit request: Request[_], messages: Messages)
 
     @layout(
-        pageTitle = messages("underpaymentTypeTemp.pageTitle"),
+        pageTitle = messages("underpaymentType.pageTitle"),
         form = Some(form),
         customBackLinkUrl = Some(backLink)
     ) {
@@ -36,7 +36,7 @@
 
             @inputRadio(
                 form = form,
-                legend = messages("underpaymentTypeTemp.pageHeader"),
+                legend = messages("underpaymentType.pageHeader"),
                 items = radioItems,
                 legendAsHeading = true
             )

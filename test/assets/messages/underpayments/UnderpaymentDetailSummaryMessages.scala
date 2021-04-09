@@ -16,89 +16,20 @@
 
 package messages.underpayments
 
-import messages.{BaseMessages, ExpectedContent}
+import messages.BaseMessages
 
 object UnderpaymentDetailSummaryMessages extends BaseMessages {
 
-  val originalAmount = "Amount that was paid to HMRC"
-  val amendedAmount = "Amount that should have been paid"
-  val B00pageTitle = "import VAT"
-  val B00pageHeader = "import VAT"
-  val B00pageHeaderUpperCase = "Import VAT"
-  val A00pageTitle = "Customs Duty"
-  val A00pageHeader = "Customs Duty"
-  val E00pageTitle = "excise duty"
-  val E00pageHeader = "excise duty"
-  val E00pageHeaderUpperCase = "Excise duty"
-  val A20pageTitle = "Additional Duty"
-  val A20pageHeader = "Additional Duty"
-  val A30pageTitle = "Definitive Anti-Dumping Duty"
-  val A30pageHeader = "Definitive Anti-Dumping Duty"
-  val A35pageTitle = "Provisional Anti-Dumping Duty"
-  val A35pageHeader = "Provisional Anti-Dumping Duty"
-  val A40pageTitle = "Definitive Countervailing Duty"
-  val A40pageHeader = "Definitive Countervailing Duty"
-  val A45pageTitle = "Provisional Countervailing Duty"
-  val A45pageHeader = "Provisional Countervailing Duty"
-  val A10pageTitle = "Customs Duty on Agricultural Products"
-  val A10pageHeader = "Customs Duty on Agricultural Products"
-  val D10pageTitle = "Compensatory Duty"
-  val D10pageHeader = "Compensatory Duty"
-  val beginningMessage = "Confirm the "
-  val endingMessage = " underpayment details"
-  val dueToHMRC = " owed to HMRC"
-
-  val underpaymentTypeContent: Map[String, ExpectedContent] = Map(
-    "B00" -> ExpectedContent(
-      beginningMessage + B00pageTitle + endingMessage,
-      beginningMessage + B00pageHeader + endingMessage,
-      Some(B00pageHeaderUpperCase + dueToHMRC)
-    ),
-    "A00" -> ExpectedContent(
-      beginningMessage + A00pageTitle + endingMessage,
-      beginningMessage + A00pageHeader + endingMessage,
-      Some(A00pageTitle + dueToHMRC)
-    ),
-    "E00" -> ExpectedContent(
-      beginningMessage + E00pageTitle + endingMessage,
-      beginningMessage + E00pageHeader + endingMessage,
-      Some(E00pageHeaderUpperCase + dueToHMRC)
-    ),
-    "A20" -> ExpectedContent(
-      beginningMessage + A20pageTitle + endingMessage,
-      beginningMessage + A20pageHeader + endingMessage,
-      Some(A20pageTitle + dueToHMRC)
-    ),
-    "A30" -> ExpectedContent(
-      beginningMessage + A30pageTitle + endingMessage,
-      beginningMessage + A30pageHeader + endingMessage,
-      Some(A30pageTitle + dueToHMRC)
-    ),
-    "A35" -> ExpectedContent(
-      beginningMessage + A35pageTitle + endingMessage,
-      beginningMessage + A35pageHeader + endingMessage,
-      Some(A35pageTitle + dueToHMRC)
-    ),
-    "A40" -> ExpectedContent(
-      beginningMessage + A40pageTitle + endingMessage,
-      beginningMessage + A40pageHeader + endingMessage,
-      Some(A40pageTitle + dueToHMRC)
-    ),
-    "A45" -> ExpectedContent(
-      beginningMessage + A45pageTitle + endingMessage,
-      beginningMessage + A45pageHeader + endingMessage,
-      Some(A45pageTitle + dueToHMRC)
-    ),
-    "A10" -> ExpectedContent(
-      beginningMessage + A10pageTitle + endingMessage,
-      beginningMessage + A10pageHeader + endingMessage,
-      Some(A10pageTitle + dueToHMRC)
-    ),
-    "D10" -> ExpectedContent(
-      beginningMessage + D10pageTitle + endingMessage,
-      beginningMessage + D10pageHeader + endingMessage,
-      Some(D10pageTitle + dueToHMRC)
-    )
-  )
+  val pageTitle = "Underpayment summary"
+  val pageHeader = "Underpayment summary"
+  val pageHeaderSmall = "Amount owed for each type of duty or tax"
+  val owedToHMRC = "Total owed to HMRC"
+  val radioMessage = "Add another underpayment?"
+  val radioMessageHint = "You must tell us about all the types of duty or tax that were underpaid on the original import declaration."
+  val fullList = "You cannot add any more underpayment details as you have selected all the possible types of tax or duty that can apply to an import declaration."
+  val errorRequired = "Select yes if you want to add another type of tax or duty underpayment"
 
 }
+
+
+

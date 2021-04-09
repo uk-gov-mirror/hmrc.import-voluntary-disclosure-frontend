@@ -18,12 +18,12 @@ package views.underpayments
 
 import base.ViewBaseSpec
 import messages.BaseMessages
-import messages.underpayments.UnderpaymentDetailSummaryMessages
+import messages.underpayments.UnderpaymentDetailConfirmMessages
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import play.api.mvc.Call
 import play.twirl.api.Html
-import views.data.underpayments.UnderpaymentDetailSummaryData
+import views.data.underpayments.UnderpaymentDetailConfirmData
 import views.html.underpayments.UnderpaymentDetailConfirmView
 
 class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
@@ -39,16 +39,16 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
 
       lazy val view: Html = injectedView(
         underpaymentType,
-        UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
+        UnderpaymentDetailConfirmData.underpaymentDetailSummaryList(
           underpaymentType,
-          UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
+          UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
         ),
         backLink
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
-        document.title mustBe UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).title
+        document.title mustBe UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).title
       }
 
       "not render an error summary" in {
@@ -70,9 +70,9 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
       s"rendered for type $underpaymentType" should {
         lazy val view: Html = injectedView(
           underpaymentType,
-          UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
+          UnderpaymentDetailConfirmData.underpaymentDetailSummaryList(
             underpaymentType,
-            UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
+            UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
           ),
           backLink
         )(fakeRequest, messages)
@@ -80,17 +80,17 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
 
         "have the correct page title" in {
           document.title mustBe
-            UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).title
+            UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).title
         }
 
         "have the correct page heading" in {
           elementText("h1") mustBe
-            UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).heading
+            UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).heading
         }
 
         "have the correct body text" in {
           elementText("#main-content > div > div > dl > div:nth-child(3) > dt") mustBe
-            UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
+            UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
         }
       }
     }
@@ -100,20 +100,20 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
 
     lazy val view: Html = injectedView(
       underpaymentType,
-      UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
+      UnderpaymentDetailConfirmData.underpaymentDetailSummaryList(
         underpaymentType,
-        UnderpaymentDetailSummaryMessages.underpaymentTypeContent(underpaymentType).body.get
+        UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
       ),
       backLink
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct value for Amount that was paid to HMRC" in {
-      elementText("#main-content > div > div > dl > div:nth-child(1) > dt") mustBe UnderpaymentDetailSummaryMessages.originalAmount
+      elementText("#main-content > div > div > dl > div:nth-child(1) > dt") mustBe UnderpaymentDetailConfirmMessages.originalAmount
     }
 
     "have the correct value for Amount that should have been paid" in {
-      elementText("#main-content > div > div > dl > div:nth-child(2) > dt") mustBe UnderpaymentDetailSummaryMessages.amendedAmount
+      elementText("#main-content > div > div > dl > div:nth-child(2) > dt") mustBe UnderpaymentDetailConfirmMessages.amendedAmount
     }
 
     s"have the correct Continue button" in {

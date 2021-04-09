@@ -20,19 +20,21 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
+import utils.ReusableValues
 import views.html.underpayments.UnderpaymentStartView
 
 import scala.concurrent.Future
 
-class UnderpaymentStartControllerSpec extends ControllerSpecBase {
+class UnderpaymentStartControllerSpec extends ControllerSpecBase with ReusableValues {
 
   trait Test extends MockSessionRepository {
 
     lazy val controller = new UnderpaymentStartController(authenticatedAction, dataRetrievalAction,
-      messagesControllerComponents, dataRequiredAction, view, appConfig)
+      messagesControllerComponents, dataRequiredAction, view)
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
     val view: UnderpaymentStartView = injector.instanceOf[UnderpaymentStartView]
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
@@ -42,6 +44,15 @@ class UnderpaymentStartControllerSpec extends ControllerSpecBase {
     "return 200" in new Test {
       val result: Future[Result] = controller.onLoad()(fakeRequest)
       status(result) mustBe Status.OK
+    }
+
+    "return 303" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("some-cred-id")
+          .set(UnderpaymentDetailSummaryPage, allUnderpaymentDetailsSelected()).success.value
+      )
+      val result: Future[Result] = controller.onLoad()(fakeRequest)
+      status(result) mustBe Status.SEE_OTHER
     }
 
     "return HTML" in new Test {

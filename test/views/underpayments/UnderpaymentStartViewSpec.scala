@@ -30,7 +30,7 @@ class UnderpaymentStartViewSpec extends ViewBaseSpec with BaseMessages {
 
   "Rendering the Underpayment start page" when {
     "no errors exist" should {
-      lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad(), false)(fakeRequest, messages)
+      lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad())(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title of '${UnderpaymentStartMessages.pageTitle}'" in {
@@ -40,7 +40,7 @@ class UnderpaymentStartViewSpec extends ViewBaseSpec with BaseMessages {
   }
 
   "it" should {
-    lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad(), true)(fakeRequest, messages)
+    lazy val view: Html = injectedView(controllers.routes.EnterCustomsProcedureCodeController.onLoad())(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
     s"have the correct page heading of '${UnderpaymentStartMessages.heading}'" in {
       elementText("h1") mustBe UnderpaymentStartMessages.heading
@@ -67,7 +67,7 @@ class UnderpaymentStartViewSpec extends ViewBaseSpec with BaseMessages {
     }
 
     "render a continue button with the correct URL " in {
-      elementAttributes(".govuk-button") must contain("href" -> controllers.routes.UnderpaymentTypeController.onLoad().url)
+      elementAttributes(".govuk-button") must contain("href" -> controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url)
     }
 
     "render a back link with the correct URL" in {

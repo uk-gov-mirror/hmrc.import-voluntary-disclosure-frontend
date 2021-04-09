@@ -43,37 +43,21 @@ class CheckYourAnswersController @Inject()(identify: IdentifierAction,
   val onLoad: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     val disclosureDetails: CYASummaryList = buildDisclosureDetailsSummaryList(request.userAnswers).get
-    val underpaymentDetails: Option[CYASummaryList] = buildUnderpaymentDetailsSummaryList(request.userAnswers)
     val amendmentDetails: CYASummaryList = buildAmendmentDetailsSummaryList(request.userAnswers).get
     val supportingDocuments: CYASummaryList = buildSupportingDocumentsSummaryList(request.userAnswers).get
     val yourDetailsDocuments: CYASummaryList = buildYourDetailsSummaryList(request.userAnswers).get
     val paymentInformation: CYASummaryList = buildPaymentInformationSummaryList(request.userAnswers).get
 
-    // TODO - needs to change once the feature swtich is taken out
-    if (underpaymentDetails.nonEmpty){
-      Future.successful(Ok(view(
-        Seq(
-          disclosureDetails,
-          underpaymentDetails.get,
-          amendmentDetails,
-          supportingDocuments,
-          yourDetailsDocuments,
-          paymentInformation
-        ),
-        controllers.routes.CheckYourAnswersController.onLoad))
-      )
-    } else {
-      Future.successful(Ok(view(
-        Seq(
-          disclosureDetails,
-          amendmentDetails,
-          supportingDocuments,
-          yourDetailsDocuments,
-          paymentInformation
-        ),
-        controllers.routes.CheckYourAnswersController.onLoad))
-      )
-    }
+    Future.successful(Ok(view(
+      Seq(
+        disclosureDetails,
+        amendmentDetails,
+        supportingDocuments,
+        yourDetailsDocuments,
+        paymentInformation
+      ),
+      controllers.routes.CheckYourAnswersController.onLoad))
+    )
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>

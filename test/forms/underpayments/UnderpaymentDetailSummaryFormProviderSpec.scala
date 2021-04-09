@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package forms
+package forms.underpayments
 
 import base.SpecBase
-import models.UnderpaymentType
 
-class UnderpaymentTypeFormProviderSpec extends SpecBase {
+class UnderpaymentDetailSummaryFormProviderSpec extends SpecBase {
 
   "Binding a form with invalid data" when {
 
     "the no value selected" should {
+
       val missingOption: Map[String, String] = Map.empty
-      val form = new UnderpaymentTypeFormProvider()().bind(missingOption)
+      val form = new UnderpaymentDetailSummaryFormProvider()().bind(missingOption)
 
       "result in a form with errors" in {
         form.hasErrors mustBe true
@@ -36,34 +36,20 @@ class UnderpaymentTypeFormProviderSpec extends SpecBase {
       }
 
       "have an error with the correct message" in {
-        form.errors.head.message mustBe messages("underpaymentType.error.required")
+        form.errors.head.message mustBe "underpaymentDetailsSummary.error.required"
       }
     }
-
   }
 
   "Binding a form with valid data" should {
 
-    val data = Map("customsDuty" -> "true")
-    val form = new UnderpaymentTypeFormProvider()().bind(data)
+    val data = Map("value" -> "true")
+    val form = new UnderpaymentDetailSummaryFormProvider()().bind(data)
 
     "result in a form with no errors" in {
       form.hasErrors mustBe false
     }
 
-    "generate the correct model" in {
-      form.value mustBe Some(UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = false))
-    }
   }
-
-  "A form built from a valid model" should {
-    "generate the correct mapping" in {
-      val model = UnderpaymentType(customsDuty = true, importVAT = false, exciseDuty = false)
-      val form = new UnderpaymentTypeFormProvider()().fill(model)
-      form.data mustBe Map("customsDuty" -> "true",
-        "importVAT" -> "false",
-        "exciseDuty" -> "false")
-    }
-  }
-
 }
+

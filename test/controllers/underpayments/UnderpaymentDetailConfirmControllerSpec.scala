@@ -25,7 +25,7 @@ import pages.underpayments.{UnderpaymentDetailsPage, UnderpaymentTypePage}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.data.underpayments.UnderpaymentDetailSummaryData
+import views.data.underpayments.UnderpaymentDetailConfirmData
 import views.html.underpayments.UnderpaymentDetailConfirmView
 
 import scala.concurrent.Future
@@ -65,7 +65,7 @@ class UnderpaymentDetailConfirmControllerSpec extends ControllerSpecBase {
 
     "produce correct summary list" in new Test {
       controller.summaryList("B00", UnderpaymentAmount(0, 1)) mustBe
-        UnderpaymentDetailSummaryData.underpaymentDetailSummaryList(
+        UnderpaymentDetailConfirmData.underpaymentDetailSummaryList(
           "B00",
           "Import VAT owed to HMRC"
         )
@@ -84,7 +84,7 @@ class UnderpaymentDetailConfirmControllerSpec extends ControllerSpecBase {
         )
         lazy val result: Future[Result] = controller.onSubmit("B00")(fakeRequest)
         status(result) mustBe Status.SEE_OTHER
-        redirectLocation(result) mustBe Some(controllers.underpayments.routes.UnderpaymentTypeController.onLoad().url)
+        redirectLocation(result) mustBe Some(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad().url)
       }
 
       "update the UserAnswers in session" in new Test {

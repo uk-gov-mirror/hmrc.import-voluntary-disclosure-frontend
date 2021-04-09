@@ -17,10 +17,10 @@
 package services
 
 import config.AppConfig
-import models.SelectedDutyTypes._
-import models.{UnderpaymentType, UserAnswers, UserType}
+import models.SelectedDutyTypes.{Both, Duty, Neither, SelectedDutyType, Vat}
+import models.{UserAnswers, UserType}
 import pages.underpayments.UnderpaymentDetailSummaryPage
-import pages.{ImporterEORIExistsPage, UnderpaymentTypePage, UserTypePage}
+import pages.{ImporterEORIExistsPage, UserTypePage}
 
 import javax.inject.{Inject, Singleton}
 
@@ -39,28 +39,18 @@ class FlowService @Inject()(implicit val appConfig: AppConfig) {
       case _ => false
     }
 
-  // TODO - old way for duty needs to be taken out when feature switch is taken out
   def dutyType(userAnswers: UserAnswers): SelectedDutyType = {
-    if (appConfig.useOldUnderpaymentType) {
-      userAnswers.get(UnderpaymentTypePage) match {
-        case Some(UnderpaymentType(false, true, false)) => Vat
-        case Some(UnderpaymentType(_, false, _)) => Duty
-        case Some(_) => Both
+    val vatUnderpaymentType: String = "B00"
+    userAnswers.get(UnderpaymentDetailSummaryPage).map { value =>
+      val vatExists = value.exists(_.duty == vatUnderpaymentType)
+      val dutyExists = value.exists(_.duty != vatUnderpaymentType)
+      (vatExists, dutyExists) match {
+        case (true, true) => Both
+        case (true, _) => Vat
+        case (_, true) => Duty
         case _ => Neither
       }
-    } else {
-      val vatUnderpaymentType: String = "B00"
-      userAnswers.get(UnderpaymentDetailSummaryPage).map { value =>
-        val vatExists = value.exists(_.duty == vatUnderpaymentType)
-        val dutyExists = value.exists(_.duty != vatUnderpaymentType)
-        (vatExists, dutyExists) match {
-          case (true, true) => Both
-          case (true, _) => Vat
-          case (_, true) => Duty
-          case _ => Neither
-        }
-      }.getOrElse(Neither)
-    }
+    }.getOrElse(Neither)
   }
 
 }

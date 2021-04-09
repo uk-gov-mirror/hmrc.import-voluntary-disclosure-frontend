@@ -18,7 +18,7 @@ package models
 
 import base.ModelSpecBase
 import models.SelectedDutyTypes._
-import models.underpayments.UnderpaymentAmount
+import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
 import pages._
 import play.api.libs.json._
 
@@ -45,11 +45,6 @@ class IvdSubmissionSpec extends ModelSpecBase {
     defermentType = None,
     defermentAccountNumber = Some("1234567"),
     additionalDefermentAccountNumber = None,
-    underpaymentDetails = Seq(
-      UnderpaymentDetail("customsDuty", BigDecimal(123.0), BigDecimal(233.33)),
-      UnderpaymentDetail("importVat", BigDecimal(111.11), BigDecimal(1234.0)),
-      UnderpaymentDetail("exciseDuty", BigDecimal(123.22), BigDecimal(4409.55))
-    ),
     supportingDocuments = Seq(
       FileUploadInfo(
         fileName = "TestDocument.pdf",
@@ -69,10 +64,6 @@ class IvdSubmissionSpec extends ModelSpecBase {
     answers <- answers.set(KnownEoriDetails, submission.knownDetails)
     answers <- answers.set(NumberOfEntriesPage, submission.numEntries)
     answers <- answers.set(AcceptanceDatePage, submission.acceptedBeforeBrexit)
-    answers <- answers.set(UnderpaymentTypePage, UnderpaymentType(customsDuty = true, importVAT = true, exciseDuty = true))
-    answers <- answers.set(CustomsDutyPage, UnderpaymentAmount(BigDecimal("123.0"), BigDecimal("233.33")))
-    answers <- answers.set(ImportVATPage, UnderpaymentAmount(BigDecimal("111.11"), BigDecimal("1234")))
-    answers <- answers.set(ExciseDutyPage, UnderpaymentAmount(BigDecimal("123.22"), BigDecimal("4409.55")))
     answers <- answers.set(TraderAddressCorrectPage, true)
     answers <- answers.set(DeclarantContactDetailsPage, submission.declarantContactDetails)
     answers <- answers.set(TraderAddressPage, submission.traderAddress)
@@ -138,26 +129,6 @@ class IvdSubmissionSpec extends ModelSpecBase {
           "fullName" -> "John Smith",
           "email" -> "test@test.com",
           "phoneNumber" -> "0123456789"
-        )
-      }
-
-      "generate the correct JSON for the underpaymentDetails" in {
-        data("underpaymentDetails") shouldBe Json.arr(
-          Json.obj(
-            "duty" -> "customsDuty",
-            "original" -> BigDecimal("123"),
-            "amended" -> BigDecimal("233.33")
-          ),
-          Json.obj(
-            "duty" -> "importVat",
-            "original" -> BigDecimal("111.11"),
-            "amended" -> BigDecimal("1234")
-          ),
-          Json.obj(
-            "duty" -> "exciseDuty",
-            "original" -> BigDecimal("123.22"),
-            "amended" -> BigDecimal("4409.55")
-          )
         )
       }
 

@@ -19,7 +19,7 @@ package controllers
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.DefermentFormProvider
 import models.SelectedDutyTypes._
-import models.{UnderpaymentType, UserAnswers}
+import models.UserAnswers
 import pages.DefermentPage
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
@@ -51,7 +51,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
     val form = request.userAnswers.get(DefermentPage).fold(formProvider()) {
       formProvider().fill
     }
-    Future.successful(Ok(view(form, backLink, getHeaderMessage(request.userAnswers), UnderpaymentType.options(form))))
+    Future.successful(Ok(view(form, backLink, getHeaderMessage(request.userAnswers))))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -61,8 +61,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           view(
             formWithErrors,
             backLink,
-            getHeaderMessage(request.userAnswers),
-            UnderpaymentType.options(formWithErrors)
+            getHeaderMessage(request.userAnswers)
           )
         )
       ),
@@ -93,7 +92,6 @@ class DefermentController @Inject()(identify: IdentifierAction,
     }
   }
 
-  // TODO - needs to change once the feature swtich is taken out
   private[controllers] def getHeaderMessage(userAnswers: UserAnswers): String = {
     flowService.dutyType(userAnswers) match {
       case Vat => "deferment.headingOnlyVAT"

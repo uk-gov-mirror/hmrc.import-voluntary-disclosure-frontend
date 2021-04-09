@@ -17,8 +17,7 @@
 package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import models.UnderpaymentDetail
-import models.underpayments.UnderpaymentAmount
+import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
 import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -65,7 +64,7 @@ class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.underpayments.routes.UnderpaymentTypeController.onLoad())
+          Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad())
         }
       case None => Future.successful(InternalServerError("Couldn't find underpayment details"))
     }
@@ -92,7 +91,7 @@ class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
             items = Seq(
               ActionItem(
                 controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType).url,
-                Text(messages("underpaymentSummary.change"))
+                Text(messages("common.change"))
               )
             ),
             classes = "govuk-!-padding-bottom-0")

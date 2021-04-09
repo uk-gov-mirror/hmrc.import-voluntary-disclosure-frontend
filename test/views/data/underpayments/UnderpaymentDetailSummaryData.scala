@@ -16,55 +16,58 @@
 
 package views.data.underpayments
 
+import messages.underpayments.UnderpaymentDetailSummaryMessages
+import play.api.mvc.Call
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist.{ActionItem, Actions, Key, SummaryList, SummaryListRow, Value}
+import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 import views.ViewUtils.displayMoney
+
 
 object UnderpaymentDetailSummaryData {
 
-  def underpaymentDetailSummaryList(underpaymentType: String, bodyMessage: String): SummaryList =
-    SummaryList(
-      classes = "govuk-!-margin-bottom-9",
-      rows = Seq(
-        SummaryListRow(
-          key = Key(
-            content = Text("Amount that was paid to HMRC"),
-            classes = "govuk-!-width-two-thirds govuk-!-padding-bottom-0"
-          ),
-          value = Value(
-            content = HtmlContent(displayMoney(0)),
-            classes = "govuk-!-padding-bottom-0"
-          ),
-          actions = Some(Actions(
+  private lazy val changeAction: Call = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
+
+
+  val summaryList: SummaryList = SummaryList(
+    Seq(
+      SummaryListRow(
+        key = Key(
+          content = Text("import vat"),
+          classes = "govuk-summary-list__key govuk-!-width-two-thirds"
+        ),
+        value = Value(
+          content = HtmlContent(displayMoney(amountInPence = 100)),
+          classes = "govuk-summary-list__value"
+        ),
+        actions = Some(
+          Actions(
             items = Seq(
               ActionItem(
-                controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType).url,
-                Text("Change")
+                changeAction.url,
+                Text("common.change"),
+                Some("key")
               )
-            ),
-            classes = "govuk-!-padding-bottom-0")
-          ),
-          classes = "govuk-summary-list__row--no-border"
-        ),
-        SummaryListRow(
-          key = Key(
-            content = Text("Amount that should have been paid"),
-            classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
-          ),
-          value = Value(
-            content = HtmlContent(displayMoney(1)),
-            classes = "govuk-!-padding-top-0"
+            )
           )
-        ),
-        SummaryListRow(
-          key = Key(
-            content = Text(bodyMessage),
-            classes = "govuk-!-width-two-thirds"
-          ),
-          value = Value(content = HtmlContent(displayMoney(1))),
-          classes = "govuk-summary-list__row--no-border"
         )
       )
     )
+  )
+
+  val amountOwedSummaryList: SummaryList = SummaryList(
+    Seq(
+      SummaryListRow(
+        key = Key(
+          content = Text(UnderpaymentDetailSummaryMessages.owedToHMRC),
+          classes = "govuk-summary-list__key govuk-!-width-two-thirds"
+        ),
+        value = Value(
+          content = HtmlContent(displayMoney(amountInPence = 100)),
+          classes = "govuk-summary-list__value"
+        ),
+        classes = "govuk-summary-list__row--no-border"
+      )
+    )
+  )
 
 }

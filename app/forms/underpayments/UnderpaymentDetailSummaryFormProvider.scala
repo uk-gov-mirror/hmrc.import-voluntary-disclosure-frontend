@@ -14,15 +14,19 @@
  * limitations under the License.
  */
 
-package pages
+package forms.underpayments
 
-import models.underpayments.UnderpaymentAmount
-import play.api.libs.json.JsPath
+import forms.mappings.Mappings
+import play.api.data.Form
+import play.api.i18n.Messages
 
-case object CustomsDutyPage extends QuestionPage[UnderpaymentAmount] {
+class UnderpaymentDetailSummaryFormProvider extends Mappings {
 
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "customs-duty"
+  def apply()(implicit messages: Messages): Form[Boolean] =
+    Form(
+      "value" -> boolean(
+        requiredKey = "underpaymentDetailsSummary.error.required"
+      )
+    )
 
 }

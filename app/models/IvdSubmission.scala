@@ -17,9 +17,9 @@
 package models
 
 import config.FixedConfig
-import models.DocumentTypes._
+import models.DocumentTypes.{DefermentAuthorisation, DocumentType}
 import models.SelectedDutyTypes._
-import models.underpayments.UnderpaymentAmount
+import models.underpayments.UnderpaymentDetail
 import pages._
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.libs.json.{JsObject, Json, Reads, Writes}
@@ -121,11 +121,11 @@ object IvdSubmission extends FixedConfig {
     val supportingDocuments = if (data.paymentByDeferment) {
       (data.splitDeferment, data.defermentType, data.additionalDefermentType) match {
         case (true, Some("B"), Some("B")) =>
-          data.authorityDocuments.filter(x => Seq(Duty,Vat).contains(x.dutyType)).map(_.file) ++ data.supportingDocuments
+          data.authorityDocuments.filter(x => Seq(Duty, Vat).contains(x.dutyType)).map(_.file) ++ data.supportingDocuments
         case (true, Some("B"), _) =>
-          data.authorityDocuments.filter(_.dutyType==Duty).map(_.file) ++ data.supportingDocuments
+          data.authorityDocuments.filter(_.dutyType == Duty).map(_.file) ++ data.supportingDocuments
         case (true, _, Some("B")) =>
-          data.authorityDocuments.filter(_.dutyType==Vat).map(_.file) ++ data.supportingDocuments
+          data.authorityDocuments.filter(_.dutyType == Vat).map(_.file) ++ data.supportingDocuments
         case (false, Some("B"), _) =>
           data.authorityDocuments.map(_.file) ++ data.supportingDocuments
         case _ => data.supportingDocuments
@@ -175,10 +175,7 @@ object IvdSubmission extends FixedConfig {
       importerEori <- ImporterEORINumberPage.path.readNullable[String]
       importerName <- ImporterNamePage.path.readNullable[String]
       importerAddress <- ImporterAddressPage.path.readNullable[ContactAddress]
-      customsDuty <- CustomsDutyPage.path.readNullable[UnderpaymentAmount]
-      importVat <- ImportVATPage.path.readNullable[UnderpaymentAmount]
-      exciseDuty <- ExciseDutyPage.path.readNullable[UnderpaymentAmount]
-      underpaymentDetailsNew <- UnderpaymentDetailSummaryPage.path.readNullable[Seq[UnderpaymentDetail]]
+      underpaymentDetails <- UnderpaymentDetailSummaryPage.path.readNullable[Seq[UnderpaymentDetail]]
       supportingDocuments <- FileUploadPage.path.read[Seq[FileUploadInfo]]
       paymentByDeferment <- DefermentPage.path.read[Boolean]
       defermentType <- DefermentTypePage.path.readNullable[String]
@@ -190,14 +187,6 @@ object IvdSubmission extends FixedConfig {
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
       authorityDocuments <- UploadAuthorityPage.path.readNullable[Seq[UploadAuthority]]
     } yield {
-
-      val underpaymentDetails = Seq(
-        "customsDuty" -> customsDuty,
-        "importVat" -> importVat,
-        "exciseDuty" -> exciseDuty
-      ).collect {
-        case (key, Some(details)) => UnderpaymentDetail(key, details.original, details.amended)
-      }
 
       val traderContactDetails = ContactDetails(
         knownDetails.name,
@@ -218,7 +207,7 @@ object IvdSubmission extends FixedConfig {
         importerEori = importerEori,
         importerName = importerName,
         importerAddress = importerAddress,
-        underpaymentDetails = if (underpaymentDetails.nonEmpty) underpaymentDetails else underpaymentDetailsNew.getOrElse(Seq.empty),
+        underpaymentDetails = underpaymentDetails.getOrElse(Seq.empty),
         supportingDocuments = supportingDocuments,
         paymentByDeferment = paymentByDeferment,
         defermentType = defermentType,

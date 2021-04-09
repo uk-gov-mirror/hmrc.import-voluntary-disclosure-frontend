@@ -25,24 +25,10 @@ POST        /disclosure/entry-details                                           
 GET         /disclosure/when-entry-acceptance-date                                             controllers.AcceptanceDateController.onLoad
 POST        /disclosure/when-entry-acceptance-date                                             controllers.AcceptanceDateController.onSubmit
 
-GET         /disclosure/what-duty-type-underpaid                                               controllers.UnderpaymentTypeController.onLoad
-POST        /disclosure/what-duty-type-underpaid                                               controllers.UnderpaymentTypeController.onSubmit
-
 GET         /disclosure/supporting-documentation-format                                        controllers.SupportingDocController.onLoad
-
-GET         /disclosure/customs-duty-details                                                   controllers.CustomsDutyController.onLoad
-POST        /disclosure/customs-duty-details                                                   controllers.CustomsDutyController.onSubmit
-
-GET         /disclosure/import-vat-details                                                     controllers.ImportVATController.onLoad
-POST        /disclosure/import-vat-details                                                     controllers.ImportVATController.onSubmit
-
-GET         /disclosure/excise-duty-details                                                    controllers.ExciseDutyController.onLoad
-POST        /disclosure/excise-duty-details                                                    controllers.ExciseDutyController.onSubmit
 
 GET         /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onLoad
 POST        /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onSubmit
-
-GET         /disclosure/underpayment-amount-summary                                            controllers.UnderpaymentSummaryController.onLoad
 
 GET         /disclosure/upload-file                                                            controllers.UploadFileController.onLoad
 GET         /disclosure/upload-file/upscan-response                                            controllers.UploadFileController.upscanResponseHandler(key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
@@ -154,8 +140,6 @@ GET         /confirm-eori                                                       
 GET         /disclosure/importer-deferment-account-number                                      controllers.ImporterDanController.onLoad
 POST        /disclosure/importer-deferment-account-number                                      controllers.ImporterDanController.onSubmit
 
-GET         /disclosure/underpayment-introduction                                              controllers.underpayments.UnderpaymentStartController.onLoad
-
 GET         /disclosure/split-deferment-payment                                                controllers.SplitPaymentController.onLoad
 POST        /disclosure/split-deferment-payment                                                controllers.SplitPaymentController.onSubmit
 
@@ -169,6 +153,9 @@ GET         /disclosure/deferment-account-details-vat                           
 POST        /disclosure/deferment-account-details-vat                                          controllers.RepresentativeDanImportVATController.onSubmit
 
 # Underpayments
+
+GET         /disclosure/underpayment-introduction                                              controllers.underpayments.UnderpaymentStartController.onLoad
+
 GET         /disclosure/select-duty-type-underpaid                                             controllers.underpayments.UnderpaymentTypeController.onLoad
 POST        /disclosure/select-duty-type-underpaid                                             controllers.underpayments.UnderpaymentTypeController.onSubmit
 
@@ -232,7 +219,11 @@ POST        /disclosure/confirm-customs-duty-agricultural-products-underpayment-
 GET         /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "D10")
 POST        /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "D10")
 
+GET         /disclosure/underpayment-amount-summary                                            controllers.underpayments.UnderpaymentDetailSummaryController.onLoad
+POST        /disclosure/underpayment-amount-summary                                            controllers.underpayments.UnderpaymentDetailSummaryController.onSubmit
+
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan                              controllers.UploadAuthorityController.onLoad(dutyType: SelectedDutyType, dan: String)
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan/upscan-response              controllers.UploadAuthorityController.upscanResponseHandler(dutyType: SelectedDutyType, dan: String, key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan/polling                      controllers.UploadAuthorityController.uploadProgress(dutyType: SelectedDutyType, dan: String, key: String)
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan/success                      controllers.UploadAuthorityController.onSuccess(dutyType: SelectedDutyType, dan: String)
+

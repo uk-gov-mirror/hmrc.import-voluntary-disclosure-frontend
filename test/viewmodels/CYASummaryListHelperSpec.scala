@@ -16,28 +16,23 @@
 
 package viewmodels
 
-import java.time.LocalDateTime
-
 import base.SpecBase
-import models.{EntryDetails, FileUploadInfo, NumberOfEntries, ContactAddress, ContactDetails, UserAnswers}
+import models.{ContactAddress, ContactDetails, EntryDetails, FileUploadInfo, NumberOfEntries, UserAnswers}
 import org.scalatest.{MustMatchers, OptionValues, TryValues}
 import pages._
 import views.data.CheckYourAnswersData._
-import views.data.UnderpaymentSummaryData.{cdUnderpayment, edUnderpayment, ivUnderpayment}
-import java.time.LocalDate
+
+import java.time.{LocalDate, LocalDateTime}
 
 
 class CYASummaryListHelperSpec extends SpecBase with MustMatchers with TryValues with OptionValues with CYASummaryListHelper {
 
-  trait Test  {
+  trait Test {
 
     val userAnswers: UserAnswers = UserAnswers("some-cred-id")
       .set(NumberOfEntriesPage, NumberOfEntries.OneEntry).success.value
       .set(EntryDetailsPage, EntryDetails("123", "123456Q", LocalDate.of(2020, 12, 1))).success.value
       .set(AcceptanceDatePage, true).success.value
-      .set(CustomsDutyPage, cdUnderpayment).success.value
-      .set(ImportVATPage, ivUnderpayment).success.value
-      .set(ExciseDutyPage, edUnderpayment).success.value
       .set(FileUploadPage, Seq(FileUploadInfo(
         "Example.pdf",
         "https://bucketName.s3.eu-west-2.amazonaws.com?1235676",
@@ -56,26 +51,13 @@ class CYASummaryListHelperSpec extends SpecBase with MustMatchers with TryValues
 
   "buildDisclosureDetails" should {
 
-    "produce a valid model when all answers are provided" in new Test{
+    "produce a valid model when all answers are provided" in new Test {
       buildDisclosureDetailsSummaryList(userAnswers) mustBe Some(disclosureDetailsAnswers)
     }
 
     "produce a valid model when no answers are provided" in new Test {
       override val userAnswers: UserAnswers = UserAnswers("")
       buildDisclosureDetailsSummaryList(userAnswers) mustBe None
-    }
-
-  }
-
-  "buildUnderpaymentDetails" should {
-
-    "produce a valid model when all answers are provided" in new Test {
-      buildUnderpaymentDetailsSummaryList(userAnswers) mustBe Some(underpaymentAnswers)
-    }
-
-    "produce a valid model when no answers are provided" in new Test {
-      override val userAnswers: UserAnswers = UserAnswers("")
-      buildUnderpaymentDetailsSummaryList(userAnswers) mustBe None
     }
 
   }
