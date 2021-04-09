@@ -18,8 +18,10 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.BoxNumberFormProvider
+import models.UserAnswers
+
 import javax.inject.{Inject, Singleton}
-import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
+import pages.{UnderpaymentReasonAmendmentPage, UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage, UnderpaymentReasonsPage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages}
 import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
@@ -52,15 +54,17 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
     val form = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).fold(formProvider()) {
       formProvider().fill
     }
-    Future.successful(Ok(view(form, backLink, createRadioButton(form, boxNumbers))))
 
+    val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
+    Future.successful(Ok(view(form, backLink, createRadioButton(form, filteredBoxNumbers))))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(
-        BadRequest(view(formWithErrors, backLink, createRadioButton(formWithErrors, boxNumbers)))
-      ),
+      formWithErrors => {
+        val filteredBoxNumbers = boxNumbers.filterNot(boxNumber => underpaymentReasonSelected(request.userAnswers, boxNumber.toInt))
+        Future.successful(BadRequest(view(formWithErrors, backLink, createRadioButton(formWithErrors, filteredBoxNumbers))))
+      },
       value => {
         request.userAnswers.get(UnderpaymentReasonBoxNumberPage) match {
           case Some(oldValue) if oldValue != value =>
@@ -101,4 +105,8 @@ class BoxNumberController @Inject()(identify: IdentifierAction,
     )
   }
 
+  private[controllers] def underpaymentReasonSelected(userAnswers: UserAnswers, boxNumber: Int): Boolean = {
+    userAnswers.get(UnderpaymentReasonsPage).getOrElse(Seq.empty)
+      .exists(reason => reason.boxNumber == boxNumber && reason.itemNumber == 0)
+  }
 }
