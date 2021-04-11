@@ -18,8 +18,7 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.UnderpaymentReasonAmendmentFormProvider
-import javax.inject.{Inject, Singleton}
-import models.{UnderpaymentReason, UnderpaymentReasonValue}
+import models.UnderpaymentReasonValue
 import pages.ChangeUnderpaymentReasonPage
 import play.api.data.{Form, FormError}
 import play.api.i18n.I18nSupport
@@ -28,6 +27,7 @@ import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{CurrencyAmendmentView, TextAmendmentView, WeightAmendmentView}
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -79,25 +79,17 @@ class ChangeUnderpaymentReasonDetailsController @Inject()(identify: IdentifierAc
         Future.successful(BadRequest(routeToView(boxNumber, itemNumber, formWithErrors.copy(errors = newErrors))))
       },
       value => {
-        val newReasonOpt = for {
-          changedReason <- request.userAnswers.get(ChangeUnderpaymentReasonPage)
-        } yield {
-          changedReason.copy(changed = UnderpaymentReason(
-            changedReason.changed.boxNumber,
-            changedReason.changed.itemNumber,
-            value.original,
-            value.amended
-          ))
-        }
-        newReasonOpt match {
-          case Some(newReason) =>
+        request.userAnswers.get(ChangeUnderpaymentReasonPage) match {
+          case Some(data) =>
+            val changed = data.changed.copy(original = value.original, amended = value.amended)
+            val reason = data.copy(changed = changed)
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, newReason))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, reason))
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
               Redirect(controllers.routes.ConfirmChangeReasonDetailController.onLoad())
             }
-          case _ => Future.successful(InternalServerError("Changed reason details not found"))
+          case _ => Future.successful(InternalServerError("Changed item number not found"))
         }
       }
     )

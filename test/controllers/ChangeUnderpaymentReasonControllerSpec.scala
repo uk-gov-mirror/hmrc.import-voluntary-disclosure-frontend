@@ -23,7 +23,7 @@ import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.http.Status
 import play.api.mvc.Result
-import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, status}
+import play.api.test.Helpers._
 import views.data.ChangeUnderpaymentReasonData
 import views.html.ChangeUnderpaymentReasonView
 
@@ -87,6 +87,7 @@ class ChangeUnderpaymentReasonControllerSpec extends ControllerSpecBase {
     "return See Other" in new Test {
       val result: Future[Result] = controller.change(22, 0)(fakeRequest)
       status(result) mustBe Status.SEE_OTHER
+      redirectLocation(result) mustBe Some(controllers.routes.ChangeUnderpaymentReasonController.onLoad().url)
     }
 
     "return Internal Server Error" in new Test {

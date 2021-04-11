@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ItemNumberFormProvider
-import models.UnderpaymentReason
 import pages.ChangeUnderpaymentReasonPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
@@ -37,8 +36,7 @@ class ChangeItemNumberController @Inject()(identify: IdentifierAction,
                                            sessionRepository: SessionRepository,
                                            mcc: MessagesControllerComponents,
                                            view: ItemNumberView,
-                                           formProvider: ItemNumberFormProvider
-                                          )
+                                           formProvider: ItemNumberFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
   private lazy val backLink: Call = controllers.routes.ChangeUnderpaymentReasonController.onLoad()
@@ -56,23 +54,15 @@ class ChangeItemNumberController @Inject()(identify: IdentifierAction,
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, formAction, backLink))),
       value => {
-        val newReasonOpt = for {
-          changedReason <- request.userAnswers.get(ChangeUnderpaymentReasonPage)
-        } yield {
-          changedReason.copy(changed = UnderpaymentReason(
-            changedReason.changed.boxNumber,
-            value,
-            changedReason.changed.original,
-            changedReason.changed.amended
-          ))
-        }
-        newReasonOpt match {
-          case Some(newReason) =>
+        request.userAnswers.get(ChangeUnderpaymentReasonPage) match {
+          case Some(data) =>
+            val changed = data.changed.copy(itemNumber = value)
+            val reason = data.copy(changed = changed)
             for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, newReason))
+              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, reason))
               _ <- sessionRepository.set(updatedAnswers)
             } yield {
-              Redirect(controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(newReason.original.boxNumber))
+              Redirect(controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(data.original.boxNumber))
             }
           case _ => Future.successful(InternalServerError("Changed item number not found"))
         }
@@ -80,4 +70,3 @@ class ChangeItemNumberController @Inject()(identify: IdentifierAction,
     )
   }
 }
-

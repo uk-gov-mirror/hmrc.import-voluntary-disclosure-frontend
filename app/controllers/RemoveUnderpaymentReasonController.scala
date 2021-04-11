@@ -74,7 +74,7 @@ class RemoveUnderpaymentReasonController @Inject()(identify: IdentifierAction,
             allReasons <- request.userAnswers.get(UnderpaymentReasonsPage)
             removeReason <- request.userAnswers.get(ChangeUnderpaymentReasonPage)
           } yield {
-            allReasons.filterNot(x => x.boxNumber == removeReason.original.boxNumber && x.itemNumber == removeReason.original.itemNumber)
+            allReasons.filterNot(x => x == removeReason.original)
           }
 
           newReasonsOpt match {

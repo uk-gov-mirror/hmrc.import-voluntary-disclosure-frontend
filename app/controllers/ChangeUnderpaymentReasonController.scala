@@ -17,7 +17,6 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import javax.inject.{Inject, Singleton}
 import models.{ChangeUnderpaymentReason, UnderpaymentReason}
 import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.i18n.{I18nSupport, Messages}
@@ -29,6 +28,7 @@ import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.ChangeUnderpaymentReasonView
 
+import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -53,7 +53,7 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
 
   def change(boxNumber: Int, itemNumber: Int): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     request.userAnswers.get(UnderpaymentReasonsPage) match {
-      case Some(reasons) => {
+      case Some(reasons) =>
         val originalReason = reasons.filter(x => x.boxNumber == boxNumber && x.itemNumber == itemNumber).head
         for {
           updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(originalReason, originalReason)))
@@ -61,27 +61,20 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
         } yield {
           Redirect(controllers.routes.ChangeUnderpaymentReasonController.onLoad())
         }
-      }
       case _ => Future.successful(InternalServerError("No underpayment reason list found"))
     }
   }
 
   def summaryList(underpaymentReason: UnderpaymentReason)(implicit messages: Messages): SummaryList = {
 
-    def itemNumberSummaryListRow: Seq[SummaryListRow] = {
+    val itemNumberSummaryListRow: Seq[SummaryListRow] = {
       if (underpaymentReason.itemNumber != 0) {
         Seq(
           SummaryListRow(
-            key = Key(
-              content = Text(messages("changeUnderpaymentReason.itemNumber"))
-            ),
-            value = Value(
-              content = HtmlContent(underpaymentReason.itemNumber.toString)
-            ),
+            key = Key(content = Text(messages("changeUnderpaymentReason.itemNumber"))),
+            value = Value(content = HtmlContent(underpaymentReason.itemNumber.toString)),
             actions = Some(Actions(
-              items = Seq(
-                ActionItem(controllers.routes.ChangeItemNumberController.onLoad().url, Text(messages("changeUnderpaymentReason.change")))
-              )
+              items = Seq(ActionItem(controllers.routes.ChangeItemNumberController.onLoad().url, Text(messages("changeUnderpaymentReason.change"))))
             ))
           )
         )
@@ -92,38 +85,26 @@ class ChangeUnderpaymentReasonController @Inject()(identify: IdentifierAction,
 
     val originalAmountSummaryListRow: Seq[SummaryListRow] = Seq(
       SummaryListRow(
-        key = Key(
-          content = Text(messages("changeUnderpaymentReason.original")),
-          classes = "govuk-!-padding-bottom-0"
-        ),
-        value = Value(
-          content = HtmlContent(underpaymentReason.original),
-          classes = "govuk-!-padding-bottom-0"
-        ),
+        key = Key(content = Text(messages("changeUnderpaymentReason.original")), classes = "govuk-!-padding-bottom-0"),
+        value = Value(content = HtmlContent(underpaymentReason.original), classes = "govuk-!-padding-bottom-0"),
         actions = Some(Actions(
           items = Seq(
-            ActionItem(controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(underpaymentReason.boxNumber).url, Text(messages("changeUnderpaymentReason.change")))
+            ActionItem(
+              controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(underpaymentReason.boxNumber).url,
+              Text(messages("changeUnderpaymentReason.change"))
+            )
           ),
           classes = "govuk-!-padding-bottom-0")
         ),
         classes = "govuk-summary-list__row--no-border"
       ),
       SummaryListRow(
-        key = Key(
-          content = Text(messages("changeUnderpaymentReason.amended")),
-          classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"
-        ),
-        value = Value(
-          content = HtmlContent(underpaymentReason.amended),
-          classes = "govuk-!-padding-top-0"
-        )
+        key = Key(content = Text(messages("changeUnderpaymentReason.amended")), classes = "govuk-!-width-two-thirds govuk-!-padding-top-0"),
+        value = Value(content = HtmlContent(underpaymentReason.amended), classes = "govuk-!-padding-top-0")
       )
     )
 
-    val rows = itemNumberSummaryListRow ++ originalAmountSummaryListRow
-
-    SummaryList(rows)
-
+    SummaryList(itemNumberSummaryListRow ++ originalAmountSummaryListRow)
   }
 
 
