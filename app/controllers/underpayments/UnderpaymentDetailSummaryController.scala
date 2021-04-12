@@ -74,7 +74,6 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
 
   private[controllers] def summaryList(underpaymentDetail: Seq[UnderpaymentDetail])
                                       (implicit messages: Messages): SummaryList = {
-    val changeAction: Call = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
     SummaryList(
       rows = for (underpayment <- underpaymentDetail.reverse) yield
         SummaryListRow(
@@ -87,7 +86,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
             classes = "govuk-summary-list__value"
           ),
           actions = Some(
-            Actions(items = Seq(ActionItem(changeAction.url, Text(messages("common.change")), Some("key"))))
+            Actions(items = Seq(ActionItem(controllers.underpayments.routes.ChangeUnderpaymentDetailsController.onLoad(underpayment.duty).url, Text(messages("common.change")), Some("key"))))
           )
         )
     )
