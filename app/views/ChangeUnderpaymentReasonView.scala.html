@@ -1,0 +1,44 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(layout: templates.Layout,
+        h1: components.h1,
+        govukSummaryList: GovukSummaryList,
+        linkButton: components.linkButton
+)
+
+@(backLink: Call, summaryList: SummaryList, boxNumber: Int)(implicit request: Request[_], messages: Messages)
+
+@layout(
+    pageTitle = messages("changeUnderpaymentReason.heading", boxNumber),
+    customBackLinkUrl = Some(backLink)
+) {
+
+    @h1(messages("changeUnderpaymentReason.heading", boxNumber))
+
+    @govukSummaryList(summaryList)
+
+    <p><a href=@controllers.routes.RemoveUnderpaymentReasonController.onLoad().url id="remove-link" class="govuk-link">@messages("changeUnderpaymentReason.removeLink")</a></p>
+
+    @linkButton(
+        url = controllers.routes.UnderpaymentReasonSummaryController.onLoad().url,
+        value = messages("changeUnderpaymentReason.backToReasons")
+    )
+}
+
+@{
+    //$COVERAGE-OFF$
+}

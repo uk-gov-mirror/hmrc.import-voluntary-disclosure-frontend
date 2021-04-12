@@ -29,3 +29,13 @@ object UnderpaymentReason {
 
   implicit val format = Json.format[UnderpaymentReason]
 }
+
+case class ChangeUnderpaymentReason(
+                                   original: UnderpaymentReason,
+                                   changed: UnderpaymentReason
+                                   )
+
+object ChangeUnderpaymentReason {
+
+  implicit val format = Json.format[ChangeUnderpaymentReason]
+}
