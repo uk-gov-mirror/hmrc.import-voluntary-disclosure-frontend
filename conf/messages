@@ -164,6 +164,38 @@ underpaymentDetails.error.amendedNonNumber = Amount that should have been paid m
 underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
 underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
 
+# Change Underpayment Details
+changeUnderpaymentDetails.originalAmount = Amount that was paid
+changeUnderpaymentDetails.amendedAmount = Amount that should have been paid
+changeUnderpaymentDetails.B00.pageTitle = Change the import VAT underpayment details
+changeUnderpaymentDetails.B00.pageHeader = Change the import VAT underpayment details
+changeUnderpaymentDetails.A00.pageTitle = Change the Customs Duty underpayment details
+changeUnderpaymentDetails.A00.pageHeader = Change the Customs Duty underpayment details
+changeUnderpaymentDetails.E00.pageTitle = Change the excise duty underpayment details
+changeUnderpaymentDetails.E00.pageHeader = Change the excise duty underpayment details
+changeUnderpaymentDetails.A20.pageTitle = Change the Additional Duty underpayment details
+changeUnderpaymentDetails.A20.pageHeader = Change the Additional Duty underpayment details
+changeUnderpaymentDetails.A30.pageTitle = Change the Definitive Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A30.pageHeader = Change the Definitive Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A35.pageTitle = Change the Provisional Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A35.pageHeader = Change the Provisional Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A40.pageTitle = Change the Definitive Countervailing Duty underpayment details
+changeUnderpaymentDetails.A40.pageHeader = Change the Definitive Countervailing Duty underpayment details
+changeUnderpaymentDetails.A45.pageTitle = Change the Provisional Countervailing Duty underpayment details
+changeUnderpaymentDetails.A45.pageHeader = Change the Provisional Countervailing Duty underpayment details
+changeUnderpaymentDetails.A10.pageTitle = Change the Customs Duty on Agricultural Products underpayment details
+changeUnderpaymentDetails.A10.pageHeader = Change the Customs Duty on Agricultural Products underpayment details
+changeUnderpaymentDetails.D10.pageTitle = Change the Compensatory Duty underpayment details
+changeUnderpaymentDetails.D10.pageHeader = Change the Compensatory Duty underpayment details
+changeUnderpaymentDetails.error.originalNonEmpty = Enter the amount that was paid to HMRC, in pounds
+changeUnderpaymentDetails.error.originalNonNumber = Amount that was paid to HMRC must be a number like 7235 or 67.39
+changeUnderpaymentDetails.error.originalOutOfRange = Amount that was paid to HMRC must be between £0 and £9,999,999,999.99
+changeUnderpaymentDetails.error.amendedNonEmpty = Enter the amount that should have been paid, in pounds
+changeUnderpaymentDetails.error.amendedNonNumber = Amount that should have been paid must be a number like 7235 or 67.39
+changeUnderpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
+changeUnderpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
+
+
 # Underpayment Details Summary
 underpaymentDetailsSummary.pageTitle = Underpayment summary
 underpaymentDetailsSummary.pageHeader = Underpayment summary

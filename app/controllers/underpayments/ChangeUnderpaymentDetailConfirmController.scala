@@ -17,6 +17,7 @@
 package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import javax.inject.Inject
 import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
 import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.i18n.{I18nSupport, Messages}
@@ -28,19 +29,17 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.ViewUtils.displayMoney
 import views.html.underpayments.UnderpaymentDetailConfirmView
 
-import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
-                                                    getData: DataRetrievalAction,
-                                                    requireData: DataRequiredAction,
-                                                    sessionRepository: SessionRepository,
-                                                    mcc: MessagesControllerComponents,
-                                                    view: UnderpaymentDetailConfirmView
+class ChangeUnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
+                                                          getData: DataRetrievalAction,
+                                                          requireData: DataRequiredAction,
+                                                          sessionRepository: SessionRepository,
+                                                          mcc: MessagesControllerComponents,
+                                                          view: UnderpaymentDetailConfirmView
                                                    )
   extends FrontendController(mcc) with I18nSupport {
-
 
   def onLoad(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val underpaymentDetail = request.userAnswers.get(UnderpaymentDetailsPage).getOrElse(UnderpaymentAmount(0, 0))
@@ -77,8 +76,9 @@ class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
   }
 
   private def submitCall(underpaymentType: String): Call = {
-    controllers.underpayments.routes.UnderpaymentDetailConfirmController.onSubmit(underpaymentType)
+    controllers.underpayments.routes.ChangeUnderpaymentDetailConfirmController.onSubmit(underpaymentType)
   }
+
 
   private[controllers] def summaryList(underpaymentType: String, underpaymentAmount: UnderpaymentAmount)(implicit messages: Messages): SummaryList = {
     SummaryList(
