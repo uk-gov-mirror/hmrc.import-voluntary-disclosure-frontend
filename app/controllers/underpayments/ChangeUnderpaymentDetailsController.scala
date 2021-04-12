@@ -68,27 +68,11 @@ class ChangeUnderpaymentDetailsController @Inject()(identify: IdentifierAction,
           Future.successful(BadRequest(view(formWithErrors.copy(errors = newErrors), underpaymentType, backLink)))
         },
         value => {
-//          request.userAnswers.get(UnderpaymentDetailSummaryPage) match {
-//            case Some(underpayments) => {
-//              val updatedUnderpaymentTypes = underpayments.map(underpayment => if (underpayment.duty == underpaymentType) {
-//                underpayment.copy(original = value.original, amended = value.amended)
-//              } else {
-//                underpayment
-//              })
-//              for {
-//                updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, updatedUnderpaymentTypes))
-//                _ <- sessionRepository.set(updatedAnswers)
-//              } yield {
-//                Redirect(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(underpaymentType))
-//              }
-//            }
-//            case _ => Future.successful(InternalServerError("Could not find Underpayment types"))
-//          }
           for {
             updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailsPage, UnderpaymentAmount(value.original, value.amended)))
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
-            Redirect(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(underpaymentType))
+            Redirect(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(underpaymentType, true))
           }
         }
       )

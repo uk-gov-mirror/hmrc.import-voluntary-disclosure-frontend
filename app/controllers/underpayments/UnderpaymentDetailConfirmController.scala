@@ -42,7 +42,7 @@ class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
 
-  def onLoad(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onLoad(underpaymentType: String, change: Boolean ): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val underpaymentDetail = request.userAnswers.get(UnderpaymentDetailsPage).getOrElse(UnderpaymentAmount(0, 0))
     Future.successful(Ok(view(
       underpaymentType,
@@ -52,21 +52,29 @@ class UnderpaymentDetailConfirmController @Inject()(identify: IdentifierAction,
     )))
   }
 
-  def onSubmit(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+  def onSubmit(underpaymentType: String, change: Boolean ): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     request.userAnswers.get(UnderpaymentDetailsPage) match {
-      case Some(value) => val newUnderpaymentDetail = Seq(
-        UnderpaymentDetail(
-          underpaymentType,
-          value.original,
-          value.amended
-        )
-      )
+      case Some(value) => val newUnderpaymentDetail = Seq(UnderpaymentDetail(underpaymentType, value.original, value.amended))
         val currentUnderpaymentTypes = request.userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
-        for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
-          _ <- sessionRepository.set(updatedAnswers)
-        } yield {
-          Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad())
+        if (change) {
+          val updatedUnderpaymentTypes = currentUnderpaymentTypes.map(underpayment => if (underpayment.duty == underpaymentType) {
+            underpayment.copy(original = value.original, amended = value.amended)
+          } else {
+            underpayment
+          })
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, updatedUnderpaymentTypes))
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield {
+            Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad())
+          }
+        } else {
+          for {
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailSummaryPage, newUnderpaymentDetail ++ currentUnderpaymentTypes))
+            _ <- sessionRepository.set(updatedAnswers)
+          } yield {
+            Redirect(controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad())
+          }
         }
       case None => Future.successful(InternalServerError("Couldn't find underpayment details"))
     }
