@@ -18,6 +18,7 @@ package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.underpayments.UnderpaymentTypeFormProvider
+import models.UserAnswers
 import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentTypePage}
 import play.api.data.Form
 import play.api.i18n.{I18nSupport, Messages}
@@ -41,7 +42,6 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
                                            formProvider: UnderpaymentTypeFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.underpayments.routes.UnderpaymentStartController.onLoad()
   private val underpaymentTypes = Seq("B00", "A00", "E00", "A20", "A30", "A35", "A40", "A45", "A10", "D10")
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -55,7 +55,7 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
       }
       val availableUnderPaymentTypes = underpaymentTypes.filter(item => !existingUnderpaymentDetails.contains(item))
       val availableUnderPaymentTypesOptions = createRadioButton(form, availableUnderPaymentTypes)
-      Future.successful(Ok(underpaymentTypeView(form, backLink, availableUnderPaymentTypesOptions)))
+      Future.successful(Ok(underpaymentTypeView(form, backLink(request.userAnswers), availableUnderPaymentTypesOptions)))
     }
   }
 
@@ -63,7 +63,7 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
     formProvider().bindFromRequest().fold(
       formWithErrors => {
         Future.successful(
-          BadRequest(underpaymentTypeView(formWithErrors, backLink, createRadioButton(formWithErrors, underpaymentTypes)))
+          BadRequest(underpaymentTypeView(formWithErrors, backLink(request.userAnswers), createRadioButton(formWithErrors, underpaymentTypes)))
         )
       },
       value => {
@@ -86,6 +86,15 @@ class UnderpaymentTypeController @Inject()(identify: IdentifierAction,
         id = Some(keyValue)
       )
     )
+  }
+
+  def backLink(userAnswers: UserAnswers): Call = {
+    val underpaymentDetailsList = userAnswers.get(UnderpaymentDetailSummaryPage).getOrElse(Seq.empty)
+    if (underpaymentDetailsList.nonEmpty) {
+      controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
+    } else {
+      controllers.underpayments.routes.UnderpaymentStartController.onLoad()
+    }
   }
 
 }

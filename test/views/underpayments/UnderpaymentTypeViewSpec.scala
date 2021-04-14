@@ -135,10 +135,6 @@ class UnderpaymentTypeViewSpec extends ViewBaseSpec with BaseMessages with Reusa
         UnderpaymentTypeMessages.compensatoryDuty
     }
 
-    "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> backLink.url)
-    }
-
     s"have the correct Continue button" in {
       elementText(".govuk-button") mustBe continue
     }
