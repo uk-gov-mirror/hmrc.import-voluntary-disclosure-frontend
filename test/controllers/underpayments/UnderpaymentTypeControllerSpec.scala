@@ -101,4 +101,23 @@ class UnderpaymentTypeControllerSpec extends ControllerSpecBase with ReusableVal
 
   }
 
+  "Back Link" when {
+
+    "there are no existing underpayment types back button" should {
+      "take you to the underpayments start page" in new Test {
+        controller.backLink(userAnswers.get) mustBe controllers.underpayments.routes.UnderpaymentStartController.onLoad()
+      }
+    }
+
+    "there are existing underpayment types back button" should {
+      "take you to the underpayments summary page" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("credId").set(UnderpaymentDetailSummaryPage, allUnderpaymentDetailsSelected()).success.value
+        )
+        controller.backLink(userAnswers.get) mustBe controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
+      }
+    }
+
+  }
+
 }
