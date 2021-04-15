@@ -21,8 +21,8 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import forms.ItemNumberFormProvider
 import mocks.repositories.MockSessionRepository
-import models.UserAnswers
-import pages.{UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage}
+import models.{UnderpaymentReason, UserAnswers}
+import pages.{UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage, UnderpaymentReasonsPage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -33,17 +33,25 @@ import scala.concurrent.Future
 
 class ItemNumberControllerSpec extends ControllerSpecBase {
 
-  val userAnswersWithItemNumber: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
-    .set(UnderpaymentReasonBoxNumberPage, 33).success.value
-    .set(UnderpaymentReasonItemNumberPage, 1).success.value
-  )
-
   private def fakeRequestGenerator(itemNumber: String): FakeRequest[AnyContentAsFormUrlEncoded] =
     fakeRequest.withFormUrlEncodedBody(
       "itemNumber" -> itemNumber
     )
 
   trait Test extends MockSessionRepository {
+
+    private lazy val ItemNumberView = app.injector.instanceOf[ItemNumberView]
+
+    val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id"))
+
+    lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
+
+    val formProvider: ItemNumberFormProvider = injector.instanceOf[ItemNumberFormProvider]
+
+    MockedSessionRepository.set(Future.successful(true))
+
+    val form: ItemNumberFormProvider = formProvider
+
     lazy val controller = new ItemNumberController(
       authenticatedAction,
       dataRetrievalAction,
@@ -53,22 +61,19 @@ class ItemNumberControllerSpec extends ControllerSpecBase {
       ItemNumberView,
       form
     )
-    private lazy val ItemNumberView = app.injector.instanceOf[ItemNumberView]
-    lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswersWithItemNumber)
-    val formProvider: ItemNumberFormProvider = injector.instanceOf[ItemNumberFormProvider]
-    MockedSessionRepository.set(Future.successful(true))
-    val form: ItemNumberFormProvider = formProvider
   }
 
   "GET /" when {
     "return OK" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonItemNumberPage, 1).success.value
+      )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
-
     "return HTML" in new Test {
-      override lazy val dataRetrievalAction = new FakeDataRetrievalAction(Some(UserAnswers("some-cred-id")))
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -81,14 +86,25 @@ class ItemNumberControllerSpec extends ControllerSpecBase {
     "payload contains valid data" should {
 
       "return a SEE OTHER response when correct data with numeric only values" in new Test {
-        lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1"))
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("some-cred-id")
+            .set(UnderpaymentReasonBoxNumberPage, 22).success.value
+        )
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1"))
         status(result) mustBe Status.SEE_OTHER
-      }
-
-      "update the UserAnswers in session" in new Test {
-        await(controller.onSubmit(fakeRequestGenerator("1")))
         verifyCalls()
       }
+
+//      "when there are existing underpayment reasons" in new Test {
+//        override val userAnswers: Option[UserAnswers] = Some(
+//          UserAnswers("some-cred-id")
+//            .set(UnderpaymentReasonBoxNumberPage, 22).success.value
+//            .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(22, 2, "40", "50"))).success.value
+//        )
+//        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1"))
+//        controller.existsSameBoxItem(33, 2, userAnswers.get) mustBe true
+//        status(result) mustBe Status.OK
+//      }
 
     }
 
@@ -99,6 +115,34 @@ class ItemNumberControllerSpec extends ControllerSpecBase {
         status(result) mustBe Status.BAD_REQUEST
       }
 
+    }
+
+  }
+
+  "existsSameBoxItem" when {
+
+    "current box and item number submitted matches existing item" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonBoxNumberPage, 22).success.value
+          .set(UnderpaymentReasonItemNumberPage, 1).success.value
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(33, 2, "40", "50"))).success.value
+      )
+      controller.existsSameBoxItem(33, 2, userAnswers.get) mustBe true
+    }
+
+    "current box and item number submitted doesn't match an existing item" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(
+        UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonBoxNumberPage, 22).success.value
+          .set(UnderpaymentReasonItemNumberPage, 1).success.value
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(33, 2, "40", "50"))).success.value
+      )
+      controller.existsSameBoxItem(33, 1, userAnswers.get) mustBe false
+    }
+
+    "there are no underpayment items" in new Test {
+      controller.existsSameBoxItem(33, 1, userAnswers.get) mustBe false
     }
 
   }

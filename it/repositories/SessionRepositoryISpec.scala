@@ -74,7 +74,7 @@ class SessionRepositoryISpec extends PlaySpec with GuiceOneServerPerSuite with F
 
     "read in json as per format of mongo reads" in {
       val answers: JsResult[UserAnswers] = Json.fromJson[UserAnswers](userAnswersJson)(repo.domainFormatImplicit)
-      answers.get mustBe userAnswers
+      answers.get.data mustBe userAnswers.data
     }
   }
   "repository domainFormatImplicit writes" should {

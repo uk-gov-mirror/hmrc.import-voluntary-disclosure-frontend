@@ -19,6 +19,7 @@ package controllers
 import com.google.inject.Inject
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ItemNumberFormProvider
+import models.{UnderpaymentReason, UserAnswers}
 import pages.{UnderpaymentReasonBoxNumberPage, UnderpaymentReasonItemNumberPage, UnderpaymentReasonsPage}
 import play.api.data.FormError
 import play.api.i18n.I18nSupport
@@ -57,28 +58,37 @@ class ItemNumberController @Inject()(identify: IdentifierAction,
       submittedItemNumber => {
         request.userAnswers.get(UnderpaymentReasonBoxNumberPage) match {
           case Some(currentBoxNumber) =>
-            val currentUnderpayments = request.userAnswers.get(UnderpaymentReasonsPage).getOrElse(Seq.empty)
-            val alreadyExistsBoxAndItem = currentUnderpayments.exists(
-              box => box.boxNumber == currentBoxNumber && box.itemNumber == submittedItemNumber
-            )
-            if (alreadyExistsBoxAndItem) {
+            if (existsSameBoxItem(currentBoxNumber, submittedItemNumber, request.userAnswers)) {
               val form = request.userAnswers.get(UnderpaymentReasonItemNumberPage).fold(formProvider()) {
                 formProvider().fill
               }
-              val formError = FormError("itemNumber", "itemNo.error.notTheSameNumber")
-              Future.successful(Ok(view(form.copy(errors = Seq(formError)), formAction, backLink)))
+              Future.successful(Ok(view(
+                form.copy(errors = Seq(FormError("itemNumber", "itemNo.error.notTheSameNumber"))),
+                formAction,
+                backLink))
+              )
             } else {
               for {
                 updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentReasonItemNumberPage, submittedItemNumber))
                 _ <- sessionRepository.set(updatedAnswers)
               } yield {
-                val boxNumber = request.userAnswers.get(UnderpaymentReasonBoxNumberPage).getOrElse(0)
-                Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(boxNumber))
+                Redirect(controllers.routes.UnderpaymentReasonAmendmentController.onLoad(currentBoxNumber))
               }
             }
-          case _ => Future.successful(InternalServerError("Couldn't find current box number"))
+          case _ =>
+            Future.successful(InternalServerError("Couldn't find current box number"))
         }
       }
     )
   }
+
+  private[controllers] def existsSameBoxItem(currentBoxNumber: Int,
+                                             submittedItemNumber: Int,
+                                             userAnswers: UserAnswers) = {
+    lazy val currentUnderpayments: Seq[UnderpaymentReason] = userAnswers.get(UnderpaymentReasonsPage).getOrElse(Seq.empty)
+    currentUnderpayments.exists(
+      box => box.boxNumber == currentBoxNumber && box.itemNumber == submittedItemNumber
+    )
+  }
+
 }

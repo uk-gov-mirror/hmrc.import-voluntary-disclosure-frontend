@@ -21,7 +21,7 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.ItemNumberFormProvider
 import mocks.repositories.MockSessionRepository
 import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
-import pages.ChangeUnderpaymentReasonPage
+import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -88,6 +88,7 @@ class ChangeItemNumberControllerSpec extends ControllerSpecBase {
 
       "return a SEE OTHER response when correct data with numeric only values" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(35, 1, "20", "21"))).success.value
           .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
             underpayment(boxNumber = 35, itemNumber = 1),
             underpayment(boxNumber = 35, itemNumber = 1))).success.value
@@ -98,6 +99,7 @@ class ChangeItemNumberControllerSpec extends ControllerSpecBase {
 
       "update the UserAnswers in session" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(35, 1, "20", "21"))).success.value
           .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
             underpayment(boxNumber = 35, itemNumber = 1),
             underpayment(boxNumber = 35, itemNumber = 1))).success.value
