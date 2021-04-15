@@ -39,11 +39,9 @@ class UnderpaymentReasonSummaryController @Inject()(identify: IdentifierAction,
                                                    )
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink: Call = controllers.routes.BoxGuidanceController.onLoad()
-
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     summaryList(request.userAnswers.get(UnderpaymentReasonsPage)) match {
-      case Some(value) => Future.successful(Ok(view(formProvider.apply(), backLink, Some(value))))
+      case Some(value) => Future.successful(Ok(view(formProvider.apply(), Some(value))))
       case None => Future.successful(InternalServerError("Couldn't find Underpayment reasons"))
     }
   }
@@ -54,7 +52,6 @@ class UnderpaymentReasonSummaryController @Inject()(identify: IdentifierAction,
         BadRequest(
           view(
             formWithErrors,
-            backLink,
             summaryList(request.userAnswers.get(UnderpaymentReasonsPage))
           )
         )

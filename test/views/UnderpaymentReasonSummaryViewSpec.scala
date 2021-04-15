@@ -33,7 +33,6 @@ class UnderpaymentReasonSummaryViewSpec extends ViewBaseSpec with BaseMessages {
   private lazy val injectedView: UnderpaymentReasonSummaryView = app.injector.instanceOf[UnderpaymentReasonSummaryView]
 
   val formProvider: UnderpaymentReasonSummaryFormProvider = injector.instanceOf[UnderpaymentReasonSummaryFormProvider]
-  val tempChangeAndDeleteLink: Call = controllers.routes.UnderpaymentReasonSummaryController.onLoad()
 
   val summaryList: Option[SummaryList] = UnderpaymentReasonSummaryData.singleItemSummaryList
 
@@ -41,7 +40,7 @@ class UnderpaymentReasonSummaryViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form, tempChangeAndDeleteLink, summaryList)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, summaryList)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -59,7 +58,7 @@ class UnderpaymentReasonSummaryViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form, tempChangeAndDeleteLink, summaryList)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form, summaryList)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -80,7 +79,7 @@ class UnderpaymentReasonSummaryViewSpec extends ViewBaseSpec with BaseMessages {
   it should {
 
     val form: Form[Boolean] = formProvider.apply()
-    lazy val view: Html = injectedView(form, tempChangeAndDeleteLink, summaryList)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form, summaryList)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct value for the first radio button of '${ReasonSummary.siteYes}'" in {
@@ -93,11 +92,6 @@ class UnderpaymentReasonSummaryViewSpec extends ViewBaseSpec with BaseMessages {
 
     s"have the correct radio message'" in {
       elementText("#main-content > div > div > form > div > fieldset > legend") mustBe ReasonSummary.radioMessage
-    }
-
-
-    "render a back link with the correct URL" in {
-      elementAttributes("#back-link") must contain("href" -> controllers.routes.UnderpaymentReasonSummaryController.onLoad().url)
     }
 
     s"have the correct Continue button" in {
