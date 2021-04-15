@@ -18,7 +18,8 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.ItemNumberFormProvider
-import pages.ChangeUnderpaymentReasonPage
+import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
+import play.api.data.FormError
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
@@ -56,13 +57,31 @@ class ChangeItemNumberController @Inject()(identify: IdentifierAction,
       value => {
         request.userAnswers.get(ChangeUnderpaymentReasonPage) match {
           case Some(data) =>
-            val changed = data.changed.copy(itemNumber = value)
-            val reason = data.copy(changed = changed)
-            for {
-              updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, reason))
-              _ <- sessionRepository.set(updatedAnswers)
-            } yield {
-              Redirect(controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(data.original.boxNumber))
+            val currentUnderpayments = request.userAnswers.get(UnderpaymentReasonsPage).getOrElse(Seq.empty)
+            if (currentUnderpayments.nonEmpty) {
+              val alreadyExistsBoxAndItem = currentUnderpayments.exists(underpayment =>
+                underpayment.boxNumber == data.changed.boxNumber &&
+                  underpayment.itemNumber == value &&
+                  data.original.itemNumber != value
+              )
+              if (alreadyExistsBoxAndItem) {
+                val form = request.userAnswers.get(ChangeUnderpaymentReasonPage).fold(formProvider()) { reason =>
+                  formProvider().fill(reason.changed.itemNumber)
+                }
+                val formError = FormError("itemNumber", "itemNo.error.notTheSameNumber")
+                Future.successful(Ok(view(form.copy(errors = Seq(formError)), formAction, backLink)))
+              } else {
+                val changed = data.changed.copy(itemNumber = value)
+                val reason = data.copy(changed = changed)
+                for {
+                  updatedAnswers <- Future.fromTry(request.userAnswers.set(ChangeUnderpaymentReasonPage, reason))
+                  _ <- sessionRepository.set(updatedAnswers)
+                } yield {
+                  Redirect(controllers.routes.ChangeUnderpaymentReasonDetailsController.onLoad(data.original.boxNumber))
+                }
+              }
+            } else {
+              Future.successful(InternalServerError("List of underpayment reasons is empty"))
             }
           case _ => Future.successful(InternalServerError("Changed item number not found"))
         }
