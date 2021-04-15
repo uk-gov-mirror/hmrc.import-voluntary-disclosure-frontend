@@ -95,7 +95,7 @@ object AmendReasonValuesMessages extends BaseMessages {
       Some("Must be a single number, for example 1 or 4.")),
     45 -> ExpectedContent("Box 45 adjustment amendment for item 1",
       "Box 45 adjustment amendment for item 1",
-      Some("Must be a letter followed by the percentage adjustment, for example A12.5 or D0.")),
+      Some("This is usually a letter followed by a number, sometimes the letter or number may be on its own, for example A12.5, D0, M or 4.5.")),
     46 -> ExpectedContent(
       "Box 46 statistical value amendment for item 1",
       "Box 46 statistical value amendment for item 1",

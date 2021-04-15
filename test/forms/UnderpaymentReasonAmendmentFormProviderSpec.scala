@@ -21,6 +21,8 @@ import models.UnderpaymentReasonValue
 import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.data.{Form, FormError}
 
+import scala.collection.mutable
+
 class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val originalKey = "original"
   val amendedKey = "amended"
@@ -53,6 +55,10 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val amendedDecimalInvalidDecimalMessageKey = "amendmentValue.error.amended.decimal.invalidDecimals"
   val originalDecimalRangeMessageKey = "amendmentValue.error.original.decimal.outOfRange"
   val amendedDecimalRangeMessageKey = "amendmentValue.error.amended.decimal.outOfRange"
+  val adjustmentAmendedValue = "A12.5"
+  val adjustmentOriginalValue = "12.5"
+  val invalidAdjustmentAmendedValue = ".5"
+  val invalidAdjustmentOriginalValue = "A.1"
   val commodityCodeAmendedValue = "2204109400X411"
   val commodityCodeOriginalValue = "2204109400X412"
   val commodityCodeOriginalLowerValue = "2204109400x412"
@@ -73,6 +79,7 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
   val decimalOutOfRangeValue: BigDecimal = 9999999999999.99
   val vmNumberOriginalValue = "2"
   val vmNumberAmendedValue = "3"
+  val box45Regex = """^[A-M]{1}$|^[A-M]{1}[0-9]{1,2}$|^[A-M]{1}[0-9]{1,2}[.][0-9]{1}$|^[0-9]{1,2}[.][0-9]{1}$|^[0-9]{1,2}$"""
 
   def formBuilder(original: String = "", amended: String = ""): Map[String, String] = Map(
     originalKey -> original,
@@ -233,6 +240,22 @@ class UnderpaymentReasonAmendmentFormProviderSpec extends SpecBase {
         formBinderBox(formBuilder(original = commodityCodeAmendedValue.toUpperCase, amended = commodityCodeAmendedValue.toLowerCase), box = 33).errors mustBe
           Seq(
             FormError("", keysDifferentMessageKey)
+          )
+      }
+    }
+
+    "invalid format for box 45" should {
+      "result in a form with errors for original field" in {
+        formBinderBox(formBuilder(original = invalidAdjustmentOriginalValue, amended = adjustmentAmendedValue), box = 45).errors mustBe
+          Seq(
+            FormError(originalKey, originalFormatMessageKey, Seq(box45Regex))
+          )
+      }
+
+      "result in a form with errors for amendment field" in {
+        formBinderBox(formBuilder(original = adjustmentOriginalValue, amended = invalidAdjustmentAmendedValue), box = 45).errors mustBe
+          Seq(
+            FormError(amendedKey, amendedFormatMessageKey, Seq(box45Regex))
           )
       }
     }
