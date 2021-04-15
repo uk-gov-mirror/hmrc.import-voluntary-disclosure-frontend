@@ -95,16 +95,31 @@ class ItemNumberControllerSpec extends ControllerSpecBase {
         verifyCalls()
       }
 
-//      "when there are existing underpayment reasons" in new Test {
-//        override val userAnswers: Option[UserAnswers] = Some(
-//          UserAnswers("some-cred-id")
-//            .set(UnderpaymentReasonBoxNumberPage, 22).success.value
-//            .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(22, 2, "40", "50"))).success.value
-//        )
-//        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1"))
-//        controller.existsSameBoxItem(33, 2, userAnswers.get) mustBe true
-//        status(result) mustBe Status.OK
-//      }
+      "when there are existing underpayment reason" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("some-cred-id")
+            .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(33, 2, "40", "50"))).success.value
+            .set(UnderpaymentReasonBoxNumberPage, 33).success.value
+        )
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("2"))
+        status(result) mustBe Status.OK
+      }
+
+      "when there are existing underpayment reason and existing item number" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("some-cred-id")
+            .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(33, 2, "40", "50"))).success.value
+            .set(UnderpaymentReasonBoxNumberPage, 33).success.value
+            .set(UnderpaymentReasonItemNumberPage, 1).success.value
+        )
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("2"))
+        status(result) mustBe Status.OK
+      }
+
+      "when there are no current box number" in new Test {
+        val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("2"))
+        status(result) mustBe Status.INTERNAL_SERVER_ERROR
+      }
 
     }
 
@@ -124,7 +139,7 @@ class ItemNumberControllerSpec extends ControllerSpecBase {
     "current box and item number submitted matches existing item" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
-          .set(UnderpaymentReasonBoxNumberPage, 22).success.value
+          .set(UnderpaymentReasonBoxNumberPage, 33).success.value
           .set(UnderpaymentReasonItemNumberPage, 1).success.value
           .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(33, 2, "40", "50"))).success.value
       )
@@ -134,7 +149,7 @@ class ItemNumberControllerSpec extends ControllerSpecBase {
     "current box and item number submitted doesn't match an existing item" in new Test {
       override val userAnswers: Option[UserAnswers] = Some(
         UserAnswers("some-cred-id")
-          .set(UnderpaymentReasonBoxNumberPage, 22).success.value
+          .set(UnderpaymentReasonBoxNumberPage, 33).success.value
           .set(UnderpaymentReasonItemNumberPage, 1).success.value
           .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(33, 2, "40", "50"))).success.value
       )

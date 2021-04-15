@@ -56,8 +56,10 @@ class ItemNumberController @Inject()(identify: IdentifierAction,
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, formAction, backLink))),
       submittedItemNumber => {
+        println(request.userAnswers)
         request.userAnswers.get(UnderpaymentReasonBoxNumberPage) match {
           case Some(currentBoxNumber) =>
+            println(request.userAnswers)
             if (existsSameBoxItem(currentBoxNumber, submittedItemNumber, request.userAnswers)) {
               val form = request.userAnswers.get(UnderpaymentReasonItemNumberPage).fold(formProvider()) {
                 formProvider().fill
