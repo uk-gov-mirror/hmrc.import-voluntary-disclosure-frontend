@@ -25,7 +25,7 @@ POST        /disclosure/entry-details                                           
 GET         /disclosure/when-entry-acceptance-date                                             controllers.AcceptanceDateController.onLoad
 POST        /disclosure/when-entry-acceptance-date                                             controllers.AcceptanceDateController.onSubmit
 
-GET         /disclosure/supporting-documentation-format                                        controllers.SupportingDocController.onLoad
+GET         /disclosure/mandatory-documents                                                    controllers.SupportingDocController.onLoad
 
 GET         /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onLoad
 POST        /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onSubmit

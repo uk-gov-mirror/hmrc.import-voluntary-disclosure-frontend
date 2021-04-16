@@ -18,14 +18,11 @@ package messages
 
 object SupportingDocMessages  extends BaseMessages {
 
-  val pageTitle: String = "Supporting documentation"
-  val heading: String = "Supporting documentation"
-  val disclosure: String = "You will need to upload files as supporting documentation for this disclosure."
-  val fileSize: String = "Each file must be 30MB or less, and in one of the following formats:"
-  val bullet1: String = "DOC"
-  val bullet2: String = "JPG"
-  val bullet3: String = "PDF"
-  val bullet4: String = "PNG"
-  val bullet5: String = "XLS"
+  val pageTitle: String = "Documents you must upload"
+  val heading: String = "Documents you must upload"
+  val disclosure: String = "We will ask you for the following documents to support your disclosure:"
+  val bullet1: String = "the import declaration, also known as the C88 or SAD"
+  val bullet2: String = "the entry acceptance, also known as the E2"
+  val bullet3: String = "a document or scanned image showing how you calculated the tax or duty that should have been paid"
 
 }

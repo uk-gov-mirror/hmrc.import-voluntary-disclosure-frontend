@@ -48,10 +48,6 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
           elementText("#main-content p:nth-of-type(1)") mustBe SupportingDocMessages.disclosure
         }
 
-        s"have the correct page text of '${SupportingDocMessages.fileSize}'" in {
-          elementText("#main-content p:nth-of-type(2)") mustBe SupportingDocMessages.fileSize
-        }
-
         s"have the correct page text of '${SupportingDocMessages.bullet1}'" in {
           elementText("#main-content li:nth-of-type(1)") mustBe SupportingDocMessages.bullet1
         }
@@ -62,14 +58,6 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
 
         s"have the correct page text of '${SupportingDocMessages.bullet3}'" in {
           elementText("#main-content li:nth-of-type(3)") mustBe SupportingDocMessages.bullet3
-        }
-
-        s"have the correct page text of '${SupportingDocMessages.bullet4}'" in {
-          elementText("#main-content li:nth-of-type(4)") mustBe SupportingDocMessages.bullet4
-        }
-
-        s"have the correct page text of '${SupportingDocMessages.bullet5}'" in {
-          elementText("#main-content li:nth-of-type(5)") mustBe SupportingDocMessages.bullet5
         }
 
         "render a continue button with the correct URL " in {
