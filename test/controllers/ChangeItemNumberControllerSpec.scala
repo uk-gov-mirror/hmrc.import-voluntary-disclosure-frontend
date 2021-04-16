@@ -21,7 +21,7 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.ItemNumberFormProvider
 import mocks.repositories.MockSessionRepository
 import models.{ChangeUnderpaymentReason, UnderpaymentReason, UserAnswers}
-import pages.ChangeUnderpaymentReasonPage
+import pages.{ChangeUnderpaymentReasonPage, UnderpaymentReasonsPage}
 import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
@@ -63,17 +63,17 @@ class ChangeItemNumberControllerSpec extends ControllerSpecBase {
 
   "GET onLoad" when {
     "return OK" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+        .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
+          underpayment(boxNumber = 35, itemNumber = 1),
+          underpayment(boxNumber = 33, itemNumber = 1))).success.value
+      )
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
 
     "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
-        .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
-          underpayment(boxNumber = 35, itemNumber = 1),
-          underpayment(boxNumber = 35, itemNumber = 1))).success.value
-      )
       override lazy val dataRetrievalAction = new FakeDataRetrievalAction(Some(UserAnswers("some-cred-id")))
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
@@ -88,6 +88,7 @@ class ChangeItemNumberControllerSpec extends ControllerSpecBase {
 
       "return a SEE OTHER response when correct data with numeric only values" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(35, 1, "20", "21"))).success.value
           .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
             underpayment(boxNumber = 35, itemNumber = 1),
             underpayment(boxNumber = 35, itemNumber = 1))).success.value
@@ -96,8 +97,20 @@ class ChangeItemNumberControllerSpec extends ControllerSpecBase {
         status(result) mustBe Status.SEE_OTHER
       }
 
+      "return a OK response when correct data with numeric only values" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(35, 1, "60", "60"))).success.value
+          .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
+            underpayment(boxNumber = 35, itemNumber = 2),
+            underpayment(boxNumber = 35, itemNumber = 1))).success.value
+        )
+        lazy val result: Future[Result] = controller.onSubmit(fakeRequestGenerator("1"))
+        status(result) mustBe Status.OK
+      }
+
       "update the UserAnswers in session" in new Test {
         override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(UnderpaymentReasonsPage, Seq(UnderpaymentReason(35, 1, "20", "21"))).success.value
           .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
             underpayment(boxNumber = 35, itemNumber = 1),
             underpayment(boxNumber = 35, itemNumber = 1))).success.value
@@ -107,6 +120,17 @@ class ChangeItemNumberControllerSpec extends ControllerSpecBase {
       }
 
       "return an Internal Server Error" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+          .set(ChangeUnderpaymentReasonPage, ChangeUnderpaymentReason(
+            underpayment(boxNumber = 35, itemNumber = 1),
+            underpayment(boxNumber = 35, itemNumber = 1))).success.value
+        )
+        val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("itemNumber" -> "1")
+        lazy val result: Future[Result] = controller.onSubmit(request)
+        status(result) mustBe Status.INTERNAL_SERVER_ERROR
+      }
+
+      "return an Internal Server Error when no ChangeUnderpaymentReasonPage exists" in new Test {
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("itemNumber" -> "1")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.INTERNAL_SERVER_ERROR

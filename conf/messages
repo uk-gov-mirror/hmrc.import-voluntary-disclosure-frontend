@@ -461,6 +461,7 @@ itemNo.error.required = Enter an item number
 itemNo.error.outOfRange = Item number must be between 1 and 99
 itemNo.error.wholeNumber = Item number must be a whole number
 itemNo.error.nonNumeric = Item number must be a number
+itemNo.error.notTheSameNumber = You have already entered this item number for this box number, enter a different item number or change the existing reason for underpayment
 
 # Confirm Reason Details
 confirmReason.pageTitle = Confirm the details of the reason for underpayment
