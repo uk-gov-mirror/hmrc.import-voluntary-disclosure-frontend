@@ -109,10 +109,12 @@ acceptanceDate.heading = Was the entry acceptance date before 1 January 2021?
 acceptanceDate.error.required = Select yes if the entry acceptance date was before 1 January 2021
 
 # Supporting Documentation
-SupportDoc.pageTitle = Supporting documentation
-SupportDoc.heading = Supporting documentation
-SupportDoc.disclosure = You will need to upload files as supporting documentation for this disclosure.
-SupportDoc.fileSize = Each file must be {0}MB or less, and in one of the following formats:
+SupportDoc.pageTitle = Documents you must upload
+SupportDoc.heading = Documents you must upload
+SupportDoc.disclosure = We will ask you for the following documents to support your disclosure:
+SupportDoc.bullet1 = the import declaration, also known as the C88 or SAD
+SupportDoc.bullet2 = the entry acceptance, also known as the E2
+SupportDoc.bullet3 = a document or scanned image showing how you calculated the tax or duty that should have been paid
 
 # Error Summary
 error.summary.title = There is a problem

@@ -17,7 +17,6 @@
 @import config.AppConfig
 
 @this(layout: templates.Layout,
-      formHelper: FormWithCSRF,
       h1: components.h1,
       p: components.p,
       bullets: components.bullets,
@@ -33,9 +32,7 @@
 
     @p{ @messages("SupportDoc.disclosure") }
 
-    @p{ @messages("SupportDoc.fileSize", appConfig.fileSize) }
-
-    @bullets(appConfig.allowedUploadFileTypes.map(Html(_)))
+    @bullets(Seq(messages("SupportDoc.bullet1"),messages("SupportDoc.bullet2"),messages("SupportDoc.bullet3")).map(Html(_)))
 
     @linkButton(url = controllers.routes.UploadFileController.onLoad().url,messages(("common.button.continue")))
 }
