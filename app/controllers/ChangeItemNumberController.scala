@@ -65,9 +65,7 @@ class ChangeItemNumberController @Inject()(identify: IdentifierAction,
                   data.original.itemNumber != value
               )
               if (alreadyExistsBoxAndItem) {
-                val form = request.userAnswers.get(ChangeUnderpaymentReasonPage).fold(formProvider()) { reason =>
-                  formProvider().fill(reason.changed.itemNumber)
-                }
+                val form = formProvider().fill(data.changed.itemNumber)
                 val formError = FormError("itemNumber", "itemNo.error.notTheSameNumber")
                 Future.successful(Ok(view(form.copy(errors = Seq(formError)), formAction, backLink)))
               } else {
