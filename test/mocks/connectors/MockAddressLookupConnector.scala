@@ -16,17 +16,16 @@
 
 package mocks.connectors
 
+import connectors.AddressLookupConnector
 import models.ErrorModel
 import models.addressLookup.{AddressLookupOnRampModel, AddressModel}
-import org.scalatestplus.play.PlaySpec
-
-import scala.concurrent.{ExecutionContext, Future}
-import connectors.AddressLookupConnector
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.JsValue
 import uk.gov.hmrc.http.HeaderCarrier
 
-trait MockAddressLookupConnector extends PlaySpec with MockFactory {
+import scala.concurrent.{ExecutionContext, Future}
+
+trait MockAddressLookupConnector extends MockFactory {
 
   val mockAddressLookupConnector: AddressLookupConnector = mock[AddressLookupConnector]
 
@@ -36,13 +35,13 @@ trait MockAddressLookupConnector extends PlaySpec with MockFactory {
 
   def setupMockGetAddress(response: Either[ErrorModel, AddressModel]): Unit = {
     (mockAddressLookupConnector.getAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*,*,*)
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 
   def setupMockInitialiseJourney(response: Either[ErrorModel, AddressLookupOnRampModel]): Unit = {
     (mockAddressLookupConnector.initialiseJourney(_: JsValue)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*,*,*)
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 }

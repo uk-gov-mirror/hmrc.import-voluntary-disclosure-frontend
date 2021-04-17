@@ -16,15 +16,14 @@
 
 package mocks.services
 
-import base.SpecBase
-import models.{ContactAddress, EoriDetails, ErrorModel}
+import models.{EoriDetails, ErrorModel}
 import org.scalamock.scalatest.MockFactory
 import services.EoriDetailsService
 import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockEoriDetailsService extends SpecBase with MockFactory {
+trait MockEoriDetailsService extends MockFactory {
 
   val mockEoriDetailsService: EoriDetailsService = mock[EoriDetailsService]
 

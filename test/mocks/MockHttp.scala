@@ -16,13 +16,13 @@
 
 package mocks
 
-import base.SpecBase
 import org.scalamock.scalatest.MockFactory
 import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockHttp extends SpecBase with MockFactory {
+trait MockHttp extends MockFactory {
 
   val mockHttp: HttpClient = mock[HttpClient]
 
@@ -31,13 +31,13 @@ trait MockHttp extends SpecBase with MockFactory {
       .expects(url, *, *, *, *, *)
       .returns(Future.successful(response))
 
-  def setupMockHttpPost[I,O](url: String)(response: O): Unit =
-    (mockHttp.POST[I,O](_: String, _: I, _: Seq[(String, String)])(_: Writes[I], _: HttpReads[O], _: HeaderCarrier, _: ExecutionContext))
+  def setupMockHttpPost[I, O](url: String)(response: O): Unit =
+    (mockHttp.POST[I, O](_: String, _: I, _: Seq[(String, String)])(_: Writes[I], _: HttpReads[O], _: HeaderCarrier, _: ExecutionContext))
       .expects(url, *, *, *, *, *, *)
       .returns(Future.successful(response))
 
-  def setupMockHttpPostWithBody[I,O](url: String, body: I)(response: O): Unit =
-    (mockHttp.POST[I,O](_: String, _: I, _: Seq[(String, String)])(_: Writes[I], _: HttpReads[O], _: HeaderCarrier, _: ExecutionContext))
+  def setupMockHttpPostWithBody[I, O](url: String, body: I)(response: O): Unit =
+    (mockHttp.POST[I, O](_: String, _: I, _: Seq[(String, String)])(_: Writes[I], _: HttpReads[O], _: HeaderCarrier, _: ExecutionContext))
       .expects(url, body, *, *, *, *, *)
       .returns(Future.successful(response))
 }

@@ -18,7 +18,7 @@ package base
 
 import org.scalamock.scalatest.MockFactory
 
-trait RepositorySpecBase extends SpecBase with MockFactory {
+trait RepositorySpecBase extends MockFactory {
 
   def verifyCalls(): Unit = withExpectations(() => ())
 

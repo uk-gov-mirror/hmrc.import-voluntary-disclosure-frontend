@@ -19,11 +19,10 @@ package base
 import org.jsoup.Jsoup
 import org.jsoup.nodes.{Document, Element}
 import org.scalatest.Assertion
-import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 
 import scala.collection.JavaConverters._
 
-trait ViewBaseSpec extends SpecBase with GuiceOneAppPerSuite {
+trait ViewBaseSpec extends SpecBase {
 
   final val emptyString = ""
   final val govErrorSummaryListClass = ".govuk-error-summary__list"

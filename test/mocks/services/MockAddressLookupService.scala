@@ -16,7 +16,6 @@
 
 package mocks.services
 
-import base.SpecBase
 import models.ErrorModel
 import models.addressLookup.{AddressLookupOnRampModel, AddressModel}
 import org.scalamock.scalatest.MockFactory
@@ -26,28 +25,28 @@ import uk.gov.hmrc.http.HeaderCarrier
 
 import scala.concurrent.{ExecutionContext, Future}
 
-trait MockAddressLookupService extends SpecBase with MockFactory {
+trait MockAddressLookupService extends MockFactory {
 
   val mockAddressLookupService: AddressLookupService = mock[AddressLookupService]
 
   type RetrieveAddressResponse = Either[ErrorModel, AddressModel]
   type InitialiseJourneyResponse = Either[ErrorModel, AddressLookupOnRampModel]
 
-  def setupMockRetrieveAddress(response: RetrieveAddressResponse): Unit  = {
+  def setupMockRetrieveAddress(response: RetrieveAddressResponse): Unit = {
     (mockAddressLookupService.retrieveAddress(_: String)(_: HeaderCarrier, _: ExecutionContext))
-      .expects(*,*,*)
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 
-  def setupMockInitialiseJourney(response: InitialiseJourneyResponse): Unit  = {
+  def setupMockInitialiseJourney(response: InitialiseJourneyResponse): Unit = {
     (mockAddressLookupService.initialiseJourney(_: HeaderCarrier, _: ExecutionContext, _: Request[AnyContent]))
-      .expects(*,*,*)
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 
-  def setupMockInitialiseImporterJourney(response: InitialiseJourneyResponse): Unit  = {
+  def setupMockInitialiseImporterJourney(response: InitialiseJourneyResponse): Unit = {
     (mockAddressLookupService.initialiseImporterJourney(_: HeaderCarrier, _: ExecutionContext, _: Request[AnyContent]))
-      .expects(*,*,*)
+      .expects(*, *, *)
       .returns(Future.successful(response))
   }
 }
