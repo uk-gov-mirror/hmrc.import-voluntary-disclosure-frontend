@@ -22,7 +22,7 @@
         button: components.button
 )
 
-@(form: Form[_], backLink: Call, items: Seq[CheckboxItem])(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
 
     @layout(
         pageTitle = messages("whichDocuments.pageTitle"),
@@ -33,7 +33,37 @@
 
 
         @formHelper(action = controllers.routes.WhichDocumentsController.onSubmit()){
-            @checkBoxes(form, messages("whichDocuments.pageHeader"), items, hint = Some(Html(messages("whichDocuments.hint"))))
+            @checkBoxes(
+                form,
+                messages("whichDocuments.pageHeader"),
+                hint = Some(Html(messages("whichDocuments.hint"))),
+                items =  Seq(
+                    CheckboxItem(
+                        value = "importAndEntry",
+                        label = Some(Label(Some("importAndEntry"))),
+                        name = Some("importAndEntry"),
+                        content = Text(messages("whichDocuments.importAndEntry"))
+                    ),
+                    CheckboxItem(
+                        value = "airwayBill",
+                        label = Some(Label(Some("airwayBill"))),
+                        name = Some("airwayBill"),
+                        content = Text(messages("whichDocuments.airwayBill"))
+                    ),
+                    CheckboxItem(
+                        value = "originProof",
+                        label = Some(Label(Some("originProof"))),
+                        name = Some("originProof"),
+                        content = Text(messages("whichDocuments.originProof"))
+                    ),
+                    CheckboxItem(
+                        value = "other",
+                        label = Some(Label(Some("other"))),
+                        name = Some("other"),
+                        content = Text(messages("whichDocuments.other"))
+                    )
+                )
+            )
             @button("common.button.continue")
         }
 

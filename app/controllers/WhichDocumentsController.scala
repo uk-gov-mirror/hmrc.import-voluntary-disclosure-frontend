@@ -20,10 +20,7 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import forms.WhichDocumentsFormProvider
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
-import play.twirl.api.Html
 import repositories.SessionRepository
-import uk.gov.hmrc.govukfrontend.views.Aliases.{Content, Label, Text}
-import uk.gov.hmrc.govukfrontend.views.viewmodels.checkboxes.CheckboxItem
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.WhichDocumentsView
 
@@ -40,18 +37,7 @@ class WhichDocumentsController @Inject()(identify: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(
-      formProvider.apply(),
-      controllers.routes.WhichDocumentsController.onLoad(),
-      Seq(
-        CheckboxItem(
-          value = "Blah",
-          label = Some(Label(Some("Blah"))),
-          name = Some("blah"),
-          content = Text("blah")
-        )
-      )
-    )))
+    Future.successful(Ok(view(formProvider.apply(), controllers.routes.WhichDocumentsController.onLoad())))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>

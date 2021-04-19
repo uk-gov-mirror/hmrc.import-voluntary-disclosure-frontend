@@ -600,3 +600,7 @@ uploadAuthoritySuccess.text = You have uploaded {0}
 whichDocuments.pageTitle = Which of these documents will you be uploading?
 whichDocuments.pageHeader = Which of these documents will you be uploading?
 whichDocuments.hint = Select all that apply.
+whichDocuments.importAndEntry = Amendment import declaration (C88) and entry acceptance (E2)
+whichDocuments.airwayBill = Airway bill
+whichDocuments.originProof = Proof of origin
+whichDocuments.other = Other documentation relevant to this underpayment disclosure
