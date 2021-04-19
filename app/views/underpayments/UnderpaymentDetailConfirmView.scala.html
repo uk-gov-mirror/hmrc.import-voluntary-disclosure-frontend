@@ -20,7 +20,7 @@
         formHelper: FormWithCSRF,
         button: components.button
 )
-@(underpaymentType: String, underpaymentSummary: SummaryList, backLink: Call)(implicit request: Request[_], messages: Messages)
+@(underpaymentType: String, underpaymentSummary: SummaryList, backLink: Call, submitCall: Call)(implicit request: Request[_], messages: Messages)
 
 @layout(
     pageTitle = messages(s"underpaymentDetailsConfirm.$underpaymentType.pageTitle"),
@@ -30,7 +30,7 @@
 
     @govukSummaryList(underpaymentSummary)
 
-    @formHelper(action = controllers.underpayments.routes.UnderpaymentDetailConfirmController.onSubmit(underpaymentType)) {
+    @formHelper(action = submitCall) {
         @button("common.button.continue")
     }
 }

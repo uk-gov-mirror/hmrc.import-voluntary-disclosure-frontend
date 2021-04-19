@@ -38,7 +38,7 @@ object UnderpaymentDetailConfirmData {
           actions = Some(Actions(
             items = Seq(
               ActionItem(
-                controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType).url,
+                controllers.underpayments.routes.ChangeUnderpaymentDetailsController.onLoad(underpaymentType).url,
                 Text("Change")
               )
             ),
