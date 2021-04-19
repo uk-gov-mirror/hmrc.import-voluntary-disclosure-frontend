@@ -18,50 +18,63 @@
         layout: templates.Layout,
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
-        checkBoxes: components.checkboxes,
+        govukCheckboxes: GovukCheckboxes,
         button: components.button
 )
 
-@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, checked: WhichDocuments)(implicit request: Request[_], messages: Messages)
 
     @layout(
         pageTitle = messages("whichDocuments.pageTitle"),
         form = Some(form),
         customBackLinkUrl = Some(backLink)) {
 
-        @errorSummary(form.errors)
+        @if(form.errors.nonEmpty) {
+            @errorSummary(Seq(form.errors.head))
+        }
 
+        @formHelper(action = controllers.routes.WhichDocumentsController.onSubmit()) {
 
-        @formHelper(action = controllers.routes.WhichDocumentsController.onSubmit()){
-            @checkBoxes(
-                form,
-                messages("whichDocuments.pageHeader"),
-                hint = Some(Html(messages("whichDocuments.hint"))),
-                items =  Seq(
-                    CheckboxItem(
-                        value = "importAndEntry",
-                        label = Some(Label(Some("importAndEntry"))),
-                        name = Some("importAndEntry"),
-                        content = Text(messages("whichDocuments.importAndEntry"))
+            @govukCheckboxes(
+                Checkboxes(
+                    name = "value",
+                    fieldset = Some(Fieldset(
+                        legend = Some(Legend(
+                            content = Text(messages("whichDocuments.pageHeader")),
+                            isPageHeading = true,
+                            classes = "govuk-fieldset__legend--l"
+                        ))
+                    )),
+                    hint = Some(Hint(
+                        content = Text(messages("whichDocuments.hint"))
+                    )),
+                    items = Seq(
+                        CheckboxItem(
+                            name = Some("importAndEntry"),
+                            value = "true",
+                            content = Text(messages("whichDocuments.importAndEntry")),
+                            checked = checked.importAndEntry
+                        ),
+                        CheckboxItem(
+                            name = Some("airwayBill"),
+                            value = "true",
+                            content = Text(messages("whichDocuments.airwayBill")),
+                            checked = checked.airwayBill
+                        ),
+                        CheckboxItem(
+                            name = Some("originProof"),
+                            value = "true",
+                            content = Text(messages("whichDocuments.originProof")),
+                            checked = checked.originProof
+                        ),
+                        CheckboxItem(
+                            name = Some("other"),
+                            value = "true",
+                            content = Text(messages("whichDocuments.other")),
+                            checked = checked.other
+                        )
                     ),
-                    CheckboxItem(
-                        value = "airwayBill",
-                        label = Some(Label(Some("airwayBill"))),
-                        name = Some("airwayBill"),
-                        content = Text(messages("whichDocuments.airwayBill"))
-                    ),
-                    CheckboxItem(
-                        value = "originProof",
-                        label = Some(Label(Some("originProof"))),
-                        name = Some("originProof"),
-                        content = Text(messages("whichDocuments.originProof"))
-                    ),
-                    CheckboxItem(
-                        value = "other",
-                        label = Some(Label(Some("other"))),
-                        name = Some("other"),
-                        content = Text(messages("whichDocuments.other"))
-                    )
+                    errorMessage = form.errors.headOption.map(err => ErrorMessage(content = Text(messages(err.message, err.args: _*))))
                 )
             )
             @button("common.button.continue")

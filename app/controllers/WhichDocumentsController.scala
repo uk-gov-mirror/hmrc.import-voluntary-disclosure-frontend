@@ -18,6 +18,8 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.WhichDocumentsFormProvider
+import models.WhichDocuments
+import pages.WhichDocumentsPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
@@ -25,6 +27,7 @@ import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.WhichDocumentsView
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class WhichDocumentsController @Inject()(identify: IdentifierAction,
@@ -36,12 +39,27 @@ class WhichDocumentsController @Inject()(identify: IdentifierAction,
                                          formProvider: WhichDocumentsFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
+  // TODO - change to charlies page
+  private lazy val backButton = controllers.routes.WhichDocumentsController.onLoad()
+
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    Future.successful(Ok(view(formProvider.apply(), controllers.routes.WhichDocumentsController.onLoad())))
+    val documentsSelected = request.userAnswers.get(WhichDocumentsPage).getOrElse(WhichDocuments())
+    Future.successful(Ok(view(formProvider.apply(), backButton, documentsSelected)))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    ???
+    val documentsSelected = request.userAnswers.get(WhichDocumentsPage).getOrElse(WhichDocuments())
+    formProvider().bindFromRequest().fold(
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backButton, documentsSelected))),
+      value => {
+        for {
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichDocumentsPage, value))
+          _ <- sessionRepository.set(updatedAnswers)
+        } yield {
+          Redirect(controllers.routes.WhichDocumentsController.onLoad())
+        }
+      }
+    )
   }
 
 }
