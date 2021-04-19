@@ -39,6 +39,9 @@ class WhichDocumentsController @Inject()(identify: IdentifierAction,
                                          formProvider: WhichDocumentsFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
+  // TODO - need to update the submission
+  // TODO - write tests
+
   // TODO - change to charlies page
   private lazy val backButton = controllers.routes.WhichDocumentsController.onLoad()
 
