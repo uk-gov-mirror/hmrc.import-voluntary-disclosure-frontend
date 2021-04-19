@@ -595,3 +595,8 @@ uploadAuthority.uploadFile = Upload file
 uploadAuthoritySuccess.pageTitle = The file has been uploaded successfully
 uploadAuthoritySuccess.pageHeader = The file has been uploaded successfully
 uploadAuthoritySuccess.text = You have uploaded {0}
+
+# Which Documents you will be uploading page
+whichDocuments.pageTitle = Which of these documents will you be uploading?
+whichDocuments.pageHeader = Which of these documents will you be uploading?
+whichDocuments.hint = Select all that apply.

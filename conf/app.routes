@@ -293,3 +293,5 @@ GET         /disclosure/upload-deferment-authority/:dutyType/:dan/upscan-respons
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan/polling                      controllers.UploadAuthorityController.uploadProgress(dutyType: SelectedDutyType, dan: String, key: String)
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan/success                      controllers.UploadAuthorityController.onSuccess(dutyType: SelectedDutyType, dan: String)
 
+GET         /disclosure/which-documents-upload                                                 controllers.WhichDocumentsController.onLoad
+POST        /disclosure/which-documents-upload                                                 controllers.WhichDocumentsController.onSubmit
