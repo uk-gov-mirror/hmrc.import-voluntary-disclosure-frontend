@@ -44,7 +44,8 @@ case class IvdSubmission(userType: UserType,
                          additionalDefermentType: Option[String] = None,
                          amendedItems: Seq[UnderpaymentReason] = Seq.empty,
                          underpaymentDetails: Seq[UnderpaymentDetail] = Seq.empty,
-                         documentsSupplied: Seq[DocumentType] = Seq.empty,
+                         documentsSupplied: Seq[DocumentType] = Seq.empty, // mandatory docs
+                         optionalDocumentsSupplied: Seq[DocumentType] = Seq.empty, // optional docs
                          supportingDocuments: Seq[FileUploadInfo] = Seq.empty,
                          splitDeferment: Boolean = false,
                          authorityDocuments: Seq[UploadAuthority] = Seq.empty
@@ -155,6 +156,7 @@ object IvdSubmission extends FixedConfig {
       "declarantContactDetails" -> data.declarantContactDetails,
       "underpaymentDetails" -> data.underpaymentDetails,
       "supportingDocumentTypes" -> supportingDocumentTypes,
+      "optionalDocumentTypes" -> data.optionalDocumentsSupplied,
       "amendedItems" -> data.amendedItems,
       "supportingDocuments" -> supportingDocuments
     )
@@ -186,6 +188,7 @@ object IvdSubmission extends FixedConfig {
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
       authorityDocuments <- UploadAuthorityPage.path.readNullable[Seq[UploadAuthority]]
+      optionalDocumentsSupplied <- WhichDocumentsPage.path.readNullable[WhichDocuments]
     } yield {
 
       val traderContactDetails = ContactDetails(
@@ -193,6 +196,20 @@ object IvdSubmission extends FixedConfig {
         declarantContactDetails.email,
         declarantContactDetails.phoneNumber
       )
+
+      val optionalDocuments = optionalDocumentsSupplied.getOrElse(WhichDocuments())
+      val optionalDocumentsList: Option[Seq[DocumentType]] = Some(Map(
+        "importAndEntry" -> optionalDocuments.importAndEntry,
+        "airwayBill" -> optionalDocuments.airwayBill,
+        "originProof" -> optionalDocuments.originProof,
+        "other" -> optionalDocuments.other
+      ).flatMap( document => document match {
+        case ("importAndEntry", true) => Some(Seq(DocumentTypes.AmendedC88, DocumentTypes.AmendedC2))
+        case ("airwayBill", true) => Some(Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate))
+        case ("originProof", true) => Some(Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate))
+        case ("other", true) => Some(Seq(DocumentTypes.Other))
+        case _ => None
+      }).flatten.toSeq)
 
       IvdSubmission(
         userType = userType,
@@ -217,7 +234,8 @@ object IvdSubmission extends FixedConfig {
         additionalInfo = additionalInfo.getOrElse("Not Applicable"),
         amendedItems = amendedItems,
         splitDeferment = splitDeferment.getOrElse(false),
-        authorityDocuments = authorityDocuments.getOrElse(Seq.empty)
+        authorityDocuments = authorityDocuments.getOrElse(Seq.empty),
+        optionalDocumentsSupplied = optionalDocumentsList.getOrElse(Seq.empty)
       )
     }
 }
