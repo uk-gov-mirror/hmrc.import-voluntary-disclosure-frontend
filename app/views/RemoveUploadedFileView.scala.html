@@ -18,21 +18,28 @@
         layout: templates.Layout,
         formHelper: FormWithCSRF,
         errorSummary: components.errorSummary,
+        h1: components.h1,
+        p: components.p,
         yesNoRadio: components.yesNoRadio,
         button: components.button
 )
 
-@(form: Form[_], index: Index)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], index: Index, filename: String)(implicit request: Request[_], messages: Messages)
 
 @layout(pageTitle = messages("removeUploadedFile.pageTitle"), form = Some(form), customBackLinkUrl = Some(controllers.routes.UploadAnotherFileController.onLoad)) {
 
     @errorSummary(form.errors)
+
+    @h1("removeUploadedFile.heading")
+
+    @p(Html(filename))
 
     @formHelper(action = controllers.routes.RemoveUploadedFileController.onSubmit(index)) {
 
         @yesNoRadio(
             form,
             headingKey = "removeUploadedFile.heading",
+            classes = "govuk-visually-hidden",
             inline = true
         )
 

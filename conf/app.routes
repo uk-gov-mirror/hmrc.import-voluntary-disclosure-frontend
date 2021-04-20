@@ -43,8 +43,8 @@ POST        /disclosure/how-will-you-pay                                        
 GET         /disclosure/upload-another-file                                                    controllers.UploadAnotherFileController.onLoad
 POST        /disclosure/upload-another-file                                                    controllers.UploadAnotherFileController.onSubmit
 
-GET         /disclosure/remove-file/:index                                                     controllers.RemoveUploadedFileController.onLoad(index: models.Index)
-POST        /disclosure/remove-file/:index                                                     controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
+GET         /disclosure/confirm-file-removal/:index                                            controllers.RemoveUploadedFileController.onLoad(index: models.Index)
+POST        /disclosure/confirm-file-removal/:index                                            controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
 
 GET         /disclosure/address-correct                                                        controllers.TraderAddressCorrectController.onLoad
 POST        /disclosure/address-correct                                                        controllers.TraderAddressCorrectController.onSubmit

@@ -43,7 +43,7 @@ class RemoveUploadedFileControllerSpec extends ControllerSpecBase {
     val formProvider: RemoveUploadedFileFormProvider = injector.instanceOf[RemoveUploadedFileFormProvider]
     val form: RemoveUploadedFileFormProvider = formProvider
 
-    val index:Index = Index.apply(1)
+    val index:Index = Index.apply(0)
 
     MockedSessionRepository.set(Future.successful(true))
 
@@ -121,8 +121,25 @@ class RemoveUploadedFileControllerSpec extends ControllerSpecBase {
 
     "payload contains invalid data" should {
       "return a BAD REQUEST" in new Test {
+        override val userAnswers: Option[UserAnswers] = Some(
+          UserAnswers("credId")
+            .set(
+              FileUploadPage,
+              Seq(FileUploadInfo(
+                fileName = "file.txt",
+                downloadUrl = "url",
+                uploadTimestamp = LocalDateTime.now,
+                checksum = "checksum",
+                fileMimeType = "application/txt"
+              ))
+            ).success.value
+        )
         val result: Future[Result] = controller.onSubmit(index)(fakeRequest)
         status(result) mustBe Status.BAD_REQUEST
+      }
+      "return a Internal Server Error if data lost" in new Test {
+        val result: Future[Result] = controller.onSubmit(index)(fakeRequest)
+        status(result) mustBe Status.INTERNAL_SERVER_ERROR
       }
     }
   }
