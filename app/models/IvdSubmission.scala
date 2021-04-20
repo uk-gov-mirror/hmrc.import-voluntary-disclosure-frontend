@@ -188,7 +188,7 @@ object IvdSubmission extends FixedConfig {
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
       authorityDocuments <- UploadAuthorityPage.path.readNullable[Seq[UploadAuthority]]
-      optionalDocumentsSupplied <- WhichDocumentsPage.path.readNullable[WhichDocuments]
+      optionalDocumentsSupplied <- OptionalSupportingDocsPage.path.readNullable[OptionalSupportingDocs]
     } yield {
 
       val traderContactDetails = ContactDetails(
@@ -197,7 +197,7 @@ object IvdSubmission extends FixedConfig {
         declarantContactDetails.phoneNumber
       )
 
-      val optionalDocuments = optionalDocumentsSupplied.getOrElse(WhichDocuments())
+      val optionalDocuments = optionalDocumentsSupplied.getOrElse(OptionalSupportingDocs())
       val optionalDocumentsList: Option[Seq[DocumentType]] = Some(Map(
         "importAndEntry" -> optionalDocuments.importAndEntry,
         "airwayBill" -> optionalDocuments.airwayBill,

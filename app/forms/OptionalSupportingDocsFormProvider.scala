@@ -16,21 +16,21 @@
 
 package forms
 
-import models.WhichDocuments
+import models.OptionalSupportingDocs
 import play.api.data.Form
 import play.api.data.Forms.{boolean, mapping}
 import play.api.i18n.Messages
 
-class WhichDocumentsFormProvider {
+class OptionalSupportingDocsFormProvider {
 
-  def apply()(implicit messages: Messages): Form[WhichDocuments] =
+  def apply()(implicit messages: Messages): Form[OptionalSupportingDocs] =
     Form(
       mapping(
         "importAndEntry" -> boolean,
         "airwayBill" -> boolean,
         "originProof" -> boolean,
         "other" -> boolean
-      )(WhichDocuments.apply)(WhichDocuments.unapply).verifying(
+      )(OptionalSupportingDocs.apply)(OptionalSupportingDocs.unapply).verifying(
         messages("underpaymentType.error.required"),
         fields => fields.importAndEntry || fields.airwayBill || fields.originProof || fields.other
       )

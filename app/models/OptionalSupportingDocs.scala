@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package pages
+package models
 
-import models.WhichDocuments
-import play.api.libs.json.JsPath
+import play.api.libs.json.{Json, OFormat}
 
-object WhichDocumentsPage extends QuestionPage[WhichDocuments] {
+case class OptionalSupportingDocs(
+                           importAndEntry: Boolean = false,
+                           airwayBill: Boolean = false,
+                           originProof: Boolean = false,
+                           other: Boolean = false)
 
-  def path: JsPath = JsPath \ toString
-
-  override def toString: String = "which-documents-uploaded"
-
+object OptionalSupportingDocs {
+  implicit val format: OFormat[OptionalSupportingDocs] = Json.format[OptionalSupportingDocs]
 }

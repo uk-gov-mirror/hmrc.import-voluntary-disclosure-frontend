@@ -17,46 +17,46 @@
 package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
-import forms.WhichDocumentsFormProvider
-import models.WhichDocuments
-import pages.WhichDocumentsPage
+import forms.OptionalSupportingDocsFormProvider
+import models.OptionalSupportingDocs
+import pages.OptionalSupportingDocsPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.WhichDocumentsView
+import views.html.OptionalSupportingDocsView
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class WhichDocumentsController @Inject()(identify: IdentifierAction,
-                                         getData: DataRetrievalAction,
-                                         requireData: DataRequiredAction,
-                                         sessionRepository: SessionRepository,
-                                         mcc: MessagesControllerComponents,
-                                         view: WhichDocumentsView,
-                                         formProvider: WhichDocumentsFormProvider)
+
+class OptionalSupportingDocsController @Inject()(identify: IdentifierAction,
+                                                 getData: DataRetrievalAction,
+                                                 requireData: DataRequiredAction,
+                                                 sessionRepository: SessionRepository,
+                                                 mcc: MessagesControllerComponents,
+                                                 view: OptionalSupportingDocsView,
+                                                 formProvider: OptionalSupportingDocsFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
   // TODO - need to update the submission
   // TODO - write tests
-
-  // TODO - change to charlies page
-  private lazy val backButton = controllers.routes.WhichDocumentsController.onLoad()
+  // TODO - update back button for /disclosure/upload-file based on AnyOtherSupportingDocsController boolean value
+  private lazy val backButton = controllers.routes.AnyOtherSupportingDocsController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val documentsSelected = request.userAnswers.get(WhichDocumentsPage).getOrElse(WhichDocuments())
+    val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(OptionalSupportingDocs())
     Future.successful(Ok(view(formProvider.apply(), backButton, documentsSelected)))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val documentsSelected = request.userAnswers.get(WhichDocumentsPage).getOrElse(WhichDocuments())
+    val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(OptionalSupportingDocs())
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backButton, documentsSelected))),
       value => {
         for {
-          updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichDocumentsPage, value))
+          updatedAnswers <- Future.fromTry(request.userAnswers.set(OptionalSupportingDocsPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           Redirect(controllers.routes.UploadFileController.onLoad())
