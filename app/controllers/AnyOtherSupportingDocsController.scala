@@ -57,7 +57,7 @@ class AnyOtherSupportingDocsController @Inject()(identify: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           if (value) {
-            Redirect(controllers.routes.AnyOtherSupportingDocsController.onLoad())
+            Redirect(controllers.routes.WhichDocumentsController.onLoad())
           } else {
             Redirect(controllers.routes.UploadFileController.onLoad())
           }

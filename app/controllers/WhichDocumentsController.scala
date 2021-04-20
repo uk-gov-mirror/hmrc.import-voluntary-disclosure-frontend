@@ -59,7 +59,7 @@ class WhichDocumentsController @Inject()(identify: IdentifierAction,
           updatedAnswers <- Future.fromTry(request.userAnswers.set(WhichDocumentsPage, value))
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
-          Redirect(controllers.routes.WhichDocumentsController.onLoad())
+          Redirect(controllers.routes.UploadFileController.onLoad())
         }
       }
     )
