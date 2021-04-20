@@ -27,7 +27,6 @@ import play.api.http.Status
 import play.api.mvc.{AnyContentAsFormUrlEncoded, Result}
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
-import services.FlowService
 import views.html.NumberOfEntriesView
 
 import scala.concurrent.Future
@@ -44,12 +43,11 @@ class NumberOfEntriesControllerSpec extends ControllerSpecBase {
 
     val formProvider: NumberOfEntriesFormProvider = injector.instanceOf[NumberOfEntriesFormProvider]
     val form: NumberOfEntriesFormProvider = formProvider
-    val flowService: FlowService = app.injector.instanceOf[FlowService]
 
     MockedSessionRepository.set(Future.successful(true))
 
     lazy val controller = new NumberOfEntriesController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, appConfig, messagesControllerComponents, flowService, form, numberOfEntriesPage)
+      mockSessionRepository, appConfig, messagesControllerComponents, form, numberOfEntriesPage)
   }
 
   "GET /" should {

@@ -16,11 +16,42 @@
 
 package models.requests
 
-import models.UserAnswers
+import models.SelectedDutyTypes.{Both, Duty, Neither, SelectedDutyType, Vat}
+import models.{UserAnswers, UserType}
+import pages.{ImporterEORIExistsPage, UserTypePage}
+import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.mvc.WrappedRequest
 
 case class OptionalDataRequest[A](request: IdentifierRequest[A], credId: String, eori: String, userAnswers: Option[UserAnswers])
   extends WrappedRequest[A](request)
 
 case class DataRequest[A](request: OptionalDataRequest[A], credId: String, eori: String, userAnswers: UserAnswers)
-  extends WrappedRequest[A](request)
+  extends WrappedRequest[A](request) {
+
+  def isRepFlow: Boolean =
+    userAnswers.get(UserTypePage) match {
+      case Some(userType) => userType == UserType.Representative
+      case _ => false
+    }
+
+  def doesImporterEORIExist: Boolean =
+    userAnswers.get(ImporterEORIExistsPage) match {
+      case Some(value) => value
+      case _ => false
+    }
+
+  def dutyType: SelectedDutyType = {
+    val vatUnderpaymentType: String = "B00"
+    userAnswers.get(UnderpaymentDetailSummaryPage).map { value =>
+      val vatExists = value.exists(_.duty == vatUnderpaymentType)
+      val dutyExists = value.exists(_.duty != vatUnderpaymentType)
+      (vatExists, dutyExists) match {
+        case (true, true) => Both
+        case (true, _) => Vat
+        case (_, true) => Duty
+        case _ => Neither
+      }
+    }.getOrElse(Neither)
+  }
+
+}

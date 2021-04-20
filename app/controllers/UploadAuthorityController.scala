@@ -25,7 +25,7 @@ import pages.{SplitPaymentPage, UploadAuthorityPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.{FileUploadRepository, SessionRepository}
-import services.{FlowService, UpScanService}
+import services.UpScanService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{UploadAuthorityProgressView, UploadAuthoritySuccessView, UploadAuthorityView}
 
@@ -42,7 +42,6 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
                                           fileUploadRepository: FileUploadRepository,
                                           sessionRepository: SessionRepository,
                                           upScanService: UpScanService,
-                                          flowService: FlowService,
                                           view: UploadAuthorityView,
                                           progressView: UploadAuthorityProgressView,
                                           successView: UploadAuthoritySuccessView,
@@ -67,7 +66,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
     }
 
     upScanService.initiateAuthorityJourney(dutyType, dan).map { response =>
-      Ok(view(response, backLink(dutyType, dan, flowService.dutyType(request.userAnswers), splitPayment), dan, dutyTypeKey))
+      Ok(view(response, backLink(dutyType, dan, request.dutyType, splitPayment), dan, dutyTypeKey))
         .removingFromSession("AuthorityUpscanReference")
         .addingToSession("AuthorityUpscanReference" -> response.reference.value)
     }
@@ -144,7 +143,7 @@ class UploadAuthorityController @Inject()(identify: IdentifierAction,
   def onSuccess(dutyType: SelectedDutyType, dan: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val splitPayment = request.userAnswers.get(SplitPaymentPage).getOrElse(false)
 
-    val action = flowService.dutyType(request.userAnswers) match {
+    val action = request.dutyType match {
       case Both if splitPayment && dutyType == Duty => controllers.routes.RepresentativeDanImportVATController.onLoad().url
       case _ => controllers.routes.CheckYourAnswersController.onLoad().url
     }

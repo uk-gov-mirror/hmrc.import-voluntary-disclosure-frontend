@@ -20,7 +20,7 @@ import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.config.MockAppConfig
 import mocks.repositories.{MockFileUploadRepository, MockSessionRepository}
-import mocks.services.{MockFlowService, MockUpScanService}
+import mocks.services.MockUpScanService
 import models.SelectedDutyTypes._
 import models.UserAnswers
 import models.upscan.{FileUpload, Reference, UpScanInitiateResponse, UploadFormTemplate}
@@ -59,7 +59,7 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
     | }""".stripMargin)
 
 
-  trait Test extends MockSessionRepository with MockFileUploadRepository with MockUpScanService with MockFlowService {
+  trait Test extends MockSessionRepository with MockFileUploadRepository with MockUpScanService {
     private lazy val uploadAuthorityView: UploadAuthorityView = app.injector.instanceOf[UploadAuthorityView]
     private lazy val uploadAuthorityProgressView: UploadAuthorityProgressView = app.injector.instanceOf[UploadAuthorityProgressView]
     private lazy val uploadAuthoritySuccessView: UploadAuthoritySuccessView = app.injector.instanceOf[UploadAuthoritySuccessView]
@@ -74,7 +74,6 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
       MockedFileUploadRepository.updateRecord(Future.successful(true))
       MockedFileUploadRepository.getRecord(Future.successful(Some(Json.fromJson[FileUpload](callbackReadyJson).get)))
       MockedSessionRepository.set(Future.successful(true))
-      MockedFlowService.dutyType(dutyType)
 
       MockedUpScanService.initiateAuthorityJourney(
         Future.successful(UpScanInitiateResponse(
@@ -90,7 +89,7 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
     lazy val controller = {
       setupMocks()
       new UploadAuthorityController(authenticatedAction, dataRetrievalAction, dataRequiredAction, messagesControllerComponents,
-        mockFileUploadRepository, mockSessionRepository, mockUpScanService, mockFlowService, uploadAuthorityView,
+        mockFileUploadRepository, mockSessionRepository, mockUpScanService, uploadAuthorityView,
         uploadAuthorityProgressView, uploadAuthoritySuccessView, MockAppConfig)
     }
   }

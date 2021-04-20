@@ -21,7 +21,7 @@ import assets.BaseTestConstants.errorModel
 import base.ControllerSpecBase
 import controllers.actions.FakeDataRetrievalAction
 import mocks.repositories.MockSessionRepository
-import mocks.services.{MockAddressLookupService, MockFlowService}
+import mocks.services.MockAddressLookupService
 import models.{UserAnswers, UserType}
 import models.addressLookup.AddressLookupOnRampModel
 import pages.UserTypePage
@@ -33,7 +33,7 @@ import scala.concurrent.Future
 
 class AddressLookupControllerSpec extends ControllerSpecBase {
 
-  trait Test extends MockAddressLookupService with MockSessionRepository with MockFlowService {
+  trait Test extends MockAddressLookupService with MockSessionRepository {
     lazy val dataRetrievalAction = new FakeDataRetrievalAction(Some(UserAnswers("some-cred-id")))
 
     lazy val controller = new AddressLookupController(

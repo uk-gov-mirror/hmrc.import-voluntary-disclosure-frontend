@@ -26,7 +26,6 @@ import pages.{DefermentAccountPage, DefermentPage, DefermentTypePage, SplitPayme
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers._
-import services.FlowService
 import views.html.RepresentativeDanView
 
 import scala.concurrent.Future
@@ -48,12 +47,11 @@ class RepresentativeDanControllerSpec extends ControllerSpecBase {
 
     val formProvider: RepresentativeDanFormProvider = injector.instanceOf[RepresentativeDanFormProvider]
     val form: RepresentativeDanFormProvider = formProvider
-    val flowService: FlowService = app.injector.instanceOf[FlowService]
 
     MockedSessionRepository.set(Future.successful(true))
 
     lazy val controller = new RepresentativeDanController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, messagesControllerComponents, flowService, representativeDanView, form)
+      mockSessionRepository, messagesControllerComponents, representativeDanView, form)
   }
 
   "GET Representative Dan page" should {

@@ -19,14 +19,15 @@ package controllers
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.NumberOfEntriesFormProvider
+
 import javax.inject.{Inject, Singleton}
 import models.NumberOfEntries.{MoreThanOneEntry, OneEntry}
+import models.requests.DataRequest
 import models.{NumberOfEntries, UserAnswers}
 import pages.NumberOfEntriesPage
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.SessionRepository
-import services.FlowService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.NumberOfEntriesView
 
@@ -40,7 +41,6 @@ class NumberOfEntriesController @Inject()(identify: IdentifierAction,
                                           sessionRepository: SessionRepository,
                                           appConfig: AppConfig,
                                           mcc: MessagesControllerComponents,
-                                          flowService: FlowService,
                                           formProvider: NumberOfEntriesFormProvider,
                                           view: NumberOfEntriesView)
   extends FrontendController(mcc) with I18nSupport {
@@ -53,13 +53,13 @@ class NumberOfEntriesController @Inject()(identify: IdentifierAction,
       formProvider().fill
     }
 
-    Future.successful(Ok(view(form, backLink(request.userAnswers))))
+    Future.successful(Ok(view(form, backLink(request))))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
 
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink(request.userAnswers)))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink(request)))),
       value => {
         for {
           updatedAnswers <- Future.fromTry(request.userAnswers.set(NumberOfEntriesPage, value))
@@ -76,8 +76,8 @@ class NumberOfEntriesController @Inject()(identify: IdentifierAction,
     case MoreThanOneEntry => Redirect(controllers.routes.NumberOfEntriesController.onLoad())
   }
 
-  private[controllers] def backLink(userAnswers: UserAnswers): Call =
-    (flowService.isRepFlow(userAnswers), flowService.doesImporterEORIExist(userAnswers)) match {
+  private[controllers] def backLink(request: DataRequest[_]): Call =
+    (request.isRepFlow, request.doesImporterEORIExist) match {
       case (true, true) => controllers.routes.ImporterEORINumberController.onLoad()
       case (true, false) => controllers.routes.ImporterEORIExistsController.onLoad()
       case _ => controllers.routes.UserTypeController.onLoad()

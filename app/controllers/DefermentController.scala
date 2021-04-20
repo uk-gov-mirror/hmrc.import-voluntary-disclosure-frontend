@@ -20,12 +20,12 @@ import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierA
 import forms.DefermentFormProvider
 import models.SelectedDutyTypes._
 import models.UserAnswers
+import models.requests.DataRequest
 import pages.DefermentPage
 import play.api.i18n.I18nSupport
 import play.api.libs.json.Format.GenericFormat
 import play.api.mvc._
 import repositories.SessionRepository
-import services.FlowService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.DefermentView
 
@@ -41,7 +41,6 @@ class DefermentController @Inject()(identify: IdentifierAction,
                                     sessionRepository: SessionRepository,
                                     mcc: MessagesControllerComponents,
                                     formProvider: DefermentFormProvider,
-                                    flowService: FlowService,
                                     view: DefermentView)
   extends FrontendController(mcc) with I18nSupport {
 
@@ -51,7 +50,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
     val form = request.userAnswers.get(DefermentPage).fold(formProvider()) {
       formProvider().fill
     }
-    Future.successful(Ok(view(form, backLink, getHeaderMessage(request.userAnswers))))
+    Future.successful(Ok(view(form, backLink, getHeaderMessage(request))))
   }
 
   def onSubmit: Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
@@ -61,7 +60,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           view(
             formWithErrors,
             backLink,
-            getHeaderMessage(request.userAnswers)
+            getHeaderMessage(request)
           )
         )
       ),
@@ -71,7 +70,7 @@ class DefermentController @Inject()(identify: IdentifierAction,
           _ <- sessionRepository.set(updatedAnswers)
         } yield {
           if (value) {
-            redirectToDefermentView(request.userAnswers)
+            redirectToDefermentView(request)
           } else {
             Redirect(controllers.routes.CheckYourAnswersController.onLoad())
           }
@@ -80,9 +79,9 @@ class DefermentController @Inject()(identify: IdentifierAction,
     )
   }
 
-  private[controllers] def redirectToDefermentView(userAnswers: UserAnswers): Result = {
-    if (flowService.isRepFlow(userAnswers)) {
-      flowService.dutyType(userAnswers) match {
+  private[controllers] def redirectToDefermentView(request: DataRequest[_]): Result = {
+    if (request.isRepFlow) {
+      request.dutyType match {
         case underpaymentType if underpaymentType == Both => Redirect(controllers.routes.SplitPaymentController.onLoad())
         case underpaymentType if Seq(Vat, Duty).contains(underpaymentType) => Redirect(controllers.routes.RepresentativeDanController.onLoad())
         case _ => InternalServerError("Couldn't find Underpayment types")
@@ -92,8 +91,8 @@ class DefermentController @Inject()(identify: IdentifierAction,
     }
   }
 
-  private[controllers] def getHeaderMessage(userAnswers: UserAnswers): String = {
-    flowService.dutyType(userAnswers) match {
+  private[controllers] def getHeaderMessage(request: DataRequest[_]): String = {
+    request.dutyType match {
       case Vat => "deferment.headingOnlyVAT"
       case Duty => "deferment.headingDutyOnly"
       case _ => "deferment.headingVATandDuty"
