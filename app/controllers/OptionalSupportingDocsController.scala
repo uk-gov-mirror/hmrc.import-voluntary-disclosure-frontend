@@ -39,19 +39,20 @@ class OptionalSupportingDocsController @Inject()(identify: IdentifierAction,
                                                  formProvider: OptionalSupportingDocsFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
+  // TODO - changes to the lists from Ians branch
   // TODO - write tests
 
-  private lazy val backButton = controllers.routes.AnyOtherSupportingDocsController.onLoad()
+  private lazy val backLink = controllers.routes.AnyOtherSupportingDocsController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(Seq.empty)
-    Future.successful(Ok(view(formProvider.apply(), backButton, documentsSelected)))
+    Future.successful(Ok(view(formProvider.apply(), backLink, documentsSelected)))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(Seq.empty)
     formProvider().bindFromRequest().fold(
-      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backButton, documentsSelected))),
+      formWithErrors => Future.successful(BadRequest(view(formWithErrors, backLink, documentsSelected))),
       value => {
         for {
           updatedAnswers <- Future.fromTry(request.userAnswers.set(OptionalSupportingDocsPage, value))

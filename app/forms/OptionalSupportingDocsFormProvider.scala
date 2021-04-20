@@ -19,22 +19,14 @@ package forms
 import forms.mappings.Mappings
 import play.api.data.Form
 import play.api.data.Forms.seq
-import play.api.data.validation.{Constraint, Invalid, Valid}
 
 class OptionalSupportingDocsFormProvider extends Mappings {
 
   def apply(): Form[Seq[String]] =
     Form(
       "optionalDocumentsList" -> seq(text("optionalSupportingDocuments.error.required"))
-        .verifying(nonEmptySeq())
+        .verifying(nonEmptySeq("optionalSupportingDocuments.error.required"))
     )
 
-  private def nonEmptySeq(): Constraint[Seq[_]] =
-    Constraint {
-      case seq if seq.nonEmpty =>
-        Valid
-      case _ =>
-        Invalid("optionalSupportingDocuments.error.required")
-    }
 
 }

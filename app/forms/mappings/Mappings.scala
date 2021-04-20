@@ -16,10 +16,10 @@
 
 package forms.mappings
 
-import config.AppConfig
 import models.Enumerable
 import play.api.data.FieldMapping
 import play.api.data.Forms.of
+import play.api.data.validation.{Constraint, Invalid, Valid}
 import play.api.i18n.Messages
 
 import java.time.LocalDate
@@ -67,4 +67,14 @@ trait Mappings extends Formatters with Constraints {
   protected def foreignCurrency(requiredKey: String = "error.required",
                                 invalidNumeric: String = "error.invalid"): FieldMapping[String] =
     of(foreignCurrencyFormatter(requiredKey, invalidNumeric))
+
+
+  def nonEmptySeq(errorMessage: String): Constraint[Seq[_]] =
+    Constraint {
+      case seq if seq.nonEmpty =>
+        Valid
+      case _ =>
+        Invalid(errorMessage)
+    }
+
 }
