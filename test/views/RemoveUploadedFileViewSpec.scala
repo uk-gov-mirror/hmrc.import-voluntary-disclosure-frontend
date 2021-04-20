@@ -32,6 +32,8 @@ class RemoveUploadedFileViewSpec extends ViewBaseSpec with BaseMessages {
 
   val formProvider: RemoveUploadedFileFormProvider = injector.instanceOf[RemoveUploadedFileFormProvider]
 
+  val filename: String = "Filename"
+
   val index: Index = Index.apply(1)
 
 
@@ -39,7 +41,7 @@ class RemoveUploadedFileViewSpec extends ViewBaseSpec with BaseMessages {
     "no errors exist" should {
 
       val form: Form[Boolean] = formProvider.apply()
-      lazy val view: Html = injectedView(form,index)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form,index, filename)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       s"have the correct page title" in {
@@ -57,7 +59,7 @@ class RemoveUploadedFileViewSpec extends ViewBaseSpec with BaseMessages {
 
     "an error exists (no option has been selected)" should {
       lazy val form: Form[Boolean] = formProvider().bind(Map("value" -> ""))
-      lazy val view: Html = injectedView(form,index)(fakeRequest, messages)
+      lazy val view: Html = injectedView(form,index, filename)(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
       "update the page title to include the error prefix" in {
@@ -78,11 +80,15 @@ class RemoveUploadedFileViewSpec extends ViewBaseSpec with BaseMessages {
   it should {
 
     val form: Form[Boolean] = formProvider.apply()
-    lazy val view: Html = injectedView(form, index)(fakeRequest, messages)
+    lazy val view: Html = injectedView(form, index, filename)(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     s"have the correct h1 of '${RemoveUploadedFileMessages.h1}'" in {
       elementText("h1") mustBe RemoveUploadedFileMessages.h1
+    }
+
+    s"have the correct filename in the body" in {
+      elementText("p") mustBe filename
     }
 
     s"have the correct value for the first radio button of '${RemoveUploadedFileMessages.siteYes}'" in {

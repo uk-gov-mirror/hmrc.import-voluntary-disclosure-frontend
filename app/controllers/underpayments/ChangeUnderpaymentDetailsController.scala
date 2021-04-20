@@ -18,33 +18,37 @@ package controllers.underpayments
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.underpayments.UnderpaymentDetailsFormProvider
-import pages.underpayments.UnderpaymentDetailsPage
+import models.underpayments.UnderpaymentAmount
+import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.data.FormError
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import repositories.SessionRepository
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
-import views.html.underpayments.UnderpaymentDetailsView
+import views.html.underpayments.ChangeUnderpaymentDetailsView
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 @Singleton
-class UnderpaymentDetailsController @Inject()(identify: IdentifierAction,
-                                              getData: DataRetrievalAction,
-                                              requireData: DataRequiredAction,
-                                              sessionRepository: SessionRepository,
-                                              mcc: MessagesControllerComponents,
-                                              formProvider: UnderpaymentDetailsFormProvider,
-                                              view: UnderpaymentDetailsView)
+class ChangeUnderpaymentDetailsController @Inject()(identify: IdentifierAction,
+                                                    getData: DataRetrievalAction,
+                                                    requireData: DataRequiredAction,
+                                                    sessionRepository: SessionRepository,
+                                                    mcc: MessagesControllerComponents,
+                                                    formProvider: UnderpaymentDetailsFormProvider,
+                                                    view: ChangeUnderpaymentDetailsView)
+
   extends FrontendController(mcc) with I18nSupport {
 
-  private lazy val backLink = controllers.underpayments.routes.UnderpaymentTypeController.onLoad()
+  private lazy val backLink = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
 
   def onLoad(underpaymentType: String): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val form = request.userAnswers.get(UnderpaymentDetailsPage).fold(formProvider()) {
-      formProvider().fill
+
+    val form = request.userAnswers.get(UnderpaymentDetailSummaryPage).fold(formProvider()) { value =>
+      val underpayment = value.filter(underpayment => underpayment.duty == underpaymentType).head
+      formProvider().fill(UnderpaymentAmount(underpayment.original, underpayment.amended))
     }
     Future.successful(Ok(view(form, underpaymentType, backLink)))
   }
@@ -64,13 +68,17 @@ class UnderpaymentDetailsController @Inject()(identify: IdentifierAction,
         },
         value => {
           for {
-            updatedAnswers <- Future.fromTry(request.userAnswers.set(UnderpaymentDetailsPage, value))
+            updatedAnswers <- Future.fromTry(request.userAnswers.set(
+              UnderpaymentDetailsPage, UnderpaymentAmount(value.original, value.amended))
+            )
             _ <- sessionRepository.set(updatedAnswers)
           } yield {
-            Redirect(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(underpaymentType, change = false))
+            Redirect(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(
+              underpaymentType = underpaymentType,
+              change = true)
+            )
           }
         }
       )
   }
-
 }

@@ -21,21 +21,22 @@ import controllers.actions.FakeDataRetrievalAction
 import forms.underpayments.UnderpaymentDetailsFormProvider
 import mocks.repositories.MockSessionRepository
 import models.UserAnswers
-import models.underpayments.UnderpaymentAmount
-import pages.underpayments.UnderpaymentDetailsPage
+import models.underpayments.{UnderpaymentAmount, UnderpaymentDetail}
+import pages.underpayments.{UnderpaymentDetailSummaryPage, UnderpaymentDetailsPage}
 import play.api.http.Status
 import play.api.mvc.Result
 import play.api.test.Helpers.{charset, contentType, defaultAwaitTimeout, redirectLocation, status}
-import views.html.underpayments.UnderpaymentDetailsView
+import views.html.underpayments.ChangeUnderpaymentDetailsView
 
 import scala.concurrent.Future
 
-class UnderpaymentDetailsControllerSpec extends ControllerSpecBase {
+class ChangeUnderpaymentDetailsControllerSpec extends ControllerSpecBase {
 
   private final val underpaymentType = "A00"
 
   trait Test extends MockSessionRepository {
-    private lazy val underpaymentDetailsView: UnderpaymentDetailsView = app.injector.instanceOf[UnderpaymentDetailsView]
+
+    private lazy val changeUnderpaymentDetailsView: ChangeUnderpaymentDetailsView = app.injector.instanceOf[ChangeUnderpaymentDetailsView]
 
     val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId"))
     private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
@@ -45,24 +46,27 @@ class UnderpaymentDetailsControllerSpec extends ControllerSpecBase {
 
     MockedSessionRepository.set(Future.successful(true))
 
-    lazy val controller = new UnderpaymentDetailsController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
-      mockSessionRepository, messagesControllerComponents, form, underpaymentDetailsView)
+    lazy val controller = new ChangeUnderpaymentDetailsController(authenticatedAction, dataRetrievalAction, dataRequiredAction,
+      mockSessionRepository, messagesControllerComponents, form, changeUnderpaymentDetailsView)
   }
 
-  "GET onLoad" should {
+  "GET onLoad" when {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad(underpaymentType)(fakeRequest)
       status(result) mustBe Status.OK
     }
 
+
     "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] = Some(
-        UserAnswers("credId").set(UnderpaymentDetailsPage, UnderpaymentAmount(50, 60)).success.value
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("some-cred-id")
+        .set(UnderpaymentDetailSummaryPage, Seq(UnderpaymentDetail(underpaymentType, original = 10, amended = 20))).success.value
+        .set(UnderpaymentDetailsPage, UnderpaymentAmount(original = 10, amended = 20)).success.value
       )
       val result: Future[Result] = controller.onLoad(underpaymentType)(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
     }
+
   }
 
   "POST onSubmit" when {
@@ -76,7 +80,7 @@ class UnderpaymentDetailsControllerSpec extends ControllerSpecBase {
         )
         status(result) mustBe Status.SEE_OTHER
         redirectLocation(result) mustBe
-          Some(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(underpaymentType,false).url)
+          Some(controllers.underpayments.routes.UnderpaymentDetailConfirmController.onLoad(underpaymentType, true).url)
       }
 
       "update the UserAnswers in session" in new Test {
@@ -106,4 +110,6 @@ class UnderpaymentDetailsControllerSpec extends ControllerSpecBase {
 
   }
 
+
 }
+

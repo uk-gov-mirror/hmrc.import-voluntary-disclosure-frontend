@@ -27,6 +27,9 @@ POST        /disclosure/when-entry-acceptance-date                              
 
 GET         /disclosure/mandatory-documents                                                    controllers.SupportingDocController.onLoad
 
+GET         /disclosure/further-documents                                                      controllers.AnyOtherSupportingDocsController.onLoad
+POST        /disclosure/further-documents                                                      controllers.AnyOtherSupportingDocsController.onSubmit
+
 GET         /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onLoad
 POST        /disclosure/enter-cpc                                                              controllers.EnterCustomsProcedureCodeController.onSubmit
 
@@ -43,8 +46,8 @@ POST        /disclosure/how-will-you-pay                                        
 GET         /disclosure/upload-another-file                                                    controllers.UploadAnotherFileController.onLoad
 POST        /disclosure/upload-another-file                                                    controllers.UploadAnotherFileController.onSubmit
 
-GET         /disclosure/remove-file/:index                                                     controllers.RemoveUploadedFileController.onLoad(index: models.Index)
-POST        /disclosure/remove-file/:index                                                     controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
+GET         /disclosure/confirm-file-removal/:index                                            controllers.RemoveUploadedFileController.onLoad(index: models.Index)
+POST        /disclosure/confirm-file-removal/:index                                            controllers.RemoveUploadedFileController.onSubmit(index: models.Index)
 
 GET         /disclosure/address-correct                                                        controllers.TraderAddressCorrectController.onLoad
 POST        /disclosure/address-correct                                                        controllers.TraderAddressCorrectController.onSubmit
@@ -255,38 +258,98 @@ POST        /disclosure/customs-duty-agricultural-products-underpayment-details 
 GET         /disclosure/compensatory-duty-underpayment-details                                 controllers.underpayments.UnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
 POST        /disclosure/compensatory-duty-underpayment-details                                 controllers.underpayments.UnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
 
-GET         /disclosure/confirm-import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "B00")
-POST        /disclosure/confirm-import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "B00")
+GET         /disclosure/confirm-import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "B00", change: Boolean)
+POST        /disclosure/confirm-import-vat-underpayment-details                                controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "B00", change: Boolean)
 
-GET         /disclosure/confirm-customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A00")
-POST        /disclosure/confirm-customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A00")
+GET         /disclosure/confirm-customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A00", change: Boolean)
+POST        /disclosure/confirm-customs-duty-underpayment-details                              controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A00", change: Boolean)
 
-GET         /disclosure/confirm-excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "E00")
-POST        /disclosure/confirm-excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "E00")
+GET         /disclosure/confirm-excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "E00", change: Boolean)
+POST        /disclosure/confirm-excise-duty-underpayment-details                               controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "E00", change: Boolean)
 
-GET         /disclosure/confirm-additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A20")
-POST        /disclosure/confirm-additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A20")
+GET         /disclosure/confirm-additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A20", change: Boolean)
+POST        /disclosure/confirm-additional-duty-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A20", change: Boolean)
 
-GET         /disclosure/confirm-definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A30")
-POST        /disclosure/confirm-definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A30")
+GET         /disclosure/confirm-definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A30", change: Boolean)
+POST        /disclosure/confirm-definitive-add-underpayment-details                            controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A30", change: Boolean)
 
-GET         /disclosure/confirm-provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A35")
-POST        /disclosure/confirm-provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A35")
+GET         /disclosure/confirm-provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A35", change: Boolean)
+POST        /disclosure/confirm-provisional-add-underpayment-details                           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A35", change: Boolean)
 
-GET         /disclosure/confirm-definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A40")
-POST        /disclosure/confirm-definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A40")
+GET         /disclosure/confirm-definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A40", change: Boolean)
+POST        /disclosure/confirm-definitive-countervailing-duty-underpayment-details            controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A40", change: Boolean)
 
-GET         /disclosure/confirm-provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A45")
-POST        /disclosure/confirm-provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A45")
+GET         /disclosure/confirm-provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A45", change: Boolean)
+POST        /disclosure/confirm-provisional-countervailing-duty-underpayment-details           controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A45", change: Boolean)
 
-GET         /disclosure/confirm-customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A10")
-POST        /disclosure/confirm-customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A10")
+GET         /disclosure/confirm-customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "A10", change: Boolean)
+POST        /disclosure/confirm-customs-duty-agricultural-products-underpayment-details        controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "A10", change: Boolean)
 
-GET         /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "D10")
-POST        /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "D10")
+GET         /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onLoad(underpaymentType: String = "D10", change: Boolean)
+POST        /disclosure/confirm-compensatory-duty-underpayment-details                         controllers.underpayments.UnderpaymentDetailConfirmController.onSubmit(underpaymentType: String = "D10", change: Boolean)
 
 GET         /disclosure/underpayment-amount-summary                                            controllers.underpayments.UnderpaymentDetailSummaryController.onLoad
 POST        /disclosure/underpayment-amount-summary                                            controllers.underpayments.UnderpaymentDetailSummaryController.onSubmit
+
+GET         /disclosure/change-import-vat-underpayment-details                                 controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "B00")
+POST        /disclosure/change-import-vat-underpayment-details                                 controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "B00")
+
+GET         /disclosure/change-customs-duty-underpayment-details                               controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A00")
+POST        /disclosure/change-customs-duty-underpayment-details                               controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A00")
+
+GET         /disclosure/change-excise-duty-underpayment-details                                controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "E00")
+POST        /disclosure/change-excise-duty-underpayment-details                                controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "E00")
+
+GET         /disclosure/change-additional-duty-underpayment-details                            controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A20")
+POST        /disclosure/change-additional-duty-underpayment-details                            controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A20")
+
+GET         /disclosure/change-definitive-add-underpayment-details                             controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A30")
+POST        /disclosure/change-definitive-add-underpayment-details                             controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A30")
+
+GET         /disclosure/change-provisional-add-underpayment-details                            controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A35")
+POST        /disclosure/change-provisional-add-underpayment-details                            controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A35")
+
+GET         /disclosure/change-definitive-countervailing-duty-underpayment-details             controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A40")
+POST        /disclosure/change-definitive-countervailing-duty-underpayment-details             controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A40")
+
+GET         /disclosure/change-provisional-countervailing-duty-underpayment-details            controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A45")
+POST        /disclosure/change-provisional-countervailing-duty-underpayment-details            controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A45")
+
+GET         /disclosure/change-customs-duty-agricultural-products-underpayment-details         controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "A10")
+POST        /disclosure/change-customs-duty-agricultural-products-underpayment-details         controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A10")
+
+GET         /disclosure/change-compensatory-duty-underpayment-details                          controllers.underpayments.ChangeUnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
+POST        /disclosure/change-compensatory-duty-underpayment-details                          controllers.underpayments.ChangeUnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
+
+GET         /disclosure/remove-import-vat-underpayment-confirm                                 controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "B00")
+POST        /disclosure/remove-import-vat-underpayment-confirm                                 controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "B00")
+
+GET         /disclosure/remove-customs-duty-underpayment-confirm                               controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A00")
+POST        /disclosure/remove-customs-duty-underpayment-confirm                               controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A00")
+
+GET         /disclosure/remove-excise-duty-underpayment-confirm                                controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "E00")
+POST        /disclosure/remove-excise-duty-underpayment-confirm                                controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "E00")
+
+GET         /disclosure/remove-additional-duty-underpayment-confirm                            controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A20")
+POST        /disclosure/remove-additional-duty-underpayment-confirm                            controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A20")
+
+GET         /disclosure/remove-definitive-add-underpayment-confirm                             controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A30")
+POST        /disclosure/remove-definitive-add-underpayment-confirm                             controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A30")
+
+GET         /disclosure/remove-provisional-add-underpayment-confirm                            controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A35")
+POST        /disclosure/remove-provisional-add-underpayment-confirm                            controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A35")
+
+GET         /disclosure/remove-definitive-countervailing-duty-underpayment-confirm             controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A40")
+POST        /disclosure/remove-definitive-countervailing-duty-underpayment-confirm             controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A40")
+
+GET         /disclosure/remove-provisional-countervailing-duty-underpayment-confirm            controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A45")
+POST        /disclosure/remove-provisional-countervailing-duty-underpayment-confirm            controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A45")
+
+GET         /disclosure/remove-customs-duty-agricultural-products-underpayment-confirm         controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "A10")
+POST        /disclosure/remove-customs-duty-agricultural-products-underpayment-confirm         controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "A10")
+
+GET         /disclosure/remove-compensatory-duty-underpayment-confirm                          controllers.underpayments.RemoveUnderpaymentDetailsController.onLoad(underpaymentType: String = "D10")
+POST        /disclosure/remove-compensatory-duty-underpayment-confirm                          controllers.underpayments.RemoveUnderpaymentDetailsController.onSubmit(underpaymentType: String = "D10")
 
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan                              controllers.UploadAuthorityController.onLoad(dutyType: SelectedDutyType, dan: String)
 GET         /disclosure/upload-deferment-authority/:dutyType/:dan/upscan-response              controllers.UploadAuthorityController.upscanResponseHandler(dutyType: SelectedDutyType, dan: String, key: Option[String] ?= None, errorCode: Option[String] ?= None, errorMessage: Option[String] ?= None, errorResource: Option[String] ?= None, errorRequestId: Option[String] ?= None)

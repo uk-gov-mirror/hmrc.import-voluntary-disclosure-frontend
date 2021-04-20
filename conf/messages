@@ -166,6 +166,79 @@ underpaymentDetails.error.amendedNonNumber = Amount that should have been paid m
 underpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
 underpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
 
+# Change Underpayment Details
+changeUnderpaymentDetails.originalAmount = Amount that was paid
+changeUnderpaymentDetails.amendedAmount = Amount that should have been paid
+changeUnderpaymentDetails.B00.pageTitle = Change the import VAT underpayment details
+changeUnderpaymentDetails.B00.pageHeader = Change the import VAT underpayment details
+changeUnderpaymentDetails.A00.pageTitle = Change the Customs Duty underpayment details
+changeUnderpaymentDetails.A00.pageHeader = Change the Customs Duty underpayment details
+changeUnderpaymentDetails.E00.pageTitle = Change the excise duty underpayment details
+changeUnderpaymentDetails.E00.pageHeader = Change the excise duty underpayment details
+changeUnderpaymentDetails.A20.pageTitle = Change the Additional Duty underpayment details
+changeUnderpaymentDetails.A20.pageHeader = Change the Additional Duty underpayment details
+changeUnderpaymentDetails.A30.pageTitle = Change the Definitive Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A30.pageHeader = Change the Definitive Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A35.pageTitle = Change the Provisional Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A35.pageHeader = Change the Provisional Anti-Dumping Duty underpayment details
+changeUnderpaymentDetails.A40.pageTitle = Change the Definitive Countervailing Duty underpayment details
+changeUnderpaymentDetails.A40.pageHeader = Change the Definitive Countervailing Duty underpayment details
+changeUnderpaymentDetails.A45.pageTitle = Change the Provisional Countervailing Duty underpayment details
+changeUnderpaymentDetails.A45.pageHeader = Change the Provisional Countervailing Duty underpayment details
+changeUnderpaymentDetails.A10.pageTitle = Change the Customs Duty on Agricultural Products underpayment details
+changeUnderpaymentDetails.A10.pageHeader = Change the Customs Duty on Agricultural Products underpayment details
+changeUnderpaymentDetails.D10.pageTitle = Change the Compensatory Duty underpayment details
+changeUnderpaymentDetails.D10.pageHeader = Change the Compensatory Duty underpayment details
+changeUnderpaymentDetails.error.originalNonEmpty = Enter the amount that was paid to HMRC, in pounds
+changeUnderpaymentDetails.error.originalNonNumber = Amount that was paid to HMRC must be a number like 7235 or 67.39
+changeUnderpaymentDetails.error.originalOutOfRange = Amount that was paid to HMRC must be between £0 and £9,999,999,999.99
+changeUnderpaymentDetails.error.amendedNonEmpty = Enter the amount that should have been paid, in pounds
+changeUnderpaymentDetails.error.amendedNonNumber = Amount that should have been paid must be a number like 7235 or 67.39
+changeUnderpaymentDetails.error.amendedOutOfRange = Amount that should have been paid must be between £0 and £9,999,999,999.99
+changeUnderpaymentDetails.error.positiveAmountOwed = Amount that should have been paid must be more than amount that was paid to HMRC
+changeUnderpaymentDetails.B00.removeLink = Remove this import VAT underpayment
+changeUnderpaymentDetails.A00.removeLink = Remove this Customs Duty underpayment
+changeUnderpaymentDetails.E00.removeLink = Remove this excise duty underpayment
+changeUnderpaymentDetails.A20.removeLink = Remove this Additional Duty underpayment
+changeUnderpaymentDetails.A30.removeLink = Remove this Definitive Anti-Dumping Duty underpayment
+changeUnderpaymentDetails.A35.removeLink = Remove this Provisional Anti-Dumping Duty underpayment
+changeUnderpaymentDetails.A40.removeLink = Remove this Definitive Countervailing Duty underpayment
+changeUnderpaymentDetails.A45.removeLink = Remove this Provisional Countervailing Duty underpayment
+changeUnderpaymentDetails.A10.removeLink = Remove this Customs Duty on Agricultural Products underpayment
+changeUnderpaymentDetails.D10.removeLink = Remove this Compensatory Duty underpayment
+
+# Remove Underpayment Details
+removeUnderpaymentDetails.B00.pageTitle = Are you sure you want to remove this import VAT underpayment?
+removeUnderpaymentDetails.B00.pageHeader = Are you sure you want to remove this import VAT underpayment?
+removeUnderpaymentDetails.A00.pageTitle = Are you sure you want to remove this Customs Duty underpayment?
+removeUnderpaymentDetails.A00.pageHeader = Are you sure you want to remove this Customs Duty underpayment?
+removeUnderpaymentDetails.E00.pageTitle = Are you sure you want to remove this excise duty underpayment?
+removeUnderpaymentDetails.E00.pageHeader = Are you sure you want to remove this excise duty underpayment?
+removeUnderpaymentDetails.A20.pageTitle = Are you sure you want to remove this Additional Duty underpayment?
+removeUnderpaymentDetails.A20.pageHeader = Are you sure you want to remove this Additional Duty underpayment?
+removeUnderpaymentDetails.A30.pageTitle = Are you sure you want to remove this Definitive Anti-Dumping Duty underpayment?
+removeUnderpaymentDetails.A30.pageHeader = Are you sure you want to remove this Definitive Anti-Dumping Duty underpayment?
+removeUnderpaymentDetails.A35.pageTitle = Are you sure you want to remove this Provisional Anti-Dumping Duty underpayment?
+removeUnderpaymentDetails.A35.pageHeader = Are you sure you want to remove this Provisional Anti-Dumping Duty underpayment?
+removeUnderpaymentDetails.A40.pageTitle = Are you sure you want to remove this Definitive Countervailing Duty underpayment?
+removeUnderpaymentDetails.A40.pageHeader = Are you sure you want to remove this Definitive Countervailing Duty underpayment?
+removeUnderpaymentDetails.A45.pageTitle = Are you sure you want to remove this Provisional Countervailing Duty underpayment?
+removeUnderpaymentDetails.A45.pageHeader = Are you sure you want to remove this Provisional Countervailing Duty underpayment?
+removeUnderpaymentDetails.A10.pageTitle = Are you sure you want to remove this Customs Duty on Agricultural Products underpayment?
+removeUnderpaymentDetails.A10.pageHeader = Are you sure you want to remove this Customs Duty on Agricultural Products underpayment?
+removeUnderpaymentDetails.D10.pageTitle = Are you sure you want to remove this Compensatory Duty underpayment?
+removeUnderpaymentDetails.D10.pageHeader = Are you sure you want to remove this Compensatory Duty underpayment?
+removeUnderpaymentDetails.B00.error.message = Select yes if you want to remove this import VAT underpayment
+removeUnderpaymentDetails.A00.error.message = Select yes if you want to remove this Customs Duty VAT underpayment
+removeUnderpaymentDetails.E00.error.message = Select yes if you want to remove this excise duty underpayment
+removeUnderpaymentDetails.A20.error.message = Select yes if you want to remove this Additional Duty underpayment
+removeUnderpaymentDetails.A30.error.message = Select yes if you want to remove this Definitive Anti-Dumping Duty underpayment
+removeUnderpaymentDetails.A35.error.message = Select yes if you want to remove this Provisional Anti-Dumping Duty underpayment
+removeUnderpaymentDetails.A40.error.message = Select yes if you want to remove this Definitive Countervailing Duty underpayment
+removeUnderpaymentDetails.A45.error.message = Select yes if you want to remove this Provisional Countervailing Duty underpayment
+removeUnderpaymentDetails.A10.error.message = Select yes if you want to remove this Customs Duty on Agricultural Products underpayment
+removeUnderpaymentDetails.D10.error.message = Select yes if you want to remove this Compensatory Duty underpayment
+
 # Underpayment Details Summary
 underpaymentDetailsSummary.pageTitle = Underpayment summary
 underpaymentDetailsSummary.pageHeader = Underpayment summary
@@ -595,6 +668,16 @@ uploadAuthority.uploadFile = Upload file
 uploadAuthoritySuccess.pageTitle = The file has been uploaded successfully
 uploadAuthoritySuccess.pageHeader = The file has been uploaded successfully
 uploadAuthoritySuccess.text = You have uploaded {0}
+
+# Any Other Supporting Documentation
+anyOtherSupportingDocs.pageTitle = Do you have any of these documents?
+anyOtherSupportingDocs.heading = Do you have any of these documents?
+anyOtherSupportingDocs.p1 = You will be asked to upload the following documents if they apply:
+anyOtherSupportingDocs.bullet1 = the amendment import declaration (C88) and entry acceptance (E2), sometimes known as a training entry
+anyOtherSupportingDocs.bullet2 = the airway bill, if the goods were transported by air
+anyOtherSupportingDocs.bullet3 = a proof of origin for the goods, if the import declaration used a preference from a preference agreement or the Generalised Scheme of Preferences
+anyOtherSupportingDocs.bullet4 = other documentation relevant to this underpayment disclosure
+anyOtherSupportingDocs.error.required = Select yes if you have any of these documents
 
 # Which Documents you will be uploading page
 whichDocuments.pageTitle = Which of these documents will you be uploading?

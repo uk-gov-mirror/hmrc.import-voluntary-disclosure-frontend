@@ -34,6 +34,9 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
 
   val backLink: Call = controllers.underpayments.routes.UnderpaymentDetailsController.onLoad(underpaymentType)
 
+  val submitCall: Call = controllers.underpayments.routes.UnderpaymentDetailConfirmController.onSubmit(underpaymentType, change = true)
+
+
   "Rendering the Underpayment Detail Summary page" when {
     "no errors exist" should {
 
@@ -43,7 +46,8 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
           underpaymentType,
           UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
         ),
-        backLink
+        backLink,
+        submitCall
       )(fakeRequest, messages)
       lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -74,7 +78,8 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
             underpaymentType,
             UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
           ),
-          backLink
+          backLink,
+          submitCall
         )(fakeRequest, messages)
         lazy implicit val document: Document = Jsoup.parse(view.body)
 
@@ -104,7 +109,8 @@ class UnderpaymentDetailConfirmViewSpec extends ViewBaseSpec with BaseMessages {
         underpaymentType,
         UnderpaymentDetailConfirmMessages.underpaymentTypeContent(underpaymentType).body.get
       ),
-      backLink
+      backLink,
+      submitCall
     )(fakeRequest, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 

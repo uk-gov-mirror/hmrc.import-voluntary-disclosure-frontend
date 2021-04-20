@@ -21,7 +21,7 @@ import forms.underpayments.UnderpaymentDetailSummaryFormProvider
 import models.underpayments.UnderpaymentDetail
 import pages.underpayments.UnderpaymentDetailSummaryPage
 import play.api.i18n.{I18nSupport, Messages}
-import play.api.mvc.{Action, AnyContent, Call, MessagesControllerComponents}
+import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.content.{HtmlContent, Text}
 import uk.gov.hmrc.govukfrontend.views.viewmodels.summarylist._
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
@@ -74,7 +74,6 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
 
   private[controllers] def summaryList(underpaymentDetail: Seq[UnderpaymentDetail])
                                       (implicit messages: Messages): SummaryList = {
-    val changeAction: Call = controllers.underpayments.routes.UnderpaymentDetailSummaryController.onLoad()
     SummaryList(
       rows = for (underpayment <- underpaymentDetail.reverse) yield
         SummaryListRow(
@@ -87,7 +86,7 @@ class UnderpaymentDetailSummaryController @Inject()(identify: IdentifierAction,
             classes = "govuk-summary-list__value"
           ),
           actions = Some(
-            Actions(items = Seq(ActionItem(changeAction.url, Text(messages("common.change")), Some("key"))))
+            Actions(items = Seq(ActionItem(controllers.underpayments.routes.ChangeUnderpaymentDetailsController.onLoad(underpayment.duty).url, Text(messages("common.change")), Some("key"))))
           )
         )
     )

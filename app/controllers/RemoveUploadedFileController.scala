@@ -45,17 +45,19 @@ class RemoveUploadedFileController @Inject()(
   def onLoad(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
       request.userAnswers.get(FileUploadPage) match {
-        case None => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
-        case Some(files) if(files.isEmpty) => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
-        case _ => Future.successful(Ok(view(formProvider(), index)))
+        case Some(files) if(files.isDefinedAt(index.position)) => Future.successful(Ok(view(formProvider(), index, files(index.position).fileName)))
+        case _ => Future.successful(Redirect(controllers.routes.SupportingDocController.onLoad()))
       }
   }
 
   def onSubmit(index: Index): Action[AnyContent] = (identify andThen getData andThen requireData).async {
     implicit request =>
         formProvider().bindFromRequest().fold(
-          formWithErrors =>
-            Future.successful(BadRequest(view(formWithErrors, index))),
+          formWithErrors => request.userAnswers.get(FileUploadPage) match {
+            case Some(files) if(files.isDefinedAt(index.position)) =>
+              Future.successful(BadRequest(view(formWithErrors, index, files(index.position).fileName)))
+            case _ => Future.successful(InternalServerError("File Upload list unavailable."))
+          },
           value => {
             if (value) {
               for {

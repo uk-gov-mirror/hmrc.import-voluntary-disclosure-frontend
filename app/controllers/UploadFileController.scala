@@ -18,9 +18,10 @@ package controllers
 
 import config.AppConfig
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
+import javax.inject.{Inject, Singleton}
 import models.FileUploadInfo
 import models.upscan._
-import pages.FileUploadPage
+import pages.{AnyOtherSupportingDocsPage, FileUploadPage}
 import play.api.i18n.I18nSupport
 import play.api.mvc._
 import repositories.{FileUploadRepository, SessionRepository}
@@ -28,7 +29,6 @@ import services.UpScanService
 import uk.gov.hmrc.play.bootstrap.frontend.controller.FrontendController
 import views.html.{UploadFileView, UploadProgressView}
 
-import javax.inject.{Inject, Singleton}
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
@@ -47,9 +47,14 @@ class UploadFileController @Inject()(identify: IdentifierAction,
   extends FrontendController(mcc) with I18nSupport {
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
+    lazy val backLink = request.userAnswers.get(AnyOtherSupportingDocsPage) match {
+      case Some(true) => controllers.routes.AnyOtherSupportingDocsController.onLoad //TODO - This will need to redirect to the additional documents page
+      case _ => controllers.routes.AnyOtherSupportingDocsController.onLoad
+    }
 
-    upScanService.initiateNewJourney().map { response =>
-      Ok(view(response, controllers.routes.SupportingDocController.onLoad))
+    upScanService
+    .initiateNewJourney().map { response =>
+      Ok(view(response, backLink))
         .removingFromSession("UpscanReference")
         .addingToSession("UpscanReference" -> response.reference.value)
     }
