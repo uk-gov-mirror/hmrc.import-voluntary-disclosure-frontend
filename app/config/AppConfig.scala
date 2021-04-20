@@ -76,6 +76,17 @@ class AppConfigImpl @Inject()(config: Configuration, servicesConfig: ServicesCon
 
   lazy val importVoluntaryDisclosureSubmission: String = servicesConfig.baseUrl("import-voluntary-disclosure-submission")
 
+  lazy val importVoluntaryDisclosureStub: String = servicesConfig.baseUrl("import-voluntary-disclosure-stub")
+  lazy val retrieveAddressFromStub: Boolean = servicesConfig.getBoolean("features.retrieveAddressFromStub")
+
+  def retrieveAddressUrl: String = {
+    if (retrieveAddressFromStub) {
+      importVoluntaryDisclosureStub
+    } else {
+      addressLookupFrontend
+    }
+  }
+
 }
 
 trait AppConfig extends FixedConfig {
@@ -86,7 +97,7 @@ trait AppConfig extends FixedConfig {
   val host: String
 
   def feedbackUrl(implicit request: RequestHeader): String
-
+  def retrieveAddressUrl: String
   val appName: String
   val loginUrl: String
   val signOutUrl: String
