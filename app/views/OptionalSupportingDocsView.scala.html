@@ -22,10 +22,10 @@
         button: components.button
 )
 
-@(form: Form[_], backLink: Call, checked: OptionalSupportingDocs)(implicit request: Request[_], messages: Messages)
+@(form: Form[_], backLink: Call, checked: Seq[String])(implicit request: Request[_], messages: Messages)
 
 @layout(
-    pageTitle = messages("whichDocuments.pageTitle"),
+    pageTitle = messages("optionalSupportingDocuments.pageTitle"),
     form = Some(form),
     customBackLinkUrl = Some(backLink)) {
 
@@ -37,41 +37,45 @@
 
         @govukCheckboxes(
             Checkboxes(
-                name = "value",
+                name = "optionalDocumentsList",
                 fieldset = Some(Fieldset(
                     legend = Some(Legend(
-                        content = Text(messages("whichDocuments.pageHeader")),
+                        content = Text(messages("optionalSupportingDocuments.pageHeader")),
                         isPageHeading = true,
                         classes = "govuk-fieldset__legend--l"
                     ))
                 )),
                 hint = Some(Hint(
-                    content = Text(messages("whichDocuments.hint"))
+                    content = Text(messages("optionalSupportingDocuments.hint"))
                 )),
                 items = Seq(
                     CheckboxItem(
-                        name = Some("importAndEntry"),
-                        value = "true",
-                        content = Text(messages("whichDocuments.importAndEntry")),
-                        checked = checked.importAndEntry
+                        name = Some("optionalDocumentsList[]"),
+                        id = Some("optionalDocumentsList"),
+                        value = "importAndEntry",
+                        content = Text(messages("optionalSupportingDocuments.importAndEntry")),
+                        checked = checked.contains("importAndEntry")
                     ),
                     CheckboxItem(
-                        name = Some("airwayBill"),
-                        value = "true",
-                        content = Text(messages("whichDocuments.airwayBill")),
-                        checked = checked.airwayBill
+                        name = Some("optionalDocumentsList[]"),
+                        id = Some("optionalDocumentsList-1"),
+                        value = "airwayBill",
+                        content = Text(messages("optionalSupportingDocuments.airwayBill")),
+                        checked = checked.contains("airwayBill")
                     ),
                     CheckboxItem(
-                        name = Some("originProof"),
-                        value = "true",
-                        content = Text(messages("whichDocuments.originProof")),
-                        checked = checked.originProof
+                        name = Some("optionalDocumentsList[]"),
+                        id = Some("optionalDocumentsList-2"),
+                        value = "originProof",
+                        content = Text(messages("optionalSupportingDocuments.originProof")),
+                        checked = checked.contains("originProof")
                     ),
                     CheckboxItem(
-                        name = Some("other"),
-                        value = "true",
-                        content = Text(messages("whichDocuments.other")),
-                        checked = checked.other
+                        name = Some("optionalDocumentsList[]"),
+                        id = Some("optionalDocumentsList-3"),
+                        value = "other",
+                        content = Text(messages("optionalSupportingDocuments.other")),
+                        checked = checked.contains("other")
                     )
                 ),
                 errorMessage = form.errors.headOption.map(err => ErrorMessage(content = Text(messages(err.message, err.args: _*))))

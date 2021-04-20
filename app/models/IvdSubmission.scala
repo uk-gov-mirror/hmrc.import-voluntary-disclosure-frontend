@@ -188,7 +188,7 @@ object IvdSubmission extends FixedConfig {
       amendedItems <- UnderpaymentReasonsPage.path.read[Seq[UnderpaymentReason]]
       splitDeferment <- SplitPaymentPage.path.readNullable[Boolean]
       authorityDocuments <- UploadAuthorityPage.path.readNullable[Seq[UploadAuthority]]
-      optionalDocumentsSupplied <- OptionalSupportingDocsPage.path.readNullable[OptionalSupportingDocs]
+      optionalDocumentsSupplied <- OptionalSupportingDocsPage.path.readNullable[Seq[String]]
     } yield {
 
       val traderContactDetails = ContactDetails(
@@ -197,19 +197,13 @@ object IvdSubmission extends FixedConfig {
         declarantContactDetails.phoneNumber
       )
 
-      val optionalDocuments = optionalDocumentsSupplied.getOrElse(OptionalSupportingDocs())
-      val optionalDocumentsList: Option[Seq[DocumentType]] = Some(Map(
-        "importAndEntry" -> optionalDocuments.importAndEntry,
-        "airwayBill" -> optionalDocuments.airwayBill,
-        "originProof" -> optionalDocuments.originProof,
-        "other" -> optionalDocuments.other
-      ).flatMap( document => document match {
-        case ("importAndEntry", true) => Some(Seq(DocumentTypes.AmendedC88, DocumentTypes.AmendedC2))
-        case ("airwayBill", true) => Some(Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate))
-        case ("originProof", true) => Some(Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate))
-        case ("other", true) => Some(Seq(DocumentTypes.Other))
-        case _ => None
-      }).flatten.toSeq)
+      val optionalDocumentsList: Option[Seq[DocumentType]] = Some(optionalDocumentsSupplied.getOrElse(Seq.empty).flatMap {
+        case "importAndEntry" => Seq(DocumentTypes.AmendedC88, DocumentTypes.AmendedC2)
+        case "airwayBill" => Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate)
+        case "originProof" => Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate)
+        case "other" => Seq(DocumentTypes.Other)
+        case _ => Seq.empty
+      })
 
       IvdSubmission(
         userType = userType,

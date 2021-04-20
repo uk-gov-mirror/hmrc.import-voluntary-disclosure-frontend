@@ -16,24 +16,25 @@
 
 package forms
 
-import models.OptionalSupportingDocs
+import forms.mappings.Mappings
 import play.api.data.Form
-import play.api.data.Forms.{boolean, mapping}
-import play.api.i18n.Messages
+import play.api.data.Forms.seq
+import play.api.data.validation.{Constraint, Invalid, Valid}
 
-class OptionalSupportingDocsFormProvider {
+class OptionalSupportingDocsFormProvider extends Mappings {
 
-  def apply()(implicit messages: Messages): Form[OptionalSupportingDocs] =
+  def apply(): Form[Seq[String]] =
     Form(
-      mapping(
-        "importAndEntry" -> boolean,
-        "airwayBill" -> boolean,
-        "originProof" -> boolean,
-        "other" -> boolean
-      )(OptionalSupportingDocs.apply)(OptionalSupportingDocs.unapply).verifying(
-        messages("underpaymentType.error.required"),
-        fields => fields.importAndEntry || fields.airwayBill || fields.originProof || fields.other
-      )
+      "optionalDocumentsList" -> seq(text("optionalSupportingDocuments.error.required"))
+        .verifying(nonEmptySeq())
     )
+
+  private def nonEmptySeq(): Constraint[Seq[_]] =
+    Constraint {
+      case seq if seq.nonEmpty =>
+        Valid
+      case _ =>
+        Invalid("optionalSupportingDocuments.error.required")
+    }
 
 }

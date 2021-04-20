@@ -16,10 +16,9 @@
 
 package pages
 
-import models.OptionalSupportingDocs
 import play.api.libs.json.JsPath
 
-object OptionalSupportingDocsPage extends QuestionPage[OptionalSupportingDocs] {
+object OptionalSupportingDocsPage extends QuestionPage[Seq[String]] {
 
   def path: JsPath = JsPath \ toString
 

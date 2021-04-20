@@ -679,12 +679,12 @@ anyOtherSupportingDocs.bullet3 = a proof of origin for the goods, if the import 
 anyOtherSupportingDocs.bullet4 = other documentation relevant to this underpayment disclosure
 anyOtherSupportingDocs.error.required = Select yes if you have any of these documents
 
-# Which Documents you will be uploading page
-whichDocuments.pageTitle = Which of these documents will you be uploading?
-whichDocuments.pageHeader = Which of these documents will you be uploading?
-whichDocuments.hint = Select all that apply.
-whichDocuments.error.required = Select which documents you will be uploading
-whichDocuments.importAndEntry = Amendment import declaration (C88) and entry acceptance (E2)
-whichDocuments.airwayBill = Airway bill
-whichDocuments.originProof = Proof of origin
-whichDocuments.other = Other documentation relevant to this underpayment disclosure
+# Optional Support Documents you will be uploading page
+optionalSupportingDocuments.pageTitle = Which of these documents will you be uploading?
+optionalSupportingDocuments.pageHeader = Which of these documents will you be uploading?
+optionalSupportingDocuments.hint = Select all that apply.
+optionalSupportingDocuments.error.required = Select which documents you will be uploading
+optionalSupportingDocuments.importAndEntry = Amendment import declaration (C88) and entry acceptance (E2)
+optionalSupportingDocuments.airwayBill = Airway bill
+optionalSupportingDocuments.originProof = Proof of origin
+optionalSupportingDocuments.other = Other documentation relevant to this underpayment disclosure

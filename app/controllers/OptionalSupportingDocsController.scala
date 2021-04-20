@@ -18,7 +18,6 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.OptionalSupportingDocsFormProvider
-import models.OptionalSupportingDocs
 import pages.OptionalSupportingDocsPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
@@ -40,17 +39,17 @@ class OptionalSupportingDocsController @Inject()(identify: IdentifierAction,
                                                  formProvider: OptionalSupportingDocsFormProvider)
   extends FrontendController(mcc) with I18nSupport {
 
-  // TODO - need to update the submission
   // TODO - write tests
+
   private lazy val backButton = controllers.routes.AnyOtherSupportingDocsController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(OptionalSupportingDocs())
+    val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(Seq.empty)
     Future.successful(Ok(view(formProvider.apply(), backButton, documentsSelected)))
   }
 
   def onSubmit(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
-    val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(OptionalSupportingDocs())
+    val documentsSelected = request.userAnswers.get(OptionalSupportingDocsPage).getOrElse(Seq.empty)
     formProvider().bindFromRequest().fold(
       formWithErrors => Future.successful(BadRequest(view(formWithErrors, backButton, documentsSelected))),
       value => {
