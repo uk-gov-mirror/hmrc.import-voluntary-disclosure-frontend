@@ -18,8 +18,7 @@ package controllers
 
 import controllers.actions.{DataRequiredAction, DataRetrievalAction, IdentifierAction}
 import forms.WhichDocumentsFormProvider
-import models.DocumentTypes.DocumentType
-import models.{DocumentTypes, WhichDocuments}
+import models.WhichDocuments
 import pages.WhichDocumentsPage
 import play.api.i18n.I18nSupport
 import play.api.mvc.{Action, AnyContent, MessagesControllerComponents}
