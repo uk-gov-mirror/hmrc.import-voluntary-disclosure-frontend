@@ -48,8 +48,8 @@ class UploadFileController @Inject()(identify: IdentifierAction,
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
     lazy val backLink = request.userAnswers.get(AnyOtherSupportingDocsPage) match {
-      case Some(true) => controllers.routes.AnyOtherSupportingDocsController.onLoad //TODO - This will need to redirect to the additional documents page
-      case _ => controllers.routes.AnyOtherSupportingDocsController.onLoad
+      case Some(true) => controllers.routes.OptionalSupportingDocsController.onLoad()
+      case _ => controllers.routes.AnyOtherSupportingDocsController.onLoad()
     }
 
     upScanService

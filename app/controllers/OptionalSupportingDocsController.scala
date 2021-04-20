@@ -42,7 +42,6 @@ class OptionalSupportingDocsController @Inject()(identify: IdentifierAction,
 
   // TODO - need to update the submission
   // TODO - write tests
-  // TODO - update back button for /disclosure/upload-file based on AnyOtherSupportingDocsController boolean value
   private lazy val backButton = controllers.routes.AnyOtherSupportingDocsController.onLoad()
 
   def onLoad(): Action[AnyContent] = (identify andThen getData andThen requireData).async { implicit request =>
