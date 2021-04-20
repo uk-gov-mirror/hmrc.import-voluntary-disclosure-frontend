@@ -1,0 +1,63 @@
+@*
+ * Copyright 2021 HM Revenue & Customs
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *@
+
+@this(layout: templates.Layout,
+        formHelper: FormWithCSRF,
+        errorSummary: components.errorSummary,
+        yesNoRadio: components.yesNoRadio,
+        button: components.button,
+        p: components.p,
+        bullets: components.bullets,
+        h1: components.h1)
+
+@(form: Form[_], backLink: Call)(implicit request: Request[_], messages: Messages)
+
+    @layout(
+        pageTitle = messages("anyOtherSupportingDocs.pageTitle"),
+        form = Some(form),
+        customBackLinkUrl = Some(backLink)) {
+
+        @errorSummary(form.errors)
+
+        @h1(messages("anyOtherSupportingDocs.heading"))
+
+        @p{ @messages("anyOtherSupportingDocs.p1") }
+
+        @bullets(
+            isSpaced = true,
+            items = Seq(
+                messages("anyOtherSupportingDocs.bullet1"),
+                messages("anyOtherSupportingDocs.bullet2"),
+                messages("anyOtherSupportingDocs.bullet3"),
+                messages("anyOtherSupportingDocs.bullet4")).map(Html(_)
+            )
+        )
+
+        @formHelper(action = controllers.routes.AnyOtherSupportingDocsController.onSubmit()) {
+            @yesNoRadio(
+                form,
+                headingKey = "anyOtherSupportingDocs.heading",
+                classes = "govuk-visually-hidden"
+            )
+
+            @button("common.button.continue")
+        }
+
+    }
+
+    @{
+        //$COVERAGE-OFF$
+    }

@@ -61,7 +61,7 @@ class SupportingDocViewSpec extends ViewBaseSpec with BaseMessages {
         }
 
         "render a continue button with the correct URL " in {
-          elementAttributes(".govuk-button") must contain("href" -> "/disclose-import-taxes-underpayment/disclosure/upload-file")
+          elementAttributes(".govuk-button") must contain("href" -> controllers.routes.AnyOtherSupportingDocsController.onLoad().url)
         }
 
         "render a back link with the correct URL" in {

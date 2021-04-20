@@ -23,6 +23,7 @@ import mocks.repositories.{MockFileUploadRepository, MockSessionRepository}
 import mocks.services.MockUpScanService
 import models.upscan.{FileUpload, Reference, UpScanInitiateResponse, UploadFormTemplate}
 import models.UserAnswers
+import pages.AnyOtherSupportingDocsPage
 import play.api.http.Status
 import play.api.libs.json.{JsValue, Json}
 import play.api.mvc.Result
@@ -90,7 +91,6 @@ class UploadFileControllerSpec extends ControllerSpecBase {
   "GET onLoad" should {
     "return OK" in new Test {
       val result: Future[Result] = controller.onLoad()(fakeRequest)
-
       status(result) mustBe Status.OK
     }
 
@@ -98,6 +98,18 @@ class UploadFileControllerSpec extends ControllerSpecBase {
       val result: Future[Result] = controller.onLoad()(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
+    }
+
+    "return correct back link for no additional documents" in new Test {
+      val result: Future[Result] = controller.onLoad()(fakeRequest)
+      contentAsString(result).contains(controllers.routes.AnyOtherSupportingDocsController.onLoad.url) mustBe true
+    }
+
+    "return correct back link for additional documents" in new Test {
+      override val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId")
+      .set(AnyOtherSupportingDocsPage, true).success.value)
+      val result: Future[Result] = controller.onLoad()(fakeRequest)
+      contentAsString(result).contains(controllers.routes.AnyOtherSupportingDocsController.onLoad.url) mustBe true
     }
   }
 

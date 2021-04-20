@@ -1,4 +1,4 @@
-@*
+/*
  * Copyright 2021 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,18 +12,19 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *@
+ */
 
-@this()
+package forms
 
-@(items: Seq[Html], isWarning: Boolean = false, numberList: Boolean = false, isSpaced: Boolean = false)(implicit messages: Messages)
+import forms.mappings.Mappings
+import javax.inject.Inject
+import play.api.data.Form
 
-<ul class="govuk-list govuk-list--bullet @if(isWarning){govuk-warning-text__text govuk-!-margin-top-5} @if(numberList){govuk-list govuk-list--number} @if(isSpaced){govuk-list--spaced}">
- @items.map { item =>
-  <li>@item</li>
- }
-</ul>
 
-@{
- //$COVERAGE-OFF$
+class AnyOtherSupportingDocsFormProvider @Inject() extends Mappings {
+
+  def apply(): Form[Boolean] =
+    Form(
+      "value" -> boolean("anyOtherSupportingDocs.error.required")
+    )
 }
