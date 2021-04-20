@@ -45,7 +45,6 @@ case class IvdSubmission(userType: UserType,
                          amendedItems: Seq[UnderpaymentReason] = Seq.empty,
                          underpaymentDetails: Seq[UnderpaymentDetail] = Seq.empty,
                          documentsSupplied: Seq[DocumentType] = Seq.empty, // mandatory docs
-                         optionalDocumentsSupplied: Seq[DocumentType] = Seq.empty, // optional docs
                          supportingDocuments: Seq[FileUploadInfo] = Seq.empty,
                          splitDeferment: Boolean = false,
                          authorityDocuments: Seq[UploadAuthority] = Seq.empty
@@ -156,7 +155,6 @@ object IvdSubmission extends FixedConfig {
       "declarantContactDetails" -> data.declarantContactDetails,
       "underpaymentDetails" -> data.underpaymentDetails,
       "supportingDocumentTypes" -> supportingDocumentTypes,
-      "optionalDocumentTypes" -> data.optionalDocumentsSupplied,
       "amendedItems" -> data.amendedItems,
       "supportingDocuments" -> supportingDocuments
     )
@@ -197,6 +195,10 @@ object IvdSubmission extends FixedConfig {
         declarantContactDetails.phoneNumber
       )
 
+      val mandatoryDocumentsList: Seq[DocumentType] = Seq(
+        DocumentTypes.OriginalC88, DocumentTypes.OriginalC2, DocumentTypes.AmendedSubstituteEntryWorksheet
+      )
+
       val optionalDocumentsList: Option[Seq[DocumentType]] = Some(optionalDocumentsSupplied.getOrElse(Seq.empty).flatMap {
         case "importAndEntry" => Seq(DocumentTypes.AmendedC88, DocumentTypes.AmendedC2)
         case "airwayBill" => Seq(DocumentTypes.InvoiceAirwayBillPreferenceCertificate)
@@ -229,7 +231,7 @@ object IvdSubmission extends FixedConfig {
         amendedItems = amendedItems,
         splitDeferment = splitDeferment.getOrElse(false),
         authorityDocuments = authorityDocuments.getOrElse(Seq.empty),
-        optionalDocumentsSupplied = optionalDocumentsList.getOrElse(Seq.empty)
+        documentsSupplied = mandatoryDocumentsList ++ optionalDocumentsList.getOrElse(Seq.empty)
       )
     }
 }
