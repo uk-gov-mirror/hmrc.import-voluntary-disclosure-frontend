@@ -27,11 +27,11 @@ import java.net.URI
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpScanConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig) {
+class UpScanConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig)(implicit ec: ExecutionContext) {
 
   lazy val urlForPostInitiate: String = s"${appConfig.upScanInitiateBaseUrl}/upscan/v2/initiate"
 
-  def postToInitiate(body: UpScanInitiateRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[UpscanInitiateResponse] = {
+  def postToInitiate(body: UpScanInitiateRequest)(implicit hc: HeaderCarrier): Future[UpscanInitiateResponse] = {
     httpClient.post(new URI(urlForPostInitiate).toURL).withBody(Json.toJson(body)).execute[UpscanInitiateResponse]
   }
 }

@@ -30,18 +30,20 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class AddressLookupConnector @Inject() (val http: HttpClientV2, implicit val config: AppConfig) {
+class AddressLookupConnector @Inject() (val http: HttpClientV2)(implicit
+  val config: AppConfig,
+  val ec: ExecutionContext
+) {
 
   def initialiseJourney(
     addressLookupJsonBuilder: JsValue
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[AddressLookupOnRampModel]] = {
+  )(implicit hc: HeaderCarrier): Future[HttpPostResult[AddressLookupOnRampModel]] = {
     val url = s"${config.addressLookupFrontend}${config.addressLookupInitialise}"
     http.post(new URI(url).toURL).withBody(addressLookupJsonBuilder).execute[HttpPostResult[AddressLookupOnRampModel]]
   }
 
   private[connectors] def getAddressUrl(id: String) = s"${config.addressLookupFrontend}/api/confirmed?id=$id"
 
-  def getAddress(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[AddressModel]] = {
+  def getAddress(id: String)(implicit hc: HeaderCarrier): Future[HttpGetResult[AddressModel]] =
     http.get(new URI(getAddressUrl(id)).toURL).execute[HttpGetResult[AddressModel]]
-  }
 }

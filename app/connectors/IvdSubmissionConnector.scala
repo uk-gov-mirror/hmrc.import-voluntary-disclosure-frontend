@@ -29,7 +29,10 @@ import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class IvdSubmissionConnector @Inject() (val http: HttpClientV2, implicit val config: AppConfig) {
+class IvdSubmissionConnector @Inject() (val http: HttpClientV2)(implicit
+  val config: AppConfig,
+  val ec: ExecutionContext
+) {
 
   private[connectors] def getEoriDetailsUrl(id: String) =
     s"${config.importVoluntaryDisclosureSubmission}/api/eoriDetails?id=$id"
@@ -38,16 +41,13 @@ class IvdSubmissionConnector @Inject() (val http: HttpClientV2, implicit val con
 
   private[connectors] def updateCaseUrl = s"${config.importVoluntaryDisclosureSubmission}/api/update-case"
 
-  def getEoriDetails(id: String)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpGetResult[EoriDetails]] = {
+  def getEoriDetails(id: String)(implicit hc: HeaderCarrier): Future[HttpGetResult[EoriDetails]] =
     http.get(new URI(getEoriDetailsUrl(id)).toURL).execute[HttpGetResult[EoriDetails]]
-  }
 
-  def createCase(submission: JsValue)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[HttpPostResult[SubmissionResponse]] = {
+  def createCase(submission: JsValue)(implicit hc: HeaderCarrier): Future[HttpPostResult[SubmissionResponse]] =
     http.post(new URI(createCaseUrl).toURL).withBody(submission).execute[HttpPostResult[SubmissionResponse]]
-  }
 
-  def updateCase(update: JsValue)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[Either[UpdateCaseError, UpdateCaseResponse]] = {
+  def updateCase(update: JsValue)(implicit hc: HeaderCarrier): Future[Either[UpdateCaseError, UpdateCaseResponse]] =
     http.post(new URI(updateCaseUrl).toURL).withBody(update).execute[Either[UpdateCaseError, UpdateCaseResponse]]
-  }
 
 }
