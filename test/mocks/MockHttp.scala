@@ -16,42 +16,40 @@
 
 package mocks
 
+import izumi.reflect.Tag
 import org.scalamock.scalatest.MockFactory
-import play.api.libs.json.Writes
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
+import play.api.libs.ws.BodyWritable
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, HttpReads}
 
+import java.net.{URI, URL}
 import scala.concurrent.{ExecutionContext, Future}
 
 trait MockHttp extends MockFactory {
 
-  val mockHttp: HttpClient = mock[HttpClient]
+  val mockHttp: HttpClientV2 = mock[HttpClientV2]
 
   def setupMockHttpGet[T](url: String)(response: T): Unit =
-    (mockHttp.GET[T](_: String, _: Seq[(String, String)], _: Seq[(String, String)])(
+    (mockHttp.get(_: URL)(_: HeaderCarrier).execute[T](
       _: HttpReads[T],
-      _: HeaderCarrier,
       _: ExecutionContext
     ))
-      .expects(url, *, *, *, *, *)
+      .expects(new URI(url).toURL, *, *, *)
       .returns(Future.successful(response))
 
   def setupMockHttpPost[I, O](url: String)(response: O): Unit =
-    (mockHttp.POST[I, O](_: String, _: I, _: Seq[(String, String)])(
-      _: Writes[I],
+    (mockHttp.post(_: URL)(_: HeaderCarrier).withBody(_: I)(_: BodyWritable[I], _: Tag[I], _: ExecutionContext).execute[O](
       _: HttpReads[O],
-      _: HeaderCarrier,
       _: ExecutionContext
     ))
-      .expects(url, *, *, *, *, *, *)
+      .expects(new URI(url).toURL, *, *, *, *, *, *, *)
       .returns(Future.successful(response))
 
   def setupMockHttpPostWithBody[I, O](url: String, body: I)(response: O): Unit =
-    (mockHttp.POST[I, O](_: String, _: I, _: Seq[(String, String)])(
-      _: Writes[I],
+    (mockHttp.post(_: URL)(_: HeaderCarrier).withBody(body)(_: BodyWritable[I], _: Tag[I], _: ExecutionContext).execute[O](
       _: HttpReads[O],
-      _: HeaderCarrier,
       _: ExecutionContext
     ))
-      .expects(url, body, *, *, *, *, *)
+      .expects(new URI(url).toURL, *, *, *, *, *, *)
       .returns(Future.successful(response))
 }

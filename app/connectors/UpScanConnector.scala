@@ -18,18 +18,20 @@ package connectors
 
 import config.AppConfig
 import connectors.httpParsers.UpScanInitiateHttpParser.{UpScanInitiateResponseReads, UpscanInitiateResponse}
-import javax.inject.Inject
 import models.upscan.UpScanInitiateRequest
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+import play.api.libs.json.Json
+import uk.gov.hmrc.http.HeaderCarrier
+import uk.gov.hmrc.http.client.HttpClientV2
 
+import java.net.URI
+import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
 
-class UpScanConnector @Inject() (httpClient: HttpClient, appConfig: AppConfig) {
+class UpScanConnector @Inject() (httpClient: HttpClientV2, appConfig: AppConfig) {
 
   lazy val urlForPostInitiate: String = s"${appConfig.upScanInitiateBaseUrl}/upscan/v2/initiate"
 
-  def postToInitiate(
-    body: UpScanInitiateRequest
-  )(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[UpscanInitiateResponse] =
-    httpClient.POST(urlForPostInitiate, body)(UpScanInitiateRequest.jsonWrites, UpScanInitiateResponseReads, hc, ec)
+  def postToInitiate(body: UpScanInitiateRequest)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[UpscanInitiateResponse] = {
+    httpClient.post(new URI(urlForPostInitiate).toURL).withBody(Json.toJson(body)).execute[UpscanInitiateResponse]
+  }
 }

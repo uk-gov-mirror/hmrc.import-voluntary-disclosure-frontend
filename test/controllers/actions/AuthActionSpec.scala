@@ -50,7 +50,7 @@ class AuthActionSpec extends SpecBase {
     lazy val unauthorisedView: UnauthorisedView = injector.instanceOf[views.html.errors.UnauthorisedView]
     lazy val config                             = new MockAppConfig()
     lazy val action =
-      new AuthenticatedIdentifierAction(mockAuthConnector, unauthorisedView, config, bodyParsers, messagesApi, mockHttp)
+      new AuthenticatedIdentifierAction(mockAuthConnector, unauthorisedView, config, bodyParsers, messagesApi)
     val target = new Harness(action)
   }
 

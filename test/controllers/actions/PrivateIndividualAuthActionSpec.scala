@@ -55,8 +55,7 @@ class PrivateIndividualAuthActionSpec extends SpecBase {
         unauthorisedView,
         config,
         bodyParsers,
-        messagesApi,
-        mockHttp
+        messagesApi
       )
     val target = new Harness(action)
   }

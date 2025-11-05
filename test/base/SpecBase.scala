@@ -31,7 +31,8 @@ import play.api.mvc.{AnyContentAsEmpty, MessagesControllerComponents}
 import play.api.test.CSRFTokenHelper._
 import play.api.test.FakeRequest
 import repositories.{FileUploadRepository, SessionRepository}
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, SessionKeys}
+import uk.gov.hmrc.http.client.HttpClientV2
+import uk.gov.hmrc.http.{HeaderCarrier, SessionKeys}
 import uk.gov.hmrc.play.language.LanguageUtils
 
 import scala.concurrent.duration.{Duration, FiniteDuration, _}
@@ -50,7 +51,7 @@ trait SpecBase
     .overrides(bind[FileUploadRepository].toInstance(mock[FileUploadRepository]))
     .overrides(bind[SessionRepository].toInstance(mock[SessionRepository]))
     .overrides(bind[DataRetrievalAction].toInstance(mock[DataRetrievalAction]))
-    .overrides(bind[HttpClient].toInstance(mock[HttpClient]))
+    .overrides(bind[HttpClientV2].toInstance(mock[HttpClientV2]))
     .build()
 
   lazy val fakeRequest: FakeRequest[AnyContentAsEmpty.type] =
