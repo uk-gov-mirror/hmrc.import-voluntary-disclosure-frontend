@@ -26,7 +26,7 @@ import utils.ReusableValues
 
 class IvdSubmissionConnectorSpec extends ConnectorSpecBase with MockHttp with ReusableValues {
 
-  lazy val target = new IvdSubmissionConnector(mockHttp, MockAppConfig)
+  lazy val target = new IvdSubmissionConnector(mockHttp)(MockAppConfig.appConfig)
 
   "Ivd Submission Connector" should {
 

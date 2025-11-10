@@ -28,7 +28,6 @@ class ModuleBindings extends Module {
     bind[PrivateIndividualAuthAction].to(classOf[PrivateIndividualAuthenticationAction]),
     bind[DataRequiredAction].to(classOf[DataRequiredActionImpl]),
     bind[DataRetrievalAction].to(classOf[DataRetrievalActionImpl]),
-    bind[AppConfig].to(classOf[AppConfigImpl]),
     bind[SessionRepository].to(classOf[UserAnswersRepository]),
     bind[FileUploadRepository].to(classOf[FileUploadRepositoryImpl])
   )

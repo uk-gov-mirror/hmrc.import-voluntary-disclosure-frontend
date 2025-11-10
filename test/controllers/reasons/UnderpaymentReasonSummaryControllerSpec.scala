@@ -106,7 +106,7 @@ class UnderpaymentReasonSummaryControllerSpec extends ControllerSpecBase {
       }
 
       "return a SEE OTHER on Other Reason feature switch enabled" in new Test {
-        override val testConfig: AppConfig                   = new MockAppConfig()
+        override val testConfig: AppConfig                   = MockAppConfig.appConfig
         val request: FakeRequest[AnyContentAsFormUrlEncoded] = fakeRequest.withFormUrlEncodedBody("value" -> "false")
         lazy val result: Future[Result]                      = controller.onSubmit()(request)
         status(result) mustBe Status.SEE_OTHER

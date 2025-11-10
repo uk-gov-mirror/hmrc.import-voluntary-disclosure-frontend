@@ -57,7 +57,7 @@ object UploadDetails {
     ((JsPath \ "uploadTimestamp").write(MongoJavatimeFormats.instantWrites) and
       (JsPath \ "checksum").write[String] and
       (JsPath \ "fileName").write[String] and
-      (JsPath \ "fileMimeType").write[String])(unlift(UploadDetails.unapply))
+      (JsPath \ "fileMimeType").write[String])(ud => Tuple.fromProductTyped(ud))
   )
 
   private def decodeMimeEncodedWord(word: String): String =

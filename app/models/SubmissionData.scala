@@ -16,7 +16,6 @@
 
 package models
 
-import config.FixedConfig
 import models.importDetails._
 import models.reasons.UnderpaymentReason
 import models.underpayments.UnderpaymentDetail
@@ -61,7 +60,7 @@ case class SubmissionData(
   isImporterVatRegistered: Option[Boolean]
 )
 
-object SubmissionData extends FixedConfig {
+object SubmissionData {
 
   implicit val reads: Reads[SubmissionData] =
     for {

@@ -42,7 +42,7 @@ class FileUploadRepositoryImpl @Inject() (mongoComponent: MongoComponent, appCon
         IndexModel(
           ascending("reference"),
           IndexOptions().name("reference-unique-index").unique(true).sparse(false).expireAfter(
-            appConfig.fileRepositoryTtl,
+            appConfig.fileRepositoryTtl.toLong,
             TimeUnit.SECONDS
           )
         )

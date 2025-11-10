@@ -138,7 +138,7 @@ class UploadAuthorityControllerSpec extends ControllerSpecBase {
         form,
         successView,
         errorHandler,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         ec
       )
     }

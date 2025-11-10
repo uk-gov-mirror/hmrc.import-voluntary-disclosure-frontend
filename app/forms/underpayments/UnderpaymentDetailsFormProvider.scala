@@ -42,7 +42,7 @@ class UnderpaymentDetailsFormProvider extends Mappings {
           invalidDecimalPlacesKey = "underpaymentDetails.error.amendedNonNumber",
           nonNumericKey = "underpaymentDetails.error.amendedNonNumber"
         ).verifying(inRange[BigDecimal](minimum, maximum, "underpaymentDetails.error.amendedOutOfRange"))
-      )(UnderpaymentAmount.apply)(UnderpaymentAmount.unapply)
+      )(UnderpaymentAmount.apply)(u => Some(Tuple.fromProductTyped(u)))
         .verifying(positiveAmountOwing())
     )
 

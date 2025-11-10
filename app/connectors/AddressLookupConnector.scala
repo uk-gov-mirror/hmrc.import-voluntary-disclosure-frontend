@@ -22,6 +22,7 @@ import connectors.httpParsers.InitialiseAddressLookupHttpParser.InitialiseAddres
 import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
 import models.addressLookup.{AddressLookupOnRampModel, AddressModel}
 import play.api.libs.json.JsValue
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 

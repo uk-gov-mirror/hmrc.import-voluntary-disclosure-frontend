@@ -31,15 +31,13 @@ class ConfirmEORIDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the Confirm EORI Details page without the vatNumber" should {
 
-    lazy val appConfig = new MockAppConfig()
-
     lazy val view: Html = injectedView(
       details(
         "GB987654321000",
         "Fast Food ltd.",
         "Not VAT registered"
       )
-    )(fakeRequest, messages, appConfig)
+    )(fakeRequest, messages, MockAppConfig.appConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have only 1 Summary List" in {
@@ -82,15 +80,13 @@ class ConfirmEORIDetailsViewSpec extends ViewBaseSpec {
 
   "Rendering the Confirm EORI Details page with the vatNumber" should {
 
-    lazy val appConfig = new MockAppConfig()
-
     lazy val view: Html = injectedView(
       details(
         "GB987654321000",
         "Fast Food ltd.",
         "987654321000"
       )
-    )(fakeRequest, messages, appConfig)
+    )(fakeRequest, messages, MockAppConfig.appConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have only 1 Summary List" in {
@@ -134,7 +130,7 @@ class ConfirmEORIDetailsViewSpec extends ViewBaseSpec {
   it should {
 
     lazy val view: Html =
-      injectedView(details("GB987654321000", "Fast Food ltd.", "987654321000"))(fakeRequest, messages, appConfig)
+      injectedView(details("GB987654321000", "Fast Food ltd.", "987654321000"))(fakeRequest, messages, MockAppConfig.appConfig)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     checkPageTitle(ConfirmEORIDetailsMessages.title)

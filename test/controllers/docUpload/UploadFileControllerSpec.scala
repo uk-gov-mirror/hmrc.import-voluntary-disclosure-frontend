@@ -101,7 +101,7 @@ class UploadFileControllerSpec extends ControllerSpecBase {
         uploadFileView,
         uploadProgressView,
         form,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         ec
       )
     }

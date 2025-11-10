@@ -29,7 +29,7 @@ class ImporterAddressLookupJsonBuilderSpec extends SpecBase {
 
       "the continueUrl is given to the user" in {
         val builder =
-          ImporterAddressLookupJsonBuilder("/lookup-address/confirmed", "importer")(messagesApi, MockAppConfig)
+          ImporterAddressLookupJsonBuilder("/lookup-address/confirmed", "importer")(messagesApi, MockAppConfig.appConfig)
         Json.toJson(builder) mustBe importerAddressLookupV2Json(builder)
       }
     }

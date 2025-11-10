@@ -34,8 +34,8 @@ trait MockUpScanConnector extends MockFactory {
       request: UpScanInitiateRequest,
       response: Future[UpscanInitiateResponse]
     ): CallHandler[Future[UpscanInitiateResponse]] =
-      (mockUpScanConnector.postToInitiate(_: UpScanInitiateRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(request, *, *)
+      (mockUpScanConnector.postToInitiate(_: UpScanInitiateRequest)(_: HeaderCarrier))
+        .expects(request, *)
         .returns(response)
   }
 }

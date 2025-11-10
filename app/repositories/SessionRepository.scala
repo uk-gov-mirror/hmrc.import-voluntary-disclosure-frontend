@@ -41,7 +41,7 @@ class UserAnswersRepository @Inject() (mongoComponent: MongoComponent, appConfig
       indexes = Seq(
         IndexModel(
           ascending("lastUpdated"),
-          IndexOptions().name("user-answers-last-updated-index").expireAfter(appConfig.cacheTtl, TimeUnit.SECONDS)
+          IndexOptions().name("user-answers-last-updated-index").expireAfter(appConfig.cacheTtl.toLong, TimeUnit.SECONDS)
         )
       )
     )

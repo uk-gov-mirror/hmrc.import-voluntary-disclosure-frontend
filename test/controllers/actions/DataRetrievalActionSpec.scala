@@ -19,6 +19,7 @@ package controllers.actions
 import base.SpecBase
 import models.UserAnswers
 import models.requests.{IdentifierRequest, OptionalDataRequest}
+import org.mockito.{ArgumentMatchers, Mockito}
 import repositories.SessionRepository
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -43,9 +44,11 @@ class DataRetrievalActionSpec extends SpecBase {
 
       "set userAnswers to 'None' in the request" in new Test {
 
-        (mockSessionRepository.get(_: String)(_: ExecutionContext))
-          .expects(*, *)
-          .returns(Future.successful(None))
+        //        (mockSessionRepository.get(_: String)(_: ExecutionContext))
+        //          .expects(*, *)
+        //          .returns(Future.successful(None))
+
+        Mockito.when(mockSessionRepository.get(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(None))
 
         private val futureResult = action.callTransform(request)
 
@@ -60,9 +63,11 @@ class DataRetrievalActionSpec extends SpecBase {
       "build a userAnswers object and add it to the request" in new Test {
 
         private val answers = Some(new UserAnswers("id"))
-        (mockSessionRepository.get(_: String)(_: ExecutionContext))
-          .expects(*, *)
-          .returns(Future.successful(answers))
+        //        (mockSessionRepository.get(_: String)(_: ExecutionContext))
+        //          .expects(*, *)
+        //          .returns(Future.successful(answers))
+
+        Mockito.when(mockSessionRepository.get(ArgumentMatchers.any())(ArgumentMatchers.any())).thenReturn(Future.successful(None))
 
         private val futureResult = action.callTransform(request)
 

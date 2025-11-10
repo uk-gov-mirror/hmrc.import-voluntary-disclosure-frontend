@@ -33,7 +33,7 @@ class RepresentativeDanFormProvider @Inject() extends Mappings {
           .transform(_.replace(" ", ""), identity[String])
           .verifying(regexp("[0-9]{7}", "repDan.error.input.format")),
         "value" -> text("repDan.error.radio.required")
-      )(RepresentativeDan.apply)(RepresentativeDan.unapply)
+      )(RepresentativeDan.apply)(r => Some(Tuple.fromProductTyped(r)))
     )
   }
 }

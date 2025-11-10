@@ -25,14 +25,14 @@ import play.api.test.Helpers.{await, defaultAwaitTimeout}
 
 class UpScanConnectorSpec extends ConnectorSpecBase with MockHttp {
 
-  object TestConnector extends UpScanConnector(mockHttp, MockAppConfig)
+  object TestConnector extends UpScanConnector(mockHttp, MockAppConfig.appConfig)
 
   val exampleModel: UpScanInitiateRequest = UpScanInitiateRequest(
-    MockAppConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload,
-    MockAppConfig.upScanSuccessRedirectForUser,
-    MockAppConfig.upScanErrorRedirectForUser,
-    MockAppConfig.upScanMinFileSize,
-    MockAppConfig.upScanMaxFileSize
+    MockAppConfig.appConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload,
+    MockAppConfig.appConfig.upScanSuccessRedirectForUser,
+    MockAppConfig.appConfig.upScanErrorRedirectForUser,
+    MockAppConfig.appConfig.upScanMinFileSize,
+    MockAppConfig.appConfig.upScanMaxFileSize
   )
   val response: UpScanInitiateResponse = UpScanInitiateResponse(
     Reference("11370e18-6e24-453e-b45a-76d3e32ea33d"),

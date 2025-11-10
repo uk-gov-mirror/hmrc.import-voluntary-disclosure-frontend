@@ -51,7 +51,7 @@ class DeclarantContactDetailsFormProvider @Inject() extends Mappings {
               "declarantContactDetails.error.phoneNumberInvalidFormat"
             )
           )
-      )(ContactDetails.apply)(ContactDetails.unapply)
+      )(ContactDetails.apply)(c => Some(Tuple.fromProductTyped(c)))
     )
 
 }

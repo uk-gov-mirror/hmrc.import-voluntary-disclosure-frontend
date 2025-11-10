@@ -32,7 +32,7 @@ class AddressLookupConnectorSpec extends SpecBase with MockHttp {
 
   val errorModel: HttpResponse = HttpResponse(Status.BAD_REQUEST, "Error Message")
 
-  object TestAddressLookupConnector extends AddressLookupConnector(mockHttp, appConfig)
+  object TestAddressLookupConnector extends AddressLookupConnector(mockHttp)
 
   "AddressLookupConnector" must {
 

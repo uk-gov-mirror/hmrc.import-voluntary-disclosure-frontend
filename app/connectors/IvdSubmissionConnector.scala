@@ -17,10 +17,11 @@
 package connectors
 
 import config.AppConfig
-import connectors.httpParsers.IvdHttpParser._
+import connectors.httpParsers.IvdHttpParser.*
 import connectors.httpParsers.ResponseHttpParser.{HttpGetResult, HttpPostResult}
 import models.{EoriDetails, SubmissionResponse, UpdateCaseError, UpdateCaseResponse}
 import play.api.libs.json.JsValue
+import play.api.libs.ws.JsonBodyWritables.writeableOf_JsValue
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.http.client.HttpClientV2
 

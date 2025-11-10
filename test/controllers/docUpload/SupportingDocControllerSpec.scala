@@ -79,7 +79,7 @@ class SupportingDocControllerSpec extends ControllerSpecBase {
 
   "Back link" should {
     "return to Underpayment Reason Summary if otherItemEnabled feature switch is on" in new Test {
-      override val testConfig: AppConfig = new MockAppConfig()
+      override val testConfig: AppConfig = MockAppConfig.appConfig
       controller.backLink(
         userAnswers.get
       ) mustBe controllers.reasons.routes.UnderpaymentReasonSummaryController.onLoad()

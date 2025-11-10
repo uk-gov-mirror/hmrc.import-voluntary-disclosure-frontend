@@ -49,7 +49,7 @@ trait ConfirmReasonDetailSummaryList extends SummaryListHelper {
   private def buildBoxNumberSummaryListRow(
     boxNumberOpt: Option[BoxNumber]
   )(implicit messages: Messages): Seq[SummaryListRow] = {
-    boxNumberOpt map { boxNumber: BoxNumber =>
+    boxNumberOpt map { boxNumber =>
       Seq(
         createRow(
           Text(messages("confirmReason.boxNumber")),
@@ -69,7 +69,7 @@ trait ConfirmReasonDetailSummaryList extends SummaryListHelper {
   private def buildItemNumberSummaryListRow(
     itemNumberOpt: Option[Int]
   )(implicit messages: Messages): Seq[SummaryListRow] = {
-    itemNumberOpt map { itemNumber: Int =>
+    itemNumberOpt map { itemNumber =>
       Seq(
         createRow(
           Text(messages("confirmReason.itemNumber")),
@@ -91,7 +91,7 @@ trait ConfirmReasonDetailSummaryList extends SummaryListHelper {
     amendmentAnswersOpt: Option[UnderpaymentReasonValue],
     boxNumber: BoxNumber
   )(implicit messages: Messages): Seq[SummaryListRow] = {
-    amendmentAnswersOpt map { underPaymentReasonValue: UnderpaymentReasonValue =>
+    amendmentAnswersOpt map { underPaymentReasonValue =>
       Seq(
         createRow(
           Text(messages("confirmReason.original")),

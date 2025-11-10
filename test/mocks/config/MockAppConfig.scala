@@ -17,63 +17,61 @@
 package mocks.config
 
 import config.AppConfig
+import org.mockito.Mockito.when
+import org.scalamock.scalatest.MockFactory
 import play.api.i18n.Lang
 import play.api.mvc.RequestHeader
 
-object MockAppConfig extends MockAppConfig()
+import org.mockito.ArgumentMatchers.any
 
-class MockAppConfig() extends AppConfig {
-  override val footerLinkItems: Seq[String]         = Seq("TBC")
-  override val contactFormServiceIdentifier: String = "TBC"
-  override val surveyUrl: String                    = "TBC"
-  override val host: String                         = "TBC"
+trait MockAppConfig extends MockFactory {
 
-  override def feedbackUrl(implicit request: RequestHeader): String =
-    "/contact/beta-feedback?service=import-voluntary-disclosure"
+  val appConfig: AppConfig = mock[AppConfig]
 
-  override val appName: String                       = "import-voluntary-disclosure-frontend"
-  override val loginUrl: String                      = "TBC"
-  override val signOutUrl: String                    = "TBC"
-  override val loginContinueUrl: String              = "TBC"
-  override val addressLookupFrontend: String         = "TBC"
-  override val addressLookupCallback: String         = "/disclose-import-taxes-underpayment/address-callback"
-  override val importerAddressLookupCallback: String = "/disclose-import-taxes-underpayment/importer-address-callback"
-  override val addressLookupInitialise: String       = "TBC"
-  override val addressLookupFeedbackUrl: String      = "TBC"
-  override val addressLookupCallbackUrl: String      = "TBC"
-  override val importerAddressLookupCallbackUrl: String                 = "TBC"
-  override val timeoutPeriod: Int                                       = 900
-  override val countdown: Int                                           = 120
-  override val cacheTtl: Int                                            = 500
-  override val upScanCallbackUrlForSuccessOrFailureOfFileUpload: String = "TBC"
-  override val upScanSuccessRedirectForUser: String                     = "TBC"
-  override val upScanSuccessRedirectForBulk: String                     = "TBC"
-  override val upScanErrorRedirectForUser: String                       = "TBC"
-  override val upScanErrorRedirectForBulk: String                       = "TBC"
-  override val upScanMinFileSize: Int                                   = 1
-  override val upScanMaxFileSize: Int                                   = 10485760
-  override val upScanPollingDelayMilliSeconds: Int                      = 10
-  override val upScanInitiateBaseUrl: String                            = "TBC"
-  override val upScanAcceptedFileTypes: String                          = "TBC"
-  override val fileRepositoryTtl: Int                                   = 86400
-  override val upScanAuthoritySuccessRedirectForUser: String            = "TBC"
-  override val upScanAuthorityErrorRedirectForUser: String              = "TBC"
-  override val upScanSupportingDocSuccessRedirectForUser: String        = "TBC"
-  override val upScanSupportingDocErrorRedirectForUser: String          = "TBC"
-
-  override val upScanCancelCaseRedirectForUser: String         = "TBC"
-  override val upScanCancelCaseDocErrorRedirectForUser: String = "TBC"
-
-  override val importVoluntaryDisclosureSubmission: String = "TBC"
-
-  override val eccSubscribeUrl: String = "TBC"
-  override val c2001Url: String        = "TBC"
-  override val en: Lang                = Lang("en")
-  override val cy: Lang                = Lang("cy")
-  override val defaultLanguage: Lang   = en
-
-  override val vatReturnAdjustmentsUrl: String = "url"
-  override val pvaHandoffUrl: String           = "url"
-  override val c18EmailAddress: String         = "npcc@hmrc.gov.uk"
-
+  when(appConfig.footerLinkItems).thenReturn(Seq("TBC"))
+  when(appConfig.contactFormServiceIdentifier).thenReturn("TBC")
+  when(appConfig.surveyUrl).thenReturn("TBC")
+  when(appConfig.host).thenReturn("TBC")
+  when(appConfig.feedbackUrl(any())).thenReturn("/contact/beta-feedback?service=import-voluntary-disclosure")
+  when(appConfig.appName).thenReturn("import-voluntary-disclosure-frontend")
+  when(appConfig.loginUrl).thenReturn("TBC")
+  when(appConfig.signOutUrl).thenReturn("TBC")
+  when(appConfig.loginContinueUrl).thenReturn("TBC")
+  when(appConfig.addressLookupFrontend).thenReturn("TBC")
+  when(appConfig.addressLookupCallback).thenReturn("/disclose-import-taxes-underpayment/address-callback")
+  when(appConfig.importerAddressLookupCallback).thenReturn("/disclose-import-taxes-underpayment/importer-address-callback")
+  when(appConfig.addressLookupInitialise).thenReturn("TBC")
+  when(appConfig.addressLookupFeedbackUrl).thenReturn("TBC")
+  when(appConfig.addressLookupCallbackUrl).thenReturn("TBC")
+  when(appConfig.importerAddressLookupCallbackUrl).thenReturn("TBC")
+  when(appConfig.timeoutPeriod).thenReturn(900)
+  when(appConfig.countdown).thenReturn(120)
+  when(appConfig.cacheTtl).thenReturn(500)
+  when(appConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload).thenReturn("TBC")
+  when(appConfig.upScanSuccessRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanSuccessRedirectForBulk).thenReturn("TBC")
+  when(appConfig.upScanErrorRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanMinFileSize).thenReturn(1)
+  when(appConfig.upScanMaxFileSize).thenReturn(10485760)
+  when(appConfig.upScanPollingDelayMilliSeconds).thenReturn(10)
+  when(appConfig.upScanInitiateBaseUrl).thenReturn("TBC")
+  when(appConfig.upScanAcceptedFileTypes).thenReturn("TBC")
+  when(appConfig.fileRepositoryTtl).thenReturn(86400)
+  when(appConfig.upScanAuthoritySuccessRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanAuthorityErrorRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanSupportingDocSuccessRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanSupportingDocErrorRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanCancelCaseRedirectForUser).thenReturn("TBC")
+  when(appConfig.upScanCancelCaseDocErrorRedirectForUser).thenReturn("TBC")
+  when(appConfig.importVoluntaryDisclosureSubmission).thenReturn("TBC")
+  when(appConfig.eccSubscribeUrl).thenReturn("TBC")
+  when(appConfig.c2001Url).thenReturn("TBC")
+  when(appConfig.en).thenReturn(Lang("en"))
+  when(appConfig.cy).thenReturn(Lang("cy"))
+  when(appConfig.defaultLanguage).thenReturn(Lang("en"))
+  when(appConfig.vatReturnAdjustmentsUrl).thenReturn("url")
+  when(appConfig.pvaHandoffUrl).thenReturn("url")
+  when(appConfig.c18EmailAddress).thenReturn("npcc@hmrc.gov.uk")
 }
+
+object MockAppConfig extends MockAppConfig

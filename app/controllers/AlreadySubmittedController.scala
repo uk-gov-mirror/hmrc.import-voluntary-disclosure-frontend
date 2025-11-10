@@ -35,15 +35,15 @@ class AlreadySubmittedController @Inject() (
     with I18nSupport {
 
   def createSubmitted: Action[AnyContent] = identify.async { implicit request =>
-    Future.successful(Ok(view(SubmissionType.CreateCase)))
+    Future.successful(Ok(view(SubmissionType.CreateCase.toString)))
   }
 
   def amendSubmitted: Action[AnyContent] = identify.async { implicit request =>
-    Future.successful(Ok(view(SubmissionType.UpdateCase)))
+    Future.successful(Ok(view(SubmissionType.UpdateCase.toString)))
   }
 
   def cancelSubmitted: Action[AnyContent] = identify.async { implicit request =>
-    Future.successful(Ok(view(SubmissionType.CancelCase)))
+    Future.successful(Ok(view(SubmissionType.CancelCase.toString)))
   }
 
 }

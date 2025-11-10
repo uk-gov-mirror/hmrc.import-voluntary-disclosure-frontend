@@ -39,7 +39,7 @@ class BulkUploadFileViewSpec extends ViewBaseSpec {
 
   "Rendering the UploadFile page" should {
     val form: Form[String] = formProvider.apply()
-    lazy val view: Html    = injectedView(form, initiateResponse, backLink)(fakeRequest, MockAppConfig, messages)
+    lazy val view: Html    = injectedView(form, initiateResponse, backLink)(fakeRequest, MockAppConfig.appConfig, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     "have the correct form action" in {
@@ -51,14 +51,14 @@ class BulkUploadFileViewSpec extends ViewBaseSpec {
     }
 
     "have the correct file upload control file types" in {
-      element(".govuk-file-upload").attr("accept") mustBe MockAppConfig.upScanAcceptedFileTypes
+      element(".govuk-file-upload").attr("accept") mustBe MockAppConfig.appConfig.upScanAcceptedFileTypes
     }
 
   }
 
   it should {
     val form: Form[String] = formProvider.apply()
-    lazy val view: Html    = injectedView(form, initiateResponse, backLink)(fakeRequest, MockAppConfig, messages)
+    lazy val view: Html    = injectedView(form, initiateResponse, backLink)(fakeRequest, MockAppConfig.appConfig, messages)
     lazy implicit val document: Document = Jsoup.parse(view.body)
 
     checkPageTitle(BulkUploadFileMessages.title)

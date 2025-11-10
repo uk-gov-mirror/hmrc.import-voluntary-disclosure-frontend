@@ -114,7 +114,7 @@ class UploadSupportingDocumentationControllerSpec extends ControllerSpecBase {
         uploadDocumentationView,
         progressView,
         form,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         ec
       )
     }

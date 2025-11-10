@@ -31,20 +31,20 @@ class UpScanServiceSpec extends ServiceSpecBase {
 
   private val dutyType = "duty"
 
-  private val callBackUrl = MockAppConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload
-  private val success     = MockAppConfig.upScanSuccessRedirectForUser
-  private val error       = MockAppConfig.upScanErrorRedirectForUser
-  private val minFileSize = MockAppConfig.upScanMinFileSize
-  private val maxFileSize = MockAppConfig.upScanMaxFileSize
+  private val callBackUrl = MockAppConfig.appConfig.upScanCallbackUrlForSuccessOrFailureOfFileUpload
+  private val success     = MockAppConfig.appConfig.upScanSuccessRedirectForUser
+  private val error       = MockAppConfig.appConfig.upScanErrorRedirectForUser
+  private val minFileSize = MockAppConfig.appConfig.upScanMinFileSize
+  private val maxFileSize = MockAppConfig.appConfig.upScanMaxFileSize
 
   private val upScanAuthoritySuccessRedirectForUser =
-    MockAppConfig.upScanAuthoritySuccessRedirectForUser ++ s"/$dutyType/upscan-response"
+    MockAppConfig.appConfig.upScanAuthoritySuccessRedirectForUser ++ s"/$dutyType/upscan-response"
 
   private val upScanAuthorityErrorRedirectForUser =
-    MockAppConfig.upScanAuthorityErrorRedirectForUser ++ s"/$dutyType/upscan-response"
+    MockAppConfig.appConfig.upScanAuthorityErrorRedirectForUser ++ s"/$dutyType/upscan-response"
 
   trait Test extends MockUpScanConnector {
-    lazy val service = new UpScanService(mockUpScanConnector, MockAppConfig)
+    lazy val service = new UpScanService(mockUpScanConnector, MockAppConfig.appConfig)
   }
 
   "buildInitiateRequest" should {

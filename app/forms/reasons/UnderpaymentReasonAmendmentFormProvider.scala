@@ -97,7 +97,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings with FormHelpers 
       mapping(
         "original" -> foreignCurrency("amendmentValue.error.original.missing", "amendmentValue.error.original.format"),
         "amended"  -> foreignCurrency("amendmentValue.error.amended.missing", "amendmentValue.error.amended.format")
-      )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+      )(UnderpaymentReasonValue.apply)(u => Some(Tuple.fromProductTyped(u)))
         .verifying(different("amendmentValue.error.amended.different"))
     )
   }
@@ -111,7 +111,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings with FormHelpers 
         "amended" -> text("amendmentValue.error.amended.missing")
           .transform[String](toUpperNoSpaces(_), toUpperNoSpaces(_))
           .verifying(regexp(regex, "amendmentValue.error.amended.format"))
-      )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+      )(UnderpaymentReasonValue.apply)(u => Some(Tuple.fromProductTyped(u)))
         .verifying(different("amendmentValue.error.amended.different"))
     )
   }
@@ -179,7 +179,7 @@ class UnderpaymentReasonAmendmentFormProvider extends Mappings with FormHelpers 
         "original" -> text("otherReason.error.required")
           .verifying(maxLength(1500, "otherReason.error.maxLength")),
         "amended" -> Forms.text
-      )(UnderpaymentReasonValue.apply)(UnderpaymentReasonValue.unapply)
+      )(UnderpaymentReasonValue.apply)(u => Some(Tuple.fromProductTyped(u)))
     )
   }
 }

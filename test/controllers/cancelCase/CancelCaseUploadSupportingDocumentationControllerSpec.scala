@@ -114,7 +114,7 @@ class CancelCaseUploadSupportingDocumentationControllerSpec extends ControllerSp
         cancelCaseUploadSupportingDocumentationView,
         progressView,
         form,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         ec
       )
     }

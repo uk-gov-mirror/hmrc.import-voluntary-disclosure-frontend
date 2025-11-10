@@ -46,7 +46,7 @@ class CancelCaseUploadSupportingDocumentationViewSpec extends ViewBaseSpec {
     lazy val view: Html =
       injectedView(form, initiateResponse, backLink, oneFileUploaded, checkMode = false)(
         fakeRequest,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         messages
       )
     lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -64,7 +64,7 @@ class CancelCaseUploadSupportingDocumentationViewSpec extends ViewBaseSpec {
     }
 
     s"have the correct file upload control file types" in {
-      element(".govuk-file-upload").attr("accept") mustBe MockAppConfig.upScanAcceptedFileTypes
+      element(".govuk-file-upload").attr("accept") mustBe MockAppConfig.appConfig.upScanAcceptedFileTypes
     }
 
     "an error exists (no file has been uploaded)" should {
@@ -72,7 +72,7 @@ class CancelCaseUploadSupportingDocumentationViewSpec extends ViewBaseSpec {
       lazy val view: Html =
         injectedView(form, initiateResponse, backLink, zeroFilesUploaded, checkMode = false)(
           fakeRequest,
-          MockAppConfig,
+          MockAppConfig.appConfig,
           messages
         )
       lazy implicit val document: Document = Jsoup.parse(view.body)
@@ -96,7 +96,7 @@ class CancelCaseUploadSupportingDocumentationViewSpec extends ViewBaseSpec {
     lazy val view: Html =
       injectedView(form, initiateResponse, backLink, oneFileUploaded, checkMode = true)(
         fakeRequest,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         messages
       )
     lazy implicit val document: Document = Jsoup.parse(view.body)

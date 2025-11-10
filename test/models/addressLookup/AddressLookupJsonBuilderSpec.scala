@@ -28,7 +28,7 @@ class AddressLookupJsonBuilderSpec extends SpecBase {
     "Serialize to new address lookup Json when using addressLookup v2" when {
 
       "the continueUrl is given to the user" in {
-        val builder = AddressLookupJsonBuilder("/lookup-address/confirmed", "Fast Food ltd")(messagesApi, MockAppConfig)
+        val builder = AddressLookupJsonBuilder("/lookup-address/confirmed", "Fast Food ltd")(messagesApi, MockAppConfig.appConfig)
         Json.toJson(builder) mustBe addressLookupV2Json(builder)
       }
     }

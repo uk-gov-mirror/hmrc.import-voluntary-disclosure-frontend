@@ -29,7 +29,7 @@ class GuidanceControllerSpec extends ControllerSpecBase {
   private lazy val controller = new GuidanceController(
     guidanceView,
     messagesControllerComponents,
-    MockAppConfig
+    MockAppConfig.appConfig
   )
 
   "GuidanceController" should {

@@ -45,7 +45,7 @@ class EntryDetailsFormProvider @Inject() extends Mappings with FormHelpers {
           validatePastKey = Some("entryDetails.entryDate.error.past"),
           validateAfterKey = Some("entryDetails.entryDate.error.after")
         )
-      )(EntryDetails.apply)(EntryDetails.unapply)
+      )(EntryDetails.apply)(e => Some(Tuple.fromProductTyped(e)))
     )
   }
 }

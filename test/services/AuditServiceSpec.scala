@@ -35,7 +35,7 @@ class AuditServiceSpec extends ServiceSpecBase with MockFactory {
         .expects(*, *, *)
         .once()
 
-      val service = new AuditService(MockAppConfig, mockAuditConnector)
+      val service = new AuditService(MockAppConfig.appConfig, mockAuditConnector)
 
       val auditModel: JsonAuditModel = new JsonAuditModel {
         override val auditType: String       = "SomeEvent"
@@ -51,7 +51,7 @@ class AuditServiceSpec extends ServiceSpecBase with MockFactory {
     "return a data event with credId and affinityGroup appended to the data event" in {
       val mockAuditConnector = mock[AuditConnector]
 
-      val service = new AuditService(MockAppConfig, mockAuditConnector)
+      val service = new AuditService(MockAppConfig.appConfig, mockAuditConnector)
 
       val auditModel: JsonAuditModel = new JsonAuditModel {
         override val auditType: String       = "SomeEvent"

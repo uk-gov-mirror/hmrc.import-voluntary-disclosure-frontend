@@ -32,7 +32,7 @@ class UnauthorisedControllerSpec extends ControllerSpecBase {
     messagesControllerComponents,
     view,
     unauthorisedAgentAccessView,
-    MockAppConfig
+    MockAppConfig.appConfig
   )
 
   "onPageLoad" should {

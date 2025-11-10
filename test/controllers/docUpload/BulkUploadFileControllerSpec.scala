@@ -115,7 +115,7 @@ class BulkUploadFileControllerSpec extends ControllerSpecBase {
         uploadProgressView,
         form,
         bulkUploadSuccessView,
-        MockAppConfig,
+        MockAppConfig.appConfig,
         ec
       )
     }

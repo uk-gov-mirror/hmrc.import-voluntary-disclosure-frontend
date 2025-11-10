@@ -27,6 +27,9 @@ import uk.gov.hmrc.auth.core._
 import uk.gov.hmrc.auth.core.syntax.retrieved.authSyntaxForRetrieved
 import views.html.errors.UnauthorisedView
 
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+
 import scala.concurrent.Future
 
 class AuthActionSpec extends SpecBase {
@@ -46,9 +49,10 @@ class AuthActionSpec extends SpecBase {
       def onPageLoad(): Action[AnyContent] = authAction(_ => Results.Ok)
     }
 
+    val mockAuthConnector: AuthConnector = mock[AuthConnector]
     lazy val bodyParsers: BodyParsers.Default   = injector.instanceOf[BodyParsers.Default]
     lazy val unauthorisedView: UnauthorisedView = injector.instanceOf[views.html.errors.UnauthorisedView]
-    lazy val config                             = new MockAppConfig()
+    lazy val config                             = MockAppConfig.appConfig
     lazy val action =
       new AuthenticatedIdentifierAction(mockAuthConnector, unauthorisedView, config, bodyParsers, messagesApi)
     val target = new Harness(action)
@@ -58,7 +62,8 @@ class AuthActionSpec extends SpecBase {
 
     "user is not logged in" must {
       "redirect to sign-in" in new Test {
-        MockedAuthConnector.authorise(Future.failed(SessionRecordNotFound()))
+        when(mockAuthConnector.authorise(any(), any())(any(), any())).thenReturn(Future.failed(SessionRecordNotFound()))
+//        MockedAuthConnector.authorise(Future.failed(SessionRecordNotFound()))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.SEE_OTHER
       }
@@ -66,9 +71,11 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has an external ID for organisation" must {
       "execute the action block" in new Test {
-        MockedAuthConnector.authorise(
-          Future.successful(Some("abc") and singleEnrolment and Some(AffinityGroup.Organisation))
-        )
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(Some("abc") and singleEnrolment and Some(AffinityGroup.Organisation)))
+//        MockedAuthConnector.authorise(
+//          Future.successful(Some("abc") and singleEnrolment and Some(AffinityGroup.Organisation))
+//        )
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.OK
       }
@@ -76,9 +83,11 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has an external ID for individual" must {
       "execute the action block" in new Test {
-        MockedAuthConnector.authorise(
-          Future.successful(Some("abc") and singleEnrolment and Some(AffinityGroup.Individual))
-        )
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(Some("abc") and singleEnrolment and Some(AffinityGroup.Individual)))
+//        MockedAuthConnector.authorise(
+//          Future.successful(Some("abc") and singleEnrolment and Some(AffinityGroup.Individual))
+//        )
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.OK
       }
@@ -86,9 +95,11 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has an external ID for organisation but no enrolment" must {
       "execute the action block" in new Test {
-        MockedAuthConnector.authorise(
-          Future.successful(Some("abc") and noEnrolment and Some(AffinityGroup.Organisation))
-        )
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(Some("abc") and noEnrolment and Some(AffinityGroup.Organisation)))
+//        MockedAuthConnector.authorise(
+//          Future.successful(Some("abc") and noEnrolment and Some(AffinityGroup.Organisation))
+//        )
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.SEE_OTHER
         redirectLocation(response) mustBe Some(config.eccSubscribeUrl)
@@ -97,7 +108,9 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has an external ID for individual but no enrolment" must {
       "execute the action block" in new Test {
-        MockedAuthConnector.authorise(Future.successful(Some("abc") and noEnrolment and Some(AffinityGroup.Individual)))
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(Some("abc") and noEnrolment and Some(AffinityGroup.Individual)))
+//        MockedAuthConnector.authorise(Future.successful(Some("abc") and noEnrolment and Some(AffinityGroup.Individual)))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.SEE_OTHER
         redirectLocation(response) mustBe Some(
@@ -108,7 +121,9 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has no external ID for organisation" must {
       "receive an authorised response" in new Test {
-        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment and Some(AffinityGroup.Organisation)))
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(None and singleEnrolment and Some(AffinityGroup.Organisation)))
+//        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment and Some(AffinityGroup.Organisation)))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.UNAUTHORIZED
       }
@@ -116,7 +131,9 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has no external ID for individual" must {
       "receive an authorised response" in new Test {
-        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment and Some(AffinityGroup.Individual)))
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(None and singleEnrolment and Some(AffinityGroup.Individual)))
+//        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment and Some(AffinityGroup.Individual)))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.UNAUTHORIZED
       }
@@ -124,7 +141,9 @@ class AuthActionSpec extends SpecBase {
 
     "user is logged in and has no external ID for agent" must {
       "receive an authorised response" in new Test {
-        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment and Some(AffinityGroup.Agent)))
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.successful(None and singleEnrolment and Some(AffinityGroup.Agent)))
+//        MockedAuthConnector.authorise(Future.successful(None and singleEnrolment and Some(AffinityGroup.Agent)))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.SEE_OTHER
         redirectLocation(response) mustBe Some(
@@ -135,7 +154,9 @@ class AuthActionSpec extends SpecBase {
 
     "authorisation exception occurs" must {
       "receive an authorised response" in new Test {
-        MockedAuthConnector.authorise(Future.failed(InternalError()))
+        when(mockAuthConnector.authorise(any(), any())(any(), any()))
+          .thenReturn(Future.failed(InternalError()))
+//        MockedAuthConnector.authorise(Future.failed(InternalError()))
         private val response = target.onPageLoad()(fakeRequest)
         status(response) mustBe Status.UNAUTHORIZED
       }

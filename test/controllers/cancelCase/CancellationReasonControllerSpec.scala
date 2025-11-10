@@ -17,51 +17,65 @@
 package controllers.cancelCase
 
 import base.ControllerSpecBase
-import controllers.actions.FakeDataRetrievalAction
+import controllers.actions.{DataRetrievalAction, DataRetrievalActionImpl, FakeDataRetrievalAction}
 import forms.cancelCase.CancellationReasonFormProvider
-import mocks.repositories.MockSessionRepository
 import models.UserAnswers
 import models.requests._
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito.when
+import org.scalatestplus.mockito.MockitoSugar
 import pages.CheckModePage
 import pages.updateCase.UpdateAdditionalInformationPage
 import play.api.http.Status
 import play.api.mvc._
 import play.api.test.FakeRequest
 import play.api.test.Helpers._
+import repositories.SessionRepository
 import views.html.cancelCase.CancellationReasonView
 
 import scala.concurrent.Future
 
 class CancellationReasonControllerSpec extends ControllerSpecBase {
 
-  trait Test extends MockSessionRepository {
-    private lazy val view: CancellationReasonView = app.injector.instanceOf[CancellationReasonView]
+  val mockSessionRepository: SessionRepository = mock[SessionRepository]
 
-    val userAnswers: Option[UserAnswers] = Some(
-      UserAnswers("credId")
-        .set(CheckModePage, false).success.value
-    )
-    private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
+  private lazy val view: CancellationReasonView = app.injector.instanceOf[CancellationReasonView]
 
-    implicit lazy val dataRequest: DataRequest[AnyContentAsEmpty.type] = DataRequest(
-      OptionalDataRequest(
-        IdentifierRequest(fakeRequest, "credId", "eori"),
-        "credId",
-        "eori",
-        userAnswers
-      ),
+  val userAnswers: Option[UserAnswers] = Some(UserAnswers("credId").set(CheckModePage, false).success.value)
+
+  private lazy val dataRetrievalAction = new FakeDataRetrievalAction(userAnswers)
+
+  implicit lazy val dataRequest: DataRequest[AnyContentAsEmpty.type] = DataRequest(
+    OptionalDataRequest(
+      IdentifierRequest(fakeRequest, "credId", "eori"),
       "credId",
       "eori",
-      userAnswers.get
-    )
+      userAnswers
+    ),
+    "credId",
+    "eori",
+    userAnswers.get
+  )
 
-    val formProvider: CancellationReasonFormProvider = injector.instanceOf[CancellationReasonFormProvider]
+  val formProvider: CancellationReasonFormProvider = injector.instanceOf[CancellationReasonFormProvider]
 
-    MockedSessionRepository.set(Future.successful(true))
+  val controller = new CancellationReasonController(
+    authenticatedAction,
+    dataRetrievalAction,
+    dataRequiredAction,
+    mockSessionRepository,
+    messagesControllerComponents,
+    formProvider,
+    view,
+    ec
+  )
 
-    lazy val controller = new CancellationReasonController(
+  private def cancellationReasonController(
+                                            fataRetrievalAction: FakeDataRetrievalAction = dataRetrievalAction
+                                          ): CancellationReasonController = {
+    new CancellationReasonController(
       authenticatedAction,
-      dataRetrievalAction,
+      fataRetrievalAction,
       dataRequiredAction,
       mockSessionRepository,
       messagesControllerComponents,
@@ -72,14 +86,17 @@ class CancellationReasonControllerSpec extends ControllerSpecBase {
   }
 
   "GET onLoad" should {
-    "return OK" in new Test {
+    "return OK" in {
       val result: Future[Result] = controller.onLoad(fakeRequest)
       status(result) mustBe Status.OK
     }
 
-    "return HTML" in new Test {
-      override val userAnswers: Option[UserAnswers] =
+    "return HTML" in {
+      val userAnswers: Option[UserAnswers] =
         Some(UserAnswers("some-cred-id").set(UpdateAdditionalInformationPage, "some text").success.value)
+
+      val controller = cancellationReasonController(new FakeDataRetrievalAction(userAnswers))
+
       val result: Future[Result] = controller.onLoad(fakeRequest)
       contentType(result) mustBe Some("text/html")
       charset(result) mustBe Some("utf-8")
@@ -89,33 +106,40 @@ class CancellationReasonControllerSpec extends ControllerSpecBase {
   "POST onSubmit" when {
     "payload contains valid data when check mode is false" should {
 
-      "return a SEE OTHER response" in new Test {
+      "return a SEE OTHER response" in {
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
         val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           fakeRequest.withFormUrlEncodedBody("value" -> "some text")
         lazy val result: Future[Result] = controller.onSubmit(request)
         status(result) mustBe Status.SEE_OTHER
       }
 
-      "rediret to CYA" in new Test {
-        override val userAnswers: Option[UserAnswers] = Some(
+      "rediret to CYA" in {
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
+        val userAnswers: Option[UserAnswers] = Some(
           UserAnswers("some-cred-id")
             .set(UpdateAdditionalInformationPage, "some text").success.value
             .set(CheckModePage, true).success.value
         )
         val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           fakeRequest.withFormUrlEncodedBody("value" -> "some text")
+
+        val controller = cancellationReasonController(new FakeDataRetrievalAction(userAnswers))
         lazy val result: Future[Result] = controller.onSubmit(request)
         redirectLocation(result) mustBe Some(
           controllers.cancelCase.routes.CancelCaseCheckYourAnswersController.onLoad().url
         )
       }
 
-      "return the correct location header for the response" in new Test {
-        override val userAnswers: Option[UserAnswers] = Some(
+      "return the correct location header for the response" in {
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
+        val userAnswers: Option[UserAnswers] = Some(
           UserAnswers("some-cred-id")
             .set(UpdateAdditionalInformationPage, "some text").success.value
             .set(CheckModePage, false).success.value
         )
+        val controller = cancellationReasonController(new FakeDataRetrievalAction(userAnswers))
+
         val request: FakeRequest[AnyContentAsFormUrlEncoded] =
           fakeRequest.withFormUrlEncodedBody("value" -> "some text")
         lazy val result: Future[Result] = controller.onSubmit(request)
@@ -124,15 +148,15 @@ class CancellationReasonControllerSpec extends ControllerSpecBase {
         )
       }
 
-      "update the UserAnswers in session" in new Test {
-        private val request = fakeRequest.withFormUrlEncodedBody("value" -> "some text")
+      "update the UserAnswers in session" in {
+        when(mockSessionRepository.set(any())(any())).thenReturn(Future.successful(true))
+        val request = fakeRequest.withFormUrlEncodedBody("value" -> "some text")
         await(controller.onSubmit(request))
-        verifyCalls()
       }
     }
 
     "payload contains invalid data" should {
-      "return a BAD REQUEST" in new Test {
+      "return a BAD REQUEST" in {
         val result: Future[Result] = controller.onSubmit(fakeRequest)
         status(result) mustBe Status.BAD_REQUEST
       }
@@ -141,9 +165,10 @@ class CancellationReasonControllerSpec extends ControllerSpecBase {
 
   "backLink" when {
     "not in change mode" should {
-      "point to Disclosure Referencer Number Page" in new Test {
-        override val userAnswers: Option[UserAnswers] =
+      "point to Disclosure Referencer Number Page" in {
+        val userAnswers: Option[UserAnswers] =
           Some(UserAnswers("some-cred-id").set(CheckModePage, false).success.value)
+        val controller = cancellationReasonController(new FakeDataRetrievalAction(userAnswers))
         lazy val result: Option[Call] = controller.backLink
         result mustBe Some(controllers.cancelCase.routes.CancelCaseReferenceNumberController.onLoad())
 
@@ -151,10 +176,22 @@ class CancellationReasonControllerSpec extends ControllerSpecBase {
     }
 
     "in change mode" should {
-      "point to Check Your Answers page" in new Test {
-        override val userAnswers: Option[UserAnswers] =
+      "point to Check Your Answers page" in {
+        val ua: Option[UserAnswers] =
           Some(UserAnswers("some-cred-id").set(CheckModePage, true).success.value)
-        lazy val result: Option[Call] = controller.backLink
+        val dataReq = DataRequest(
+          OptionalDataRequest(
+            IdentifierRequest(fakeRequest, "credId", "eori"),
+            "credId",
+            "eori",
+            ua
+          ),
+          "credId",
+          "eori",
+          ua.get
+        )
+        val controller = cancellationReasonController(new FakeDataRetrievalAction(userAnswers))
+        lazy val result: Option[Call] = controller.backLink(dataReq)
         result mustBe Some(controllers.cancelCase.routes.CancelCaseCheckYourAnswersController.onLoad())
       }
     }

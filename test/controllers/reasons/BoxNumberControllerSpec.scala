@@ -101,7 +101,7 @@ class BoxNumberControllerSpec extends ControllerSpecBase {
       }
 
       "return a SEE OTHER entry level response when request for Other Reason is sent" in new Test {
-        override val testConfig: AppConfig = new MockAppConfig()
+        override val testConfig: AppConfig = MockAppConfig.appConfig
         lazy val result: Future[Result] = controller.onSubmit(
           fakeRequestGenerator("99")
         )
